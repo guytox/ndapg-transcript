@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -231,6 +231,27 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+    ],
+
+
+    // system defined constants
+    'semesters' => [
+        1 => 'first',
+        2 => 'second',
+    ],
+
+    'roles' => [
+        'applicant' => 'applicant',
+        'admin' => 'admin',
+        'student' => 'student',
+        'dean' => 'dean',
+        'lecturer' => 'lecturer',
+        'hod' => 'hod',
+        'exam_officer' => 'exam_officer',
+        'reg_officer' => 'reg_officer',
+        'bursar' => 'bursar',
+        'vc' => 'vc',
+        'audit'=> 'audit'
     ],
 
 ];
