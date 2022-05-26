@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\AcademicSession;
+use Illuminate\Database\Seeder;
 
-class SchoolSessionSeeder extends Seeder
+class AcademicSessionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,11 +14,11 @@ class SchoolSessionSeeder extends Seeder
      */
     public function run()
     {
-        AcademicSession::firstOrCreate(['name' => '2021/2022'], [
-            'name' => '2021/2022',
+        AcademicSession::firstOrCreate(['name' => '2022/2023'], [
+            'name' => '2022/2023',
             'uid' => uniqid('as_'),
             'currentSemester' =>  config('app.semesters.2'),
-            'description' => 'Academic session for 2021/2022',
+            'description' => 'Academic session for 2022/2023',
             'status' => true
         ]);
     }
