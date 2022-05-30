@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PaymentHandleController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentController as ApplicantPaymentController;
 
@@ -19,7 +20,11 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Auth::routes(['verify' => true]);
+Auth::routes([
+    'verify' => true,
+    'register' => true,
+    'login' => true
+]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('verified')->name('home');
 

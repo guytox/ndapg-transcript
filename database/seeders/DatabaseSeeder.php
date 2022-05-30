@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
                 PaymentConfigSeeder::class,
                 AcademicSessionSeeder::class,
                 MatricConfigSeeder::class,
+                BillingItemSeeder::class,
             ]
 
         );
