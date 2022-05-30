@@ -254,4 +254,23 @@ return [
         'audit'=> 'audit'
     ],
 
+    'etranzact' => [
+        'terminal_id' => '0000000001',
+        'response_url' => env('RESPONSE_URL'),
+        'application_fee_response_url' => env('APPLICATION_FEE_RESPONSE_URL'),
+        'wallet_response_url' => env('WALLET_RESPONSE_URL'),
+        'secret_key' => env('ETRANZACT_SECRET_KEY'),
+        'logo_url' => 'https://ugpayment.umm.edu.ng/images/ummlogo.jpg'
+    ],
+
+    'status' => [
+        'pending' => 'pending',
+        'paid' => 'paid'
+    ],
+
+    'payment_methods' => [
+        'umm-wallet' => 'umm-wallet',
+        'e-tranzact' => 'e-tranzact',
+    ],
+
 ];

@@ -15,6 +15,7 @@
                                 <span>Dashboard</span>
                             </a>
                         </li>
+                        @include('includes.role-sidebar.applicant')
 
                         @include('includes.role-sidebar.student')
 

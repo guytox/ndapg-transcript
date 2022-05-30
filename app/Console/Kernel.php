@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\ConfirmDevEmail;
+use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,6 +18,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $users = User::where('email_verified_at', null)->get();
+
+            foreach ($users as $user) {
+                $user->email_verified_at = now();
+                $user->save();
+            }
+        })->everyMinute();
     }
 
     /**

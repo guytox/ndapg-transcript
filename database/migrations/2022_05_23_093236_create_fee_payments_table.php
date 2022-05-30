@@ -15,6 +15,18 @@ class CreateFeePaymentsTable extends Migration
     {
         Schema::create('fee_payments', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
+            $table->string('uid');
+            $table->enum('payment_status', ['pending', 'paid'])->default('pending');
+            $table->bigInteger('payment_config_id');
+            $table->bigInteger('academic_session_id');
+            $table->integer('amount_billed');
+            $table->string('txn_id')->nullable();
+            $table->integer('amount_paid')->nullable();
+            $table->integer('balance')->nullable();
+            $table->string('checksum')->nullable();
+            $table->string('billing_by')->nullable();
+            $table->unique(array('user_id', 'payment_config_id'));
             $table->timestamps();
         });
     }
