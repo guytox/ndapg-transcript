@@ -37,7 +37,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title">Payment Details</h4>
-                <p>Payment Description: Payment for single article</h3>
+                <h3>Payment Description: Payment for single article</h3>
 
                     <hr>
 

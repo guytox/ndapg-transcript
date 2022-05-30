@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentLogsTable extends Migration
+class CreateApplicationFeeRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreatePaymentLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_logs', function (Blueprint $table) {
+        Schema::create('application_fee_requests', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('fee_payment_id');
+            $table->bigInteger('payee_id');
+            $table->integer('amount');
             $table->string('uid');
-            $table->integer('amount_paid');
-            $table->string('payment_channel');
+            $table->enum('status', ['pending', 'paid'])->default('pending');
+            $table->string('txn_id')->nullable();
+            $table->string('checksum')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ class CreatePaymentLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_logs');
+        Schema::dropIfExists('application_fee_requests');
     }
 }
