@@ -32,9 +32,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->midd
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
 
 Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm'])->group(function (){
-    Route::get('/profile', function (){
-        dd('profile');
-    })->name('applicant.profile');
+    Route::get('/profile', [\App\Http\Controllers\Applicant\ProfileController::class, 'addData'])->name('applicant.profile');
 });
 
 
