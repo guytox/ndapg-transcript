@@ -12,4 +12,5 @@ class ProfileController extends Controller
     {
         return (new StoreProfileService())->run();
     }
+
 }
