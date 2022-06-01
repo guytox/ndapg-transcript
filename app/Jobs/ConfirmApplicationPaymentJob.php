@@ -90,6 +90,9 @@ class ConfirmApplicationPaymentJob implements ShouldQueue
                 'payment_channel' => config('app.payment_methods.e-tranzact')
             ]);
 
+            $feeRequest->status = 'paid';
+            $feeRequest->save();
+
             // genericMail($emailSubject, $validPaymentMessage, $this->email);
         } else {
             FeePayment::where('txn_id', $this->transactionId)->where('checksum', $this->checksum)->update([
