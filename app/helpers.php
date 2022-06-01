@@ -152,3 +152,14 @@ function getActiveAcademicSessionId() {
     abort(403, 'Session Not Configured');
 }
 
+function getPaymentConfigBySlug($configSlug){
+    $slug = \App\Models\PaymentConfiguration::where('payment_purpose_slug', $configSlug)->first();
+
+    if($slug) {
+        return $slug;
+    }
+
+    \Illuminate\Support\Facades\Log::error('payment for this slug: ' . $configSlug . 'Does not exist');
+    abort(403, 'An Error Occured');
+}
+

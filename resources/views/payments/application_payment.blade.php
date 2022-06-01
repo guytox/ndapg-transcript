@@ -8,6 +8,9 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
+
+                    <h2>You need to pay to continue your application</h2>
+
                     <h2 class="header-title">Click this button to proceed to payment gateway</h2>
                     <p class="card-title-desc"> </p>
 

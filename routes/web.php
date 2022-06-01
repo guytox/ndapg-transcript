@@ -29,8 +29,12 @@ Auth::routes([
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('verified')->name('home');
 
 
-Route::prefix('applicant')->middleware('auth')->group(function (){
-    Route::get('/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
+Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
+
+Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm'])->group(function (){
+    Route::get('/profile', function (){
+        dd('profile');
+    })->name('applicant.profile');
 });
 
 
