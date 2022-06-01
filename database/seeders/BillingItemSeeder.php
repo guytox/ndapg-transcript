@@ -47,7 +47,7 @@ class BillingItemSeeder extends Seeder
             ['030', 'Hostel Maintenance'],
             ['031', 'Late Application Fee'],
             ['032', 'Re-sit Examination Fee'],
-            ['033', 'SPGS Service Charge'],
+            ['033', 'SPGS Services Charge'],
             ['034', 'Seminar Fee'],
             ['035', 'Maintenance Charges'],
             ['036', 'Suspension of Studies Form'],
