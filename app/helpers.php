@@ -31,13 +31,13 @@ function generateApplicationNumber(){
 
 function updateApplicationNumber($number)
 {
-    $number = substr($number, -1);
+    $number = substr($number, -5);
 
     $applicationNo = \App\Models\MatricConfiguration::where('session_id', activeSession()->id)->first();
-
+    $modifiedNumber = (string)((int)($number));
     if($applicationNo) {
         $applicationNo->update([
-            'application_number_count' => intval($number) + 1
+            'application_number_count' => intval($modifiedNumber) + 1
         ]);
     }
 }
