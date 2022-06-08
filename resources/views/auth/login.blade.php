@@ -1,5 +1,7 @@
 @extends('layouts.auth')
 
+@include('includes.messages')
+
 @section('content')
 <h5 class="mb-5 text-center">Sign in to your account.</h5>
 <form class="form-horizontal" method="POST" action="{{ route('login') }}">

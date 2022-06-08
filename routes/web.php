@@ -31,8 +31,18 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->midd
 
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
 
-Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm'])->group(function (){
-    Route::get('/profile', [\App\Http\Controllers\Applicant\ProfileController::class, 'addData'])->name('applicant.profile');
+Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm'])->group(function () {
+    Route::prefix('profile')->group(function () {
+        Route::get('/contact-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'contactDetails'])->name('applicant.profile.contact_details');
+        Route::get('/personal-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'personalDetails'])->name('applicant.profile.personal_details');
+        Route::post('/store', [\App\Http\Controllers\Applicant\ProfileController::class, 'storeUserProfile'])->name('applicant.profile.store');
+    });
+
+    Route::prefix('qualifications')->group(function () {
+        Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicant.qualifications.school');
+        Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicant.qualifications.professional');
+        Route::post('/store', [\App\Http\Controllers\Applicant\QualificationsController::class, 'store'])->name('applicant.qualifications.store');
+    });
 });
 
 
