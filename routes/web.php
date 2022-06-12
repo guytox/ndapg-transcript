@@ -43,7 +43,24 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicant.qualifications.professional');
         Route::post('/store', [\App\Http\Controllers\Applicant\QualificationsController::class, 'store'])->name('applicant.qualifications.store');
     });
+
+    Route::prefix('referees')->group(function() {
+        Route::get('add-referee', [\App\Http\Controllers\Applicant\RefereeController::class, 'addReferee'])->name('applicant.referee');
+        Route::post('add-referee', [\App\Http\Controllers\Applicant\RefereeController::class, 'storeReferee'])->name('applicant.referee.store');
+    });
+
+    Route::prefix('academics')->group(function() {
+        Route::get('add-card', [\App\Http\Controllers\Applicant\AcademicController::class, 'addCardView'])->name('applicant.add_card')->middleware('application_submitted_result');
+        Route::post('add-card', [\App\Http\Controllers\Applicant\AcademicController::class, 'addCardStore'])->name('applicant.add_card.store')->middleware('application_submitted_result');
+        Route::get('add-result', [\App\Http\Controllers\Applicant\AcademicController::class, 'addResultView'])->name('applicant.add_result');
+        Route::get('view-result', [\App\Http\Controllers\Applicant\AcademicController::class, 'viewResultSubmitted'])->name('applicant.view_result');
+        Route::post('add-result', [\App\Http\Controllers\Applicant\AcademicController::class, 'addResultStore'])->name('applicant.add_result.store');
+    });
 });
+
+
+Route::get('applicant-referee/{uid}', [\App\Http\Controllers\Applicant\RefereeController::class, 'viewApplicantReferred'])->name('referee.view_details');
+Route::post('applicant-referee/{uid}', [\App\Http\Controllers\Applicant\RefereeController::class, 'updateRefereeDetails'])->name('referee.update_details');
 
 
 /**
