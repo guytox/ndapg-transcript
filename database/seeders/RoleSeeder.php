@@ -15,10 +15,10 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $roles = ['applicant', 'admin', 'student', 'dean', 'lecturer', 'hod', 'exam_officer','reg_officer','bursar','vc','audit','pg_sec', 'pg_dean', 'ict_support'];
+        $roles = ['applicant', 'admin', 'student', 'dean', 'lecturer', 'hod', 'exam_officer','reg_officer','bursar','vc','audit','pg_sec', 'pg_dean', 'ict_support','staff'];
 
         foreach ($roles as $role) {
-            // create role when the seeder is called with 3 basic roles.
+            // create role when the seeder is called with above listed roles.
             Role::findOrCreate($role);
         }
     }

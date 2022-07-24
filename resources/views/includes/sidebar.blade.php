@@ -10,16 +10,27 @@
                         <li class="menu-title">Menu</li>
 
                         <li>
-                            <a href="#" class="@if (Request::is('dashboard')) active @endif waves-effect">
+                            <a href="{{route('home')}}" class="@if (Request::is('dashboard')) active @endif waves-effect">
                                 <i class="mdi mdi-view-dashboard"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="mdi mdi-email-multiple-outline"></i>
+                                <span>Email</span>
+                            </a>
+
+                        </li>
+
                         @include('includes.role-sidebar.applicant')
 
                         @include('includes.role-sidebar.student')
 
                         @include('includes.role-sidebar.admin')
+
+                        @include('includes.role-sidebar.staff')
 
                         <li>
                             <a href="#logout" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" class=" waves-effect">

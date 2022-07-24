@@ -167,6 +167,13 @@ return [
          */
         Spatie\Permission\PermissionServiceProvider::class,
 
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        Collective\Html\HtmlServiceProvider::class,
+
+        //qr code generator
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+
         /*
          * Application Services Providers...
          */
@@ -230,6 +237,16 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        //Laravel forms
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+
+        //Laravel Excel
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+        //qrCode alaiases
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
 
     ],
 
