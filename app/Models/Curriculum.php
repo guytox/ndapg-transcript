@@ -14,6 +14,6 @@ class Curriculum extends Model
 
     public function curriculumItems()
     {
-        return $this->hasMany(CurriculumItem::class);
+        return $this->hasMany(CurriculumItem::class, 'curricula_id');
     }
 }

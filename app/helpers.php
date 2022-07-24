@@ -1,7 +1,20 @@
 <?php
-use App\Models\FeePayment;
-use App\Models\User;
 
+use App\Models\AcademicSession;
+use App\Models\Department;
+use App\Models\Faculty;
+use App\Models\FeePayment;
+use App\Models\MatricConfig;
+use App\Models\MatricConfiguration;
+use App\Models\Program;
+use App\Models\RegMonitor;
+use App\Models\Semester;
+use App\Models\SemesterCourse;
+use App\Models\StudentRecord;
+use App\Models\StudyLevel;
+use App\Models\User;
+use App\Models\UserProfile;
+use Illuminate\Support\Facades\Auth;
 
 function activeSession(){
     $session = \App\Models\AcademicSession::where('status', true)->first();
@@ -12,10 +25,47 @@ function activeSession(){
     throw new Exception('No active session configured');
 }
 
+function getsessionById($id){
+    $session = AcademicSession::find($id);
+    if($session) {
+        return $session;
+    }
 
-function generateMatriculationNumber(object $student)
+    throw new Exception('No active session configured');
+}
+
+function getSessionsDropdown(){
+    $session = AcademicSession::all()->pluck('name','id');
+
+    return $session;
+}
+
+
+function generateMatriculationNumber()
 {
+    $matricNo = MatricConfiguration::where('session_id', activeSession()->id)->first();
 
+    if ($matricNo) {
+        if ($matricNo->matric_count===0) {
+            return $matricNo->student_number.($matricNo->matric_count +1);
+        }else{
+            return $matricNo->student_number.$matricNo->matric_count;
+        }
+    }
+
+}
+
+function updateMatriculationNumber($number)
+{
+    $number = substr($number, -5);
+
+    $applicationNo = \App\Models\MatricConfiguration::where('session_id', activeSession()->id)->first();
+    $modifiedNumber = (string)((int)($number));
+    if($applicationNo) {
+        $applicationNo->update([
+            'matric_count' => intval($modifiedNumber) + 1
+        ]);
+    }
 }
 
 function generateApplicationNumber(){
@@ -45,6 +95,44 @@ function updateApplicationNumber($number)
 function user()
 {
     return Auth::user();
+}
+
+function getUser($id,$param){
+
+    $getuser = User::find($id);
+    switch ($param) {
+
+        case 'name':
+            return $getuser->name;
+            break;
+
+        case 'email':
+            return $getuser->email;
+            break;
+
+        case 'phone_number':
+            return $getuser->phone_number;
+            break;
+
+        case 'username':
+            return $getuser->username;
+            break;
+
+        case 'all':
+            return $getuser;
+            break;
+
+        default:
+            return "N/A";
+            break;
+    }
+
+}
+
+function getUserByUsername($username){
+    $user = User::where('username',$username)->first();
+
+    return $user;
 }
 
 /**
@@ -163,3 +251,240 @@ function getPaymentConfigBySlug($configSlug){
     abort(403, 'An Error Occured');
 }
 
+//*********************************************************************************************** */
+// StudyLevel Helpers
+//*********************************************************************************************** */
+
+function getStudyLevelDetailsById($id){
+    $level = StudyLevel::find($id);
+    return $level->level;
+}
+
+
+//*********************************************************************************************** */
+// Semester Helpers
+//*********************************************************************************************** */
+
+function getSemesterDetailsById($id){
+    $semester = Semester::find($id);
+    return $semester->name;
+}
+
+function getSemesterIdByName($id){
+    $semester = Semester::where('name', $id)->first();
+    return $semester->id;
+}
+
+function getSemestersDropdown(){
+    $semesters = Semester::all()->pluck('name', 'id');
+    return $semesters;
+}
+
+
+//*********************************************************************************************** */
+// Semester Course Helpers
+//*********************************************************************************************** */
+
+function getCourseDetailsById($id, $param){
+    $course = SemesterCourse::find($id);
+
+
+    switch ($param) {
+        case 'id':
+            return $course->id;
+            break;
+
+        case 'code':
+            return $course->courseCode;
+            break;
+
+        case 'title':
+            return $course->courseTitle;
+            break;
+
+        case 'credits':
+            return $course->creditUnits;
+            break;
+
+        case 'all':
+            return $course;
+            break;
+
+        default:
+            return "N/A";
+            break;
+    }
+}
+
+function getSemesterCoursesDropdown(){
+    $courses = SemesterCourse::where('activeStatus', 1)->get()->pluck('courseCode','id');
+    return $courses;
+}
+
+//*********************************************************************************************** */
+// Faculty and Department and Programme Helpers
+//*********************************************************************************************** */
+
+function getFacultyDetailsById($id,$param){
+    $faculty = Faculty::find($id);
+    switch ($param) {
+        case 'id':
+            return $faculty->id;
+            break;
+
+        case 'name':
+            return $faculty->name;
+            break;
+
+        case 'dean':
+            return $faculty->dean_id;
+            break;
+        case 'all':
+            return $faculty;
+            break;
+
+        default:
+            return "N/A";
+            break;
+    }
+
+}
+
+function getDepartmentDetailById($id,$param){
+    $department = Department::with('faculty')->find($id);
+    switch ($param) {
+        case 'id':
+            return $department->id;
+            break;
+
+        case 'name':
+            return $department->name;
+            break;
+
+        case 'faculty':
+            return $department->faculty_id;
+            break;
+        case 'hod':
+            return $department->hod_id;
+            break;
+        case 'examOfficer':
+            return $department->exam_officer_id;
+            break;
+        case 'RegistrationOfficer':
+            return $department->registration_officer_id;
+            break;
+        case 'all':
+            return $department;
+            break;
+
+        default:
+            return "N/A";
+            break;
+    }
+
+}
+
+
+
+function getProgrammeDetailById($id,$param){
+    $value = Program::find($id);
+
+    switch ($param) {
+        case 'id':
+            return $value->id;
+            break;
+
+        case 'name':
+            return $value->name;
+            break;
+
+        case 'level':
+            return $value->level_id;
+            break;
+
+        case 'department':
+            return $value->department_id;
+            break;
+
+        case 'dean':
+            return $value->hod_id;
+            break;
+
+        case 'hod':
+            return $value->hod_id;
+            break;
+
+        case 'examOfficer':
+            return $value->exam_officer_id;
+            break;
+
+        case 'RegistrationOfficer':
+            return $value->exam_officer_id;
+            break;
+
+        case 'title':
+            return $value->degree_title;
+            break;
+
+        default:
+            return "N/A";
+            break;
+    }
+
+
+}
+
+//*********************************************************************************************** */
+// Studend Record Helpers Helpers
+//*********************************************************************************************** */
+
+
+function getStudentIdByUserId($id){
+    $student = StudentRecord::where('user_id', $id)->first();
+
+    return $student->id;
+}
+
+
+
+function getStudentByUserId($id){
+    $student = StudentRecord::where('user_id', $id)->first();
+
+    return $student;
+}
+
+function getStudentByStudentId($id){
+    $student = StudentRecord::find($id);
+
+    return $student;
+}
+
+
+//*********************************************************************************************** */
+// Course Registration Helpers Helpers
+//*********************************************************************************************** */
+
+function checkCourseRegDuplicate($id, $user_id){
+    $duplicate = RegMonitor::where(['curricula_id'=>$id, 'student_id'=>getStudentIdByUserId($user_id)])->first();
+
+    if ($duplicate) {
+        return true;
+    }
+    else{
+
+        return false;
+    }
+}
+
+function getStaffProfileById($id){
+    //$staff = User::where('user_id', $id)->with('profile')->first();
+
+
+    $staff = UserProfile::where('user_id', $id)->first();
+    if ($staff) {
+        return $staff;
+    }else{
+        return false;
+    }
+
+}

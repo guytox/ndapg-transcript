@@ -17,10 +17,11 @@ class CreateDepartmentsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('description')->nullable();
-            $table->integer('hod_id')->nullable();
-            $table->integer('exam_officer_id')->nullable();
-            $table->integer('registration_officer_id')->nullable();
-            $table->integer('faculty_id');
+            $table->foreignId('hod_id')->nullable()->constrained('users','id');
+            $table->foreignId('exam_officer_id')->nullable()->constrained('users','id');
+            $table->foreignId('registration_officer_id')->nullable()->constrained('users','id');
+            $table->foreignId('faculty_id')->constrained('faculties');
+            $table->enum('academic',[1,2])->default(2);
             $table->string('uid');
             $table->timestamps();
         });

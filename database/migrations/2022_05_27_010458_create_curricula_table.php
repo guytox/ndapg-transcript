@@ -18,10 +18,13 @@ class CreateCurriculaTable extends Migration
             $table->integer('programs_id');
             $table->string('title');
             $table->string('semester');
+            $table->string('uid');
             $table->integer('studyLevel');
             $table->integer('minRegCredits');
             $table->integer('maxRegCredits');
-            $table->boolean('active');
+            $table->integer('numOfCourses')->default(0);
+            $table->boolean('active')->default(1);
+            $table->unique(array('programs_id', 'semester','studyLevel'));
             $table->timestamps();
         });
     }

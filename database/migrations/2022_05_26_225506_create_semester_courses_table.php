@@ -16,10 +16,13 @@ class CreateSemesterCoursesTable extends Migration
     {
         Schema::create('semester_courses', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('department_id');
+            $table->foreignId('department_id')->constrained('departments','id');
             $table->string('courseCode');
             $table->string('courseTitle');
+            $table->integer('creditUnits');
             $table->string('courseDescription')->nullable();
+            $table->integer('max_ca')->nullable()->default(30);
+            $table->integer('max_exam')->nullable()->default(70);
             $table->boolean('activeStatus')->default(1);
             //$table->foreign('department_id')
             //        ->references('id')->on('departments')->onDelete('cascade');

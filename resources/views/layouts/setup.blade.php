@@ -3,12 +3,22 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>UMM | Conference App</title>
+    <title>NDA |App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Durable Consultants Limited" name="description" />
     <meta content="Themesdesign" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.ico') }}">
+
+    <!-- DataTables -->
+    <link href="{{asset('admin/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('admin/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+    <!-- Responsive datatable examples -->
+    <link href="{{asset('admin/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+    <!-- Lightbox css -->
+    <link href="{{ asset('admin/assets/libs/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- Bootstrap Css -->
     <link href="{{ asset('admin/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -140,11 +150,11 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                            2021 © Apaxy.
+                             © 2022, Durable Consultants Limited
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-right d-none d-sm-block">
-                                Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                                University of Mkar, Mkar
                             </div>
                         </div>
                     </div>
@@ -486,6 +496,14 @@
     <script src="{{ asset('admin/assets/libs/metismenu/metisMenu.min.js') }}"></script>
     <script src="{{ asset('admin/assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('admin/assets/libs/node-waves/waves.min.js') }}"></script>
+
+            <!-- Magnific Popup-->
+    <script src="{{asset('admin/assets/libs/magnific-popup/jquery.magnific-popup.min.js')}} "></script>
+
+    <!-- Tour init js-->
+    <script src="{{ asset('admin/assets/js/pages/lightbox.init.js') }} "></script>
+
+
     @yield('js')
     <script src="{{ asset('admin/assets/js/app.js') }}"></script>
 

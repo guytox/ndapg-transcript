@@ -24,8 +24,13 @@ class DatabaseSeeder extends Seeder
                 ProgramSeeder::class,
                 PaymentConfigSeeder::class,
                 AcademicSessionSeeder::class,
+                SemesterSeeder::class,
                 MatricConfigSeeder::class,
                 BillingItemSeeder::class,
+                StudyLevelsSeeder::class,
+                StatesSeeder::class,
+                LocalGovernmentSeeder::class,
+                ErrorCodesSeeder::class
             ]
 
         );

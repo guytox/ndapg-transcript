@@ -10,4 +10,8 @@ class CurriculumItem extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function curricula(){
+        return $this->belongsTo(Curriculum::class,);
+    }
 }

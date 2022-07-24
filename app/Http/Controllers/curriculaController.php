@@ -1,0 +1,198 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Curriculum;
+use App\Models\CurriculumItem;
+use App\Models\Program;
+use App\Models\Semester;
+use App\Models\SemesterCourse;
+use App\Models\StudyLevel;
+use Illuminate\Http\Request;
+
+class curriculaController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        if (user()->hasRole('admin')) {
+            $programs = Program::all()->pluck('name', 'id');
+            $semesters = Semester::all()->pluck('name', 'id');
+            $studyLevels = StudyLevel::all()->pluck('level', 'id');
+
+            $curricula = Curriculum::all();
+
+            return view('admin.configs.viewCurricula', compact('programs', 'semesters', 'studyLevels', 'curricula'));
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        if (user()->hasRole('admin')) {
+
+            $this->validate($request, [
+
+                '_token'=>'required',
+                'programs_id'=>'required',
+                'title'=>'required',
+                'semester'=>'required',
+                'uid'=>'required',
+                'studyLevel'=>'required',
+                'minRegCredits'=>'required',
+                'maxRegCredits'=>'required',
+
+
+            ]);
+
+            Curriculum::upsert($request->except('_token'), $uniqueBy ='id', $update=[
+
+                'programs_id',
+                'title',
+                'semester',
+                'studyLevel',
+                'minRegCredits',
+                'maxRegCredits',
+                'active'
+            ]);
+
+            return redirect(route('curricula.index'));
+
+            return "You are good to go, we are in store";
+
+
+        }
+
+
+    return "<br> You do not have the required permission to visit this page";
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        if (user()->hasRole('admin')) {
+            $curriculum = Curriculum::with('curriculumItems')->find($id);
+            $courses = SemesterCourse::where('activeStatus', '=', 1)->get()->pluck('courseCode','id');
+
+            //return $curriculum;
+
+            return view('admin.configs.viewCurriculum', compact('curriculum', 'courses'));
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        if (user()->hasRole('admin')) {
+
+            $this->validate($request, [
+
+                '_token'=>'required',
+                'programs_id'=>'required',
+                'title'=>'required',
+                'semester'=>'required',
+                'uid'=>'required',
+                'studyLevel'=>'required',
+                'minRegCredits'=>'required',
+                'maxRegCredits'=>'required',
+
+
+            ]);
+
+            Curriculum::upsert($request->except('_token','_method'), $uniqueBy ='id', $update=[
+
+                'programs_id',
+                'title',
+                'semester',
+                'studyLevel',
+                'minRegCredits',
+                'maxRegCredits',
+                'active'
+            ]);
+
+            return redirect(route('curricula.index'));
+
+            return "You are good to go, we are in store";
+
+
+        }
+
+
+    return "<br> You do not have the required permission to visit this page";
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        if (user()->hasRole('admin')) {
+
+            //return $id;
+            //Enter you code here
+            $toDelete = Curriculum::findOrFail($id);
+
+            try {
+
+                $toDelete->deleteOrFail();
+
+                return redirect(route('curricula.index'));
+
+            } catch (\Illuminate\Database\QueryException $e) {
+
+                return redirect(route('curricula.index'))->with('error',"Error!!! Curriculum could not be deleted");
+            }
+
+
+
+            return "You are good to go and destroy, This is dangerous so you are not allowed, Call me";
+
+
+        }
+    return "<br> You do not have the required permission to visit this page";
+    }
+}

@@ -1,11 +1,52 @@
 @role('admin')
 
 <li>
-    <a href="javascript: void(0);" class="has-arrow waves-effect">
-        <i class="mdi mdi-email-multiple-outline"></i>
-        <span>Email</span>
+    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+        <i class="mdi mdi-tag-heart"></i>
+        <span>Academic Configs</span>
     </a>
+    <ul>
+        <li>
+            <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Facuties</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('departments.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Departments</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('programs.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Programmes</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('studylevels.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>StudyLevels</span>
+            </a>
+        </li>
 
+        <li>
+            <a href="{{ route('semestercourses.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Semester Courses</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('curricula.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Curriculum Config</span>
+            </a>
+        </li>
+
+
+    </ul>
 </li>
 
 <li>
@@ -15,7 +56,7 @@
     </a>
     <ul>
         <li>
-            <a href="{{ route('view.transactions') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+            <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>View Transactions</span>
             </a>
@@ -32,20 +73,73 @@
 
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+        <i class="mdi mdi-tag-heart"></i>
+        <span>Appointments</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{{ route('appointments.get.deans') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Deans/Directors</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('appointments.get.hods') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>HOD's/EO/RO</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Appoint Sta</span>
+            </a>
+        </li>
+
+
+
+    </ul>
+</li>
+
+
+<li>
+    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
         <i class="mdi mdi-book-information-variant"></i>
         <span>Manage Students</span>
     </a>
     <ul>
         <li>
-            <a href="{{ route('view.students') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+            <a href="{{ route('view.all.active') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>List Students</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('import.user') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+            <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>Upload Student list</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+<li>
+    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+        <i class="mdi mdi-book-information-variant"></i>
+        <span>Manage Staff</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{{ route('stafflist.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>List Staff</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('rolemanagement.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Add Roles</span>
             </a>
         </li>
 
@@ -59,13 +153,13 @@
     </a>
     <ul>
         <li>
-            <a href="{{ route('import.emails') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+            <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>Upload Student Emails</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('view.emails') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+            <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>View/Revoke Emails</span>
             </a>
@@ -75,18 +169,13 @@
 </li>
 
 <li>
-    <a href="{{ route('import.balances') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+    <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
         <i class="mdi mdi-book-information-variant"></i>
         <span>Upload Student Balances</span>
     </a>
 </li>
 
-<li>
-    <a href="" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-        <i class="mdi mdi-timelapse"></i>
-        <span>Lecturers</span>
-    </a>
-</li>
+
 
 
 @endrole
