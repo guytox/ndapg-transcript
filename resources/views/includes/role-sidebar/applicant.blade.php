@@ -1,6 +1,36 @@
 @role('applicant')
 
 <li>
+    <a href="#" class="has-arrow @if (Request::is('application.referee')) active @endif waves-effect">
+        <i class="mdi mdi-school-outline"></i>
+        <span>Academics</span>
+    </a>
+
+    <ul>
+        <li>
+            <a href="{{ route('applicant.add_card') }}" class="@if (Request::is('applicant/profile/*')) active @endif waves-effect">
+                <i class="mdi mdi-file-document-box-check"></i>
+                <span>Card Details</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('applicant.add_result') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
+                <i class="mdi mdi-file-document-edit"></i>
+                <span>Submit Result</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('applicant.view_result') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
+                <i class="mdi mdi-file-document-box-multiple"></i>
+                <span>Olevel Result(s)</span>
+            </a>
+        </li>
+
+
+    </ul>
+</li>
+
+<li>
     <a href="{{ route('application.fee') }}" class="@if (Request::is('application.fee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Payment</span>
@@ -34,6 +64,13 @@
         </li>
 
     </ul>
+</li>
+
+<li>
+    <a href="{{ route('applicant.referee') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
+        <i class="mdi mdi-cash-marker"></i>
+        <span>Referee</span>
+    </a>
 </li>
 
 <li>
