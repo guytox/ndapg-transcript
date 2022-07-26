@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\RegClearance;
 use App\Models\StudentRecord;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -45,10 +46,22 @@ class StudentMassSeeder extends Seeder
                 'admission_session'=> activeSession()->id,
 
             ]);
+
+
+
             //update user with current level
 
             $user->current_level = getProgrammeDetailById($student->program_id, 'level');
             $user->save();
+
+
+            //Next allow registration for the student
+            $allow_reg = RegClearance::updateOrCreate(['student_id'=>$student->id, 'school_session_id'=>getActiveAcademicSessionId()],[
+                'student_id'=>$student->id,
+                'school_session_id'=>getActiveAcademicSessionId(),
+                'first_semester' =>1,
+                'second_semester'=>1
+            ]);
 
 
             $a++;

@@ -17,7 +17,7 @@ class AdminUserSeeder extends Seeder
     public function run()
     {
         $faker = app(Generator::class);
-        $emails = ['julius@gmail.com', 'guytox@gmail.com', 'iortimdan@umm.edu.ng', 'successfullprince@gmail.com', 'pioryina@umm.edu.ng', 'vicechancellor@umm.edu.ng'];
+        $emails = ['julius@gmail.com', 'guytox@gmail.com', 'iortimdan@umm.edu.ng', 'successfullprince@gmail.com', 'pioryina@umm.edu.ng', 'vicechancellor@umm.edu.ng', 'voachanya@gmail.com'];
 
         foreach ($emails as $email)
         {
