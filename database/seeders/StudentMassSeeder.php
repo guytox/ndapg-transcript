@@ -42,7 +42,7 @@ class StudentMassSeeder extends Seeder
                 'matric'=>$user->username,
                 'program_id'=> random_int(1,25),
                 'state_origin' => random_int(1,38),
-                'admission_session'=> activeSession()->id,
+                'admission_session'=> activeSession()->id, 
 
             ]);
             //update user with current level
