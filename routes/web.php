@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicSessionsController;
 use App\Http\Controllers\PaymentHandleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,7 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::resource('/curricula', curriculaController::class);
         Route::resource('/curriculaitems', CurriculaItemsController::class);
         Route::resource('/rolemanagement', RoleManagementController::class);
+        Route::resource('/acadsessions', AcademicSessionsController::class);
 
     });
 

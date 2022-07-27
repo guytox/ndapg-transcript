@@ -45,6 +45,13 @@
             </a>
         </li>
 
+        <li>
+            <a href="{{ route('acadsessions.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Academic Sessions</span>
+            </a>
+        </li>
+
 
     </ul>
 </li>
