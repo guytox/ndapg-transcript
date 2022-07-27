@@ -193,7 +193,7 @@ class SemesterCourseAllocationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return back()->with('error', "Error !!!!, This Action is not allowed, Contact ICT");
     }
 
 
@@ -217,6 +217,12 @@ class SemesterCourseAllocationController extends Controller
             //get the Allocation
 
             $allocationMonitor = CourseAllocationMonitor::where('uid', $request->MonitorId)->first();
+
+            //check to see if the session is the present session, if not redirect back with error
+
+            if ($allocationMonitor->session_id!=activeSession()->id && $allocationMoitor->semester_id != getSemesterIdByName(activeSession()->currentSemester)) {
+                return back()->with('error', "This action cannot be performed because this is not the current session and semester");
+            }
 
             //check to see if grding rights have been granted and perform the neccessary checks
 
@@ -253,7 +259,10 @@ class SemesterCourseAllocationController extends Controller
     public function deleteAllocationItem(Request $request, $id){
         if (user()->hasRole('hod')) {
 
-            $todelete = CourseAllocationItems::find($id);
+            $todelete = CourseAllocationItems::where('grading_completed','2')->where('id',$id)->first();
+            if (!$todelete) {
+                return back()->with('error', "Error!!! Cannot Delete Course Allocation, either it is a previous session allocation or grading for this course has been completed");
+            }
             //return $todelete;
             $todelete->delete();
 
