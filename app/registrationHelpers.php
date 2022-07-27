@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Curriculum;
+use App\Models\CurriculumItem;
 use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\FeePayment;
@@ -381,5 +382,23 @@ function getUserSemesterCoursesDropdown($id){
 
 
     return "N/A";
+}
+
+function getAllocatonCourses($hodId){
+
+    $userDepts = getAcademicDepts(user()->id);
+
+    $courses = CurriculumItem::join('semester_courses','semester_courses.id','=','curriculum_items.semester_courses_id')
+                            ->join('departments', 'departments.id','=','semester_courses.department_id')
+                            ->join('faculties','faculties.id','=','departments.faculty_id')
+                            ->where('faculties.academic',1)
+                            ->where('departments.hod_id', $hodId)
+                            ->where('semester_courses.activeStatus',1)
+                            ->select('semester_courses.*')
+                            ->get()
+                            ->pluck('courseCode','id');
+
+    return $courses;
+
 }
 
