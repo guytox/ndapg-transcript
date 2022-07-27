@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SemesterCourseImport;
 use App\Models\Department;
 use App\Models\SemesterCourse;
+use Dotenv\Validator;
+use Facade\FlareClient\Stacktrace\File;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Traits\HasRoles;
 
 class SemesterCoursesController extends Controller
 {
+    use HasRoles;
     /**
      * Display a listing of the resource.
      *
@@ -213,4 +219,36 @@ class SemesterCoursesController extends Controller
         }
     return "<br> You do not have the required permission to visit this page";
     }
+
+
+
+    public function uploadSemesterCourse(Request $request){
+
+        if (user()->hasRole('admin')) {
+            //return $request;
+
+            $validated = $request->validate([
+                'file' => 'required|mimes:xlsx|max:3048',
+                'department_id' =>'required'
+            ]);
+
+            $courses = $request->file('file');
+
+            Excel::import(new SemesterCourseImport($request->department_id), $courses);
+
+            return redirect(route('semestercourses.index'))->with('success', "Courses Uploaded Successfully!!!");
+        } else{
+
+            return back()->with('error', 'You do not have the privileges to perform this action, contact ICT');
+
+        }
+
+
+
+
+    }
+
+
+
+
 }

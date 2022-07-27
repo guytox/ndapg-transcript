@@ -129,7 +129,7 @@
                                         <td>
 
 
-                                            {!! Form::open(['route' => ['course-allocation.destroy', 'course_allocation'=>$item->id] , 'method' => 'DELETE']) !!}
+                                            {!! Form::open(['route' => ['delete.allocation.staff', 'id'=>$item->id] , 'method' => 'DELETE']) !!}
 
                                             <a class="popup-form btn btn-primary" href="#edit-form{{$key+1}}">Change Grading Rights</a>
 
