@@ -231,6 +231,18 @@ class SemesterCourseAllocationController extends Controller
 
 
 
+    public function deleteAllocationItem($id){
+        if (user()->hasRole('admin')) {
+            
+            $todelete = CourseAllocationItems::find($id);
+            $todelete->delete();
+
+            return back()->with('success', 'Allocated lecturer removed Successfully!!!');
+        }
+    }
+
+
+
 
 
 }

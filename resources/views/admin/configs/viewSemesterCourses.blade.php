@@ -11,6 +11,8 @@
                 <div class="card-body">
                     <div>
                         <a class="popup-form btn btn-primary" href="#test-form">Create New Semester Course</a>
+
+                        <a class="popup-form btn btn-success" href="#upload-form">Upload Semester Courses </a>
                     </div>
                     <h4 class="header-title mb-4"></h4>
                     @include('includes.messages')
@@ -142,6 +144,8 @@
                                 <h4 class="header-title mb-4"></h4>
                                 <div>
                                     <a class="popup-form btn btn-primary" href="#test-form">Create New Semester Course</a>
+
+                                    <a class="popup-form btn btn-success" href="#upload-form">Upload Semester Courses </a>
                                 </div>
 
                                 <div class="card mfp-hide mfp-popup-form mx-auto" id="test-form">
@@ -192,6 +196,34 @@
                                         {!! Form::close() !!}
                                     </div>
                                 </div>
+
+
+
+                                {{-- Upload form --}}
+
+                                <div class="card mfp-hide mfp-popup-form mx-auto" id="upload-form">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 mb-4">Upload Semester Courses File (.xlsx)</h4>
+                                        {!! Form::open(['route' => 'semestercourses.upload', 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
+
+                                        {!! Form::hidden('uid',uniqid('sc_'), ['class'=>'form-control']) !!}
+
+
+                                        <div class="form-group">
+                                            {!! Form::label('department_id', 'Select Associate Department') !!}
+                                            {!! Form::select('department_id', $departments, null, ['class' => 'form-control' ]) !!}
+                                        </div>
+                                        {!! Form::label('file', "select file to upoload, must be of type .xlsx FORMAT MUST CONTAIN: coursecode, coursetitle, creditunits, description") !!}
+                                        {!! Form::file('file', ['class'=> 'form-control']) !!}
+
+                                        <br>
+
+                                        {!! Form::submit('Upload Semester Courses',['class'=>'btn btn-danger form-control']) !!}
+
+                                        {!! Form::close() !!}
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>

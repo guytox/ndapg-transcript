@@ -65,6 +65,7 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::resource('/programs', ProgrammeController::class);
         Route::resource('/studylevels', StudyLevelsController::class);
         Route::resource('/semestercourses', SemesterCoursesController::class);
+        Route::post('/semcoursesupload', [SemesterCoursesController::class, 'uploadSemesterCourse'])->name('semestercourses.upload');
         Route::resource('/curricula', curriculaController::class);
         Route::resource('/curriculaitems', CurriculaItemsController::class);
         Route::resource('/rolemanagement', RoleManagementController::class);
@@ -88,6 +89,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
         Route::resource('/course-allocation', SemesterCourseAllocationController::class);
         Route::post('/add-allocation',[SemesterCourseAllocationController::class, 'addAllocationItem'])->name('add.allocation.staff');
+        Route::get('/remove-allocation/{$id}',[SemesterCourseAllocationController::class, 'deleteAllocationItem'])->name('delete.allocation.staff');
 
     });
 
