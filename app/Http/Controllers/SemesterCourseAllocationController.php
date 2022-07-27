@@ -118,17 +118,20 @@ class SemesterCourseAllocationController extends Controller
 
             //get all courses that have not been allocated
             $userDepts = getAcademicDepts(user()->id);
-            $allocatedCoruses = CourseAllocationItems::where('course_id',$allMonitor->id)->get()->pluck('course_id');
+            $allocatedCoruses = CourseAllocationItems::where('allocation_id',$allMonitor->id)->where('can_grade',1)->get()->pluck('course_id');
             $unallocated = CurriculumItem::join('semester_courses as g','g.id','=','curriculum_items.semester_courses_id')
                                                 ->whereIN('g.department_id', $userDepts)
-                                                ->whereNotIn('curriculum_items.course_id', $allocatedCoruses)
+                                                ->whereNotIn('curriculum_items.semester_courses_id', $allocatedCoruses)
                                                 ->where(['g.activeStatus'=>'1'])
                                                 ->get()
                                                 ->pluck('semester_courses_id','id');
 
+            $curriculumCourses = getAllocatonCourses(user()->id);
+
+
             $title = "Department of ".getDepartmentDetailById($allMonitor->department_id,'name');
 
-            return view('admin.configs.viewCourseAllocationItems',compact('allMonitor','lecturers','semesterCourses','allocatedCoruses', 'unallocated','title'));
+            return view('admin.configs.viewCourseAllocationItems',compact('allMonitor','lecturers','semesterCourses','allocatedCoruses', 'unallocated','title','curriculumCourses'));
 
         }else {
             return back()->with('error','Error 40012 !!! Contact ICT');
@@ -215,26 +218,43 @@ class SemesterCourseAllocationController extends Controller
 
             $allocationMonitor = CourseAllocationMonitor::where('uid', $request->MonitorId)->first();
 
-            //proceed with createOrUpdate
+            //check to see if grding rights have been granted and perform the neccessary checks
+
             $data = [
                 'allocation_id' => $allocationMonitor->id,
                 'course_id' => $request->semester_courses_id,
                 'staff_id' => $request->staffId,
                 'can_grade' => $request->gradingRights
             ];
-            $allocationItem = CourseAllocationItems::updateOrCreate(['allocation_id' => $allocationMonitor->id,'course_id' => $request->semester_courses_id, 'staff_id' => $request->staffId, ],$data);
+
+            if ($request->gradingRights == 1) {
+                //check use update or create
+                $allocationItem = CourseAllocationItems::updateOrCreate(['allocation_id' => $allocationMonitor->id,'course_id' => $request->semester_courses_id, 'can_grade' => $request->gradingRights, ], $data);
+
+                return back()->with('success', "Grading rights added/modifed successfully");
+
+            }else {
+
+                // No grading rights proceed with createOrUpdate
+
+                $allocationItem = CourseAllocationItems::updateOrCreate(['allocation_id' => $allocationMonitor->id,'course_id' => $request->semester_courses_id, 'staff_id' => $request->staffId, ], $data);
+
+                return back()->with('success',"Course Allocation addedd successfully");
 
 
-            return redirect(route('course-allocation.show',['course_allocation' => $allocationMonitor->uid]));
+            }
+
+            return redirect(route('course-allocation.show',['course_allocation' => $allocationMonitor->uid]))->with('error', "Warning!!! Possible failure, Check last allocation");
         }
     }
 
 
 
-    public function deleteAllocationItem($id){
-        if (user()->hasRole('admin')) {
-            
+    public function deleteAllocationItem(Request $request, $id){
+        if (user()->hasRole('hod')) {
+
             $todelete = CourseAllocationItems::find($id);
+            //return $todelete;
             $todelete->delete();
 
             return back()->with('success', 'Allocated lecturer removed Successfully!!!');

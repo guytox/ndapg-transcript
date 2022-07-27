@@ -58,7 +58,7 @@
 
                                     <div class="form-group">
                                         {!! Form::label('semester_courses_id', 'Select Semester Course') !!}
-                                        {!! Form::select('semester_courses_id', $semesterCourses, null, ['class' => 'form-control', 'required']) !!}
+                                        {!! Form::select('semester_courses_id', $curriculumCourses, null, ['class' => 'form-control', 'required']) !!}
                                     </div>
 
                                     <div class="form-group">
@@ -68,7 +68,7 @@
 
                                     <div class="form-group">
                                         {!! Form::label('gradingRights', 'Can this User grade (Yes/No)') !!}
-                                        {!! Form::select('gradingRights', array('1' => 'Yes', '2' => 'No'), '2', ['class' => 'form-control', 'required']) !!}
+                                        {!! Form::select('gradingRights', array(1 => 'Yes', 2 => 'No'), 2, ['class' => 'form-control', 'required']) !!}
                                     </div>
 
 
@@ -119,7 +119,7 @@
                                         <td>{{ getUser($item->staff_id,'phone_number') }}</td>
 
                                         @if ($item->can_grade == 1)
-                                            <td> YES</td>
+                                            <td> YES </td>
                                         @elseif ($item->can_grade == 2)
                                             <td> NO </td>
                                         @endif
@@ -129,7 +129,7 @@
                                         <td>
 
 
-                                            {!! Form::open(['route' => ['delete.allocation.staff', 'id'=>$item->id] , 'method' => 'DELETE']) !!}
+                                            {!! Form::open(['route' => ['delete.allocation.staff', 'id'=>$item->id] , 'method' => 'POST']) !!}
 
                                             <a class="popup-form btn btn-primary" href="#edit-form{{$key+1}}">Change Grading Rights</a>
 
@@ -178,6 +178,14 @@
                             @endif
 
                                     <tr>
+                                        <td></td>
+                                        <td> <span class="text-default">Courses without Staff to Grade/Upload Scores</span> </td>
+                                        <td colspan="6">
+                                            @foreach ($unallocated as $course)
+                                               <i class="text-danger" title="{{getCourseDetailsById($course, 'title')}}">{{getCourseDetailsById($course, 'code')}},</i>
+                                            @endforeach
+
+                                        </td>
 
                                     </tr>
 
@@ -195,6 +203,8 @@
                                     <a class="popup-form btn btn-primary" href="#new-fee-template-item">Add New Course Allocation</a>
 
                                     <a class="btn btn-warning" href="{{redirect(back())}}">Return Back</a>
+
+                                    <a class="btn btn-dark" href="#">Print Course Allocation</a>
                                 </div>
 
 

@@ -89,7 +89,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
         Route::resource('/course-allocation', SemesterCourseAllocationController::class);
         Route::post('/add-allocation',[SemesterCourseAllocationController::class, 'addAllocationItem'])->name('add.allocation.staff');
-        Route::get('/remove-allocation/{$id}',[SemesterCourseAllocationController::class, 'deleteAllocationItem'])->name('delete.allocation.staff');
+        Route::post('/remove-allocation/{id}',[SemesterCourseAllocationController::class, 'deleteAllocationItem'])->name('delete.allocation.staff');
 
     });
 
