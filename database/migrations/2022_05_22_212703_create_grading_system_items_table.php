@@ -21,6 +21,7 @@ class CreateGradingSystemItemsTable extends Migration
             $table->string('grade_letter');
             $table->integer('credit_earned')->default(0);
             $table->integer('weight_points');
+            $table->unique(['grading_system_id','grade_letter'],'gradeitemDupCheck');
             $table->timestamps();
         });
     }

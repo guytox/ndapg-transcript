@@ -22,7 +22,7 @@
         <li>
             <a href="{{ route('student.registration.viewAll',['id'=>user()->id]) }}" class="@if (Request::is('coursereg.show')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
-                <span>view Previous Registrations</span>
+                <span>Registrations History</span>
             </a>
         </li>
         <li>
