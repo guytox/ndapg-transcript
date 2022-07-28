@@ -57,7 +57,7 @@
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
         <i class="mdi mdi-timelapse"></i>
-        <span>My Lectures</span>
+        <span>Grade Allocated Courses</span>
     </a>
 </li>
 

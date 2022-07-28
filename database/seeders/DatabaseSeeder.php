@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
                 FacultySeeder::class,
                 DepartmentSeeder::class,
                 ProgramSeeder::class,
+                GradingSystemSeeder::class,
                 PaymentConfigSeeder::class,
                 AcademicSessionSeeder::class,
                 SemesterSeeder::class,
