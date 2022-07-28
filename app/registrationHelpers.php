@@ -173,12 +173,8 @@ function getRegStudents($userId,$jurisdiction, $status ){
 
     $pendingRegs = RegMonitor::join('programs','programs.id','=','reg_monitors.program_id')
                                     ->join('departments','departments.id','=','programs.department_id')
-                                    ->join('faculties','faculties.id','=','departments.faculty_id')
+                                    ->whereIn('departments.id', $jurisdiction)
                                     ->where('reg_monitors.status','=', $status)
-                                    ->orWhere('departments.hod_id', $userId)
-                                    ->orWhere('departments.registration_officer_id', $userId)
-                                    ->orWhere('departments.exam_officer_id', $userId)
-                                    ->orWhere('faculties.dean_id', $userId)
                                     ->select('reg_monitors.*')
                                     ->get();
 
@@ -207,6 +203,9 @@ function getAcademicDepts($id){
     if ($user->hasRole('dean')) {
         $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
                                 ->where('faculties.dean_id', $id)
+                                ->orWhere('departments.hod_id',$id)
+                                ->orWhere('departments.registration_officer_id',$id)
+                                ->orWhere('departments.exam_officer_id',$id)
                                 ->where('faculties.academic',1)
                                 ->select('departments.*')
                                 ->get()
@@ -216,7 +215,13 @@ function getAcademicDepts($id){
     }
 
     if ($user->hasRole('hod')) {
-        $dept = Department::where('hod_id', $id)
+        $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->orWhere('departments.hod_id',$id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->orWhere('departments.registration_officer_id',$id)
+                                ->orWhere('departments.exam_officer_id',$id)
+                                ->select('departments.*')
                                 ->get()
                                 ->pluck('id');
 
@@ -224,7 +229,13 @@ function getAcademicDepts($id){
     }
 
     if ($user->hasRole('reg_officer')) {
-        $dept = Department::where('registration_officer_id', $id)
+        $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->orWhere('departments.hod_id',$id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->orWhere('departments.registration_officer_id',$id)
+                                ->orWhere('departments.exam_officer_id',$id)
+                                ->select('departments.*')
                                 ->get()
                                 ->pluck('id');
 
@@ -232,7 +243,13 @@ function getAcademicDepts($id){
     }
 
     if ($user->hasRole('exam_officer')) {
-        $dept = Department::where('exam_officer_id', $id)
+        $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->orWhere('departments.hod_id',$id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->orWhere('departments.registration_officer_id',$id)
+                                ->orWhere('departments.exam_officer_id',$id)
+                                ->select('departments.*')
                                 ->get()
                                 ->pluck('id');
 
