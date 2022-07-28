@@ -9,6 +9,7 @@ use App\Http\Controllers\curriculaController;
 use App\Http\Controllers\CurriculaItemsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\RegistrationApprovalController;
 use App\Http\Controllers\RoleManagementController;
@@ -71,6 +72,11 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::resource('/curriculaitems', CurriculaItemsController::class);
         Route::resource('/rolemanagement', RoleManagementController::class);
         Route::resource('/acadsessions', AcademicSessionsController::class);
+        Route::resource('/gradingsystems', GradingSystemController::class);
+        Route::post('/addgradingsystemItem', [GradingSystemController::class, 'addGradingItem'])->name('add.grading.item');
+        Route::post('/removegradingsystemItem', [GradingSystemController::class, 'deleteGradingItem'])->name('delete.grading.item');
+        Route::post('/editgradingsystemItem', [GradingSystemController::class, 'editGradingItem'])->name('edit.grading.item');
+
 
     });
 

@@ -52,6 +52,13 @@
             </a>
         </li>
 
+        <li>
+            <a href="{{ route('gradingsystems.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Grading Systems</span>
+            </a>
+        </li>
+
 
     </ul>
 </li>
