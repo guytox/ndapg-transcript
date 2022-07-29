@@ -125,4 +125,15 @@ class StudentInformationController extends Controller
 
 
     }
+
+    public function uploadStudentsForm(){
+
+        if (user()->hasRole('admin') or user()->hasRole('pay_processor')) {
+
+            $programlist = Program::all()->pluck('name','id');
+
+            return view('admin.configs.import-students',compact('programlist'));
+
+        }
+    }
 }

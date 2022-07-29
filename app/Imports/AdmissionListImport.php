@@ -40,21 +40,33 @@ class AdmissionListImport implements ToModel, WithHeadingRow
             'current_level' => getProgrammeDetailById($this->program_id, 'level'),
         ];
 
-        $studentUser = User::updateOrCreate(['email'=>$row['email']],$data);
+        $studentUser = User::upsert($data, $uniqueBy =['email'],[
+            'email_verified_at'
+        ]);
+
+        //$studentUser = User::updateOrCreate(['email'=>$row['email']],$data);
         // Assign Student Role to user
-        $studentUser->assignRole('student');
+        $newuser = User::where('username', $row['matricno'])->first();
+        if ($newuser) {
+            $newuser->assignRole('student');
+        }
+
 
         //get studentRecordData
 
         $studentData = [
-            'user_id'=>$studentUser->id,
-            'matric'=>$studentUser->username,
+            'user_id'=>$newuser->id,
+            'matric'=>$newuser->username,
             'program_id' => $this->program_id,
             'admission_session' => activeSession()->id,
         ];
 
         //create student record
-        $studentUserRecord = StudentRecord::updateOrCreate(['user_id'=>$studentUser->id, 'matric'=>$studentUser->username],$studentData);
+        // $studentUserRecord = StudentRecord::upsert($studentData, $uniqueBy =['user_id'],[
+        //     'admission_session'
+        // ]);
+
+        $studentUserRecord = StudentRecord::updateOrCreate(['user_id'=>$newuser->id, 'matric'=>$newuser->username],$studentData);
 
         return $studentUserRecord;
 
