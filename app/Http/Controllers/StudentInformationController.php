@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\AdmissionListImport;
+use App\Imports\StudentPaymentUploadImport;
 use App\Models\Program;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -107,7 +108,7 @@ class StudentInformationController extends Controller
         if (user()->hasRole('admin')) {
 
             $validated = $request->validate([
-                'file' => 'required|mimes:xlsx|max:3048',
+                'file' => 'required|mimes:xlsx|max:2048',
                 'program_id' =>'required'
             ]);
 
@@ -135,5 +136,29 @@ class StudentInformationController extends Controller
             return view('admin.configs.import-students',compact('programlist'));
 
         }
+    }
+
+    public function uploadStudentPayments(Request $request){
+
+        //return $request;
+
+        if (user()->hasRole('admin') or user()->hasRole('pay_processor')) {
+
+            $validated = $request->validate([
+                'file' => 'required|mimes:xlsx|max:2048',
+                'semester' =>'required'
+            ]);
+
+            $studentList = $request->file('file');
+
+            Excel::import(new StudentPaymentUploadImport($request->semester, user()->id), $studentList);
+
+            return back()->with('success', "Congratulations!!! Payments uploaded successfully !!! .");
+
+        }else{
+            return back()->with('info', "This action is for administrator's Only, Contact ICT");
+        }
+
+        return back()->with('error',"Nothing found");
     }
 }

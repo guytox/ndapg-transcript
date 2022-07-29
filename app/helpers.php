@@ -143,6 +143,11 @@ function currentDate()
     return Carbon\Carbon::today()->toDateString();
 }
 
+function humanReadableDate($date)
+{
+    return Carbon\Carbon::parse($date)->format('D d, M Y');
+}
+
 function presentationFileURL($file)
 {
     return asset('presentations/' . $file);
@@ -249,6 +254,25 @@ function getPaymentConfigBySlug($configSlug){
 
     \Illuminate\Support\Facades\Log::error('payment for this slug: ' . $configSlug . 'Does not exist');
     abort(403, 'An Error Occured');
+}
+
+//*********************************************************************************************** */
+// Currency / Naira Helpers
+//*********************************************************************************************** */
+
+function convertToKobo($nairaFigure){
+
+    $koboFigure = $nairaFigure * 100;
+
+    return $koboFigure;
+}
+
+
+function convertToNaira($koboFigure){
+
+    $nairaFigure = $koboFigure/100;
+
+    return $nairaFigure;
 }
 
 //*********************************************************************************************** */
