@@ -63,5 +63,15 @@
 
 @endrole
 
+@role('pay_processor')
+
+<li>
+    <a href="{{ route('student.paymentupload.form') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+        <i class="mdi mdi-tag-heart"></i>
+        <span>Upload Student Payment Details</span>
+    </a>
+</li>
+
+@endrole
 
 @endrole

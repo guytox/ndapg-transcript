@@ -15,4 +15,9 @@ class StudentRecord extends Model
 
         return $this->belongsTo(User::class);
     }
+
+    public function uploadedPayments(){
+
+        return $this->hasMany(UploadedPayment::class, 'student_id','id');
+    }
 }
