@@ -77,6 +77,7 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::post('/removegradingsystemItem', [GradingSystemController::class, 'deleteGradingItem'])->name('delete.grading.item');
         Route::post('/editgradingsystemItem', [GradingSystemController::class, 'editGradingItem'])->name('edit.grading.item');
         Route::post('/studentlistupload', [StudentInformationController::class, 'uploadStudentList'])->name('student.list.upload');
+        Route::get('/studentlistupload', [StudentInformationController::class, 'uploadStudentsForm'])->name('student.upload.form');
 
 
 

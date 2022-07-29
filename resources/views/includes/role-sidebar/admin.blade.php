@@ -129,7 +129,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+            <a href="{{ route('student.upload.form') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>Upload Student list</span>
             </a>
