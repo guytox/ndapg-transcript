@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AdmissionListImport;
+use App\Models\Program;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Traits\HasRoles;
 
 class StudentInformationController extends Controller
@@ -20,7 +23,9 @@ class StudentInformationController extends Controller
 
             $studentList = User::role('student')->select('id','name','email','username', 'phone_number','current_level')->get();
 
-            return view('admin.view-student-list',compact('studentList'));
+            $programlist = Program::all()->pluck('name','id');
+
+            return view('admin.view-student-list',compact('studentList', 'programlist'));
 
 
         }else{
@@ -95,7 +100,29 @@ class StudentInformationController extends Controller
         //
     }
 
+
+
     public function uploadStudentList(Request $request){
-        // Perform the upload of student list here
+
+        if (user()->hasRole('admin')) {
+
+            $validated = $request->validate([
+                'file' => 'required|mimes:xlsx|max:3048',
+                'program_id' =>'required'
+            ]);
+
+            $studentList = $request->file('file');
+
+            Excel::import(new AdmissionListImport($request->program_id), $studentList);
+
+            return back()->with('success', "Congratulations!!! Student list uploaded successfully !!! .");
+
+        }else{
+            return back()->with('info', "This action is for administrator's Only, Contact ICT");
+        }
+
+        return back()->with('error',"Nothing found");
+
+
     }
 }
