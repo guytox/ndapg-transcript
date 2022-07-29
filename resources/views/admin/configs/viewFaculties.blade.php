@@ -87,6 +87,11 @@
                                             {!! Form::text('description', '',['class'=>'form-control', 'required' ]) !!}
                                         </div>
 
+                                        <div class="form-group">
+                                            {!! Form::label('academic', 'Is it Academic or Non-Academic ') !!}
+                                            {!! Form::select('academic',[1=>'Academic', 2=>'Non-Academic'] ,'1',['class'=>'form-control', 'required' ]) !!}
+                                        </div>
+
                                         {!! Form::submit('Create New Faculty') !!}
 
                                         {!! Form::close() !!}
@@ -117,6 +122,11 @@
                                                 <div class="form-group">
                                                     {!! Form::label('description', 'Enter a Faculty Description') !!}
                                                     {!! Form::text('description', $val2->description,['class'=>'form-control', 'required'  ]) !!}
+                                                </div>
+
+                                                <div class="form-group">
+                                                    {!! Form::label('academic', 'Enter a Faculty Description') !!}
+                                                    {!! Form::select('academic',[1=>'Academic', 2=>'Non-Academic'] ,$val2->academic,['class'=>'form-control', 'required' ]) !!}
                                                 </div>
 
                                                 {!! Form::submit('Edit Faculty Details',['class'=>'btn btn-success']) !!}

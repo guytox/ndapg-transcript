@@ -76,6 +76,8 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::post('/addgradingsystemItem', [GradingSystemController::class, 'addGradingItem'])->name('add.grading.item');
         Route::post('/removegradingsystemItem', [GradingSystemController::class, 'deleteGradingItem'])->name('delete.grading.item');
         Route::post('/editgradingsystemItem', [GradingSystemController::class, 'editGradingItem'])->name('edit.grading.item');
+        Route::post('/studentlistupload', [StudentInformationController::class, 'uploadStudentList'])->name('student.list.upload');
+
 
 
     });
@@ -152,6 +154,24 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
 
 
 });
+
+
+//Routes for external Staff for Pay Processing etc
+
+Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor'])->group(function () {
+
+    Route::prefix('UploadPayments')->group(function () {
+
+        Route::get('confirmpay', [ 'school'])->name('fee.confirmation.search');
+        Route::post('confirmpay', [ 'school'])->name('fee.confirmation.upload');
+        Route::get('confirmreports', [ 'school'])->name('fee.confirmation.report');
+
+    });
+
+});
+
+
+
 
 Route::get('/Confirmation/CourseReg/{$id}', [StudentRegistrationController::class, 'verifyReg'])->middleware('auth', 'role:staff')->name('verify.student.reg');
 

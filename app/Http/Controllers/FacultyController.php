@@ -58,13 +58,15 @@ class FacultyController extends Controller
 
                     'name'=>'required',
                     'description'=>'required',
+                    'academic' => 'required'
 
                 ]);
 
                 Faculty::upsert($request->except('_token'), $uniqueBy =['facultyName'], $update=[
 
                     'name',
-                    'description'
+                    'description',
+                    'academic'
                 ]);
 
                 return redirect(route('faculties.index'));
@@ -117,10 +119,11 @@ class FacultyController extends Controller
 
                 $this->validate($request, [
 
-                    'uid',
-                    'id',
-                    'facultyName',
-                    'facultyDescription',
+                    'uid' =>'required',
+                    'id' => 'required',
+                    'name' => 'required',
+                    'description' => 'required',
+                    'academic' => 'required'
 
 
                 ]);
@@ -132,7 +135,8 @@ class FacultyController extends Controller
                 Faculty::upsert($request->except('_token', '_method'), $uniqueBy ='id', $update=[
                     'name',
                     'description',
-                    'uid'
+                    'uid',
+                    'academic'
                 ]);
 
                 return redirect(route('faculties.index'));

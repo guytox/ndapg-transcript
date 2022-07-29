@@ -81,7 +81,8 @@ class DepartmentController extends Controller
                     'faculty_id'=>'required',
                     'name'=>'required',
                     'description'=>'required',
-                    'uid'=>'required'
+                    'uid'=>'required',
+                    'academic' => 'required'
 
                 ]);
 
@@ -90,7 +91,8 @@ class DepartmentController extends Controller
                     'faculty_id',
                     'name',
                     'uid',
-                    'description'
+                    'description',
+                    'academic'
                 ]);
 
                 return redirect(route('departments.index'));
@@ -148,7 +150,8 @@ class DepartmentController extends Controller
                     'faculty_id'=>'required',
                     'name'=>'required',
                     'description'=>'required',
-                    'uid'=>'required'
+                    'uid'=>'required',
+                    'academic' => 'required'
 
                 ]);
 
@@ -158,7 +161,8 @@ class DepartmentController extends Controller
 
                     'faculty_id',
                     'name',
-                    'description'
+                    'description',
+                    'academic'
                 ]);
 
                 return redirect(route('departments.index'));
