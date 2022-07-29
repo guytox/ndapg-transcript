@@ -87,6 +87,11 @@
                                                 {!! Form::text('description', $department->description,['class'=>'form-control', 'required'  ]) !!}
                                             </div>
 
+                                            <div class="form-group">
+                                                {!! Form::label('academic', 'Is it Academic or Non-Academic ') !!}
+                                                {!! Form::select('academic',[1=>'Academic', 2=>'Non-Academic'] ,$department->academic,['class'=>'form-control', 'required' ]) !!}
+                                            </div>
+
                                             {!! Form::submit('Edit Department Details',['class'=>'btn btn-success']) !!}
 
                                             {!! Form::close() !!}
@@ -128,6 +133,11 @@
                                         <div class="form-group">
                                             {!! Form::label('description', 'Enter a Shortcode for the Department') !!}
                                             {!! Form::text('description', '',['class'=>'form-control', 'required' ]) !!}
+                                        </div>
+
+                                        <div class="form-group">
+                                            {!! Form::label('academic', 'Is it Academic or Non-Academic ') !!}
+                                            {!! Form::select('academic',[1=>'Academic', 2=>'Non-Academic'] ,'1',['class'=>'form-control', 'required' ]) !!}
                                         </div>
 
                                         {!! Form::submit('Create New Department') !!}

@@ -94,4 +94,8 @@ class StudentInformationController extends Controller
     {
         //
     }
+
+    public function uploadStudentList(Request $request){
+        // Perform the upload of student list here
+    }
 }
