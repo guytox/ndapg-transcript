@@ -183,7 +183,7 @@
 </li>
 
 <li>
-    <a href="{{ route('faculties.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+    <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
         <i class="mdi mdi-book-information-variant"></i>
         <span>Upload Student Balances</span>
     </a>

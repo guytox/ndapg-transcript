@@ -32,16 +32,16 @@ class AdmissionListImport implements ToModel, WithHeadingRow
 
         $data = [
             'name' => $row['name'],
-            'email' => $row['name'],
-            'password' => Hash::make('123456'),
+            'email' => $row['email'],
+            'password' => Hash::make($row['matricno']),
             'email_verified_at' => now(),
             'username' => $row['matricno'],
-            'phone_number'=> $row['name'],
+            'phone_number'=> formatPhoneNumber($row['gsm']),
             'current_level' => getProgrammeDetailById($this->program_id, 'level'),
         ];
 
         $studentUser = User::upsert($data, $uniqueBy =['email'],[
-            'email_verified_at'
+            'email_verified_at',
         ]);
 
         //$studentUser = User::updateOrCreate(['email'=>$row['email']],$data);
