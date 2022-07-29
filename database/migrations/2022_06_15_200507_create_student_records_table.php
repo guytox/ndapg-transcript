@@ -25,7 +25,7 @@ class CreateStudentRecordsTable extends Migration
             $table->boolean('is_disabled')->default(false);
             $table->boolean('is_on_siwes')->default(false);
             $table->string('disability')->nullable();
-            $table->integer('state_origin');
+            $table->integer('state_origin')->nullable();
             $table->integer('semesters_spent')->default(0);
             $table->string('dob')->nullable();
             $table->string('jamb_no')->nullable();

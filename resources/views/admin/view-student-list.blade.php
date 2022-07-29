@@ -22,8 +22,31 @@ type="text/css" />
 
                     </div>
 
-                    {{-- <div class="col-sn-6">--}}
-                    {{-- <a href="{{ route('presenting.create')  }}" class="btn btn-primary">Add new Presentation topic &nbsp; <i--}} {{--                                    class="mdi mdi-file-document-edit-outline"></i></a>--}} {{--                        </div>--}} </div>
+                    <div class="col-sn-6">
+                    <a href="#upload-form" class="popup-form btn btn-primary">Upload Student List &nbsp; <i class="mdi mdi-file-document-edit-outline"></i></a>
+                    </div>
+
+                    <div class="card mfp-hide mfp-popup-form mx-auto" id="upload-form">
+                        <div class="card-body">
+                            <h4 class="mt-0 mb-4">Specify Details to Upload Student List</h4>
+                            {!! Form::open(['route' => 'student.list.upload', 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
+
+                            <div class="form-group">
+                                {!! Form::label('program_id', 'Select Programme') !!}
+                                {!! Form::select('program_id', $programlist,'',['class'=>'form-control', 'required' ]) !!}
+                            </div>
+
+                            <div class="form-group">
+                                {!! Form::label('file', 'Select .xlsx File to upload (format: name// matricno // email// gsm // programme // department // faculty)') !!}
+                                {!! Form::file('file', ['class'=> 'form-control']) !!}
+                            </div>
+
+                            {!! Form::submit('Upload Student List') !!}
+
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
+                </div>
 
                         <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;" >
                             <thead>
