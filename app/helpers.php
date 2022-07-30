@@ -118,6 +118,10 @@ function getUser($id,$param){
             return $getuser->username;
             break;
 
+        case 'level':
+            return $getuser->current_level;
+            break;
+
         case 'all':
             return $getuser;
             break;

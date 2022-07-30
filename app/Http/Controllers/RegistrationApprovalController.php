@@ -23,6 +23,12 @@ class RegistrationApprovalController extends Controller
         //check if staff has requisite roles relevant for approval
        $staffRoles = $this->getAcademicRoles(user()->id);
 
+       if (isset($_GET['as'])){
+            $role = $_GET['as'];
+        }else{
+            $role = 'role';
+        }
+
     //    foreach ($staffRoles as $va) {
     //     $roleMenu []= collect([
     //         'role'=> $va['name']
@@ -33,8 +39,8 @@ class RegistrationApprovalController extends Controller
 
 
        //get appointment jurrisdiction
-       $staffJurisdiction = getAcademicDepts(user()->id);
-       //return $staffJurisdiction;
+       $staffJurisdiction = getAcademicDepts(user()->id, $role);
+       $staffJurisdiction;
 
 
        $title = "List of Pending Registrations";
@@ -53,8 +59,17 @@ class RegistrationApprovalController extends Controller
         //check if staff has requisite roles relevant for approval
        $staffRoles = $this->getAcademicRoles(user()->id);
 
+        if (isset($_GET['as'])){
+            $role = $_GET['as'];
+        }else{
+            $role = 'role';
+        }
 
-       $staffJurisdiction = getAcademicDepts(user()->id);
+
+
+
+
+       $staffJurisdiction = getAcademicDepts(user()->id, $role);
 
        $title = "List of Approved Registrations";
 
@@ -216,8 +231,33 @@ class RegistrationApprovalController extends Controller
 
     }
 
+    public function showStudentConfirmedReg($id, $student_id){
 
-    
+        if (user()->hasRole('reg_officer|hod|dean|admin|vc|dvc')) {
+
+            //fetch all regMonitors
+
+            $Monitors = RegMonitor::where(['student_id'=>$student_id,'std_confirm'=>'1', 'uid'=>$id])->with('RegMonitorItems')->first();
+
+            //return $Monitors;
+
+            if ($Monitors) {
+
+                $staffRoles = $this->getAcademicRoles(user()->id);
+
+                return view('admin.printStudentCourseReg', compact('Monitors', 'staffRoles'));
+            }
+            return redirect(route('coursereg.index'))->with('error',"Error 40322, Contact ICT");
+
+
+        }else{
+            abort(403,"You do not have permission to view this page, Please Contact ICT");
+        }
+
+
+
+    }
+
 
 
 

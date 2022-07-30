@@ -4,50 +4,139 @@
 
 @role('hod|dean|reg_officer|exam_officer')
 
-<li>
-    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
-        <i class="mdi mdi-tag-heart"></i>
-        <span>Registration Mgt.</span>
-    </a>
-    <ul>
-        <li>
-            <a href="{{ route('reg.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                <i class="mdi mdi-tag-heart"></i>
-                <span>Approval Queue</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('reg.approvals') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                <i class="mdi mdi-tag-heart"></i>
-                <span>Approved Registrations</span>
-            </a>
-        </li>
+@role('dean')
+    <li>Dean's Office</li>
+    <li>
+        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+            <i class="mdi mdi-tag-heart"></i>
+            <span>Registration Mgt.</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ route('reg.index',['as'=>'ityoughKiVesen']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Dean Approval Queue</span>
+                </a>
+            </li>
 
-    </ul>
-</li>
+            <li>
+                <a href="{{ route('reg.approvals',['as'=>'ityoughKiVesen']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Approved Registrations</span>
+                </a>
+            </li>
 
-<li>
-    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
-        <i class="mdi mdi-tag-heart"></i>
-        <span>Course Allocation</span>
-    </a>
-    <ul>
-        <li>
-            <a href="{{ route('course-allocation.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                <i class="mdi mdi-tag-heart"></i>
-                <span>Course Allocation</span>
-            </a>
-        </li>
+        </ul>
+    </li>
+@endrole
 
-        <li>
-            <a href="{{ route('reg.approvals') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                <i class="mdi mdi-tag-heart"></i>
-                <span>View Previous Allocations</span>
-            </a>
-        </li>
+@role('hod')
+    <li>HOD's Office</li>
+    <li>
+        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+            <i class="mdi mdi-tag-heart"></i>
+            <span>Registration Mgt.</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ route('reg.index',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>HOD Approval Queue</span>
+                </a>
+            </li>
 
-    </ul>
-</li>
+            <li>
+                <a href="{{ route('reg.approvals',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Approved Registrations</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+    <li>
+        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+            <i class="mdi mdi-tag-heart"></i>
+            <span>Course Allocation</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ route('course-allocation.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Course Allocation</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('reg.approvals') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>View Previous Allocations</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+@endrole
+
+@role('reg_officer')
+    <li>Reg. Officer's Office</li>
+    <li>
+        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+            <i class="mdi mdi-tag-heart"></i>
+            <span>Registration Mgt.</span>
+        </a>
+        <ul>
+            @role('reg_officer')
+            <li>
+                <a href="{{ route('reg.index', ['as'=>'ityoughKiNgeren']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Reg_officer Approval Queue</span>
+                </a>
+            </li>
+            @endrole
+
+            <li>
+                <a href="{{ route('reg.approvals',['as'=>'ityoughKiNgeren']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Approved Registrations</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+@endrole
+
+@role('exam_officer')
+    <li>Exam Officer's Office</li>
+    <li>
+        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+            <i class="mdi mdi-tag-heart"></i>
+            <span>Registration Mgt.</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ route('reg.index', ['as'=>'ityoughKiKyaren']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Reg_officer Approval Queue</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('reg.approvals',['as'=>'ityoughKiKyaren']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Approved Registrations</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+@endrole
+
 
 
 @endrole

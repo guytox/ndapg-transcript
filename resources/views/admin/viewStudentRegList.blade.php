@@ -90,30 +90,26 @@ type="text/css" />
                                             </h3>
 
                                         </td>
-                                        {{-- <td>
-                                            @if (getRegMonitorById($v->id, 'stdconfirmation')==0)
-                                                <span>Registration Not Confirmed, Department cannot See it</span>
-                                            @elseif (getRegMonitorById($v->id, 'stdconfirmation')==1 &&getRegMonitorById($v->id, 'status')=='pending' )
-                                                <span>Registration Not Approved, Contact Department to Secure Approval</span>
-                                            @elseif (getRegMonitorById($v->id, 'stdconfirmation')==1 && getRegMonitorById($v->id, 'status')=='approved' )
-                                                <span>All Well, No Action Required</span>
-                                            @endif
-                                        </td> --}}
+
 
                                         <td>
                                             @if (getRegMonitorById($v->id, 'stdconfirmation')==1 )
-                                                <a class="btn btn-primary" href="{{ route('student.registration.viewMyConfirmed', ['id'=>$v->id]) }}">view Details</a>
+
+                                                <a class="btn btn-primary" href="{{ route('show.single.student.reg', ['id'=>$v->uid, 'student_id'=>$v->student_id]) }}">view Details</a>
+
                                             @else
-                                                <a class="btn btn-danger" href="{{ route('student.registration.viewSingle', ['id'=>$v->id]) }}">Preview and Submit Registration</a>
+
+
+
                                             @endif
 
 
 
                                             @if ($v->session_id===activesession()->id && getRegMonitorById($v->id, 'status')=='approved' )
-                                            
+
                                             @role('student')
 
-                                                <a class="btn btn-danger" href="{{ route('student.registration.viewSingle', ['id'=>$v->id]) }}">Print Exam. Card</a>
+                                                <a class="btn btn-danger" href="{{ route('student.registration.viewSingle', ['id'=>$v->uid]) }}">Print Exam. Card</a>
 
                                             @endrole
 

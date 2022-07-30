@@ -190,7 +190,7 @@ function getRoleIdByRoleName($name){
 
 
 
-function getAcademicDepts($id){
+function getAcademicDepts($id, $role){
 
     $user = User::find($id);
 
@@ -200,67 +200,53 @@ function getAcademicDepts($id){
         return $dept;
     }
 
-    if ($user->hasRole('dean')) {
-        $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
-                                ->where('faculties.dean_id', $id)
-                                ->orWhere('departments.hod_id',$id)
-                                ->orWhere('departments.registration_officer_id',$id)
-                                ->orWhere('departments.exam_officer_id',$id)
-                                ->where('faculties.academic',1)
-                                ->select('departments.*')
-                                ->get()
-                                ->pluck('id');
 
+    if ($user->hasRole('dean') && $role =='ityoughKiVesen') {
+
+        $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
+                        ->where('faculties.academic', 1)
+                        ->Where('faculties.dean_id', $id)
+                        ->select('departments.*')
+                        ->get()->pluck('id');
+        return $dept;
+
+
+    }
+
+    if ($user->hasRole('hod') && $role =='ityoughKiChukur') {
+
+        $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
+                        ->where('faculties.academic', 1)
+                        ->where('departments.hod_id',$id)
+                        ->select('departments.*')
+                        ->get()->pluck('id');
         return $dept;
     }
 
-    if ($user->hasRole('hod')) {
-        $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
-                                ->where('faculties.academic',1)
-                                ->orWhere('departments.hod_id',$id)
-                                ->orWhere('faculties.dean_id', $id)
-                                ->orWhere('departments.registration_officer_id',$id)
-                                ->orWhere('departments.exam_officer_id',$id)
-                                ->select('departments.*')
-                                ->get()
-                                ->pluck('id');
+    if ($user->hasRole('reg_officer') && $role =='ityoughKiNgeren') {
 
+        $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
+                        ->where('faculties.academic', 1)
+                        ->where('departments.registration_officer_id',$id)
+                        ->select('departments.*')
+                        ->get()->pluck('id');
         return $dept;
+
     }
 
-    if ($user->hasRole('reg_officer')) {
-        $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
-                                ->where('faculties.academic',1)
-                                ->orWhere('departments.hod_id',$id)
-                                ->orWhere('faculties.dean_id', $id)
-                                ->orWhere('departments.registration_officer_id',$id)
-                                ->orWhere('departments.exam_officer_id',$id)
-                                ->select('departments.*')
-                                ->get()
-                                ->pluck('id');
+    if ($user->hasRole('exam_officer') && $role =='ityoughKiKyaren') {
 
+        $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
+                        ->where('faculties.academic', 1)
+                        ->where('departments.exam_officer_id',$id)
+                        ->select('departments.*')
+                        ->get()->pluck('id');
         return $dept;
+
+
     }
 
-    if ($user->hasRole('exam_officer')) {
-        $dept = Department::join('faculties','faculties.id','=','departments.faculty_id')
-                                ->where('faculties.academic',1)
-                                ->orWhere('departments.hod_id',$id)
-                                ->orWhere('faculties.dean_id', $id)
-                                ->orWhere('departments.registration_officer_id',$id)
-                                ->orWhere('departments.exam_officer_id',$id)
-                                ->select('departments.*')
-                                ->get()
-                                ->pluck('id');
-
-        return $dept;
-    }
-
-
-
-
-
-    return "N/A";
+    return [];
 }
 
 

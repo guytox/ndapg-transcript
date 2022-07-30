@@ -47,7 +47,7 @@
                                                 @if (getRegMonitorById($v->id, 'stdconfirmation')==='0')
                                                     <span title="Student Confirmation" > &#10060;</span>
                                                 @elseif (getRegMonitorById($v->id, 'stdconfirmation')==='1')
-                                                    <span title="registration Officer" > &#9989;</span>
+                                                    <span title="Student Confirmation" > &#9989;</span>
                                                 @endif
 
                                                 @if (getRegMonitorById($v->id, 'rostatus')==0)
