@@ -87,6 +87,7 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
     Route::prefix('Approvals')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer')->group(function(){
         Route::resource('reg', RegistrationApprovalController::class);
         Route::get('get/Approvals', [RegistrationApprovalController::class, 'showApproved'])->name('reg.approvals');
+        Route::get('get/Approvals/{id}/{student_id}', [RegistrationApprovalController::class, 'showStudentConfirmedReg'])->name('show.single.student.reg');
     });
 
 });

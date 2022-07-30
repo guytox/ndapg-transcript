@@ -31,7 +31,7 @@ class StudentInformationController extends Controller
 
         }else{
 
-            return redirect(route('home')->with('error',"You do not have rights to view this page, contact ICT"));
+            return redirect(route('home'))->with('error',"You do not have rights to view this page, contact ICT");
         }
     }
 

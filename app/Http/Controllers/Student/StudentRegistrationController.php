@@ -342,7 +342,7 @@ class StudentRegistrationController extends Controller
             $outline = Curriculum::find($id);
 
             $cores = CurriculumItem::whereNotIn('semester_courses_id',$carryOvers->pluck('course_id'))->whereNotIn('semester_courses_id',$droppedcores->pluck('course_id'))->where(['curricula_id'=> $id, 'category' =>'core' ])->get();
-            
+
             $electives = CurriculumItem::whereNotIn('semester_courses_id',$carryOvers->pluck('course_id'))->whereNotIn('semester_courses_id',$droppedelectives->pluck('course_id'))->where(['curricula_id'=> $id, 'category' =>'elective' ])->get();
 
             $optionals = CurriculumItem::whereNotIn('semester_courses_id',$carryOvers->pluck('course_id'))->where(['curricula_id'=> $id, 'category' =>'core/optional' ])->get();
