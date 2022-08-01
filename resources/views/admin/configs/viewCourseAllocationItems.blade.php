@@ -29,7 +29,7 @@
 
 
 
-    <h1>Details of {{ $title }} Course Allocation</h1>
+    <h4>{{ $title }} {{ getsessionById($allMonitor->session_id)->name}}, {{ ucfirst(getSemesterDetailsById($allMonitor->semester_id))}} Semester Course Allocation </h4>
 
     <div class="row">
         @include('includes.messages')
@@ -54,6 +54,8 @@
 
                                     <div class="form-group">
                                         {!! Form::hidden('MonitorId', $allMonitor->uid, ['class'=>'form-control']) !!}
+
+                                        {!! Form::hidden('uid',uniqid('sca_'), ['class'=>'form-control']) !!}
                                     </div>
 
                                     <div class="form-group">
@@ -151,6 +153,7 @@
 
                                                 <div class="form-group">
                                                     {!! Form::hidden('MonitorId', $allMonitor->uid, ['class'=>'form-control']) !!}
+                                                    {!! Form::hidden('uid',uniqid('sca_'), ['class'=>'form-control']) !!}
                                                 </div>
 
                                                 <div class="form-group">
@@ -179,8 +182,8 @@
 
                                     <tr>
                                         <td></td>
-                                        <td> <span class="text-default">Courses without Staff to Grade/Upload Scores</span> </td>
-                                        <td colspan="6">
+                                        <td colspan="3"> <span class="text-default">Courses without Staff to Grade/Upload Scores</span> </td>
+                                        <td colspan="4">
                                             @foreach ($unallocated as $course)
                                                <i class="text-danger" title="{{getCourseDetailsById($course, 'title')}}">{{getCourseDetailsById($course, 'code')}},</i>
                                             @endforeach

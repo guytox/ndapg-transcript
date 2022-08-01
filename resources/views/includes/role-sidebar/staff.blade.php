@@ -31,7 +31,9 @@
 @endrole
 
 @role('hod')
+
     <li>HOD's Office</li>
+
     <li>
         <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
             <i class="mdi mdi-tag-heart"></i>
@@ -62,14 +64,14 @@
         </a>
         <ul>
             <li>
-                <a href="{{ route('course-allocation.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <a href="{{ route('course-allocation.index',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                     <i class="mdi mdi-tag-heart"></i>
                     <span>Course Allocation</span>
                 </a>
             </li>
 
             <li>
-                <a href="{{ route('reg.approvals') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <a href="{{ route('reg.approvals',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                     <i class="mdi mdi-tag-heart"></i>
                     <span>View Previous Allocations</span>
                 </a>
@@ -77,6 +79,30 @@
 
         </ul>
     </li>
+
+    <li>
+        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+            <i class="mdi mdi-tag-heart"></i>
+            <span>Result Management</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{ route('hod-confirm.index',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Grade Acceptance</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>View Computed Results</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
 @endrole
 
 @role('reg_officer')
@@ -144,7 +170,7 @@
 @role('lecturer')
 
 <li>
-    <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+    <a href="{{ route('lecturer.grading.home',['as'=>'ortesenKwagh']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
         <i class="mdi mdi-timelapse"></i>
         <span>Grade Allocated Courses</span>
     </a>

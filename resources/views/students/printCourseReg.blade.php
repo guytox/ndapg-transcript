@@ -36,14 +36,7 @@
                             </div>
                         </td>
                         <td>
-                            <div class="text-center mb-5">
-                                <a href="#" class="logo"><img height="50" width="50" src="{{asset('assets/img/logo/ummlogo.jpg')}}" alt="logo"></a>
-
-                                <h4 class="font-size-24 text-default mb-4">UNIVERSIT OF MKAR, MKAR <br>
-                                    <span class="text-success font-size-16" >P.M.B. 05 Gboko, Benue State</span> <br>
-                                    <span class="text-success font-size-16">https://umm.edu.ng, +234 803 314 2160</span> <br>
-                                    <span class="text-danger font-size-20"> <U>COURSE REGISTRATION FORM</U> </span></h5>
-                            </div>
+                            @include('includes.reportheaderstudent')
                         </td>
 
 
@@ -53,7 +46,7 @@
                                 @if ($Monitors->status ==='approved')
                                     {!! QrCode::size(160)->generate(route('verify.student.reg',['$id'=>$Monitors->uid])) !!}
                                 @else
-                                    Reg. Not Approved Yet
+                                    Reg. Not Yet Approved
                                 @endif
 
 

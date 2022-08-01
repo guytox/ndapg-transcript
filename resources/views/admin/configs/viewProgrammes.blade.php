@@ -19,10 +19,11 @@
                             <thead>
                                 <tr>
                                     <th scope="col">S/N</th>
-                                    <th scope="col">College Name</th>
+                                    <th scope="col">Faculty Name</th>
                                     <th scope="col">Department Name</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Programme Name</th>
+                                    <th scope="col">category</th>
                                     <th scope="col">Study Level</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -46,6 +47,7 @@
                                             <h5 class="font-size-15 mb-0">{{$programme->progName}}</h5>
                                         </td>
 
+                                        <td>{{$programme->category}}</td>
                                         <td>{{$programme->levelName}}</td>
                                         <td>
 
@@ -104,6 +106,11 @@
                                         </div>
 
                                         <div class="form-group">
+                                            {!! Form::label('category', 'Select Category') !!}
+                                            {!! Form::select('category', ['academic'=>'Academic', 'professional'=>'Professional'], null, ['class' => 'form-control','required' ]) !!}
+                                        </div>
+
+                                        <div class="form-group">
                                             {!! Form::label('description', 'Enter a description for the Programme') !!}
                                             {!! Form::text('description', '',['class'=>'form-control', 'required' ]) !!}
                                         </div>
@@ -150,6 +157,11 @@
                                                 <div class="form-group">
                                                     {!! Form::label('level_id', 'Select Studye Level') !!}
                                                     {!! Form::select('level_id', $levels, $val2->level_id, ['class' => 'form-control' ]) !!}
+                                                </div>
+
+                                                <div class="form-group">
+                                                    {!! Form::label('category', 'Select Category') !!}
+                                                    {!! Form::select('category', ['academic'=>'Academic', 'professional'=>'Professional'], $val2->category, ['class' => 'form-control','required' ]) !!}
                                                 </div>
 
                                                 <div class="form-group">

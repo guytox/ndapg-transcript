@@ -105,7 +105,13 @@ class SemesterCourseAllocationController extends Controller
     public function show($id)
     {
 
+        $role = $_GET['as'];
+        $userId = user()->id;
+
         $allMonitor = CourseAllocationMonitor::where('uid', $id)->with('allocationItems')->first();
+
+        $sessionId = $allMonitor->session_id;
+        $semesterId = $allMonitor->semester_id;
 
         if (user()->hasRole('hod') && getDepartmentDetailById($allMonitor->department_id,'hod')==user()->id) {
             // You have all the allocations aleady
@@ -117,7 +123,7 @@ class SemesterCourseAllocationController extends Controller
             $semesterCourses = getUserSemesterCoursesDropdown(user()->id);
 
             //get all courses that have not been allocated
-            $userDepts = getAcademicDepts(user()->id);
+            $userDepts = getAcademicDepts($userId, $role);
             $allocatedCoruses = CourseAllocationItems::where('allocation_id',$allMonitor->id)->where('can_grade',1)->get()->pluck('course_id');
             $unallocated = CurriculumItem::join('semester_courses as g','g.id','=','curriculum_items.semester_courses_id')
                                                 ->whereIN('g.department_id', $userDepts)
@@ -126,7 +132,7 @@ class SemesterCourseAllocationController extends Controller
                                                 ->get()
                                                 ->pluck('semester_courses_id','id');
 
-            $curriculumCourses = getAllocatonCourses(user()->id);
+            $curriculumCourses = getAllocatonCourses($userId, $role);
 
 
             $title = "Department of ".getDepartmentDetailById($allMonitor->department_id,'name');
@@ -210,6 +216,7 @@ class SemesterCourseAllocationController extends Controller
                 'semester_courses_id'=>'required',
                 'staffId'=>'required',
                 'gradingRights'=>'required',
+                'uid' => 'required'
 
             ]);
 
@@ -230,7 +237,8 @@ class SemesterCourseAllocationController extends Controller
                 'allocation_id' => $allocationMonitor->id,
                 'course_id' => $request->semester_courses_id,
                 'staff_id' => $request->staffId,
-                'can_grade' => $request->gradingRights
+                'can_grade' => $request->gradingRights,
+                'uid' => $request->uid
             ];
 
             if ($request->gradingRights == 1) {

@@ -10,6 +10,7 @@ use App\Http\Controllers\CurriculaItemsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\GradingSystemController;
+use App\Http\Controllers\LecturerGradingController;
 use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\RegistrationApprovalController;
 use App\Http\Controllers\RoleManagementController;
@@ -94,11 +95,44 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
 
 Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer')->group(function(){
 
-    Route::prefix('CourseGrading')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer')->group(function(){
-
+    Route::prefix('CourseGrading')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer')->group(function(){
+        //Semester Course Allcoaton Routes
         Route::resource('/course-allocation', SemesterCourseAllocationController::class);
         Route::post('/add-allocation',[SemesterCourseAllocationController::class, 'addAllocationItem'])->name('add.allocation.staff');
         Route::post('/remove-allocation/{id}',[SemesterCourseAllocationController::class, 'deleteAllocationItem'])->name('delete.allocation.staff');
+
+        //lecturer Grading routes
+        Route::get('/lecturerGrading/{as}', [LecturerGradingController::class, 'showMyCourses'])->name('lecturer.grading.home');
+
+        Route::get('/lecturerGrading/Start/{as}/{id}', [LecturerGradingController::class, 'startGrading'])->name('lecturer.grading.start');
+
+        Route::post('/lecturerGrading/{as}', [LecturerGradingController::class, 'showMyPreviousCourses'])->name('lecturer.grading.previous');
+
+        Route::post('/lecturerGrading/DownloadStudents/{as}/{id}', [LecturerGradingController::class, 'downloadRegistrants'])->name('lecturer.grading.download');
+
+        Route::post('/lecturerGrading/UploadGrades/{as}', [LecturerGradingController::class, 'uploadGrades'])->name('lecturer.grading.upload');
+
+        Route::get('/lecturerGrading/UploadManualGrades/{as}/{id}', [LecturerGradingController::class, 'manualUploadofGrades'])->name('lecturer.grading.manualupload');
+
+        Route::post('/lecturerGrading/ConfirmGrades/{as}', [LecturerGradingController::class, 'gradeConfirmation'])->name('lecturer.grading.confirm');
+
+        Route::post('/lecturerGrading/DeConfirmGrades/{as}', [LecturerGradingController::class, 'reverseGradeConfirmation'])->name('lecturer.grading.deconfirm');
+
+
+        Route::post('/lecturerGrading/SubmitGrades/{as}', [LecturerGradingController::class, 'submitGrades'])->name('lecturer.grading.submit');
+
+        Route::get('/lecturerGrading/hodHome/{as}', [LecturerGradingController::class, 'hodGradeHome'])->name('hod-confirm.index');
+
+        Route::post('/lecturerGrading/hodPrevious/{as}', [LecturerGradingController::class, 'hodShowSelected'])->name('hod-confirm.previous');
+
+        Route::post('/lecturerGrading/hodConfirmGrades/{as}', [LecturerGradingController::class, 'hodConfirmGrades'])->name('hod.grading.confirm');
+
+        Route::post('/lecturerGrading/deanRejectGrades/{as}', [LecturerGradingController::class, 'deanDeConfirmGrades'])->name('dean.grading.confirm');
+
+
+        Route::get('/lecturerScoreSheet/{as}/{id}', [LecturerGradingController::class, 'showScoreSheet'])->name('lecturer.grading.scoresheet');
+
+
 
     });
 

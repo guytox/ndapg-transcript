@@ -95,7 +95,7 @@ type="text/css" />
                                     <td>{{ getSemesterDetailsById($v['semester_id']) }}</td>
                                     <td>{{ getUser($v['created_by'],'name') }}</td>
                                     <td>
-                                        <a href="{{ route('course-allocation.show', $v['uid']) }}" class="btn btn-primary">View Details</a>
+                                        <a href="{{ route('course-allocation.show', [$v['uid'], 'as'=>'ityoughKiChukur']) }}" class="btn btn-primary">View Details</a>
                                     </td>
                                     @if ($v['session_id'] < activeSession()->id)
                                     <td></td>
@@ -123,7 +123,7 @@ type="text/css" />
 
                                             {!! Form::hidden('id', $v->uid, ['class'=>'form-control']) !!}
 
-                                            
+
 
                                             <div class="form-group">
                                                 {!! Form::label('department_id', 'Select Department') !!}

@@ -416,9 +416,9 @@ function getUserSemesterCoursesDropdown($id){
     return "N/A";
 }
 
-function getAllocatonCourses($hodId){
+function getAllocatonCourses($hodId, $role){
 
-    $userDepts = getAcademicDepts(user()->id);
+    $userDepts = getAcademicDepts(user()->id, $role);
 
     $courses = CurriculumItem::join('semester_courses','semester_courses.id','=','curriculum_items.semester_courses_id')
                             ->join('departments', 'departments.id','=','semester_courses.department_id')
