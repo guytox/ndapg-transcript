@@ -21,6 +21,7 @@ class CreateProgramsTable extends Migration
             $table->string('name')->unique();
             $table->foreignId('level_id')->nullable();
             $table->string('description')->nullable();
+            $table->enum('category',array('academic','professional'))->nullable()->default('academic');
             $table->foreignId('department_id')->constrained('departments');
             $table->string('uid');
             $table->timestamps();

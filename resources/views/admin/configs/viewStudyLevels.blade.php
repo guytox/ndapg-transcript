@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>List of Colleges</h1>
+    <h1>List of Study Levels</h1>
 
     <div class="row">
         <div class="col-lg-12">

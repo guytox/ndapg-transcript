@@ -30,7 +30,7 @@ class ProgrammeController extends Controller
                 $programmes = Program::join('departments', 'departments.id','=', 'programs.department_id')
                                         ->join('faculties','faculties.id','=', 'departments.faculty_id')
                                         ->join('study_levels', 'study_levels.id', '=', 'level_id')
-                                        ->select('programs.id as progId','programs.degree_title as degreeTitle', 'programs.name as progName', 'programs.description as progDescription','departments.name as deptName', 'department_id as department_id', 'departments.faculty_id as faculties_id', 'faculties.name as facultyName', 'study_levels.id as level_id', 'study_levels.level as levelName')
+                                        ->select('programs.id as progId','programs.degree_title as degreeTitle', 'programs.category as category' ,'programs.name as progName', 'programs.description as progDescription','departments.name as deptName', 'department_id as department_id', 'departments.faculty_id as faculties_id', 'faculties.name as facultyName', 'study_levels.id as level_id', 'study_levels.level as levelName')
                                         ->get();
 
                 //return $programmes;
@@ -84,7 +84,8 @@ class ProgrammeController extends Controller
                     'department_id'=>'required',
                     'name'=>'required',
                     'description'=>'required',
-                    'uid'=>'required'
+                    'uid'=>'required',
+                    'category' => 'required'
 
                 ]);
 
@@ -92,7 +93,8 @@ class ProgrammeController extends Controller
 
                     'department_id',
                     'name',
-                    'description'
+                    'description',
+                    'category'
                 ]);
 
                 return redirect(route('programs.index'));
@@ -156,10 +158,10 @@ class ProgrammeController extends Controller
 
                 $this->validate($request, [
 
-                    'id',
-                    'departments_id',
-                    'progName',
-                    'progDescription'
+                    'department_id' => 'required',
+                    'name' => 'required',
+                    'description' => 'required',
+                    'category' => 'required'
 
                 ]);
 
@@ -171,7 +173,8 @@ class ProgrammeController extends Controller
 
                     'department_id',
                     'name',
-                    'description'
+                    'description',
+                    'category'
                 ]);
 
                 return redirect(route('programs.index'));

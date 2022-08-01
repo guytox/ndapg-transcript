@@ -73,7 +73,7 @@
                                             {!! Form::hidden('uid',uniqid('dp_'), ['class'=>'form-control']) !!}
 
                                             <div class="form-group">
-                                                {!! Form::label('faculty_id', 'Select Associate College') !!}
+                                                {!! Form::label('faculty_id', 'Select Associate Faculty') !!}
                                                 {!! Form::select('faculty_id',  $faculties, $department->faculty_id,  ['class' => 'form-control' ]) !!}
                                             </div>
 
@@ -121,7 +121,7 @@
 
 
                                         <div class="form-group">
-                                            {!! Form::label('faculty_id', 'Select Associate College') !!}
+                                            {!! Form::label('faculty_id', 'Select Associate Faculty') !!}
                                             {!! Form::select('faculty_id', $faculties, null, ['class' => 'form-control' ]) !!}
                                         </div>
 

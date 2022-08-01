@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>List of Colleges</h1>
+    <h1>List of Faculties</h1>
 
     <div class="row">
         <div class="col-lg-12">
@@ -21,8 +21,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col">S/N</th>
-                                    <th scope="col">College Name</th>
-                                    <th scope="col">College Description</th>
+                                    <th scope="col">Faculty Name</th>
+                                    <th scope="col">Faculty Description</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -67,7 +67,7 @@
                             <div class="card-body">
                                 <h4 class="header-title mb-4"></h4>
                                 <div>
-                                    <a class="popup-form btn btn-primary" href="#test-form">Create New College</a>
+                                    <a class="popup-form btn btn-primary" href="#test-form">Create New Faculty</a>
                                 </div>
 
                                 <div class="card mfp-hide mfp-popup-form mx-auto" id="test-form">
@@ -78,7 +78,7 @@
                                         {!! Form::hidden('uid',uniqid('fc_'), ['class'=>'form-control']) !!}
 
                                         <div class="form-group">
-                                            {!! Form::label('name', 'Enter Enter College Name (Don\'t use the Prefix "College of")') !!}
+                                            {!! Form::label('name', 'Enter Enter Faculty Name (Don\'t use the Prefix "Faculty of")') !!}
                                             {!! Form::text('name', '',['class'=>'form-control', 'required' ]) !!}
                                         </div>
 
@@ -108,14 +108,14 @@
                                     @foreach ($faculties as $key => $val2)
                                         <div class="card mfp-hide mfp-popup-form mx-auto" id="edit-form{{$key+1}}">
                                             <div class="card-body">
-                                                <h4 class="mt-0 mb-4">Edit College Details</h4>
+                                                <h4 class="mt-0 mb-4">Edit Faculty Details</h4>
                                                 {!! Form::open(['route' =>['faculties.update', 'faculty'=>$val2->id] , 'method' => 'PUT']) !!}
 
                                                 {!! Form::hidden('id', $val2->id, ['class'=>'form-control']) !!}
                                                 {!! Form::hidden('uid', uniqid('fc_'), ['class'=>'form-control']) !!}
 
                                                 <div class="form-group">
-                                                    {!! Form::label('name', 'Enter Enter College Name (Don\'t use the Prefix "College of")') !!}
+                                                    {!! Form::label('name', 'Enter Enter Faculty Name (Don\'t use the Prefix "Faculty of")') !!}
                                                     {!! Form::text('name', $val2->name, ['class'=>'form-control', 'required' ]) !!}
                                                 </div>
 

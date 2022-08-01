@@ -24,7 +24,7 @@
                                 <tr>
                                     <th scope="col">S/N</th>
                                     <th scope="col">Role Name</th>
-                                    <th scope="col">College Description</th>
+                                    <th scope="col">Role Description</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -78,7 +78,7 @@
                                         {!! Form::open(['route' => 'rolemanagement.store', 'method' => 'POST']) !!}
 
                                         <div class="form-group">
-                                            {!! Form::label('name', 'Enter Enter Role Name (Don\'t use the Prefix "College of")') !!}
+                                            {!! Form::label('name', 'Enter Enter Role Name ') !!}
                                             {!! Form::text('name', '',['class'=>'form-control', 'required' ]) !!}
                                         </div>
 

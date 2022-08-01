@@ -139,6 +139,12 @@ function getUserByUsername($username){
     return $user;
 }
 
+function getUserById($id){
+    $user = User::find($id);
+
+    return $user;
+}
+
 /**
  * Carbon get todays date only.
  */

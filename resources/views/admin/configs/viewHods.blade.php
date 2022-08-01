@@ -136,7 +136,7 @@
 
 
                                         <div class="form-group">
-                                            {!! Form::label('faculty_id', 'Select Associate College') !!}
+                                            {!! Form::label('faculty_id', 'Select Associate Faculty') !!}
                                             {!! Form::select('faculty_id', $faculties, null, ['class' => 'form-control' ]) !!}
                                         </div>
 
