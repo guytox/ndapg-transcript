@@ -418,6 +418,15 @@ function getDepartmentDetailById($id,$param){
 
 }
 
+function getDepartmentByName($name){
+
+    $department = Department::where('name', $name)->first();
+
+    return $department;
+}
+
+
+
 
 
 function getProgrammeDetailById($id,$param){

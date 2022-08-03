@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\StaffImport;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -24,7 +26,7 @@ class StaffController extends Controller
 
             //get all users with staff role
             $staffList = User::role('staff')->with('roles')->with('profile')->select('id','name','email','username', 'phone_number')->get();
-
+            //return $staffList;
             //get the list of Departments
             $deptsDropdown = getUserDepartmentsDropdown(user()->id);
 
@@ -194,5 +196,29 @@ class StaffController extends Controller
     public function destroy($id)
     {
         return back()->with('error', "Delete of User not allowed, Contact ICT");
+    }
+
+
+    public function uploadStaffList(Request $request){
+
+        if (user()->hasRole('admin')) {
+            //return $request;
+
+            $validated = $request->validate([
+                'file' => 'required|mimes:xlsx|max:3048',
+
+            ]);
+
+            $stafflist = $request->file('file');
+
+            Excel::import(new StaffImport, $stafflist);
+
+            return redirect(route('stafflist.index'))->with('success', "Staff List Uploaded Successfully!!!");
+        } else{
+
+            return back()->with('error', 'You do not have the privileges to perform this action, contact ICT');
+
+        }
+
     }
 }
