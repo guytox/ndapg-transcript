@@ -79,6 +79,8 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::post('/editgradingsystemItem', [GradingSystemController::class, 'editGradingItem'])->name('edit.grading.item');
         Route::post('/studentlistupload', [StudentInformationController::class, 'uploadStudentList'])->name('student.list.upload');
         Route::get('/studentlistupload', [StudentInformationController::class, 'uploadStudentsForm'])->name('student.upload.form');
+        Route::post('/studentAdmissionlistupload', [StudentInformationController::class, 'uploadStudentAdmissionList'])->name('student.admission.upload');
+        Route::get('/studentAdmissionlistupload', [StudentInformationController::class, 'uploadStudentsAdmissionForm'])->name('student.admission.form');
     });
 
 });

@@ -138,6 +138,42 @@ class StudentInformationController extends Controller
         }
     }
 
+
+    public function uploadStudentAdmissionList(Request $request){
+
+        if (user()->hasRole('admin')) {
+
+            $validated = $request->validate([
+                'file' => 'required|mimes:xlsx|max:2048',
+                'program_id' =>'required'
+            ]);
+
+            $studentList = $request->file('file');
+
+            Excel::import(new AdmissionListImport($request->program_id), $studentList);
+
+            return back()->with('success', "Congratulations!!! Student list uploaded successfully !!! .");
+
+        }else{
+            return back()->with('info', "This action is for administrator's Only, Contact ICT");
+        }
+
+        return back()->with('error',"Nothing found");
+
+
+    }
+
+    public function uploadStudentsAdmissionForm(){
+
+        if (user()->hasRole('admin') or user()->hasRole('pay_processor')) {
+
+            $programlist = Program::all()->pluck('name','id');
+
+            return view('admin.configs.import-students',compact('programlist'));
+
+        }
+    }
+
     public function uploadStudentPayments(Request $request){
 
         //return $request;

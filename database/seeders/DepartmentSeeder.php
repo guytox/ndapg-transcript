@@ -20,98 +20,29 @@ class DepartmentSeeder extends Seeder
 
         $departments = [
 
-            [
-                'Academic Planning',
-                $faculties[4]
-            ],
-            [
-                'Directorate of ICT',
-                $faculties[4]
-            ],
-            [
-                'Bursary',
-                $faculties[6]
-            ],
-            [
-                'Registry',
-                $faculties[5]
-            ],
-            [
-                'Student Affairs',
-                $faculties[4]
-            ],
-            [
-                'Security',
-                $faculties[4]
-            ],
-            [
-                'General Studies',
-                $faculties[4]
-            ],
-            [
-                'Food Science and Technology',
-                $faculties[1]
-            ],
-            [
-                'Philosophy',
-                $faculties[3]
-            ],
-            [
-                'English and Other Languages',
-                $faculties[3]
-            ],
-            [
-                'Religious Studies',
-                $faculties[3]
-            ],
-            [
-                'Chemical Science',
-                $faculties[2]
-            ],
-            [
-                'Mathematics and Computer Science',
-                $faculties[2]
-            ],
-            [
-                'Physical Science',
-                $faculties[2]
-            ],
-            [
-                'Biological Science',
-                $faculties[2]
-            ],
-            [
-                'Education',
-                $faculties[2]
-            ],
-            [
-                'Accounting',
-                $faculties[0]
-            ],
-            [
-                'Business Management',
-                $faculties[0]
-            ],
-            [
-                'Economics',
-                $faculties[0]
-            ],
-            [
-                'Mass Communication',
-                $faculties[0]
-            ],
-            [
-                'Political Science',
-                $faculties[0]
-            ],
-            [
-                'Sociology',
-                $faculties[0]
-            ],
-            [
-                'Psychology',
-                $faculties[0]
-            ]
+            ['Defence And Security Studies','Arts And Social Sciences'],
+            ['Geography','Arts And Social Sciences'],
+            ['History And War Studies','Arts And Social Sciences'],
+            ['Languages','Arts And Social Sciences'],
+            ['Political Science','Arts And Social Sciences'],
+            ['Psychology','Arts And Social Sciences'],
+            ['Directorate Of Linkages And Collaboration','Directorate Of Linkages And Collaboration'],
+            ['Civil Engineering','Engineering Technology'],
+            ['Electrical Electronics Engineering','Engineering Technology'],
+            ['Mechanical Engineering','Engineering Technology'],
+            ['Mechatronic Engineering','Engineering Technology'],
+            ['Accounting','Management Sciences'],
+            ['Economics','Management Sciences'],
+            ['Logistics And Supply Chain Management','Management Sciences'],
+            ['Management','Management Sciences'],
+            ['Computer Science','Military Science And Interdisciplinary Studies'],
+            ['Cyber Security','Military Science And Interdisciplinary Studies'],
+            ['Intelligence And Security Science','Military Science And Interdisciplinary Studies'],
+            ['Biology','Science'],
+            ['Biotechnology','Science'],
+            ['Chemistry','Science'],
+            ['Mathematical Sciences','Science'],
+            ['Physics','Science'],
         ];
 
         foreach ($departments as $department) {

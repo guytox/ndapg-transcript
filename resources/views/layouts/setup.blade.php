@@ -150,11 +150,11 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                             © 2022, Durable Consultants Limited
+
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-right d-none d-sm-block">
-                                University of Mkar, Mkar
+                                © 2022, Nigerian Defense Academy Kaduna
                             </div>
                         </div>
                     </div>

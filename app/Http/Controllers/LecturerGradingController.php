@@ -261,6 +261,7 @@ class LecturerGradingController extends Controller
                                             ->join('semester_courses', 'semester_courses.id','=','course_allocation_items.course_id')
                                             ->join('departments', 'departments.id','=','semester_courses.department_id')
                                             ->where('departments.hod_id',user()->id)
+                                            ->where('course_allocation_items.can_grade', 1)
                                             ->where([
                                             'm.session_id' => $session_id,
                                             'm.semester_id' =>$semester_id ])
