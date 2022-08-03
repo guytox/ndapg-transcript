@@ -70,13 +70,6 @@
                 </a>
             </li>
 
-            <li>
-                <a href="{{ route('reg.approvals',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                    <i class="mdi mdi-tag-heart"></i>
-                    <span>View Previous Allocations</span>
-                </a>
-            </li>
-
         </ul>
     </li>
 

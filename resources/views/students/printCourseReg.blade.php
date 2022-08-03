@@ -57,10 +57,10 @@
                 </table>
                 <table class="table table-centered table-nowrap mb-0">
                     <tr >
-                        <td>Date Submitted</td>
-                        <td>{{$Monitors->created_at}}</td>
+                        <td></td>
+                        <td> <h3><u>STUDENT DATA</u> </h3> </td>
                         <td class="text-center">
-                            <u>STUDENT DATA</u>
+
                         </td>
                         <td class="text-right"> <b>Matric:</b> </td>
                         <td class="text-danger text-left font-size-20"><b>{{getStudentByUserId(user()->id)->matric}}</b></td>
@@ -96,7 +96,7 @@
 
                     <tr>
                         <td class="text-left">Reg. Description</td>
-                        <td colspan="4" class="text-left"> <b>{{ getCurriculaById($Monitors->curricula_id,"name")}}</b> </td>
+                        <td colspan="4" class="text-left"> <b>{{ getCurriculaById($Monitors->curricula_id,"name")}},  {{activeSession()->name}} Session.</b> </td>
                     </tr>
 
                 </table>
@@ -137,6 +137,7 @@
                             <td></td>
                             <td></td>
                             <td>
+                                <b>Date Submitted :</b>{{$Monitors->created_at}},
                                 <b>Total Registered Credits</b>
                             </td>
                             <td><b>{{$Monitors->total_credits}}</b></td>

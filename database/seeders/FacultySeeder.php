@@ -14,7 +14,7 @@ class FacultySeeder extends Seeder
      */
     public function run()
     {
-        $faculties = ['Social and Management Sciences', 'Food Science and Techology', 'Science and Education','Arts','Office of the Vice Chancellor','Office of the Registrar','Office of the Bursar','Librarian'];
+        $faculties = ['Arts And Social Sciences', 'Engineering Technology', 'Management Sciences','Military Science And Interdisciplinary Studies','Science','Directorate Of Linkages And Collaboration'];
 
         foreach ($faculties as $faculty) {
             // create role when the seeder is called with 3 basic roles.
