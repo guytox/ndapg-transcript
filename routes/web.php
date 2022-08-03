@@ -59,6 +59,7 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::post('/revokehods/{departmentyid}', '\App\Http\Controllers\DepartmentController@revokeHods')->name('appointments.revoke.hod');
         Route::post('/assignhods/{departmentid}', '\App\Http\Controllers\DepartmentController@assignHod')->name('appointments.assign.hods');
         Route::resource('/stafflist', StaffController::class);
+        Route::post('/staffListUpload', [StaffController::class, 'uploadStaffList'])->name('stafflist.upload');
         Route::get('/studentlist', [StudentInformationController::class, 'index'])->name('view.all.active');
     });
 

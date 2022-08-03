@@ -22,13 +22,15 @@ type="text/css" />
                 <div class="row">
                     <div class="col-sm-12">
 
-                        <h4 class="header-title">List of UMM Staff</h4>
+                        <h4 class="header-title">List of NDA Staff</h4>
                         <p class="card-title-desc"> The List below shows the staff list on the Portal
                         </p>
 
                     </div>
                     <div>
                         <a class="popup-form btn btn-primary" href="#new-fee-template">Add New Staff</a>
+
+                        <a class="popup-form btn btn-success" href="#upload-fee-template">Upload Lecturer List</a>
 
 
                         <div class="card mfp-hide mfp-popup-form mx-auto" id="new-fee-template">
@@ -74,6 +76,28 @@ type="text/css" />
                                 {!! Form::close() !!}
                             </div>
                         </div>
+
+                        <div class="card mfp-hide mfp-popup-form mx-auto" id="upload-fee-template">
+                            <div class="card-body">
+                                <h4 class="mt-0 mb-4">Lecturer List Bulk Upload</h4>
+
+                                {!! Form::open(['route' => 'stafflist.upload', 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
+
+                                <div>
+                                    {!! Form::label('file', "select file to upoload, must be of type .xlsx FORMAT MUST CONTAIN: staffId// name// department") !!}
+                                    {!! Form::file('file', ['class'=> 'form-control']) !!}
+                                </div>
+
+                                <br>
+
+
+                                {!! Form::submit('Upload List', ['class'=>'form-control btn btn-success']) !!}
+
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
+
+
                     </div>
 
                 </div>
@@ -111,15 +135,9 @@ type="text/css" />
                                         <td>{{ $v['email'] }}</td>
                                         <td>{{ $v['phone_number'] }}</td>
                                         <td>
-                                            {{$v->id}}
-                                            {{-- {{getStaffProfileById($v->id)->id }} --}}
-
-                                            {{-- @foreach (getStaffProfile($v->id) as $profile)
-                                            {{getDepartmentDetailById($profile->department_id, 'name')}}
-                                                @php
-                                                    $department_id = getDepartmentDetailById($profile->department_id, 'id')
-                                                @endphp
-                                            @endforeach --}}
+                                            @isset(getStaffProfileById($v->id)->id)
+                                                {{getDepartmentDetailById(getStaffProfileById($v->id)->department_id, 'name')}}
+                                            @endisset
 
                                         </td>
                                         <td>

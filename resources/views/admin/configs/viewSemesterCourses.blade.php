@@ -213,8 +213,11 @@
                                             {!! Form::label('department_id', 'Select Associate Department') !!}
                                             {!! Form::select('department_id', $departments, null, ['class' => 'form-control' ]) !!}
                                         </div>
-                                        {!! Form::label('file', "select file to upoload, must be of type .xlsx FORMAT MUST CONTAIN: coursecode, coursetitle, creditunits, description") !!}
-                                        {!! Form::file('file', ['class'=> 'form-control']) !!}
+                                        <div>
+                                            {!! Form::label('file', "select file to upoload, must be of type .xlsx FORMAT MUST CONTAIN: coursecode, coursetitle, creditunits, description") !!}
+                                            {!! Form::file('file', ['class'=> 'form-control']) !!}
+                                        </div>
+
 
                                         <br>
 

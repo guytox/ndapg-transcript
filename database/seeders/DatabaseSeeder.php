@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             [
                 RoleSeeder::class,
                 AdminUserSeeder::class,
+                StudyLevelsSeeder::class,
                 FacultySeeder::class,
                 DepartmentSeeder::class,
                 ProgramSeeder::class,
@@ -28,7 +29,6 @@ class DatabaseSeeder extends Seeder
                 SemesterSeeder::class,
                 MatricConfigSeeder::class,
                 BillingItemSeeder::class,
-                StudyLevelsSeeder::class,
                 StatesSeeder::class,
                 LocalGovernmentSeeder::class,
                 ErrorCodesSeeder::class
