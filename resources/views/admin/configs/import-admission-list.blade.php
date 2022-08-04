@@ -11,15 +11,15 @@ type="text/css" />
 @include('includes.messages')
 <div class="row">
     <div class="card-body">
-        <h4 class="mt-0 mb-4">Specify Details to Upload Student Admission List</h4>
-        {!! Form::open(['route' => 'student.admission.upload', 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
+        <h4 class="mt-0 mb-4">Choose .xlsx File to  Upload Student Admission List</h4>
+        {!! Form::open(['route' => 'student.admissionoffer.upload', 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
 
         <div class="form-group">
-            {!! Form::label('file', 'Select .xlsx File to upload (format: name// matricno // email// gsm // programme // department // faculty)') !!}
+            {!! Form::label('file', 'Select .xlsx File to upload (format: faculty// category // formnumber // surname // othernames // state // programme // programme_id // department // country // gender // qualifications // remarks //)') !!}
             {!! Form::file('file', ['class'=> 'form-control']) !!}
         </div>
 
-        {!! Form::submit('Upload Student List') !!}
+        {!! Form::submit('Upload Admission List') !!}
 
         {!! Form::close() !!}
     </div>

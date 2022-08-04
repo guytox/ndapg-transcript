@@ -477,6 +477,12 @@ function getProgrammeDetailById($id,$param){
 
 }
 
+function getProgrammeDetailByName($name){
+    $program = Program::where('name', $name)->first();
+
+    return $program;
+}
+
 //*********************************************************************************************** */
 // Studend Record Helpers Helpers
 //*********************************************************************************************** */
