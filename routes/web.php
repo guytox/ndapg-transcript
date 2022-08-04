@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademicSessionsController;
+use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\PaymentHandleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,10 @@ Route::prefix('admin')->middleware(['role:admin','auth'])->group(function(){
         Route::get('/studentlistupload', [StudentInformationController::class, 'uploadStudentsForm'])->name('student.upload.form');
         Route::post('/studentAdmissionlistupload', [StudentInformationController::class, 'uploadStudentAdmissionList'])->name('student.admission.upload');
         Route::get('/studentAdmissionlistupload', [StudentInformationController::class, 'uploadStudentsAdmissionForm'])->name('student.admission.form');
+
+        //Admission Offer Upload
+        Route::post('/studentAdmissionOfferupload', [AdmissionController::class, 'uploadStudentAdmissionList'])->name('student.admissionoffer.upload');
+        Route::get('/studentAdmissionOfferupload', [AdmissionController::class, 'uploadStudentsAdmissionForm'])->name('student.admissionoffer.form');
     });
 
 });

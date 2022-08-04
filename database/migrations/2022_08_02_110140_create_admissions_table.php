@@ -16,6 +16,7 @@ class CreateAdmissionsTable extends Migration
         Schema::create('admissions', function (Blueprint $table) {
             $table->id();
             $table->string('faculty')->nullable();
+            $table->integer('session_id')->nullable();
             $table->string('category')->nullable();
             $table->string('form_number')->nullable();
             $table->string('surname')->nullable();
