@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\AdmissionOfferImport;
+use App\Models\Admission;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Traits\HasRoles;
@@ -24,7 +25,7 @@ class AdmissionController extends Controller
 
             Excel::import(new AdmissionOfferImport, $admissionList);
 
-            return redirect(route('view.all.active'))->with('success', "Admission List Uploaded Successfully!!!");
+            return redirect(route('student.admissionoffer.form'))->with('success', "Admission List Uploaded Successfully!!!");
         } else{
 
             return back()->with('error', 'You do not have the privileges to perform this action, contact ICT');
@@ -34,7 +35,11 @@ class AdmissionController extends Controller
 
     public function uploadStudentsAdmissionForm(){
         if (user()->hasRole('admin')) {
-            return view('admin.configs.import-admission-list');
+
+            $admitted = Admission::where('session_id', activeSession()->id)->get();
+
+
+            return view('admin.configs.import-admission-list', compact('admitted'));
         }
     }
 }

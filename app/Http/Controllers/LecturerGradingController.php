@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CourseAllocationItems;
 use App\Models\CourseAllocationMonitor;
 use App\Models\CurriculumItem;
+use App\Models\RegMonitorItems;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Traits\HasRoles;
@@ -62,24 +63,10 @@ class LecturerGradingController extends Controller
         }
     }
 
-    public function showScoreSheet($as){
+    public function showScoreSheet($as,$id){
         if (user()->hasRole('lecturer') && $as =='ortesenKwagh') {
 
-            return "write code for scoresheet here";
-
-            $session_id = activeSession()->id;
-            $session_name = activeSession()->name;
-            $semester = activeSession()->currentSemester;
-            $semester_id = getSemesterIdByName($semester);
-
-
-            $courses = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
-                                            ->where(['staff_id'=>user()->id,
-                                            'm.session_id' => $session_id,
-                                            'm.semester_id' =>$semester_id ])
-                                            ->select('course_allocation_items.*', 'm.uid as monitor_uid', 'm.id as monitor_id', 'm.session_id', 'm.semester_id')
-                                            ->get();
-
+            return "write Scoresheet viewing code here";
             //return $courses;
 
             return view('lecturers.viewMyCourses', compact('courses','session_name', 'semester'));
@@ -125,8 +112,47 @@ class LecturerGradingController extends Controller
     }
 
     public function manualUploadofGrades($as, $id){
-        return "we are ready for manual uplaod, write the codes here";
+
+        if (user()->hasRole('lecturer') && $as =='ortesenKwagh') {
+            //get the course allocation item
+            // get the total No of registants grouped by departments
+            //perform confirmation checks and pass the records to relevant views
+            //
+
+            $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
+                                            ->where('course_allocation_items.uid',$id)->first();
+
+            //return $course;
+
+
+            $regs = RegMonitorItems::where(['course_id'=>$course->course_id, 'session_id'=>$course->session_id,'semester_id'=>$course->semester_id])->get();
+
+            //return $regs;
+
+            return view('lecturers.uploadMyScores', compact('course', 'regs'));
+        }
+
     }
+
+    public function uploadManualGrades(Request $request, $as){
+
+        return $request;
+
+        foreach ($request->student_id as $key => $v) {
+            $matrix = $v;
+
+            foreach ($matrix as $key => $m) {
+                return $m;
+            }
+        }
+
+        return $request;
+
+
+        return "ready to send the details to job here";
+    }
+
+
 
 
     public function gradeConfirmation(Request $request, $as){

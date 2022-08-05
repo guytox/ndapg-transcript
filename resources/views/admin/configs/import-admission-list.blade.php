@@ -22,7 +22,48 @@ type="text/css" />
         {!! Form::submit('Upload Admission List') !!}
 
         {!! Form::close() !!}
+        <hr>
+        <div>
+            <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;" >
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Form No.</th>
+                        <th>Name</th>
+                        <th>State</th>
+                        <th>gender</th>
+                        <th>Programme</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    @foreach( $admitted as $key => $v )
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $v->form_number }}</td>
+                        <td>{{ $v->surname }} {{$v->other_names}}</td>
+                        <td>{{ $v->state }}</td>
+                        <td>{{ $v->gender }}</td>
+                        <td>{{ $v->programme }}</td>
+                        <td>{{ $v->category }}</td>
+                    </tr>
+
+
+                    @endforeach
+
+                </tbody>
+            </table>
+
+        </div>
+
     </div>
+
+
+
+
 </div>
 @endsection
 @section('js')

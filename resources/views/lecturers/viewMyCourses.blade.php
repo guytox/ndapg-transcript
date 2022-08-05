@@ -126,7 +126,7 @@
 
                                                 <a class="popup-form btn btn-success" href="#edit-form{{$key+1}}">Upload Scores</a>
 
-                                                <a class="btn btn-primary" href="{{route('lecturer.grading.scoresheet',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">Enter Grades</a>
+                                                <a class="btn btn-primary" href="{{route('lecturer.grading.manualupload',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">Enter Grades</a>
 
                                                 <a class=" btn btn-success" href="{{route('lecturer.grading.scoresheet',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">View Score Sheet</a>
 
