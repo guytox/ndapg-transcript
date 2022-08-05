@@ -122,6 +122,8 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
         Route::get('/lecturerGrading/UploadManualGrades/{as}/{id}', [LecturerGradingController::class, 'manualUploadofGrades'])->name('lecturer.grading.manualupload');
 
+        Route::post('/lecturerGrading/UploadManualGrades/{as}', [LecturerGradingController::class, 'uploadManualGrades'])->name('lecturer.manual.upload');
+
         Route::post('/lecturerGrading/ConfirmGrades/{as}', [LecturerGradingController::class, 'gradeConfirmation'])->name('lecturer.grading.confirm');
 
         Route::post('/lecturerGrading/DeConfirmGrades/{as}', [LecturerGradingController::class, 'reverseGradeConfirmation'])->name('lecturer.grading.deconfirm');
