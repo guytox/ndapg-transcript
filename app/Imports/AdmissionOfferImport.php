@@ -13,6 +13,16 @@ class AdmissionOfferImport implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
+
+
+    private $program_id;
+
+    public function __construct($program_id)
+    {
+        $this->program_id = $program_id;
+    }
+
+
     public function model(array $row)
     {
         $data = [
@@ -23,7 +33,7 @@ class AdmissionOfferImport implements ToModel, WithHeadingRow
             'other_names' => ucfirst($row['othernames']),
             'state' => ucfirst($row['state']),
             'programme' => ucfirst($row['programme']),
-            'programme_id' => getProgrammeDetailByName($row['programme'])->id,
+            'programme_id' => $this->program_id,
             'department' => ucfirst($row['department']),
             'country' => ucfirst($row['country']),
             'gender' => ucfirst($row['gender']),
