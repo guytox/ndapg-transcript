@@ -54,7 +54,7 @@
                         {!! Form::hidden('id', $course->uid, ['class'=>'form-control']) !!}
 
                         <tr>
-                            <th>{!! Form::checkbox('checkbox[]', null, false, []) !!}</th>
+                            <th>{!! Form::checkbox('checkbox[]', 'student_id', true, []) !!}</th>
                             <th scope="col">S/N</th>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
@@ -76,17 +76,17 @@
 
                         @foreach ($regs as $item)
                         <tr>
-                            <td>{!! Form::checkbox('student_id[]', $item->student_id, true) !!}</td>
+                            <td>{!! Form::checkbox('student_id[][]', $item->student_id, true) !!}</td>
                             <td>{{$k}}</td>
                             <td align="left">{{ getStudentById($item->student_id)->matric }}</td>
                             <td align="left">{{ getUserByStudentID($item->student_id)->name }}</td>
                             <td align="left">{{ getStudentById($item->student_id)->programName }}</td>
                             <td align="left">{{ ucfirst($item->status) }}</td>
-                            <td align="left"> {!! Form::text('student_id[{{$item->student_id}}][ca1]', number_format(convertToBoolean($item->ca1),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[{{$item->student_id}}][ca2]', number_format(convertToBoolean($item->ca2),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[{{$item->student_id}}][ca3]', number_format(convertToBoolean($item->ca3),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[{{$item->student_id}}][ca4]', number_format(convertToBoolean($item->ca4),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[{{$item->student_id}}][exam]', number_format(convertToBoolean($item->exam),2), ['class'=>'form-control']) !!}</td>
+                            <td align="left"> {!! Form::text('student_id[ca1]', number_format(convertToBoolean($item->ca1),2), ['class'=>'form-control']) !!}</td>
+                            <td align="left"> {!! Form::text('student_id[ca2]', number_format(convertToBoolean($item->ca2),2), ['class'=>'form-control']) !!}</td>
+                            <td align="left"> {!! Form::text('student_id[ca3]', number_format(convertToBoolean($item->ca3),2), ['class'=>'form-control']) !!}</td>
+                            <td align="left"> {!! Form::text('student_id[ca4]', number_format(convertToBoolean($item->ca4),2), ['class'=>'form-control']) !!}</td>
+                            <td align="left"> {!! Form::text('student_id[exam]', number_format(convertToBoolean($item->exam),2), ['class'=>'form-control']) !!}</td>
                             <td align="left">{{ number_format(convertToBoolean($item->ltotal),2) }}</td>
                             <td align="left">{{ $item->lgrade }}</td>
 

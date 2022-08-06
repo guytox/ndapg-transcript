@@ -19,6 +19,15 @@ type="text/css" />
             {!! Form::file('file', ['class'=> 'form-control']) !!}
         </div>
 
+        <div>
+            {!! Form::label('programme', 'Select Programme', []) !!}
+            {!! Form::select('programme', $programmes, null, ['class'=>'form-control']) !!}
+
+        </div>
+
+        <br>
+
+
         {!! Form::submit('Upload Admission List') !!}
 
         {!! Form::close() !!}
