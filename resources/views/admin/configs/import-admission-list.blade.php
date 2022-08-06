@@ -41,7 +41,8 @@ type="text/css" />
                         <th>Name</th>
                         <th>State</th>
                         <th>gender</th>
-                        <th>Programme</th>
+                        <th>AdmittedProg</th>
+                        <th>SysProg.</th>
                         <th>Category</th>
                     </tr>
                 </thead>
@@ -57,6 +58,7 @@ type="text/css" />
                         <td>{{ $v->state }}</td>
                         <td>{{ $v->gender }}</td>
                         <td>{{ $v->programme }}</td>
+                        <td>{{ getProgrammeDetailById($v->programme_id, 'name') }}</td>
                         <td>{{ $v->category }}</td>
                     </tr>
 
