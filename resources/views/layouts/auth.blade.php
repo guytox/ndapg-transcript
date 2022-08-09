@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Login | Apaxy - Responsive Bootstrap 4 Admin Dashboard</title>
+    <title>Login | NDA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesdesign" name="author" />
+    <meta content="NDA" name="LOGIN PG" />
+    <meta content="NDA" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
@@ -29,9 +29,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="text-center mb-5">
-                    <a href="index.html" class="logo"><img src="{{ asset('assets/images/logo-light.png') }}"
-                                                           height="24" alt="logo"></a>
-                    <h5 class="font-size-16 text-white-50 mb-4">Responsive Bootstrap 4 Admin Dashboard</h5>
+                    <a href="index.html" class="logo"><img src="https://nda.edu.ng/wp-content/uploads/2020/06/Logo_mobile_dark.png"
+                                                           height="50" alt="logo"></a>
+                    <h5 class="font-size-16 text-dark-50 mb-4">NDA</h5>
                 </div>
             </div>
         </div>
