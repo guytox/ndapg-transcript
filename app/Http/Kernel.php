@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\CheckApplicationFeePayment;
+use App\Http\Middleware\CheckProfileCompleted;
 use App\Http\Middleware\CheckRegistrationClearance;
 use App\Http\Middleware\CheckUserSubmittedResult;
 
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'application_fee.confirm' => CheckApplicationFeePayment::class,
         'coursereg_clearance.confirm' => CheckRegistrationClearance::class,
         'application_submitted_result' => CheckUserSubmittedResult::class,
+        'profile_completed' => CheckProfileCompleted::class,
     ];
 }
