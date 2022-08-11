@@ -25,6 +25,8 @@
         <div class="card">
             <div class="card-body">
 
+                @include('includes.messages')
+
                 <table class="table table-centered table-nowrap mb-0"">
                     <tr>
                         <td colspan="">
@@ -46,15 +48,18 @@
 
 
                 <div class="text-center">
-                    <h5><b> LIST OF REGISTERED STUDENTS FOR:--> {{ getSemesterCourseById($course->course_id)->courseCode}}( {{ getSemesterCourseById($course->course_id)->courseTitle}}):--> {{ ucfirst(getSemesterDetailsById($course->semester_id)) }} Semester:--> {{ getsessionById($course->session_id)->name }} Session</b></h5>
+                    <h6><b> LIST OF REGISTERED STUDENTS FOR:--> {{ getSemesterCourseById($course->course_id)->courseCode}}( {{ getSemesterCourseById($course->course_id)->courseTitle}}):--> {{ ucfirst(getSemesterDetailsById($course->semester_id)) }} Semester:--> {{ getsessionById($course->session_id)->name }} Session</b></h6>
                     <hr>
                     <table class="table table-bordered">
-                        {!! Form::open(['route' => ['lecturer.manual.upload', 'as'=>'ortesenKwagh']  , 'method' => 'POST']) !!}
 
-                        {!! Form::hidden('id', $course->uid, ['class'=>'form-control']) !!}
+                        <form action="{{ route('lecturer.manual.upload', ['as'=>'ortesenKwagh']) }}" method="post" >
+                            @csrf
+                            <input type="hidden" name="id" value="{{$course->uid}}">
+                            <input type="hidden" name="context" value="{{$_GET['context']}}">
 
                         <tr>
-                            <th>{!! Form::checkbox('checkbox[]', 'student_id', true, []) !!}</th>
+                            <th>Chk</th>
+
                             <th scope="col">S/N</th>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
@@ -71,23 +76,66 @@
 
                         </tr>
                         @php
-                            $k=1;
+                            $k=0;
                         @endphp
 
-                        @foreach ($regs as $item)
+                        @foreach ($regs as $v => $item)
+
+
                         <tr>
-                            <td>{!! Form::checkbox('student_id[][]', $item->student_id, true) !!}</td>
-                            <td>{{$k}}</td>
+                            <td><input type="checkbox" name="student_id[{{$item->id}}][id]" value="{{$item->id}}" checked></td>
+
+                            <td>{{$k+1}}</td>
                             <td align="left">{{ getStudentById($item->student_id)->matric }}</td>
                             <td align="left">{{ getUserByStudentID($item->student_id)->name }}</td>
                             <td align="left">{{ getStudentById($item->student_id)->programName }}</td>
                             <td align="left">{{ ucfirst($item->status) }}</td>
-                            <td align="left"> {!! Form::text('student_id[ca1]', number_format(convertToBoolean($item->ca1),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[ca2]', number_format(convertToBoolean($item->ca2),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[ca3]', number_format(convertToBoolean($item->ca3),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[ca4]', number_format(convertToBoolean($item->ca4),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left"> {!! Form::text('student_id[exam]', number_format(convertToBoolean($item->exam),2), ['class'=>'form-control']) !!}</td>
-                            <td align="left">{{ number_format(convertToBoolean($item->ltotal),2) }}</td>
+
+                            @if ($item['cfm_ca1'] === '0' && $_GET['context'] ==='8X34' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca1]" value="{{convertToBoolean($item->ca1)}}" class="form-control"></td>
+                            @elseif ($item->cfm_ca1 === '0' && $_GET['context']==='3XE8' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca1]" value="{{convertToBoolean($item->ca1)}}" class="form-control"></td>
+                            @else
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca1]" value="{{convertToBoolean($item->ca1)}}" class="form-control text-danger" readonly></td>
+                            @endif
+
+
+                            @if ($item->cfm_ca2 ==='0' && $_GET['context']==='8OE4' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca2]" value="{{convertToBoolean($item->ca2)}}" class="form-control"></td>
+                            @elseif ($item->cfm_ca2 ==='0' && $_GET['context']==='3XE8' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca2]" value="{{convertToBoolean($item->ca2)}}" class="form-control"></td>
+                            @else
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca2]" value="{{convertToBoolean($item->ca2)}}" class="form-control text-danger" readonly></td>
+                            @endif
+
+
+                            @if ($item->cfm_ca3 ==='0' && $_GET['context']==='3XS4' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca3]" value="{{convertToBoolean($item->ca3)}}" class="form-control"></td>
+                            @elseif ($item->cfm_ca3 ==='0' && $_GET['context']==='3XE8' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca3]" value="{{convertToBoolean($item->ca3)}}" class="form-control"></td>
+                            @else
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca3]" value="{{convertToBoolean($item->ca3)}}" class="form-control text-danger" readonly></td>
+                            @endif
+
+
+                            @if ($item->cfm_ca4 ==='0' && $_GET['context']==='3x34' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca4]" value="{{convertToBoolean($item->ca4)}}" class="form-control"></td>
+                            @elseif ($item->cfm_ca4 ==='0' && $_GET['context']==='3XE8' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca4]" value="{{convertToBoolean($item->ca4)}}" class="form-control"></td>
+                            @else
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][ca4]" value="{{convertToBoolean($item->ca4)}}" class="form-control text-danger" readonly></td>
+                            @endif
+
+
+                            @if ($item->cfm_exam ==='0' && $_GET['context']==='8X3X' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][exam]" value="{{convertToBoolean($item->exam)}}" class="form-control"></td>
+                            @elseif ($item->cfm_exam ==='0' && $_GET['context']==='3XE8' && $item->status ==='approved')
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][exam]" value="{{convertToBoolean($item->exam)}}" class="form-control "></td>
+                            @else
+                                <td align="left"> <input type="text" name="student_id[{{$item->id}}][exam]" value="{{convertToBoolean($item->exam)}}" class="form-control text-danger" readonly></td>
+                            @endif
+
+                            <td align="left">{{ convertToBoolean($item->ltotal) }}</td>
                             <td align="left">{{ $item->lgrade }}</td>
 
                         </tr>
@@ -99,13 +147,11 @@
                         <tr>
                             <td></td>
                             <td></td>
-                            <td>
+                            <td colspan="2">
                                 <b>Last updated :</b>
 
                             </td>
-                            <td><b>{{$course->updated_at}}</b></td>
-                            <td></td>
-                            <td></td>
+                            <td colspan="2"><b>{{$course->updated_at}}</b></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -114,8 +160,10 @@
 
                     </table>
 
-                    {!! Form::submit('Submit Entered Grades', ['class'=>'form-control btn btn-success']) !!}
-                    {!! Form::close() !!}
+                    <button type="submit" class=" form-control btn btn-success">Submit Entered Grades</button>
+                    <hr>
+                    <a href="{{ route('lecturer.grading.home',['as'=>'ortesenKwagh']) }}" class="btn btn-warning form-control">Return to courses</a>
+                </form>
 
 
 

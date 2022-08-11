@@ -32,6 +32,7 @@ class CreateStudentRecordsTable extends Migration
             $table->string('admission_session')->nullable();
             $table->string('graduation_session')->nullable();
             $table->string('room_number')->nullable();
+            $table->integer('grading_system')->default(1);
             $table->timestamps();
         });
     }

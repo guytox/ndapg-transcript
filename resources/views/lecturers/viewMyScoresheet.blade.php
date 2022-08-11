@@ -30,7 +30,7 @@
                         <td colspan="">
                         </td>
                         <td>
-                            @include('includes.reportheaderlecturer')
+                            @include('includes.lecturerScoreSheet')
 
                         </td>
 
@@ -45,12 +45,10 @@
                     <h5><b> LIST OF REGISTERED STUDENTS FOR:--> {{ getSemesterCourseById($course->course_id)->courseCode}}( {{ getSemesterCourseById($course->course_id)->courseTitle}}):--> {{ ucfirst(getSemesterDetailsById($course->semester_id)) }} Semester:--> {{ getsessionById($course->session_id)->name }} Session</b></h5>
                     <hr>
                     <table class="table table-bordered">
-                        {!! Form::open(['route' => ['lecturer.manual.upload', 'as'=>'ortesenKwagh']  , 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
 
-                        {!! Form::hidden('id', $course->uid, ['class'=>'form-control']) !!}
 
                         <tr>
-                            <th>{!! Form::checkbox('checkbox[]', null, false, []) !!}</th>
+
                             <th scope="col">S/N</th>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
@@ -72,7 +70,7 @@
 
                         @foreach ($regs as $item)
                         <tr>
-                            <td>{!! Form::checkbox('checkbox[]', $item->student_id, true) !!}</td>
+
                             <td>{{$k}}</td>
                             <td align="left">{{ getStudentById($item->student_id)->matric }}</td>
                             <td align="left">{{ getUserByStudentID($item->student_id)->name }}</td>
@@ -110,12 +108,13 @@
 
                     </table>
 
-                    {!! Form::submit('Submit Entered Grades', ['class'=>'form-control btn btn-success']) !!}
-                    {!! Form::close() !!}
+
 
                     <table class="table table-centered table-nowrap mb-0">
                         <tr>
                             @if ($course->submitted==='2')
+
+                            <td>Status: Grades not yet submitted to HOD</td>
 
                             @elseif ($course->submitted==='1')
                                 <td>

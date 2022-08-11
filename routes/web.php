@@ -48,8 +48,6 @@ Auth::routes([
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('verified')->name('home');
 
-Route::get('', );
-
 Route::get('profile', [ProfileController::class, 'index'])->middleware('auth')->name('user.profile');
 
 

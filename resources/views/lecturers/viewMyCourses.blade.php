@@ -126,7 +126,7 @@
 
                                                 <a class="popup-form btn btn-success" href="#edit-form{{$key+1}}">Upload Scores</a>
 
-                                                <a class="btn btn-primary" href="{{route('lecturer.grading.manualupload',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">Enter Grades</a>
+                                                <a class="popup-form btn btn-primary" href="#selectgrade-form{{$key+1}}">Enter Grades</a>
 
                                                 <a class=" btn btn-success" href="{{route('lecturer.grading.scoresheet',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">View Score Sheet</a>
 
@@ -191,6 +191,27 @@
                                                 </div>
 
                                             {!! Form::submit('Confirm Grades',['class'=>'btn btn-success']) !!}
+
+                                            {!! Form::close() !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="card mfp-hide mfp-popup-form mx-auto" id="selectgrade-form{{$key+1}}">
+                                        <div class="card-body">
+                                            <h4 class="mt-0 mb-4">Choose what to grade and submit</h4>
+                                            {!! Form::open(['route' => ['lecturer.grading.manualupload', 'as'=>'ortesenKwagh', 'id'=>$val->uid]  , 'method' => 'GET', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
+
+                                                <div class="form-group">
+                                                    {!! Form::label('context', 'Select what to Grade') !!}
+                                                    {!! Form::select('context', ['' =>'N/A', '8X34'=>'CA1','8OE4'=>'CA2', '3XS4'=>'CA3', '3x34'=>'CA4', '8X3X'=>'EXAM', '3XE8'=>'ALL'], '',['class'=>'form-control', 'required' ]) !!}
+                                                </div>
+
+                                                {{-- <div class="form-group">
+                                                    {!! Form::label('confirm', 'I confirm that I will not be able to grade this after this confirmation', ['class'=>'text-danger']) !!}
+                                                    {!! Form::checkbox('confirm','mlumun' , false ,  [ 'required' ]) !!}
+                                                </div> --}}
+
+                                            {!! Form::submit('Proceed to Enter Grades',['class'=>'btn btn-success']) !!}
 
                                             {!! Form::close() !!}
                                         </div>
