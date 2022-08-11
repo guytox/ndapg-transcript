@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CourseRegistrantExport;
+use App\Jobs\LecturerGradeUploadJob;
 use App\Models\CourseAllocationItems;
 use App\Models\CourseAllocationMonitor;
 use App\Models\CurriculumItem;
+use App\Models\GradingSystem;
+use App\Models\GradingSystemItems;
 use App\Models\RegMonitorItems;
+use App\Models\ResultAuditTrail;
+use App\Models\SemesterCourse;
+use App\Models\StudentRecord;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Traits\HasRoles;
 
 class LecturerGradingController extends Controller
@@ -66,10 +75,26 @@ class LecturerGradingController extends Controller
     public function showScoreSheet($as,$id){
         if (user()->hasRole('lecturer') && $as =='ortesenKwagh') {
 
-            return "write Scoresheet viewing code here";
-            //return $courses;
+            //get the course allocation item
+            // get the total No of registants grouped by departments
+            //perform confirmation checks and pass the records to relevant views
+            //
 
-            return view('lecturers.viewMyCourses', compact('courses','session_name', 'semester'));
+            $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
+                                            ->where(['course_allocation_items.uid' =>$id,
+                                                        'course_allocation_items.staff_id' => user()->id,
+                                                        'course_allocation_items.can_grade' =>1
+                                            ])
+                                            ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id')
+                                            ->first();
+
+            //return $course;
+
+            $regs = RegMonitorItems::where(['course_id'=>$course->course_id, 'session_id'=>$course->session_id,'semester_id'=>$course->semester_id])->get();
+
+            //return $regs;
+
+            return view('lecturers.viewMyScoresheet', compact('course', 'regs'));
 
         }
     }
@@ -101,14 +126,74 @@ class LecturerGradingController extends Controller
 
     public function downloadRegistrants(Request $request, $as, $id){
 
-        return $request;
+        //get the course allocation item
+            // get the total No of registants grouped by departments
+            //perform confirmation checks and pass the records to relevant views
+            //
 
-        return back()->with('info', "This module is not ready yet");
+            //return $request;
+
+            $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
+                                            ->join('semester_courses as s','s.id','=','course_allocation_items.course_id')
+                                            ->where(['course_allocation_items.uid' =>$id,
+                                                        'course_allocation_items.staff_id' => user()->id,
+
+                                            ])
+                                            ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id','s.courseCode')
+                                            ->first();
+            $filename = $course->courseCode."_registrants.xlsx";
+            $sessionId = $course->session_id;
+            $semesterId = $course->semester_id;
+            $courseCode = $course->course_id;
+
+            //return $filename;
+
+
+
+            $regs = RegMonitorItems::join('student_records as r','r.id','=','reg_monitor_items.student_id')
+                                            ->join('users as u','u.id','=','r.user_id')
+                                            ->where(['course_id'=>$course->course_id, 'session_id'=>$course->session_id,'semester_id'=>$course->semester_id])
+                                            ->select('r.matric','u.name','ca1','ca2','ca3','ca4','exam')
+                                            ->get();
+
+
+            return Excel::download(new CourseRegistrantExport($sessionId,$semesterId,$courseCode), $filename);
+
+        return back()->with('info', "file successfully downloaded");
     }
 
 
     public function uploadGrades(Request $request, $as){
-        return $request;
+
+        if (user()->hasRole('lecturer') && $as=='ortesenKwagh') {
+
+            $validated = $request->validate([
+                'file' => 'required|mimes:xlsx|max:3048',
+                'id' =>'required',
+                'grading' => 'required',
+            ]);
+
+            $grades = $request->file('file');
+
+            //get details of the semester course allocation from the uid (power query!!!!
+            $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id','=','course_allocation_items.allocation_id')
+                                            ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id')
+                                            ->where(['course_allocation_items.uid'=>$request->id, 'course_allocation_items.staff_id'=>user()->id, 'course_allocation_items.can_grade'=>1, 'graded'=>1, 'grading_completed'=>2, 'submitted'=>2])->first();
+            if ($course->id !='') {
+                //all set to call lecturerGradeImport class
+                return $courseId = $course->course_id;
+                return $sessionId = $course->session_id;
+                return $semesterId = $course->semester_id;
+
+
+            }
+
+
+
+
+            return $request;
+        }
+        return "this is the upload module";
     }
 
     public function manualUploadofGrades($as, $id){
@@ -120,10 +205,14 @@ class LecturerGradingController extends Controller
             //
 
             $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
-                                            ->where('course_allocation_items.uid',$id)->first();
+                                            ->where(['course_allocation_items.uid' =>$id,
+                                                        'course_allocation_items.staff_id' => user()->id,
+                                                        'course_allocation_items.can_grade' =>1
+                                            ])
+                                            ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id')
+                                            ->first();
 
             //return $course;
-
 
             $regs = RegMonitorItems::where(['course_id'=>$course->course_id, 'session_id'=>$course->session_id,'semester_id'=>$course->semester_id])->get();
 
@@ -136,20 +225,258 @@ class LecturerGradingController extends Controller
 
     public function uploadManualGrades(Request $request, $as){
 
-        return $request;
+        if (user()->hasRole('lecturer') && $as =='ortesenKwagh') {
 
-        foreach ($request->student_id as $key => $v) {
-            $matrix = $v;
+            //return $request;
 
-            foreach ($matrix as $key => $m) {
-                return $m;
+            //get details of the semester course allocation from the uid (power query!!!!)
+            $courseAll = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id','=','course_allocation_items.allocation_id')
+                                                ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id')
+                                                ->where(['course_allocation_items.uid'=>$request->id, 'course_allocation_items.staff_id'=>user()->id, 'course_allocation_items.can_grade'=>1, 'graded'=>1, 'grading_completed'=>2, 'submitted'=>2])->first();
+
+            if ($courseAll->uid !='') {
+                //collect every general thing that is required to fire the job here
+            $staffId = $courseAll->staff_id;
+            $gradeRight = $courseAll->can_grade;
+            $gradeRight = $courseAll->can_grade;
+            $confirmCa1 = $courseAll->cfm_ca1;
+            $confirmCa2 = $courseAll->cfm_ca2;
+            $confirmCa3 = $courseAll->cfm_ca3;
+            $confirmCa4 = $courseAll->cfm_ca4;
+            $confirmExam = $courseAll->cfm_exam;
+            $semesterCourseId = $courseAll->course_id;
+
+
+
+
+                //run the loop and create the job now;
+                foreach ($request->student_id as $k => $v) {
+                    $itemId = $v['id'];
+                    $ca1 = floatval($v['ca1']);
+                    $ca2 = floatval($v['ca2']);
+                    $ca3 = floatval($v['ca3']);
+                    $ca4 = floatval($v['ca4']);
+                    $exam = floatval($v['exam']);
+                    $monitorUid = $request->id;
+                    $whatToGrade = $request->context;
+                    $userId = user()->id;
+                    $session_id = $courseAll->session_id;
+                    $semester_id = $courseAll->semester_id;
+                    $courseId = $courseAll->course_id;
+
+                    //LecturerGradeUploadJob::dispatch($monitorUid, $itemId, $staffId, $userId,  $ca1, $ca2, $ca3, $ca4, $exam, $whatToGrade, $semesterCourseId);
+
+                    //next forward the details to the job
+                     $uData = '['.number_format(floatval($ca1),2).']'.'['.number_format(floatval($ca2),2).']'.'['.number_format(floatval($ca3),2).']'.'['.number_format(floatval($ca4),2).']'.'['.number_format(floatval($exam),2).']';
+
+
+                    $oldentries = RegMonitorItems::where(['id'=> $itemId, 'status'=> 'approved'])->first();
+
+                        if ($oldentries->id !='') {
+                            $oldData = '['.convertToBoolean($oldentries->ca1).']'.'['.convertToBoolean($oldentries->ca2).']'.'['.convertToBoolean($oldentries->ca3).']'.'['.convertToBoolean($oldentries->ca4).']'.'['.convertToBoolean($oldentries->exam).']';
+
+                            //return "old ".$oldData." New ". $uData;
+
+                            if ($oldData!=$uData) {
+                                //you have a difference, perform checks and proceed
+                                //get the semester course
+                                $semCourse = SemesterCourse::find($courseId);
+
+                                //check that the uploaded scores do not exceed the limits for ca and exam
+                                if ($ca1+$ca2+$ca3+$ca4<=$semCourse->max_ca && $exam<=$semCourse->max_exam) {
+
+                                    if ($whatToGrade ==='8X34' && $ca1+floatval(convertToBoolean($oldentries->ca2))+floatval(convertToBoolean($oldentries->ca3))+floatval(convertToBoolean($oldentries->ca4))<=floatval($semCourse->max_ca)  && $oldentries->cfm_ca1==='0') {
+                                        //prepare for logging
+                                            $data =[
+                                                'user_id' => $staffId,
+                                                'changes' => "[CA1]",
+                                                'old_values' => '['.convertToBoolean($oldentries->ca1).']',
+                                                'new_values' => '['.number_format($ca1,2).']',
+                                                'course_id' => $courseId,
+                                                'session_id' => $session_id,
+                                                'semester_id' => $semester_id,
+                                                'student_id' => $oldentries->student_id,
+                                            ];
+
+                                            $logEntry = ResultAuditTrail::create($data);
+
+                                            if ($logEntry) {
+                                                //all clear, you may write and proceed
+                                                $oldentries->ca1 = covertToInt($ca1);
+                                                $oldentries->ltotal = covertToInt($ca1) + $oldentries->ca2 + $oldentries->ca3 + $oldentries->ca4 + $oldentries->exam;
+                                                $oldentries->save();
+
+                                                //next update the student grade from the grading system table
+
+
+                                            }
+
+
+                                    }elseif ($whatToGrade ==='8OE4' && $ca2+floatval(convertToBoolean($oldentries->ca1))+floatval(convertToBoolean($oldentries->ca3))+floatval(convertToBoolean($oldentries->ca4))<=floatval($semCourse->max_ca)  && $oldentries->cfm_ca2==='0') {
+
+                                        //prepare for logging
+                                        $data =[
+                                            'user_id' => $staffId,
+                                            'changes' => "[CA2]",
+                                            'old_values' => '['.convertToBoolean($oldentries->ca2).']',
+                                            'new_values' => '['.number_format($ca2,2).']',
+                                            'course_id' => $courseId,
+                                            'session_id' => $session_id,
+                                            'semester_id' => $semester_id,
+                                            'student_id' => $oldentries->student_id,
+                                        ];
+
+                                        $logEntry = ResultAuditTrail::create($data);
+
+                                        if ($logEntry) {
+                                            //all clear, you may write and proceed
+                                            $oldentries->ca2 = covertToInt($ca2);
+                                            $oldentries->ltotal = $oldentries->ca1 + $oldentries->ca3 + $oldentries->ca4 + $oldentries->exam + covertToInt($ca2);
+                                            $oldentries->save();
+
+
+                                        }
+
+
+
+                                    }elseif ($whatToGrade ==='3XS4' && $ca3+floatval(convertToBoolean($oldentries->ca2))+floatval(convertToBoolean($oldentries->ca1))+floatval(convertToBoolean($oldentries->ca4))<=floatval($semCourse->max_ca)  && $oldentries->cfm_ca3==='0') {
+
+                                        //prepare for logging
+                                        $data =[
+                                            'user_id' => $staffId,
+                                            'changes' => "[CA3]",
+                                            'old_values' => '['.convertToBoolean($oldentries->ca3).']',
+                                            'new_values' => '['.number_format($ca3,2).']',
+                                            'course_id' => $courseId,
+                                            'session_id' => $session_id,
+                                            'semester_id' => $semester_id,
+                                            'student_id' => $oldentries->student_id,
+                                        ];
+
+                                        $logEntry = ResultAuditTrail::create($data);
+
+                                        if ($logEntry) {
+                                            //all clear, you may write and proceed
+                                            $oldentries->ca3 = covertToInt($ca3);
+                                            $oldentries->ltotal = $oldentries->ca1 + $oldentries->ca2 + $oldentries->ca4 + $oldentries->exam + covertToInt($ca3);
+                                            $oldentries->save();
+
+
+                                        }
+
+
+
+                                    }elseif ($whatToGrade ==='3x34' && $ca4+floatval(convertToBoolean($oldentries->ca2))+floatval(convertToBoolean($oldentries->ca3))+floatval(convertToBoolean($oldentries->ca1))<=floatval($semCourse->max_ca)  && $oldentries->cfm_ca4==='0') {
+
+                                        //prepare for logging
+                                        $data =[
+                                            'user_id' => $staffId,
+                                            'changes' => "[CA4]",
+                                            'old_values' => '['.convertToBoolean($oldentries->ca4).']',
+                                            'new_values' => '['.number_format($ca4,2).']',
+                                            'course_id' => $courseId,
+                                            'session_id' => $session_id,
+                                            'semester_id' => $semester_id,
+                                            'student_id' => $oldentries->student_id,
+                                        ];
+
+                                        $logEntry = ResultAuditTrail::create($data);
+
+                                        if ($logEntry) {
+                                            //all clear, you may write and proceed
+                                            $oldentries->ca4 = covertToInt($ca4);
+                                            $oldentries->ltotal = $oldentries->ca1 + $oldentries->ca2 + $oldentries->ca3  + $oldentries->exam + covertToInt($ca4);
+                                            $oldentries->save();
+
+
+                                        }
+
+
+
+                                    }elseif ($whatToGrade ==='8X3X' && $exam<=floatval($semCourse->max_exam)  && $oldentries->cfm_exam==='0') {
+
+                                        //prepare for logging
+                                        $data =[
+                                            'user_id' => $staffId,
+                                            'changes' => "[EXAM]",
+                                            'old_values' => '['.convertToBoolean($oldentries->exam).']',
+                                            'new_values' => '['.number_format($exam,2).']',
+                                            'course_id' => $courseId,
+                                            'session_id' => $session_id,
+                                            'semester_id' => $semester_id,
+                                            'student_id' => $oldentries->student_id,
+                                        ];
+
+                                        $logEntry = ResultAuditTrail::create($data);
+
+                                        if ($logEntry) {
+                                            //all clear, you may write and proceed
+                                            $oldentries->exam = covertToInt($exam);
+                                            $oldentries->ltotal = $oldentries->ca1 + $oldentries->ca2 + $oldentries->ca3 + $oldentries->ca4 + covertToInt($exam);
+                                            $oldentries->save();
+
+
+                                        }
+
+
+
+                                    }elseif ($whatToGrade ==='3XE8' && $ca1+$ca2+$ca3+$ca4+$exam <=floatval($semCourse->max_ca)+floatval($semCourse->max_exam) && $oldentries->cfm_ca1==='0' && $oldentries->cfm_ca2==='0' && $oldentries->cfm_ca3==='0' && $oldentries->cfm_ca4==='0' && $oldentries->cfm_exam==='0') {
+
+                                        //prepare for logging
+                                        $data =[
+                                            'user_id' => $staffId,
+                                            'changes' => "[ALL]",
+                                            'old_values' => $oldData,
+                                            'new_values' => $uData,
+                                            'course_id' => $courseId,
+                                            'session_id' => $session_id,
+                                            'semester_id' => $semester_id,
+                                            'student_id' => $oldentries->student_id,
+                                        ];
+
+                                        $logEntry = ResultAuditTrail::create($data);
+
+                                        if ($logEntry) {
+                                            //all clear, you may write and proceed
+                                            $oldentries->ca1 = covertToInt($ca1);
+                                            $oldentries->ca2 = covertToInt($ca2);
+                                            $oldentries->ca3 = covertToInt($ca3);
+                                            $oldentries->ca4 = covertToInt($ca4);
+                                            $oldentries->exam = covertToInt($exam);
+                                            $oldentries->ltotal = covertToInt($ca1) + covertToInt($ca2) + covertToInt($ca3) + covertToInt($ca4) + covertToInt($exam);
+                                            $oldentries->save();
+
+
+                                        }
+
+
+
+                                    }
+
+                                    //return back()->with('success', "Records updated Successfully");
+                                }
+
+                                //return back()->with('error', "limits are not kept, return back");
+                            }
+
+                            //return "Old values are equal to new values";
+                        }
+
+                    //return $request;
+
+                    //return $oldentries = RegMonitorItems::where(['id'=> $itemId, 'status'=> 'approved'])->first();
+
+
+                }
+
+
+                return back()->with('success', 'Grades Successfully Updated, preview to confirm');
+
             }
+
         }
+        return back()->with('error', 'Error!!! Semester Course Search Error, Search Again');
 
-        return $request;
-
-
-        return "ready to send the details to job here";
     }
 
 

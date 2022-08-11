@@ -58,6 +58,9 @@ class CreateRegMonitorItemsTable extends Migration
                 END');
 
 
+        
+
+
 
 
         DB::unprepared('CREATE TRIGGER delete_Course AFTER DELETE ON `reg_monitor_items`

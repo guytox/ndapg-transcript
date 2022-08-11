@@ -29,9 +29,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="text-center mb-5">
-                    <a href="index.html" class="logo"><img src="https://nda.edu.ng/wp-content/uploads/2020/06/Logo_mobile_dark.png"
-                                                           height="50" alt="logo"></a>
-                    <h5 class="font-size-16 text-dark-50 mb-4">NDA</h5>
+                    <a href="index.html" class="logo"><img src="{{asset('assets/img/logo/Logo_mobile_dark.png')}}"
+                                                           height="150" alt="logo"></a> <br><br>
+                    <h5 class="font-size-20 text-dark-50 mb-4">NDA SCHOOL OF POSTGRADUATE STUDIES</h5>
                 </div>
             </div>
         </div>

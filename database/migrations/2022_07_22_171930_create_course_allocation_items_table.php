@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateCourseAllocationItemsTable extends Migration
@@ -44,6 +45,21 @@ class CreateCourseAllocationItemsTable extends Migration
             $table->timestamps();
 
         });
+
+        DB::unprepared('CREATE TRIGGER update_alloc_items AFTER UPDATE ON `course_allocation_items`
+            FOR EACH ROW
+                BEGIN
+                IF (NEW.cfm_ca1!= OLD.cfm_ca1 OR NEW.cfm_ca2!= OLD.cfm_ca2 OR NEW.cfm_ca3!= OLD.cfm_ca3 OR NEW.cfm_ca4!= OLD.cfm_ca4 OR NEW.cfm_exam!= OLD.cfm_exam)
+                THEN
+                    UPDATE `reg_monitor_items`
+                    SET `reg_monitor_items`.`cfm_ca1` = NEW.cfm_ca1, `reg_monitor_items`.`cfm_ca2` = NEW.cfm_ca2, `reg_monitor_items`.`cfm_ca3` = NEW.cfm_ca3, `reg_monitor_items`.`cfm_ca4` = NEW.cfm_ca4, `reg_monitor_items`.`cfm_exam` = NEW.cfm_exam, `reg_monitor_items`.`ltotal` = (`reg_monitor_items`.`ca1`+ `reg_monitor_items`.`ca2`+ `reg_monitor_items`.`ca3`+ `reg_monitor_items`.`ca4`+ `reg_monitor_items`.`exam`)
+                    WHERE `reg_monitor_items`.`course_id` = OLD.course_id
+                    AND `reg_monitor_items`.`session_id` = (SELECT a.session_id from course_allocation_items i inner join course_allocation_monitors a on a.id=i.allocation_id where i.course_id = OLD.course_id)
+                    AND `reg_monitor_items`.`semester_id` = (SELECT a.semester_id from course_allocation_items i inner join course_allocation_monitors a on a.id=i.allocation_id where i.course_id = OLD.course_id);
+                END IF;
+
+
+                END');
 
     }
 
