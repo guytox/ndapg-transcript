@@ -31,7 +31,7 @@
                 <div class="text-center mb-5">
                     <a href="index.html" class="logo"><img src="{{asset('assets/img/logo/Logo_mobile_dark.png')}}"
                                                            height="150" alt="logo"></a> <br><br>
-                    <h5 class="font-size-20 text-dark-50 mb-4">NDA SCHOOL OF POSTGRADUATE STUDIES</h5>
+                    <h1 class="text-dark mb-4" >NDA POSTGRADUATE SCHOOL</h1>
                 </div>
             </div>
         </div>
