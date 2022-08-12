@@ -15,7 +15,7 @@ type="text/css" />
         {!! Form::open(['route' => 'student.admissionoffer.upload', 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data"]) !!}
 
         <div class="form-group">
-            {!! Form::label('file', 'Select .xlsx File to upload (format: faculty// category // formnumber // surname // othernames // state // programme // programme_id // department // country // gender // qualifications // remarks //)') !!}
+            {!! Form::label('file', 'Select .xlsx File to upload (format: faculty // category// formnumber//matricnumber// surname //othernames//  state //programme //studentpaycode //department //country //gender //qualifications //remarks)') !!}
             {!! Form::file('file', ['class'=> 'form-control']) !!}
         </div>
 
