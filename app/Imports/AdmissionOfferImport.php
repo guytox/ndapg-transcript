@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Admission;
+use App\Models\Program;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -25,25 +26,34 @@ class AdmissionOfferImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        $data = [
-            'faculty' => $row['faculty'],
-            'category' => ucfirst($row['category']),
-            'form_number' => $row['formnumber'],
-            'surname' => ucfirst($row['surname']),
-            'other_names' => ucfirst($row['othernames']),
-            'state' => ucfirst($row['state']),
-            'programme' => ucfirst($row['programme']),
-            'programme_id' => $this->program_id,
-            'department' => ucfirst($row['department']),
-            'country' => ucfirst($row['country']),
-            'gender' => ucfirst($row['gender']),
-            'qualifications' => ucfirst($row['qualifications']),
-            'remarks' => ucfirst($row['remarks']),
-            'session_id' => activeSession()->id,
-        ];
 
-        $admitted = Admission::updateOrCreate(['form_number' => $row['formnumber']],$data);
+        $program_id = Program::where('name','=',$row['programme'])->first();
 
-        return $admitted;
+
+            $data = [
+                'faculty' => $row['faculty'],
+                'category' => ucfirst($row['category']),
+                'form_number' => $row['formnumber'],
+                'surname' => ucfirst($row['surname']),
+                'other_names' => ucfirst($row['othernames']),
+                'state' => ucfirst($row['state']),
+                'programme' => ucfirst($row['programme']),
+                'programme_id' => $program_id->id,
+                'department' => ucfirst($row['department']),
+                'country' => ucfirst($row['country']),
+                'gender' => ucfirst($row['gender']),
+                'qualifications' => ucfirst($row['qualifications']),
+                'remarks' => ucfirst($row['remarks']),
+                'session_id' => activeSession()->id,
+            ];
+
+            $admitted = Admission::updateOrCreate(['form_number' => $row['formnumber']],$data);
+            return $admitted;
+
+
+        return false;
+
     }
+
+
 }

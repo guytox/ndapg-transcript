@@ -181,9 +181,9 @@ class LecturerGradingController extends Controller
                                             ->where(['course_allocation_items.uid'=>$request->id, 'course_allocation_items.staff_id'=>user()->id, 'course_allocation_items.can_grade'=>1, 'graded'=>1, 'grading_completed'=>2, 'submitted'=>2])->first();
             if ($course->id !='') {
                 //all set to call lecturerGradeImport class
-                return $courseId = $course->course_id;
-                return $sessionId = $course->session_id;
-                return $semesterId = $course->semester_id;
+                $courseId = $course->course_id;
+                $sessionId = $course->session_id;
+                $semesterId = $course->semester_id;
 
 
             }

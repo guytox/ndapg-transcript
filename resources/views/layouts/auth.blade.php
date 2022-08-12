@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="NDA" name="LOGIN PG" />
     <meta content="NDA" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+     <!-- App favicon -->
+     <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.ico') }}">
 
     <!-- Bootstrap Css -->
     <link href="{{ asset('admin/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
