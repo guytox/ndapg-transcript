@@ -38,12 +38,12 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
         //get details of the regmonitor item and proceed with upload
         $tograde = RegMonitorItems::where([
                                         'student_id' => getStudentByMatric($row['matricno'])->id,
-                                        'session_id' =>$this->sessionId,
-                                        'course_id' =>$this->courseId,
+                                        'session_id' => $this->sessionId,
+                                        'course_id' => $this->courseId,
                                         'semester_id' => $this->semesterId
                                     ])
                                     ->first();
-        $semesterCourse = SemesterCourse::find($tograde->course_id);
+        $semesterCourse = SemesterCourse::find($this->course_id);
 
         if ($tograde->student_id!='') {
             // Entry found begin checks and final entry
@@ -52,7 +52,11 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
                 //difference found, you may proceed
                 //check for limit extension then allow or disallow
                 if (covertToInt(floatval($row['ca1']))+$tograde->ca2 + $tograde->ca3 + $tograde->ca4<= $semesterCourse->max_ca ) {
-                    //limits not exceeded you may proceed with upload of scores
+                    // limits not exceeded you may proceed with upload of scores
+                    // enter log into table
+                    // update the column
+                    // update the total
+                    
 
                 }
 
