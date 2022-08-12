@@ -38,11 +38,12 @@ type="text/css" />
                     <tr>
                         <th>#</th>
                         <th>Form No.</th>
+                        <th>Matric</th>
                         <th>Name</th>
                         <th>State</th>
                         <th>gender</th>
-                        <th>AdmittedProg</th>
                         <th>SysProg.</th>
+                        <th>PayCode.</th>
                         <th>Category</th>
                     </tr>
                 </thead>
@@ -54,11 +55,12 @@ type="text/css" />
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $v->form_number }}</td>
+                        <td>{{ $v->matric_number }}</td>
                         <td>{{ $v->surname }} {{$v->other_names}}</td>
                         <td>{{ $v->state }}</td>
                         <td>{{ $v->gender }}</td>
-                        <td>{{ $v->programme }}</td>
                         <td>{{ getProgrammeDetailById($v->programme_id, 'name') }}</td>
+                        <td>{{ $v->payment_code }}</td>
                         <td>{{ $v->category }}</td>
                     </tr>
 

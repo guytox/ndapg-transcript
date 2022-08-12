@@ -19,6 +19,13 @@ class CreateAdmissionsTable extends Migration
             $table->integer('session_id')->nullable();
             $table->string('category')->nullable();
             $table->string('form_number')->nullable();
+            $table->string('matric_number')->nullable();
+            $table->string('payment_code')->nullable();
+            $table->string('tx_id')->nullable();
+            $table->string('amount_paid')->nullable();
+            $table->string('receipt_number')->nullable();
+            $table->string('cleared_by')->nullable();
+            $table->string('cleared_at')->nullable();
             $table->string('surname')->nullable();
             $table->string('other_names')->nullable();
             $table->string('state')->nullable();
