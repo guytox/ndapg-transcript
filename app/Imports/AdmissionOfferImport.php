@@ -34,6 +34,8 @@ class AdmissionOfferImport implements ToModel, WithHeadingRow
                 'faculty' => $row['faculty'],
                 'category' => ucfirst($row['category']),
                 'form_number' => $row['formnumber'],
+                'matric_number' => $row['matricnumber'],
+                'payment_code' => $row['studentpaycode'],
                 'surname' => ucfirst($row['surname']),
                 'other_names' => ucfirst($row['othernames']),
                 'state' => ucfirst($row['state']),
