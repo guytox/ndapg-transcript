@@ -20,6 +20,10 @@
                         @csrf
                         <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
                     </form>
+
+                    {{ __('remember to check your spam folder for the mail too') }}.
+
+                    <p>Remember to check your spam folder if you do not find it</p>
                 </div>
             </div>
         </div>
