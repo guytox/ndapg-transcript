@@ -96,7 +96,7 @@ Route::prefix('admin')->middleware(['role:admin','auth', 'profile_completed', 'v
 
 });
 
-Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer', 'profile_completed')->group(function(){
+Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer', 'profile_completed', 'verified')->group(function(){
 
     Route::prefix('Approvals')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer')->group(function(){
         Route::resource('reg', RegistrationApprovalController::class);
@@ -106,7 +106,7 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
 
 });
 
-Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer', 'profile_completed')->group(function(){
+Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer', 'profile_completed','verified')->group(function(){
 
     Route::prefix('CourseGrading')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer')->group(function(){
         //Semester Course Allcoaton Routes
@@ -153,7 +153,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
 });
 
-Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm'])->group(function () {
+Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm','verified'])->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/contact-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'contactDetails'])->name('applicant.profile.contact_details');
         Route::get('/personal-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'personalDetails'])->name('applicant.profile.personal_details');
@@ -180,7 +180,7 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
     });
 });
 
-Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearance.confirm', 'profile_completed'])->group(function () {
+Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearance.confirm', 'profile_completed','verified'])->group(function () {
 
     Route::prefix('outstanding')->group(function () {
         Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicant.qualifications.school');
@@ -206,7 +206,7 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
 
 //Routes for external Staff for Pay Processing etc
 
-Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bursary'])->group(function () {
+Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bursary', 'verified'])->group(function () {
 
     Route::prefix('UploadPayments')->group(function () {
 
