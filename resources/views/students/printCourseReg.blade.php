@@ -32,7 +32,7 @@
 
                             <div class="text-left mb-5">
 
-                                <img src="{{asset('/images/'.user()->passport)}}" height="240" width="220" alt="{{user()->name}}">
+                                <img src="{{asset(user()->passport)}}" height="240" width="220" alt="{{user()->name}}">
                             </div>
                         </td>
                         <td>

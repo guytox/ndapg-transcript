@@ -49,6 +49,8 @@ Auth::routes([
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('verified')->name('home');
 
 Route::get('profile', [ProfileController::class, 'index'])->middleware('auth')->name('user.profile');
+Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware('auth')->name('user.profile');
+
 
 
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
