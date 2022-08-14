@@ -171,15 +171,17 @@
 
 @endrole
 
-@role('pay_processor')
+@role('admin|bursary')
 
 <li>
-    <a href="{{ route('student.paymentupload.form') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+    <a href="{{ route('applicant.paycode.form') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
         <i class="mdi mdi-tag-heart"></i>
-        <span>Upload Student Payment Details</span>
+        <span>Upload Pay Code</span>
     </a>
 </li>
 
 @endrole
+
+
 
 @endrole
