@@ -204,14 +204,15 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
 
 //Routes for external Staff for Pay Processing etc
 
-Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin'])->group(function () {
+Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bursary'])->group(function () {
 
     Route::prefix('UploadPayments')->group(function () {
 
         Route::view('/studentpaymentsupload','admin.configs.import-student-payments')->name('student.paymentupload.form');
         Route::post('/studentpaymentupload', [StudentInformationController::class, 'uploadStudentPayments'])->name('student.payment.upload');
-
-
+        Route::view('/applicantpaycodesearch','bursary.search-applicant-paycode')->name('applicant.paycode.form');
+        Route::post('/applicantpaycodesearch', [AdmissionController::class, 'selecPayCodeApplicant'])->name('select.paycode.upload');
+        Route::post('/applicantpaycodeconfirm', [AdmissionController::class, 'activateStudentAccount'])->name('activate.student.account');
 
     });
 
