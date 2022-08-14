@@ -23,7 +23,7 @@
 
                     {{ __('remember to check your spam folder for the mail too') }}.
 
-                    <p>Remember to check your spam folder if you do not find it</p>
+                    <a href="{{route('user.profile')}}" class="btn btn-warning">CHANGE EMAIL</a>
                 </div>
             </div>
         </div>

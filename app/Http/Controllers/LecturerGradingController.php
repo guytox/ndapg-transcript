@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CourseRegistrantExport;
+use App\Imports\LecturerGradeUploadImport;
 use App\Jobs\LecturerGradeUploadJob;
 use App\Models\CourseAllocationItems;
 use App\Models\CourseAllocationMonitor;
@@ -185,15 +186,15 @@ class LecturerGradingController extends Controller
                 $sessionId = $course->session_id;
                 $semesterId = $course->semester_id;
 
+                Excel::import(new LecturerGradeUploadImport($request->id,$request->grading,$courseId,$sessionId,$semesterId,user()->id), $grades);
+
 
             }
 
 
-
-
-            return $request;
+            return back()->with('info', "grades uploaded successfully, check entries");
         }
-        return "this is the upload module";
+        return back()->with('error', "Error!!!! You do not have the required privileges to perform this task");
     }
 
     public function manualUploadofGrades($as, $id){
