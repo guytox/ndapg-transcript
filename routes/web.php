@@ -6,6 +6,7 @@ use App\Http\Controllers\PaymentHandleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentController as ApplicantPaymentController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\curriculaController;
 use App\Http\Controllers\CurriculaItemsController;
 use App\Http\Controllers\DepartmentController;
@@ -215,6 +216,9 @@ Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bur
         Route::view('/applicantpaycodesearch','bursary.search-applicant-paycode')->name('applicant.paycode.form');
         Route::post('/applicantpaycodesearch', [AdmissionController::class, 'selecPayCodeApplicant'])->name('select.paycode.upload');
         Route::post('/applicantpaycodeconfirm', [AdmissionController::class, 'activateStudentAccount'])->name('activate.student.account');
+
+        Route::view('/student-payment-report','bursary.search-applicant-payments')->name('search.paid.applicants');
+        Route::post('/student-payment-report', [BillingController::class, 'getPaidAdmittedStudents'])->name('view.paid.applicants');
 
     });
 
