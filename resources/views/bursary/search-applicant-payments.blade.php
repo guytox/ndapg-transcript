@@ -8,6 +8,8 @@ type="text/css" />
 
 @section('content')
 
+@include('includes.messages')
+
 <h4 class="mt-0 mb-4">Payment Search Request Form</h4>
 <div class="row">
     <div class="card ">
