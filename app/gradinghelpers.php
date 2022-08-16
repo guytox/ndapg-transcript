@@ -3,6 +3,7 @@
 use App\Models\CourseAllocationItems;
 use App\Models\GradingSystemItems;
 use App\Models\Program;
+use App\Models\RegMonitorItems;
 use App\Models\SemesterCourse;
 use App\Models\StudentRecord;
 use App\Models\User;
@@ -77,8 +78,13 @@ function getCourseAllocationItemByUid($uid){
     return $allocationItem;
 }
 
-function getGradeLetter($totalScore, $gradingSystem){
-    $gradingItems = GradingSystemItems::where('grading_system_id',$gradingSystem);
+function getGradeLetter($regMonitorId){
+    //find the regMonitorItem
+    $regMonitorItem = RegMonitorItems::find($regMonitorId);
+
+    //get the student grading system from student record
+
+
 }
 
 
