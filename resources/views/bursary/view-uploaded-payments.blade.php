@@ -33,13 +33,15 @@
                                 <tr>
                                     <th>S/N</th>
                                     <th>Matric No</th>
-                                    <th>Form No</th>
                                     <th>Name</th>
-                                    <th>Pay Code</th>
+                                    <th>Amount Paid</th>
                                     <th>Programme</th>
                                     <th>Cleared By</th>
                                     <th>At</th>
-                                    <th>Amount Paid</th>
+                                    <th>Form No</th>
+                                    <th>Pay Code</th>
+
+
 
                                 </tr>
                             </thead>
@@ -50,13 +52,14 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $v['matno'] }}</td>
-                                    <td>{{ $v['formno'] }}</td>
                                     <td>{{ $v['name'] }}</td>
-                                    <td>{{ $v['paycode'] }}</td>
                                     <td>{{ $v['programme'] }}</td>
+                                    <td>{{ convertToBoolean($v['amountpaid']) }}</td>
                                     <td>{{ $v['clearedby'] }}</td>
                                     <td>{{ $v['clearedat'] }}</td>
-                                    <td>{{ convertToBoolean($v['amountpaid']) }}</td>
+                                    <td>{{ $v['formno'] }}</td>
+                                    <td>{{ $v['paycode'] }}</td>
+
 
 
                                 @endforeach

@@ -18,6 +18,10 @@ class BillingController extends Controller
             $paymentList = Admission::where('amount_paid','>',0)
                                     ->where('session_id',$request->schoolsession)
                                     ->get();
+
+            if ($paymentList->count()<1) {
+                return back()->with('error', "Error, No record found");
+            }
             $totalPaid = 0;
 
             //$payList []='';
@@ -45,6 +49,8 @@ class BillingController extends Controller
 
             return view('bursary.view-uploaded-payments', compact('payList','totalPaid'));
         }
+
+        return back()->with('info', "You do not have the required privileges to view this resource");
 
     }
 }
