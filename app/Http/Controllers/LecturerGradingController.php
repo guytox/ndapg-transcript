@@ -168,6 +168,8 @@ class LecturerGradingController extends Controller
 
         if (user()->hasRole('lecturer') && $as=='ortesenKwagh') {
 
+            //return "Kumator, Good Morning, It's an interesting interaction with you this morning and I'm enjoying it.";
+
             $validated = $request->validate([
                 'file' => 'required|mimes:xlsx|max:3048',
                 'id' =>'required',
@@ -308,6 +310,8 @@ class LecturerGradingController extends Controller
                                                 $oldentries->save();
 
                                                 //next update the student grade from the grading system table
+
+
 
 
                                             }
@@ -453,6 +457,23 @@ class LecturerGradingController extends Controller
 
 
                                     }
+
+                                    $grade = GradingSystemItems::join('grading_systems as g','g.id','=','grading_system_items.grading_system_id')
+                                                                            ->join('student_records as r','r.grading_system_id','=','g.id')
+                                                                            ->join('reg_monitor_items as m','m.student_id','=','r.id')
+                                                                            ->where('m.id',$oldentries->id)
+                                                                            //->whereBetween('m.ltotal',['grading_system_items.lower_boundary', 'grading_system_items.upper_boundary'])
+                                                                            ->select('m.ltotal','grading_system_items.*')
+                                                                            ->get();
+                                                foreach ($grade as $key => $v) {
+                                                    if ($v->ltotal > $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
+
+                                                        $gradeLetter = $v->grade_letter;
+
+                                                        $oldentries->lgrade = $gradeLetter;
+                                                        $oldentries->save();
+                                                    }
+                                                }
 
                                     //return back()->with('success', "Records updated Successfully");
                                 }
@@ -714,6 +735,7 @@ class LecturerGradingController extends Controller
     public function deanDeConfirmGrades(Request $request, $as){
         return $request;
     }
+
 
 
 }

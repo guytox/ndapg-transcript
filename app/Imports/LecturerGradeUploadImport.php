@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\CourseAllocationItems;
+use App\Models\GradingSystemItems;
 use App\Models\RegMonitorItems;
 use App\Models\ResultAuditTrail;
 use App\Models\SemesterCourse;
@@ -273,6 +274,24 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
                 }
 
             }
+
+
+            $grade = GradingSystemItems::join('grading_systems as g','g.id','=','grading_system_items.grading_system_id')
+                                                                            ->join('student_records as r','r.grading_system_id','=','g.id')
+                                                                            ->join('reg_monitor_items as m','m.student_id','=','r.id')
+                                                                            ->where('m.id',$tograde->id)
+                                                                            //->whereBetween('m.ltotal',['grading_system_items.lower_boundary', 'grading_system_items.upper_boundary'])
+                                                                            ->select('m.ltotal','grading_system_items.*')
+                                                                            ->get();
+                                                foreach ($grade as $key => $v) {
+                                                    if ($v->ltotal > $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
+
+                                                        $gradeLetter = $v->grade_letter;
+
+                                                        $tograde->lgrade = $gradeLetter;
+                                                        $tograde->save();
+                                                    }
+                                                }
 
 
         }
