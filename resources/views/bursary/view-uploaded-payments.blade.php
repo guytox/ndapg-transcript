@@ -49,11 +49,11 @@
                                 @foreach( $payList as $key => $v )
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ substr($v['matno'],20,15) }}</td>
-                                    <td>{{ substr($v['formno'],6,12) }}</td>
+                                    <td>{{ $v['matno'] }}</td>
+                                    <td>{{ $v['formno'] }}</td>
                                     <td>{{ $v['name'] }}</td>
                                     <td>{{ $v['paycode'] }}</td>
-                                    <td>{{ substr($v['programme'],0,45) }}...</td>
+                                    <td>{{ $v['programme'] }}</td>
                                     <td>{{ $v['clearedby'] }}</td>
                                     <td>{{ $v['clearedat'] }}</td>
                                     <td>{{ convertToBoolean($v['amountpaid']) }}</td>
