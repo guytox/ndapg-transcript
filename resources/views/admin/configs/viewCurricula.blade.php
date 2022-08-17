@@ -28,7 +28,10 @@ type="text/css" />
 
                     </div>
                     <div>
+                        @role('admin')
                         <a class="popup-form btn btn-primary" href="#new-fee-template">Add New Curriculum </a>
+
+                        @endrole
 
 
                         <div class="card mfp-hide mfp-popup-form mx-auto" id="new-fee-template">
@@ -123,8 +126,9 @@ type="text/css" />
                                     <td>
 
                                             {!! Form::open(['route' => ['curricula.destroy', $v['id']] , 'method' => 'DELETE']) !!}
-
+                                            @role('admin')
                                             <a class="popup-form btn btn-success" href="#edit-fee-template{{$key+1}}">Edit Template </a>
+                                            @endrole
                                             <a href="{{ route('curricula.show', $v['id']) }}" class="btn btn-primary">View Details</a>
 
                                             {!! Form::submit('Delete', ['class'=>'btn btn-danger']) !!}
@@ -189,7 +193,9 @@ type="text/css" />
                         </table>
 
                         <div>
+                            @role('admin')
                             <a class="popup-form btn btn-primary" href="#new-fee-template">Add New Curriculum </a>
+                            @endrole
                         </div>
 
                 </div>

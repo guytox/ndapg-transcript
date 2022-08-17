@@ -19,7 +19,7 @@ class curriculaController extends Controller
      */
     public function index()
     {
-        if (user()->hasRole('admin')) {
+        if (user()->hasRole('admin|dean_pg')) {
             $programs = Program::all()->pluck('name', 'id');
             $semesters = Semester::all()->pluck('name', 'id');
             $studyLevels = StudyLevel::all()->pluck('level', 'id');
@@ -83,7 +83,7 @@ class curriculaController extends Controller
         }
 
 
-    return "<br> You do not have the required permission to visit this page";
+    return " You do not have the required permission to visit this page";
     }
 
     /**
@@ -94,7 +94,7 @@ class curriculaController extends Controller
      */
     public function show($id)
     {
-        if (user()->hasRole('admin')) {
+        if (user()->hasRole('admin|dean|hod|reg_officer|exam_officer')) {
             $curriculum = Curriculum::with('curriculumItems')->find($id);
             $courses = SemesterCourse::where('activeStatus', '=', 1)->get()->pluck('courseCode','id');
 
@@ -193,6 +193,42 @@ class curriculaController extends Controller
 
 
         }
-    return "<br> You do not have the required permission to visit this page";
+    return back()->with('error', "You do not have the required permission to visit this page");
     }
+
+
+    function getMyCurricula(){
+        if (user()->hasRole('dean|hod|reg_officer|exam_officer')) {
+            //return "ready to extract user curricula";
+            $programs = Program::all()->pluck('name', 'id');
+            $semesters = Semester::all()->pluck('name', 'id');
+            $studyLevels = StudyLevel::all()->pluck('level', 'id');
+
+            $curricula = Curriculum::join('programs as p', 'p.id','=','curricula.programs_id')
+                                    ->join('departments as d', 'd.id','=','p.department_id')
+                                    ->join('faculties as f','f.id','=','d.faculty_id')
+                                    ->where('d.hod_id',user()->id)
+                                    ->orWhere('d.exam_officer_id', user()->id)
+                                    ->orWhere('d.registration_officer_id', user()->id)
+                                    ->orWhere('f.dean_id', user()->id)
+                                    ->select('curricula.*')
+                                    ->get();
+
+            //return $curricula;
+
+            return view('admin.configs.viewCurricula', compact('programs', 'semesters', 'studyLevels', 'curricula'));
+        }
+    }
+
+    function showMyCurricula(){
+        if (user()->hasRole('dean|hod|reg_officer|exam_officer')) {
+            return "ready to show curriculum";
+        }
+    }
+
+
+
+
+
+
 }

@@ -112,7 +112,7 @@ Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware(
 
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
 
-Route::prefix('admin')->middleware(['role:admin','auth', 'profile_completed', 'verified'])->group(function(){
+Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_officer','auth', 'profile_completed', 'verified'])->group(function(){
 
     Route::prefix('appointments')->group(function(){
         Route::get('/getdeans', '\App\Http\Controllers\FacultyController@getDeans')->name('appointments.get.deans');
@@ -153,12 +153,18 @@ Route::prefix('admin')->middleware(['role:admin','auth', 'profile_completed', 'v
 
 });
 
-Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer', 'profile_completed', 'verified')->group(function(){
+Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|dean_pg', 'profile_completed', 'verified')->group(function(){
 
     Route::prefix('Approvals')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer')->group(function(){
         Route::resource('reg', RegistrationApprovalController::class);
         Route::get('get/Approvals', [RegistrationApprovalController::class, 'showApproved'])->name('reg.approvals');
         Route::get('get/Approvals/{id}/{student_id}', [RegistrationApprovalController::class, 'showStudentConfirmedReg'])->name('show.single.student.reg');
+    });
+
+
+    Route::prefix('curriculum')->middleware('role:dean|hod|reg_officer|exam_officer')->group(function(){
+        Route::get('/Dept/viewCurriculums',[curriculaController::class, 'getMyCurricula'])->name('get.mycurricula');
+        Route::get('/Dept/showCurriculum',[curriculaController::class, 'showMyCurricula'])->name('show.mycurriculum');
     });
 
 });

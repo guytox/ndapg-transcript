@@ -156,7 +156,21 @@
 
             @endrole
 
+            <li>
+                <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Curriculum Mgt.</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="{{ route('get.mycurricula') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                            <i class="mdi mdi-tag-heart"></i>
+                            <span>View Curriculums </span>
+                        </a>
+                    </li>
 
+                </ul>
+            </li>
 
     @endrole
 
@@ -173,28 +187,28 @@
 
     @role('admin|bursar|pay_processor|dean_pg')
 
-    <li>
-        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
-            <i class="mdi mdi-tag-heart"></i>
-            <span>Pay Code Processing</span>
-        </a>
-        <ul>
-            <li>
-                <a href="{{route('applicant.paycode.form')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                    <i class="mdi mdi-tag-heart"></i>
-                    <span>Upload Pay Code</span>
-                </a>
-            </li>
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Pay Code Processing</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="{{route('applicant.paycode.form')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Upload Pay Code</span>
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ route('search.paid.applicants')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                    <i class="mdi mdi-tag-heart"></i>
-                    <span>View Uploaded Payments</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('search.paid.applicants')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Uploaded Payments</span>
+                    </a>
+                </li>
 
-        </ul>
-    </li>
+            </ul>
+        </li>
 
     @endrole
 
