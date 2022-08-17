@@ -42,7 +42,10 @@
                         <div class="card-body">
                             <h4 class="header-title mb-4"></h4>
                             <div>
+                                @role('admin')
                                 <a class="popup-form btn btn-primary" href="#new-fee-template-item">Add New Curriculum Course</a>
+
+                                @endrole
 
                                 <a class="btn btn-warning" href="{{redirect(back())}}">Return Back</a>
                             </div>
@@ -129,7 +132,7 @@
 
 
                                         <td>
-
+                                            @role('admin')
 
                                             {!! Form::open(['route' => ['curriculaitems.destroy', 'curriculaitem'=>$item->id] , 'method' => 'DELETE']) !!}
 
@@ -138,6 +141,8 @@
                                             {!! Form::submit('Delete Course', ['class'=>'btn btn-danger']) !!}
 
                                             {!! Form::close() !!}
+
+                                            @endrole
 
                                         </td>
                                     </tr>
@@ -226,7 +231,10 @@
                             <div class="card-body">
                                 <h4 class="header-title mb-4"></h4>
                                 <div>
+                                    @role('admin')
                                     <a class="popup-form btn btn-primary" href="#new-fee-template-item">Add New Fee Template Item</a>
+
+                                    @endrole
 
                                     <a class="btn btn-warning" href="{{redirect(back())}}">Return Back</a>
                                 </div>
