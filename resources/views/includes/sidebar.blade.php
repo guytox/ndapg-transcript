@@ -33,6 +33,13 @@
                         @include('includes.role-sidebar.staff')
 
                         <li>
+                            <a href=" {{route('password.email')}} "  class=" waves-effect">
+                                <i class="mdi mdi-logout font-size-16 align-middle mr-1"></i>
+                                <span>Update Password</span>
+                            </a>
+                        </li>
+
+                        <li>
                             <a href="#logout" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" class=" waves-effect">
                                 <i class="mdi mdi-logout font-size-16 align-middle mr-1"></i>
                                 <span>Logout</span>
