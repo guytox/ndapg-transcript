@@ -269,7 +269,7 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
 
 //Routes for external Staff for Pay Processing etc
 
-Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bursary', 'verified'])->group(function () {
+Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bursary|dean_pg', 'verified'])->group(function () {
 
     Route::prefix('UploadPayments')->group(function () {
 
