@@ -20,7 +20,7 @@ class curriculaController extends Controller
     public function index()
     {
         if (user()->hasRole('admin|dean_pg')) {
-            $programs = Program::all()->pluck('name', 'id');
+            $programs = Program::orderBy('name')->get()->pluck('name', 'id');
             $semesters = Semester::all()->pluck('name', 'id');
             $studyLevels = StudyLevel::all()->pluck('level', 'id');
 
