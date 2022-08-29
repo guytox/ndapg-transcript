@@ -125,6 +125,7 @@ class AdmissionController extends Controller
                     'matric'=>$newuser->username,
                     'program_id' => $newStudent->programme_id,
                     'admission_session' => activeSession()->id,
+                    'state_origin' => getStateIdByName($newStudent->state)
                 ];
 
                 $studentUserRecord = StudentRecord::updateOrCreate(['user_id'=>$newuser->id, 'matric'=>$newuser->username],$studentData);

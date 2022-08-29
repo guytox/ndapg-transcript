@@ -519,6 +519,13 @@ function getStateNameById($id){
     return $stateOfOrigin->name;
 }
 
+function getStateIdByName($name){
+
+    $stateOfOrigin = State::where('name', $name)->first();
+
+    return $stateOfOrigin->id;
+}
+
 
 
 
