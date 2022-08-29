@@ -213,5 +213,26 @@
     @endrole
 
 
+    @role('admin|dean_pg')
+
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Reports</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="{{route('search.registered.students')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Registered Students</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+    @endrole
+
+
 
 @endrole

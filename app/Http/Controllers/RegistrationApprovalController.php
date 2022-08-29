@@ -261,6 +261,56 @@ class RegistrationApprovalController extends Controller
 
 
 
+    public function registeredStudentsReport(Request $request){
+
+        if (user()->hasRole('admin|dean_pg')) {
+
+
+
+            $this->validate($request, [
+
+                'schoolsession'=>'required',
+                'semester'=>'required',
+
+
+            ]);
+
+            //return $request;
+
+            $role = 'ReportsGenerator';
+
+            $sess = $request->schoolsession;
+            $sem = $request->semester;
+
+
+            //fetch all regMonitors
+
+                $staffJurisdiction = getAcademicDepts(user()->id, $role);
+
+                $title = "List of Registered Students for " . ucfirst(getSemesterDetailsById($sem))." Semester, ". getSessionById($sess)->name." Session";
+
+                //select students in jurisdiction
+
+                $pendingStdRegs = getRegStudentsReport($staffJurisdiction, $sess, $sem);
+
+                return view('admin.viewStudentRegReport', compact('pendingStdRegs','title'));
+
+
+
+        }elseif(user()->hasRole('reg_officer|hod|dean|admin|vc|dvc')){
+
+
+        }else{
+            abort(403,"You do not have permission to view this page, Please Contact ICT");
+        }
+
+
+
+    }
+
+
+
+
 
 
 }

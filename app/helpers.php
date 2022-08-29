@@ -10,6 +10,7 @@ use App\Models\Program;
 use App\Models\RegMonitor;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
+use App\Models\State;
 use App\Models\StudentRecord;
 use App\Models\StudyLevel;
 use App\Models\User;
@@ -506,6 +507,20 @@ function getStudentByStudentId($id){
 
     return $student;
 }
+
+
+//*********************************************************************************************** */
+// State of Origin Helpers Helpers
+//*********************************************************************************************** */
+
+function getStateNameById($id){
+    $stateOfOrigin = State::find($id);
+
+    return $stateOfOrigin->name;
+}
+
+
+
 
 
 //*********************************************************************************************** */

@@ -182,6 +182,23 @@ function getRegStudents($userId,$jurisdiction, $status ){
 
 }
 
+
+function getRegStudentsReport($jurisdiction, $sess, $sem ){
+
+    $pendingRegs = RegMonitor::join('programs','programs.id','=','reg_monitors.program_id')
+                                    ->join('departments','departments.id','=','programs.department_id')
+                                    ->join('student_records', 'student_records.id','=','reg_monitors.student_id')
+                                    ->join('user_profiles', 'user_profiles.user_id','=','student_records.user_id')
+                                    ->whereIn('departments.id', $jurisdiction)
+                                    ->where(['session_id'=>$sess, 'semester_id'=>$sem])
+                                    ->select('reg_monitors.*', 'user_profiles.gender','student_records.state_origin', 'programs.category','programs.level_id')
+                                    ->get();
+
+    return $pendingRegs;
+
+}
+
+
 function getRoleIdByRoleName($name){
     $roleFind = Role::where('name',$name)->first();
     $roleId = $roleFind->id;
@@ -194,8 +211,8 @@ function getAcademicDepts($id, $role){
 
     $user = User::find($id);
 
-    if ($user->hasRole('vc')) {
-        $dept = Department::all()->pluck('name','id');
+    if ($user->hasRole('vc|admin|dean_pg')) {
+        $dept = Department::where('academic',1)->get()->pluck('id');
 
         return $dept;
     }
