@@ -153,12 +153,15 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
 
 });
 
-Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|dean_pg', 'profile_completed', 'verified')->group(function(){
+Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|dean_pg|admin', 'profile_completed', 'verified')->group(function(){
 
     Route::prefix('Approvals')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer')->group(function(){
         Route::resource('reg', RegistrationApprovalController::class);
         Route::get('get/Approvals', [RegistrationApprovalController::class, 'showApproved'])->name('reg.approvals');
         Route::get('get/Approvals/{id}/{student_id}', [RegistrationApprovalController::class, 'showStudentConfirmedReg'])->name('show.single.student.reg');
+
+
+
     });
 
 
@@ -166,6 +169,16 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
         Route::get('/Dept/viewCurriculums',[curriculaController::class, 'getMyCurricula'])->name('get.mycurricula');
         Route::get('/Dept/showCurriculum',[curriculaController::class, 'showMyCurricula'])->name('show.mycurriculum');
     });
+
+
+    Route::prefix('Reports')->middleware('role:admin|dean_pg')->group(function(){
+
+        Route::view('/RegReport', 'admin.search-registered-students')->name('search.registered.students');
+        Route::post('RegReport', [RegistrationApprovalController::class, 'registeredStudentsReport'])->name('show.registered.students');
+
+    });
+
+
 
 });
 
