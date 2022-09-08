@@ -27,7 +27,7 @@ class AdmissionOfferImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
 
-        $program_id = Program::where('name','=',$row['programme'])->first();
+        $programs = Program::where('name','=',$row['programme'])->first();
 
 
             $data = [
@@ -40,7 +40,7 @@ class AdmissionOfferImport implements ToModel, WithHeadingRow
                 'other_names' => ucfirst($row['othernames']),
                 'state' => ucfirst($row['state']),
                 'programme' => ucfirst($row['programme']),
-                'programme_id' => $program_id->id,
+                'programme_id' => $programs->id,
                 'department' => ucfirst($row['department']),
                 'country' => ucfirst($row['country']),
                 'gender' => ucfirst($row['gender']),
