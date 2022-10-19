@@ -1,5 +1,7 @@
 @role('admin')
 
+
+{{-- Academic Configs --}}
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
         <i class="mdi mdi-tag-heart"></i>
@@ -63,6 +65,8 @@
     </ul>
 </li>
 
+{{-- Payments --}}
+
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
         <i class="mdi mdi-tag-heart"></i>
@@ -92,6 +96,8 @@
     </ul>
 </li>
 
+{{-- Appointments --}}
+
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
         <i class="mdi mdi-tag-heart"></i>
@@ -113,7 +119,7 @@
         <li>
             <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
-                <span>Appoint Sta</span>
+                <span>Appoint Staff</span>
             </a>
         </li>
 
@@ -122,6 +128,7 @@
     </ul>
 </li>
 
+{{-- Manage Students --}}
 
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
@@ -152,6 +159,8 @@
     </ul>
 </li>
 
+{{-- Manage Staff --}}
+
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
         <i class="mdi mdi-book-information-variant"></i>
@@ -174,6 +183,17 @@
     </ul>
 </li>
 
+
+{{-- Password Update --}}
+<li>
+    <a href="{{ route('update-userpass') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+        <i class="mdi mdi-lock font-size-16 align-middle mr-1"></i>
+        <span>User Password Update</span>
+    </a>
+</li>
+
+
+{{-- Manage Emails --}}
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif active has-arrow waves-effect">
         <i class="mdi mdi-book-information-variant"></i>
@@ -195,6 +215,8 @@
 
     </ul>
 </li>
+
+{{-- Upload Student Balances --}}
 
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
