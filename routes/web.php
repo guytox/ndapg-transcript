@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademicSessionsController;
+use App\Http\Controllers\Admin\AdminReportsController;
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\PaymentHandleController;
 use Illuminate\Support\Facades\Auth;
@@ -149,6 +150,11 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
         //Admission Offer Upload
         Route::post('/studentAdmissionOfferupload', [AdmissionController::class, 'uploadStudentAdmissionList'])->name('student.admissionoffer.upload');
         Route::get('/studentAdmissionOfferupload', [AdmissionController::class, 'uploadStudentsAdmissionForm'])->name('student.admissionoffer.form');
+
+        Route::view('/update-userpass', 'admin.update-password')->name('update-userpass');
+        Route::post('/userpass-update', [AdminReportsController::class, 'adminPasswordUpdate'])->name('userpass-update');
+
+
     });
 
 });
