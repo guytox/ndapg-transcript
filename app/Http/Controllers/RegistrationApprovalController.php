@@ -293,6 +293,8 @@ class RegistrationApprovalController extends Controller
 
                 $pendingStdRegs = getRegStudentsReport($staffJurisdiction, $sess, $sem);
 
+                //return $pendingStdRegs;
+
                 return view('admin.viewStudentRegReport', compact('pendingStdRegs','title'));
 
 
