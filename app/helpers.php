@@ -502,10 +502,70 @@ function getStudentByUserId($id){
     return $student;
 }
 
+
+//StudentId Helpers
+
 function getStudentByStudentId($id){
     $student = StudentRecord::find($id);
 
     return $student;
+}
+
+function getFacultyByStudentId($studentId){
+    $student =StudentRecord::join('programs as p', 'p.id','=','student_records.program_id')
+                            ->join('departments as d', 'd.id', '=', 'p.department_id')
+                            ->join('faculties as f','f.id','=','d.faculty_id')
+                            ->join('admissions as a','a.matric_number','=','student_records.matric')
+                            ->where('student_records.id', $studentId)
+                            ->select('student_records.matric', 'student_records.program_id', 'p.name as programName', 'd.name as departmentName', 'f.name as facultyName', 'd.id as departmentId', 'f.id as facultyId', 'a.form_number')
+                            ->first();
+
+    if ($student) {
+        return $student->facultyName;
+
+    }else{
+
+        return false;
+    }
+
+}
+
+function getDepartmentByStudentId($studentId){
+    $student =StudentRecord::join('programs as p', 'p.id','=','student_records.program_id')
+                            ->join('departments as d', 'd.id', '=', 'p.department_id')
+                            ->join('faculties as f','f.id','=','d.faculty_id')
+                            ->join('admissions as a','a.matric_number','=','student_records.matric')
+                            ->where('student_records.id', $studentId)
+                            ->select('student_records.matric', 'student_records.program_id', 'p.name as programName', 'd.name as departmentName', 'f.name as facultyName', 'd.id as departmentId', 'f.id as facultyId', 'a.form_number')
+                            ->first();
+
+    if ($student) {
+        return $student->departmentName;
+
+    }else{
+
+        return false;
+    }
+
+}
+
+function getFormNumberByStudentId($studentId){
+    $student =StudentRecord::join('programs as p', 'p.id','=','student_records.program_id')
+                            ->join('departments as d', 'd.id', '=', 'p.department_id')
+                            ->join('faculties as f','f.id','=','d.faculty_id')
+                            ->join('admissions as a','a.matric_number','=','student_records.matric')
+                            ->where('student_records.id', $studentId)
+                            ->select('student_records.matric', 'student_records.program_id', 'p.name as programName', 'd.name as departmentName', 'f.name as facultyName', 'd.id as departmentId', 'f.id as facultyId', 'a.form_number')
+                            ->first();
+
+    if ($student) {
+        return $student->form_number;
+
+    }else{
+
+        return false;
+    }
+
 }
 
 
