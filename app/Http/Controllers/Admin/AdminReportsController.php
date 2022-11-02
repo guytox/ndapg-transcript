@@ -6,21 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\UserTraits;
 use App\Imports\carryOverImport;
 use App\Imports\StudentOldResultImport;
+use App\Models\Admission;
 use App\Models\AuthorizedEmail;
 use App\Models\Curriculum;
 use App\Models\FeeConfig;
 use App\Models\FeePayment;
+use App\Models\Program;
 use App\Models\RegMonitor;
 use App\Models\StudentMigration;
 use App\Models\StudentRecord;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AdminReportsController extends Controller
 {
-    
+
 
     public function viewEmails()
     {
@@ -294,7 +297,7 @@ class AdminReportsController extends Controller
             $grades = $request->file('file');
 
             //fire the import at this time
-            Excel::import(new carryOverImport, $grades);
+            //Excel::import(new carryOverImport, $grades);
 
             return back()->with('success', "Carry Over Successfully uploaded");
 
@@ -316,7 +319,7 @@ class AdminReportsController extends Controller
             $grades = $request->file('file');
 
             //fire the import at this time
-            Excel::import(new StudentOldResultImport, $grades);
+            //Excel::import(new StudentOldResultImport, $grades);
 
             return back()->with('success', "Student Old Results Uploaded Successfully");
 
@@ -343,12 +346,32 @@ class AdminReportsController extends Controller
             }
             //get the user and change the username and password
 
-
+            $message = "";
             if ($student = User::where('username', $request->oldmatric)->first()) {
 
                 $student->username = $request->newmatric;
                 $student->password = Hash::make($request->newmatric);
                 $student->save();
+
+                $message = $message . " User Records Updated Successfully and ";
+
+
+                //track the new admission details and update appropriately
+
+                if ($StudentAdmission = Admission::where('matric_number', $request->oldmatric)->first()) {
+
+                    $StudentAdmission->matric_number = $request->newmatric;
+                    $StudentAdmission->save();
+
+                    $message = $message . " Admission Records Updated Successfully and ";
+
+                }else{
+
+                    $message = "Unable to correct Admission Records and ";
+
+                }
+
+
 
                 //get the student record and update matric number alone
 
@@ -357,7 +380,9 @@ class AdminReportsController extends Controller
                     $studetnAcad->matric = $request->newmatric;
                     $studetnAcad->save();
 
-                    return back()->with('info', "Matric Number and Login info Updated Successfully!!!");
+                    $message = $message . " Student Records Updated Successfully!!!";
+
+                    return back()->with('info', $message);
 
                 }else{
                     return back()->with('error', "There is a Problem, Student Record Not uplated");
@@ -377,6 +402,103 @@ class AdminReportsController extends Controller
             return back()->with('error', "You do not have the required privileges");
         }
     }
+
+
+    public function changeOfProgramme(Request $request){
+
+        //validate input and perform import while posting to job
+        $validated = $request->validate([
+            'studentmatric' => 'required',
+            'newprogramme' => 'required',
+        ]);
+
+        //return $request;
+
+
+
+        if (user()->hasRole('admin')) {
+            // compare the the old and new programme
+            $student = StudentRecord::where('matric', $request->studentmatric)->first();
+
+            if ($student->program_id == $request->newprogramme) {
+                return back()->with('error', "Old and New Programme is the same, No Changes");
+            }
+            //get the user and change the current_level
+            //return $student;
+
+            //get the new programme
+            $theNewProg = Program::find($request->newprogramme);
+
+            $message = "";
+            if ($student = User::where('username', $request->studentmatric)->first()) {
+
+                $student->current_level = $theNewProg->level_id;
+                $student->save();
+
+                $message = $message . " Current Level Updated Successfully and ";
+
+
+                //track the new admission details and update appropriately
+
+                if ($StudentAdmission = Admission::where('matric_number', $request->studentmatric)->first()) {
+
+                    $StudentAdmission->programme = $theNewProg->name;
+                    $StudentAdmission->programme_id = $theNewProg->id;
+                    $StudentAdmission->save();
+
+                    $message = $message . " Admission Records Updated Successfully and ";
+
+                }else{
+
+                    $message = "Unable to correct Admission Records and ";
+
+                }
+
+                //get Profile and change department ID
+                if ($studentProfile = UserProfile::where('user_id', $student->id)->first()) {
+
+                    $studentProfile->department_id = $theNewProg->department_id;
+                    $studentProfile->save();
+
+                    $message = $message . " Student Profile Updated Successfully and ";
+
+                }else{
+
+                    $message = "Unable to update Student Profile and ";
+
+                }
+
+
+                //get the student record and update matric number alone
+
+                if ($studetnAcad = StudentRecord::where('matric', $request->studentmatric)->first()) {
+
+                    $studetnAcad->program_id = $request->newprogramme;
+                    $studetnAcad->save();
+
+                    $message = $message . " Student Records Updated Successfully!!!";
+
+                    return back()->with('info', $message);
+
+                }else{
+                    return back()->with('error', "There is a Problem, Student Record Not uplated");
+                }
+
+                return $student->username. "-".$request->oldmatric."-" .$request->newmatric;
+
+            }else{
+
+                return back()->with('error', "User not found");
+
+            }
+
+            return $request;
+
+        }else{
+            return back()->with('error', "You do not have the required privileges");
+        }
+    }
+
 
     public function adminPasswordUpdate(Request $request){
         //validate input and perform import while posting to job

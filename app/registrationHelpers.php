@@ -451,3 +451,10 @@ function getAllocatonCourses($hodId, $role){
 
 }
 
+function getAllProgramsDropdown(){
+    $progs = Program::orderBy('name')->get()->pluck('name','id');
+
+    return $progs;
+
+}
+
