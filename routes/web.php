@@ -154,6 +154,12 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
         Route::view('/update-userpass', 'admin.update-password')->name('update-userpass');
         Route::post('/userpass-update', [AdminReportsController::class, 'adminPasswordUpdate'])->name('userpass-update');
 
+        Route::view('/update-matric', 'admin.update-matric')->name('update-matric');
+        Route::post('/matric-update', [AdminReportsController::class, 'updateMatricNo'])->name('matric-update');
+
+        Route::view('/update-programme', 'admin.update-student-programme')->name('update-programme');
+        Route::post('/programme-update', [AdminReportsController::class, 'changeOfProgramme'])->name('programme-update');
+
 
     });
 

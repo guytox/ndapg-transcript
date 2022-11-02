@@ -192,6 +192,23 @@
     </a>
 </li>
 
+{{-- Change of Matric Number --}}
+<li>
+    <a href="{{ route('update-matric') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+        <i class="mdi mdi-lock font-size-16 align-middle mr-1"></i>
+        <span>Matric Number Change</span>
+    </a>
+</li>
+
+{{-- Change of Programme --}}
+<li>
+    <a href="{{ route('update-programme') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+        <i class="mdi mdi-lock font-size-16 align-middle mr-1"></i>
+        <span>Change of Programme</span>
+    </a>
+</li>
+
+
 
 {{-- Manage Emails --}}
 <li>
