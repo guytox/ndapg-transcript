@@ -9,6 +9,8 @@ use App\Imports\StudentOldResultImport;
 use App\Models\Admission;
 use App\Models\AuthorizedEmail;
 use App\Models\Curriculum;
+use App\Models\Department;
+use App\Models\Faculty;
 use App\Models\FeeConfig;
 use App\Models\FeePayment;
 use App\Models\Program;
@@ -428,6 +430,8 @@ class AdminReportsController extends Controller
 
             //get the new programme
             $theNewProg = Program::find($request->newprogramme);
+            $theNewDepartment = Department::find($theNewProg->department_id);
+            $theNewFaculty = Faculty::find($theNewDepartment->faculty_id);
 
             $message = "";
             if ($student = User::where('username', $request->studentmatric)->first()) {
@@ -443,6 +447,9 @@ class AdminReportsController extends Controller
                 if ($StudentAdmission = Admission::where('matric_number', $request->studentmatric)->first()) {
 
                     $StudentAdmission->programme = $theNewProg->name;
+                    $StudentAdmission->category = strtoupper($theNewProg->category);
+                    $StudentAdmission->faculty = $theNewFaculty->name;
+                    $StudentAdmission->department = $theNewDepartment->name;
                     $StudentAdmission->programme_id = $theNewProg->id;
                     $StudentAdmission->save();
 
