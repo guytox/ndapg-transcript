@@ -188,7 +188,7 @@
 <li>
     <a href="{{ route('update-userpass') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
         <i class="mdi mdi-lock font-size-16 align-middle mr-1"></i>
-        <span>User Password Update</span>
+        <span>Update User Password</span>
     </a>
 </li>
 

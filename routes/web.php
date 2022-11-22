@@ -113,7 +113,7 @@ Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware(
 
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
 
-Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_officer','auth', 'profile_completed', 'verified'])->group(function(){
+Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_officer|ict_support','auth', 'profile_completed', 'verified'])->group(function(){
 
     Route::prefix('appointments')->group(function(){
         Route::get('/getdeans', '\App\Http\Controllers\FacultyController@getDeans')->name('appointments.get.deans');
@@ -160,6 +160,10 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
         Route::view('/update-programme', 'admin.update-student-programme')->name('update-programme');
         Route::post('/programme-update', [AdminReportsController::class, 'changeOfProgramme'])->name('programme-update');
 
+        Route::view('/updateUserName', 'admin.update-student-name')->name('update.username');
+        Route::post('/userNameSearch', [AdminReportsController::class, 'changeOfNameSearch'])->name('username.update.search');
+        Route::post('/userNameUpdate', [AdminReportsController::class, 'changeOfName'])->name('username.update');
+
 
     });
 
@@ -171,8 +175,6 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
         Route::resource('reg', RegistrationApprovalController::class);
         Route::get('get/Approvals', [RegistrationApprovalController::class, 'showApproved'])->name('reg.approvals');
         Route::get('get/Approvals/{id}/{student_id}', [RegistrationApprovalController::class, 'showStudentConfirmedReg'])->name('show.single.student.reg');
-
-
 
     });
 

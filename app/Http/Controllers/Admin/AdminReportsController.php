@@ -416,8 +416,6 @@ class AdminReportsController extends Controller
 
         //return $request;
 
-
-
         if (user()->hasRole('admin')) {
             // compare the the old and new programme
             $student = StudentRecord::where('matric', $request->studentmatric)->first();
@@ -504,6 +502,63 @@ class AdminReportsController extends Controller
         }else{
             return back()->with('error', "You do not have the required privileges");
         }
+    }
+
+    public function changeOfName(Request $request){
+
+        if (user()->hasRole('ict_support||admin') ) {
+            #allow to pass
+        }else{
+            return back()->with('info', "Snap!!!! Check your permissions");
+        }
+
+        //validate input and perform import while posting to job
+        $validated = $request->validate([
+            'student_id' => 'required',
+            'newname' => 'required',
+        ]);
+
+        # All clear and ready to move
+
+        $student = User::where('username', $request->student_id)->first();
+
+        if ($student) {
+            # Student found proceed with the update
+            if ($student->name === $request->newname) {
+                # Then the new name is same as the old name
+                return redirect('home')->with('error', "Error!!! Old name same as New name, NO CHANGE");
+
+            }
+
+            $student->name = $request->newname;
+            $student->save();
+
+            return redirect('home')->with('info', "Name Change Successful");
+        }
+
+    }
+
+    public function changeOfNameSearch(Request $request){
+
+        if (user()->hasRole('ict_support||admin') ) {
+            #allow to pass
+        }else{
+            return back()->with('info', "Snap!!!! Check your permissions");
+        }
+        //validate input and perform import while posting to job
+        $validated = $request->validate([
+            'studentmatric' => 'required',
+        ]);
+
+        $userInfo = User::where('username', $request->studentmatric)->first();
+
+        if ($userInfo) {
+            # User found proceed to return the view requesting for change of name
+            return view('admin.update-student-name-search')->with(['oldName'=>$userInfo->name, 'studentId'=>$userInfo->username]);
+        }else{
+            return back()->with('error', "Error!!! No record of this Matric Number found on our records");
+        }
+
     }
 
 

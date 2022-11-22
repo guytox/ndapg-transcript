@@ -35,7 +35,7 @@
                         <li>
                             <a href=" {{route('password.email')}} "  class=" waves-effect">
                                 <i class="mdi mdi-logout font-size-16 align-middle mr-1"></i>
-                                <span>Update Password</span>
+                                <span>Change My Password</span>
                             </a>
                         </li>
 
