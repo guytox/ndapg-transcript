@@ -341,7 +341,7 @@ class AdminReportsController extends Controller
 
 
 
-        if (user()->hasRole('ict_support || admin')) {
+        if (user()->hasRole('ict_support|admin')) {
             // compare the entries
             if ($request->oldmatric === $request->newmatric) {
                 return back()->with('error', "Matric Number thesame, No Changes");
@@ -416,7 +416,7 @@ class AdminReportsController extends Controller
 
         //return $request;
 
-        if (user()->hasRole('ict_support ||admin')) {
+        if (user()->hasRole('ict_support|admin')) {
             // compare the the old and new programme
             $student = StudentRecord::where('matric', $request->studentmatric)->first();
 
@@ -507,7 +507,7 @@ class AdminReportsController extends Controller
 
     public function changeOfName(Request $request){
 
-        if (user()->hasRole('ict_support||admin') ) {
+        if (user()->hasRole('ict_support|admin') ) {
             #allow to pass
         }else{
             return back()->with('info', "Snap!!!! Check your permissions");
@@ -541,7 +541,7 @@ class AdminReportsController extends Controller
 
     public function changeOfNameSearch(Request $request){
 
-        if (user()->hasRole('ict_support||admin') ) {
+        if (user()->hasRole('ict_support|admin') ) {
 
             #allow to pass
 
@@ -575,7 +575,7 @@ class AdminReportsController extends Controller
 
 
 
-        if (user()->hasRole('admin||ict_support || ict_admin')) {
+        if (user()->hasRole('admin|ict_support|ict_admin')) {
             // compare the entries
             if ($request->newpass != $request->confirmpass) {
                 return back()->with('error', "Error!!! Password Mismatch");
