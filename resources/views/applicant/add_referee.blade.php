@@ -3,9 +3,22 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
-                @include('includes.messages')
+        
                 <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                    @endif
+
+                    @if (session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                    @endif
                     <h2 class="header-title">Add Confidential Referee</h2>
+
+
 
                     <form method="post" action="{{ route('applicant.referee.store') }}" class="mt-5">
                         @csrf

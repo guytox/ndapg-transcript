@@ -11,17 +11,18 @@ class RefereeRequestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $link, $user;
+    public $link, $user, $name;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $link)
+    public function __construct($user, $link, $name)
     {
         $this->user = $user;
         $this->link = $link;
+        $this->name = $name;
     }
 
     /**

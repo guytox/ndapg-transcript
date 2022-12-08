@@ -10,6 +10,7 @@ use App\Services\ServiceInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+
 class StoreRefereeService extends BaseService implements ServiceInterface
 {
 
@@ -42,13 +43,22 @@ class StoreRefereeService extends BaseService implements ServiceInterface
 
                Log::info($link);
 
+               $name = $data['referee_name'];
+
                // send email to referee with unique id
 
-                // Mail::to($data['referee_email'])->send(new RefereeRequestMail($this->user, $link));
+             
 
-                return $referee;
+               try {
+                Mail::to($data['referee_email'])->send(new RefereeRequestMail($this->user, $link, $name));
+
+                return redirect()->route('applicant.referee')->with(['success' => 'refree added successfully']);
+
+               }catch(\Throwable $e) {
+                return redirect()->route('applicant.referee')->with(['error' => 'an error occured adding referee']);  
+               }
             }else{
-                return $refereeExist;
+                return redirect()->back()->with(['success', 'refree added successfully']);
             }
         }else {
             UserReferee::where('uid', $data['uid'])->update([
