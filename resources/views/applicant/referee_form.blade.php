@@ -68,7 +68,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="username">Phone</label>
-                    <input type="number" class="form-control @error('phone') is-invalid @enderror" id="email" name="phone" value="" placeholder="09088877651">
+                    <input type="number" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="" placeholder="09088877651">
                     @error('phone')
                     <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -79,7 +79,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="username">Years of Knowing Candidate</label>
-                        <input type="number" class="form-control @error('candidate_referee_relationship_years') is-invalid @enderror" id="email" name="candidate_referee_relationship_years" value="{{ 5 }}">
+                        <input type="number" class="form-control @error('candidate_referee_relationship_years') is-invalid @enderror" id="years_knowing" name="candidate_referee_relationship_years" value="{{ 5 }}">
                         @error('candidate_referee_relationship_years')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -90,7 +90,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="candidate_relationship">Relationship With Candidate</label>
-                    <input type="text" class="form-control @error('candidate_relationship') is-invalid @enderror" id="email" placeholder="Brother" name="candidate_relationship" value="">
+                    <input type="text" class="form-control @error('candidate_relationship') is-invalid @enderror" id="relationship" placeholder="Brother" name="candidate_relationship" value="">
                     @error('candidate_relationship')
                     <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -196,7 +196,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="username">Morally Upright ?</label>
-                        <select name="candidate_morally_upright" id="" class="form-control @error('candidate_morally_upright') is-invalid @enderror">
+                        <select name="candidate_morally_upright" id="morally_upright" class="form-control @error('candidate_morally_upright') is-invalid @enderror">
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                         </select>
@@ -265,7 +265,7 @@
 
             <div class="form-group ">
                 <label for="general_comment">General Comment for Candidate </label>
-                <textarea name="general_comment" id="" cols="30" rows="5" class="form-control @error('general_comment') is-invalid @enderror"></textarea>
+                <textarea name="general_comment" id="general_comments" cols="30" rows="5" class="form-control @error('general_comment') is-invalid @enderror"></textarea>
                 @error('reason_for_rejecting_candidate_for_research')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -273,22 +273,71 @@
                 @enderror
             </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Submit Confidential Information</button>
-            </div>
+            </div> -->
+
+            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#exampleModalScrollable">Preview Submission</button>
+                                                        
+                                                        <div class="modal fade bs-example-modal-lg" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                                                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h2 class="modal-title mt-0 text-center" id="exampleModalScrollableTitle">Application Details Preview</h2>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <p>Name: <span id="name_pr">Julius Idowu</span></p>
+                                                                        <p>Phone:  <span id="phone_pr">20130204243</span></p>
+                                                                        <p>Years of Knowing Candidate:  <span id="years_knowing_pr">NIL</span></p>
+                                                                        <p>Relationship With Candidate: <span id="relationship_pr">NIL</span></p>
+                                                                        <hr style="border-top:1px solid rgb(0, 0, 0)">
+                                                                        <p>Intellectual ability: <span id="intellectual_ability_pr">NIL</span></p>
+                                                                        <p>Academic study capacity:  <span id="academic_study_pr">NIL</span></p>
+                                                                        <p>Independent study capacity:  <span id="independent_study_pr">NIL</span></p>
+                                                                        <p>Imaginative thought capacity: <span id="ability_for_imaginative_pr">NIL</span></p>
+                                                                        <hr style="border-top:1px solid rgb(0, 0, 0)">
+                                                                        <p>Oral Expression: <span id="ability_for_oral_expression_in_english_pr">NIL</span></p>
+                                                                        <p>Written expression in English:  <span id="ability_for_written_expression_in_english_pr">NIL</span></p>
+                                                                        <p>Academic rank over 5 years (1-100):  <span id="candidate_rank_academically_among_students_in_last_five_years_pr">NIL</span></p>
+                                                                        <hr style="border-top:1px solid rgb(0, 0, 0)">
+                                                                        <p>Morally Upright: <span id="morally_upright_pr">NIL</span></p>
+                                                                        <p>Emotionally Stable :  <span id="candidate_emotionally_stable_pr">NIL</span></p>
+                                                                        <p>Physically Fit:  <span id="candidate_physically_fit_pr">NIL</span></p>
+                                                                        <p>Can you Accept Candidate as a researcher:  <span id="accept_candidate_for_research_pr">NIL</span></p>
+                                                                        <hr style="border-top:1px solid rgb(0, 0, 0)">
+                                                                        <p>General comments: <span id="general_comments_pr">NIL</span></p>
+
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button class="btn btn-success" type="submit">Submit Confidential Information</button>
+
+                                                                        </div>
+                                                                </div><!-- /.modal-content -->
+                                                            </div><!-- /.modal-dialog -->
+                                                        </div><!-- /.modal -->
+
+    </div>
+</div>
+
 
         </div>
     </div>
 </form>
 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!--  Modal content for the above example -->
+<!-- Small modal -->
+<style>
+    .modal-dialog {
+  width: 98%;
+  height: 92%;
+  padding: 0;
+}
+</style>
 
-    </div>
-</div>
 <!-- end Account pages -->
 
 <!-- JAVASCRIPT -->
@@ -299,6 +348,25 @@
 <script src="{{ asset('admin/assets/libs/node-waves/waves.min.js') }}"></script>
 
 <script src="{{ asset('admin/assets/js/app.js') }}"></script>
+
+<script type="text/javascript">
+ document.getElementById('name_pr').innerHTML = document.getElementById('name').value;
+ document.getElementById('phone_pr').innerHTML = document.getElementById('phone').value;
+ document.getElementById('years_knowing_pr').innerHTML = document.getElementById('years_knowing').value;
+ document.getElementById('relationship_pr').innerHTML = document.getElementById('relationship').value;
+ document.getElementById('intellectual_ability_pr').innerHTML = document.getElementById('intellectual_ability').value;
+ document.getElementById('academic_study_pr').innerHTML = document.getElementById('capacity_for_persistent_academic_study').value;
+ document.getElementById('independent_study_pr').innerHTML = document.getElementById('capacity_for_independent_academic_study').value;
+ document.getElementById('ability_for_imaginative_pr').innerHTML = document.getElementById('ability_for_imaginative_thought').value;
+ document.getElementById('ability_for_oral_expression_in_english_pr').innerHTML = document.getElementById('ability_for_oral_expression_in_english').value;
+ document.getElementById('ability_for_written_expression_in_english_pr').innerHTML = document.getElementById('ability_for_written_expression_in_english').value;
+ document.getElementById('candidate_rank_academically_among_students_in_last_five_years_pr').innerHTML = document.getElementById('candidate_rank_academically_among_students_in_last_five_years').value;
+ document.getElementById('morally_upright_pr').innerHTML = document.getElementById('morally_upright').value;
+ document.getElementById('candidate_emotionally_stable_pr').innerHTML = document.getElementById('candidate_emotionally_stable').value;
+ document.getElementById('candidate_physically_fit_pr').innerHTML = document.getElementById('candidate_physically_fit').value;
+ document.getElementById('accept_candidate_for_research_pr').innerHTML = document.getElementById('accept_candidate_for_research').value;
+ document.getElementById('general_comments_pr').innerHTML = document.getElementById('general_comments').value;
+</script>
 
 </body>
 
