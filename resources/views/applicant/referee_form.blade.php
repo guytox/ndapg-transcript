@@ -78,8 +78,8 @@
             </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="username">Years of Knowing Candidate</label>
-                        <input type="number" class="form-control @error('candidate_referee_relationship_years') is-invalid @enderror" id="years_knowing" name="candidate_referee_relationship_years" value="{{ 5 }}">
+                        <label for="username">Knew Candidate in which Year?</label>
+                        <input type="number" class="form-control @error('candidate_referee_relationship_years') is-invalid @enderror" id="years_knowing" name="candidate_referee_relationship_years" value="{{ 1951 }}">
                         @error('candidate_referee_relationship_years')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -106,9 +106,17 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="intellectual_ability">Intellectual Ability</label>
-                        <input type="text" class="form-control @error('intellectual_ability') is-invalid @enderror" id="intellectual_ability"  name="intellectual_ability" placeholder="Good">
+                        <select name="intellectual_ability" id="intellectual_ability" class="form-control @error('intellectual_ability') is-invalid @enderror" required='required'>
+                            <option value="">--------</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Very Good">Very Good</option>
+                            <option value="Good">Good</option>
+                            <option value="Good">Poor</option>
+                            <option value="Good">Very Poor</option>
+                        </select>
                         @error('intellectual_ability')
                         <span class="invalid-feedback" role="alert">
+
                     <strong>{{ $message }}</strong>
                 </span>
                         @enderror
@@ -118,7 +126,14 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="capacity_for_persistent_academic_study">Academic study Capacity</label>
-                        <input type="text" class="form-control @error('capacity_for_persistent_academic_study') is-invalid @enderror" id="capacity_for_persistent_academic_study" name="capacity_for_persistent_academic_study" value="" placeholder="Good">
+                        <select name="capacity_for_persistent_academic_study" id="capacity_for_persistent_academic_study" class="form-control @error('capacity_for_persistent_academic_study') is-invalid @enderror" required='required'>
+                            <option value="">--------</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Very Good">Very Good</option>
+                            <option value="Good">Good</option>
+                            <option value="Good">Poor</option>
+                            <option value="Good">Very Poor</option>
+                        </select>
                         @error('capacity_for_persistent_academic_study')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -129,7 +144,15 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="capacity_for_independent_academic_study">Independent Study Capacity</label>
-                        <input type="number" class="form-control @error('capacity_for_independent_academic_study') is-invalid @enderror" id="capacity_for_independent_academic_study" name="capacity_for_independent_academic_study" value="">
+
+                        <select name="capacity_for_independent_academic_study" id="capacity_for_independent_academic_study" class="form-control @error('capacity_for_independent_academic_study') is-invalid @enderror" required='required'>
+                            <option value="">--------</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Very Good">Very Good</option>
+                            <option value="Good">Good</option>
+                            <option value="Good">Poor</option>
+                            <option value="Good">Very Poor</option>
+                        </select>
                         @error('capacity_for_independent_academic_study')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -140,7 +163,15 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="ability_for_imaginative_thought">Imaginative thought ability</label>
-                        <input type="text" class="form-control @error('ability_for_imaginative_thought') is-invalid @enderror" id="ability_for_imaginative_thought" placeholder="Good" name="ability_for_imaginative_thought" value="">
+
+                        <select name="ability_for_imaginative_thought" id="ability_for_imaginative_thought" class="form-control @error('ability_for_imaginative_thought') is-invalid @enderror" required='required'>
+                            <option value="">--------</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Very Good">Very Good</option>
+                            <option value="Good">Good</option>
+                            <option value="Good">Poor</option>
+                            <option value="Good">Very Poor</option>
+                        </select>
                         @error('ability_for_imaginative_thought')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -156,7 +187,15 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="ability_for_oral_expression_in_english">Oral expression in English</label>
-                        <input type="text" class="form-control @error('ability_for_oral_expression_in_english') is-invalid @enderror" id="ability_for_oral_expression_in_english"  name="ability_for_oral_expression_in_english" placeholder="Good">
+
+                        <select name="ability_for_oral_expression_in_english" id="ability_for_oral_expression_in_english" class="form-control @error('ability_for_oral_expression_in_english') is-invalid @enderror" required='required'>
+                            <option value="">--------</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Very Good">Very Good</option>
+                            <option value="Good">Good</option>
+                            <option value="Good">Poor</option>
+                            <option value="Good">Very Poor</option>
+                        </select>
                         @error('ability_for_oral_expression_in_english')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -168,7 +207,15 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="ability_for_written_expression_in_english">Written expression in English</label>
-                        <input type="text" class="form-control @error('ability_for_written_expression_in_english') is-invalid @enderror" id="ability_for_written_expression_in_english" name="ability_for_written_expression_in_english" value="" placeholder="Good">
+
+                        <select name="ability_for_written_expression_in_english" id="ability_for_written_expression_in_english" class="form-control @error('ability_for_written_expression_in_english') is-invalid @enderror" required='required'>
+                            <option value="">--------</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Very Good">Very Good</option>
+                            <option value="Good">Good</option>
+                            <option value="Good">Poor</option>
+                            <option value="Good">Very Poor</option>
+                        </select>
                         @error('ability_for_written_expression_in_english')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -179,7 +226,15 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="candidate_rank_academically_among_students_in_last_five_years">Academic rank over 5 years (1-100)</label>
-                        <input type="number" class="form-control @error('candidate_rank_academically_among_students_in_last_five_years') is-invalid @enderror" id="candidate_rank_academically_among_students_in_last_five_years" name="candidate_rank_academically_among_students_in_last_five_years" value="">
+
+                        <select name="candidate_rank_academically_among_students_in_last_five_years" id="candidate_rank_academically_among_students_in_last_five_years" class="form-control @error('candidate_rank_academically_among_students_in_last_five_years') is-invalid @enderror" required='required'>
+                            <option value="">--------</option>
+                            <option value="100">70 - 100</option>
+                            <option value="60">51 - 69</option>
+                            <option value="50">41 - 50</option>
+                            <option value="40">25 - 40</option>
+                            <option value="25">0 - 25</option>
+                        </select>
                         @error('candidate_rank_academically_among_students_in_last_five_years')
                         <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -278,7 +333,7 @@
             </div> -->
 
             <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#exampleModalScrollable">Preview Submission</button>
-                                                        
+
                                                         <div class="modal fade bs-example-modal-lg" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
                                                             <div class="modal-dialog modal-xl modal-dialog-scrollable">
                                                                 <div class="modal-content">

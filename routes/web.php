@@ -273,8 +273,8 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearance.confirm', 'profile_completed','verified'])->group(function () {
 
     Route::prefix('outstanding')->group(function () {
-        Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicant.qualifications.school');
-        Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicant.qualifications.professional');
+        Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicants.qualifications.school');
+        Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicantss.qualifications.professional');
         Route::post('/payments', [\App\Http\Controllers\Applicant\QualificationsController::class, 'store'])->name('student.outstanding.payments');
     });
 

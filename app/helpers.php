@@ -6,6 +6,7 @@ use App\Models\Faculty;
 use App\Models\FeePayment;
 use App\Models\MatricConfig;
 use App\Models\MatricConfiguration;
+use App\Models\PaymentConfiguration;
 use App\Models\Program;
 use App\Models\RegMonitor;
 use App\Models\Semester;
