@@ -39,7 +39,7 @@ class AcademicController extends Controller
         $olevels = OlevelResult::where('user_id', user()->id)->orderBy('sitting', 'ASC')->get();
 
         if($olevels->count() < 1) {
-            return redirect()->route('applicant..add_result')->with(['error' => 'you have not added any result']);
+            return redirect()->route('applicant.add_result')->with(['error' => 'you have not added any result']);
         }
         return view('applicant.academics.view_result', compact('olevels'));
     }
