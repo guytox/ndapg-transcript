@@ -258,6 +258,7 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 
     Route::prefix('referees')->group(function() {
         Route::get('add-referee', [\App\Http\Controllers\Applicant\RefereeController::class, 'addReferee'])->name('applicant.referee');
+        Route::get('delete-referee/{uid}', [\App\Http\Controllers\Applicant\RefereeController::class, 'deleteNominatedReferee'])->name('delete.referee');
         Route::post('add-referee', [\App\Http\Controllers\Applicant\RefereeController::class, 'storeReferee'])->name('applicant.referee.store');
     });
 
@@ -267,6 +268,9 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::get('add-result', [\App\Http\Controllers\Applicant\AcademicController::class, 'addResultView'])->name('applicant.add_result');
         Route::get('view-result', [\App\Http\Controllers\Applicant\AcademicController::class, 'viewResultSubmitted'])->name('applicant.view_result');
         Route::post('add-result', [\App\Http\Controllers\Applicant\AcademicController::class, 'addResultStore'])->name('applicant.add_result.store');
+
+        Route::get('view-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'viewApprovedProgrammes'])->name('applicant.view_programme');
+        Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
     });
 });
 

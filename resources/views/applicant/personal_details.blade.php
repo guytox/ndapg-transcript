@@ -38,7 +38,7 @@
                         <label for="state">State</label>
                         <select name="state_of_origin" id="state" class="form-control">
                             @if(isset(user()->profile->state_id))
-                            <option value="{{ user()->profile->state_id}}" selected>{{ user()->profile->state->name  }} (current) </option>
+                            <option value="{{ user()->profile->state_id}}" selected>{{ getStateNameById(user()->profile->state_id)  }} (current) </option>
                             @endif
                             <option value="38">Not a Nigerian State</option>
                             @foreach ($states as $state)

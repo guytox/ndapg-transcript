@@ -8,17 +8,26 @@
 
     <ul>
         <li>
-            <a href="{{ route('applicant.add_card') }}" class="@if (Request::is('applicant/profile/*')) active @endif waves-effect">
-                <i class="mdi mdi-file-document-box-check"></i>
-                <span>Card Details</span>
+            <a href="{{ route('applicant.view_programme') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
+                <i class="mdi mdi-cash-marker"></i>
+                <span>Select Programme</span>
             </a>
         </li>
+
         <li>
             <a href="{{ route('applicant.add_result') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
                 <i class="mdi mdi-file-document-edit"></i>
                 <span>Submit Result</span>
             </a>
         </li>
+
+        <li>
+            <a href="{{ route('applicant.add_card') }}" class="@if (Request::is('applicant/profile/*')) active @endif waves-effect">
+                <i class="mdi mdi-file-document-box-check"></i>
+                <span>Verification Cards</span>
+            </a>
+        </li>
+
         <li>
             <a href="{{ route('applicant.view_result') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
                 <i class="mdi mdi-file-document-box-multiple"></i>
@@ -95,6 +104,20 @@
         </li>
 
     </ul>
+</li>
+
+<li>
+    <a href="{{ route('home') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
+        <i class="mdi mdi-cash-marker"></i>
+        <span>Preview Submission</span>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('home') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
+        <i class="mdi mdi-cash-marker"></i>
+        <span>submit Application</span>
+    </a>
 </li>
 
 @endrole

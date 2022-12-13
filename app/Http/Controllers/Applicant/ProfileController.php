@@ -29,4 +29,5 @@ class ProfileController extends Controller
         (new StoreProfileService($request->validated(), user()))->run();
         return redirect()->back()->with(['success' => 'profile details updated successfully']);
     }
+    
 }

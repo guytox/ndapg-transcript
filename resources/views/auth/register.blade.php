@@ -1,7 +1,8 @@
 @extends('layouts.auth')
 
 @section('content')
-<h5 class="mb-5 text-center">Register</h5>
+<h5 class="mb-5 text-center">Begin Applicaition <span class="text text-success"><i>(Create and Verify Account)</i></span> </h5>
+<p class="text text-danger">NOTE:****** You are required to create and account and verify your email, then login to complete the application process</p>
 <form class="form-horizontal" method="POST" action="{{ route('register') }}">
     @csrf
     <div class="row">
@@ -50,25 +51,25 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="custom-control custom-checkbox">
+                    {{-- <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="customControlInline">
                         <label class="custom-control-label" for="customControlInline">Remember me</label>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-md-6">
-                    <div class="text-md-right mt-3 mt-md-0">
+                    {{-- <div class="text-md-right mt-3 mt-md-0">
                         <a href="#" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your
                             password?</a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="mt-4">
-                <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Register</button>
+                <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Create Account and Login to continue Application</button>
             </div>
             <div class="mt-4 text-center">
                 <a href="{{ route('login') }}" class=" text-muted"><i class="mdi mdi-account-circle mr-1"></i>
                     Already have an account
-                    ? Login</a>
+                    ? Go Back to Login Page</a>
             </div>
         </div>
     </div>

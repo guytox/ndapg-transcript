@@ -42,11 +42,11 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Log In</button>
+                <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Log In (For All Users and Returning Applicants) </button>
             </div>
             <div class="mt-4 text-center">
-                <a href="{{ route('register') }}" class=" text-muted"><i class="mdi mdi-account-circle mr-1"></i>
-                    Register New Account</a>
+                <a href="{{ route('register') }}" class="btn btn-danger "><i class="mdi mdi-account-circle mr-1"></i>
+                    Begin Application (For New Applicants Only)</a>
             </div>
         </div>
     </div>

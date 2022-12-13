@@ -484,6 +484,33 @@ function getProgrammeDetailByName($name){
     return $program;
 }
 
+function getProgramNameById($id){
+    $progName = Program::find($id);
+
+    if ($progName) {
+
+        return $progName->name;
+
+    }else{
+
+        return false;
+
+    }
+}
+
+function getAppliableProgrammeDropdown(){
+    $listOfProgrammes = Program::where('is_advertised',"1")->OrderBy('name', 'asc')->get()->pluck('name','id');
+
+    if ($listOfProgrammes) {
+
+        return $listOfProgrammes;
+
+    }else{
+
+        return false;
+    }
+}
+
 //*********************************************************************************************** */
 // Studend Record Helpers Helpers
 //*********************************************************************************************** */
