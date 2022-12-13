@@ -243,7 +243,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
 });
 
-Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm','verified'])->group(function () {
+Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified'])->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/contact-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'contactDetails'])->name('applicant.profile.contact_details');
         Route::get('/personal-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'personalDetails'])->name('applicant.profile.personal_details');
@@ -271,8 +271,13 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 
         Route::get('view-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'viewApprovedProgrammes'])->name('applicant.view_programme');
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
+        Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
     });
 });
+
+Route::get('departments-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getDepartmentsFromFaculty']);
+Route::get('programmes-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getProgrammeFromDepartment']);
+
 
 Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearance.confirm', 'profile_completed','verified'])->group(function () {
 

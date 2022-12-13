@@ -11,6 +11,7 @@ use App\Models\OlevelResult;
 use App\Services\Profile\StoreApplicantProgrammeService;
 use App\Services\Profile\StoreOlevelService;
 use Illuminate\Http\Request;
+use App\Models\Faculty;
 
 class AcademicController extends Controller
 {
@@ -35,6 +36,19 @@ class AcademicController extends Controller
         return view('applicant.academics.add_result');
     }
 
+    public function getDepartmentsFromFaculty($id)
+    {
+        $departments = \App\Models\Department::where('faculty_id', $id)->select('id', 'name')->get();
+
+        return response()->json($departments, 200);
+    }
+    public function getProgrammeFromDepartment($id)
+    {
+        $departments = \App\Models\Program::where('department_id', $id)->select('id', 'name')->get();
+
+        return response()->json($departments, 200);
+    }
+
     public function viewResultSubmitted(){
         $olevels = OlevelResult::where('user_id', user()->id)->orderBy('sitting', 'ASC')->get();
 
@@ -56,7 +70,9 @@ class AcademicController extends Controller
         #get all approved programmes
         $approvedProgrammes = getAppliableProgrammeDropdown();
 
-        return view('applicant.programme_details', compact('approvedProgrammes'));
+        $faculties = Faculty::select('id', 'name')->get();
+
+        return view('applicant.programme_details', compact('approvedProgrammes', 'faculties'));
     }
 
 

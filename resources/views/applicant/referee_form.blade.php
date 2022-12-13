@@ -332,7 +332,7 @@
                 <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Submit Confidential Information</button>
             </div> -->
 
-            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#exampleModalScrollable">Preview Submission</button>
+            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-toggle="modal" data-target="#exampleModalScrollable" onClick="displayData()">Preview Submission</button>
 
                                                         <div class="modal fade bs-example-modal-lg" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
                                                             <div class="modal-dialog modal-xl modal-dialog-scrollable">
@@ -404,8 +404,9 @@
 
 <script src="{{ asset('admin/assets/js/app.js') }}"></script>
 
-<script type="text/javascript">
- document.getElementById('name_pr').innerHTML = document.getElementById('name').value;
+<script>
+    function displayData(){
+document.getElementById('name_pr').innerHTML = document.getElementById('name').value;
  document.getElementById('phone_pr').innerHTML = document.getElementById('phone').value;
  document.getElementById('years_knowing_pr').innerHTML = document.getElementById('years_knowing').value;
  document.getElementById('relationship_pr').innerHTML = document.getElementById('relationship').value;
@@ -421,6 +422,9 @@
  document.getElementById('candidate_physically_fit_pr').innerHTML = document.getElementById('candidate_physically_fit').value;
  document.getElementById('accept_candidate_for_research_pr').innerHTML = document.getElementById('accept_candidate_for_research').value;
  document.getElementById('general_comments_pr').innerHTML = document.getElementById('general_comments').value;
+    }
+console.log(document.getElementById('phone').value)
+
 </script>
 
 </body>
