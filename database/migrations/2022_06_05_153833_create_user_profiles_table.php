@@ -27,7 +27,7 @@ class CreateUserProfilesTable extends Migration
             $table->string('permanent_home_address')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreignId('department_id')->constrained('departments','id');
+            $table->foreignId('department_id')->nullable()->constrained('departments','id');
             $table->timestamps();
         });
     }

@@ -163,7 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-         * Package Services Providers...
+         * Package Services c...
          */
         Spatie\Permission\PermissionServiceProvider::class,
 
