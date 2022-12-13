@@ -20,7 +20,8 @@ class CheckApplicationFeePayment
         $applicationConfiguration = getPaymentConfigBySlug('application-fee');
         $applicationFee = FeePayment::where([
             'payment_config_id' => $applicationConfiguration->id,
-            'user_id' => user()->id
+            'user_id' => user()->id,
+            'payment_status' =>'paid',
         ])->first();
 
         if($applicationFee) {

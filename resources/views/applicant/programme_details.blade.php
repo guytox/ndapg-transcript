@@ -12,12 +12,12 @@
 
                 <div class="form-group">
                     {!! Form::label('programme', 'Select the Programme you want to apply for') !!}
-                    {!! Form::select('programme', getAppliableProgrammeDropdown(), user()->profile->state->applicant_program, ['class' => 'form-control', 'required']) !!}
+                    {!! Form::select('programme', getAppliableProgrammeDropdown(), user()->profile->applicant_program, ['class' => 'form-control', 'required']) !!}
                 </div>
 
                 <div class="form-group">
                     {!! Form::label('service_status', 'Are you a Serving Officer') !!}
-                    {!! Form::select('service_status', [''=>'----', '1'=>'Yes', '0'=>'No'], user()->profile->state->is_serving_officer, ['class' => 'form-control', 'required']) !!}
+                    {!! Form::select('service_status', [''=>'----', '1'=>'Yes', '0'=>'No'], user()->profile->is_serving_officer, ['class' => 'form-control', 'required']) !!}
                 </div>
 
                 <div class="form-group">
