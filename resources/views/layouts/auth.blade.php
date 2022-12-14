@@ -31,7 +31,7 @@
                 <div class="text-center mb-5">
                     <a href="index.html" class="logo"><img src="{{asset('assets/img/logo/Logo_mobile_dark.png')}}"
                                                            height="150" alt="logo"></a> <br><br>
-                    <h1 class="text-dark mb-4" >NDA POSTGRADUATE SCHOOL</h1>
+                    {{-- <h1 class="text-white mb-4" >NDA POSTGRADUATE SCHOOL</h1> --}}
                 </div>
             </div>
         </div>
