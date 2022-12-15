@@ -26,6 +26,7 @@ class StoreOlevelRequest extends FormRequest
         $availableGrades = ['A1', 'B2', 'B3', 'C4', 'C5', 'C6', 'D7', 'E8', 'F9', 'AR'];
         return [
             'exam_year' => 'required|integer|min:1952|max:'.date("Y"),
+            'exam_body' => 'required',
             'exam_type' => 'required',
             'english' => 'required|in:'. implode(',', $availableGrades),
             'mathematics' => 'required|in:'. implode(',', $availableGrades),

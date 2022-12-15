@@ -10,10 +10,10 @@
 
                 {!! Form::open(['route' => 'applicant.add_programme.store', 'method' => 'POST']) !!}
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     {!! Form::label('programme', 'Select the Programme you want to apply for') !!}
                     {!! Form::select('programme', getAppliableProgrammeDropdown(), user()->profile->applicant_program ?? '', ['class' => 'form-control', 'required']) !!}
-                </div>
+                </div> --}}
 
                 <div class="form-group">
                 <label>Select Faculty </label>
@@ -25,26 +25,29 @@
                 </select>
                 </div>
 
-                <br>
+
                 <label>Department</label>
                 <div id="selector" >
-            
+
                                         <select name="department" id="departments" class="form-control @error('departments') is-invalid @enderror">
                                             <option value="">select department</option>
                                         </select>
                                     </div> <br>
                 <label>Program</label>
-                
-                
-                <div id="program_selector" >
-            
-                                        <select name="program" id="programs" class="form-control @error('program') is-invalid @enderror">
-                                            <option value="">select program</option>
-                                        </select>
-                                    </div>
+
+                <div id="program_selector" class="form-group">
+
+                    <select name="program" id="programs" class="form-control @error('program') is-invalid @enderror">
+                        <option value="">select program</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <h2 class="header-title">Service Records (For Military Personnel Alone)</h2>
 
                 <div class="form-group">
-                    {!! Form::label('service_status', 'Are you a Serving Officer') !!}
+                    {!! Form::label('service_status', 'Are you a Serving Military Personnel?') !!}
                     {!! Form::select('service_status', [''=>'----', '1'=>'Yes', '0'=>'No'], user()->profile->is_serving_officer ??'', ['class' => 'form-control', 'required']) !!}
                 </div>
 
