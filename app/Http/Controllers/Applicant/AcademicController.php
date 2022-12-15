@@ -44,7 +44,7 @@ class AcademicController extends Controller
     }
     public function getProgrammeFromDepartment($id)
     {
-        $departments = \App\Models\Program::where('department_id', $id)->select('id', 'name')->get();
+        $departments = \App\Models\Program::where('department_id', $id)->where('is_advertised', '1')->select('id', 'name')->get();
 
         return response()->json($departments, 200);
     }

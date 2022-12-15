@@ -5,7 +5,7 @@
             <div class="card">
                 @include('includes.messages')
                 <div class="card-body">
-                    <h2 class="header-title">  Add Olevel Resukt</h2>
+                    <h2 class="header-title">  Add O-level Result</h2>
                     <p><strong>NB: If you add a sitting of a result that has been previously added it would be replaced by the new result entry</strong></p>
                     <br><br>
 
@@ -13,11 +13,12 @@
                         {{ csrf_field() }}
                         <div class="clearfix row">
                             <div class="col-sm-4">
-                                <select class="form-control show-tick" name="exam_type">
-                                    <option value="">-- Select Examination type --</option>
-                                    <option value="WASCCE JAN/FEB">WASSCE JAN/FEB</option>
-                                    <option value="WASCCE MAY/JUNE">WASSCE MAY/JUNE</option>
-                                    <option value="WASCCE GCE NOV/DEC">WASSCE GCE NOV/DEC</option>
+                                <select class="form-control show-tick" name="exam_body">
+                                    <option value="">-- Select Examination body --</option>
+                                    <option value="WAEC">WAEC</option>
+                                    <option value="WASCCE">WASCCE</option>
+                                    <option value="NECO">NECO</option>
+                                    <option value="NABTEB">NABTEB</option>
                                     <option value="IGCE">IGCE</option>
 
                                 </select>
@@ -27,10 +28,9 @@
                             <div class="col-sm-4">
                                 <select class="form-control show-tick" name="exam_type">
                                     <option value="">-- Select Examination type --</option>
-                                    <option value="WASCCE JAN/FEB">WASSCE JAN/FEB</option>
-                                    <option value="WASCCE MAY/JUNE">WASSCE MAY/JUNE</option>
-                                    <option value="WASCCE GCE NOV/DEC">WASSCE GCE NOV/DEC</option>
-                                    <option value="IGCE">IGCE</option>
+                                    <option value="JAN/FEB">JAN/FEB</option>
+                                    <option value="MAY/JUNE">MAY/JUNE</option>
+                                    <option value="NOV/DEC">NOV/DEC</option>
 
                                 </select>
 
@@ -39,26 +39,21 @@
                             <div class="col-sm-4">
                                 <select class="form-control show-tick" name="exam_year">
                                     <option value="">Select Your Examination year</option>
+                                    @php
+                                        $year = 1950;
+                                    @endphp
 
-                                    <option value="2001">2001</option>
-                                    <option value="2002">2002</option>
-                                    <option value="2003">2003</option>
-                                    <option value="2004">2004</option>
-                                    <option value="2005">2005</option>
-                                    <option value="2006">2006</option>
-                                    <option value="2007">2007</option>
-                                    <option value="2008">2008</option>
-                                    <option value="2009">2009</option>
-                                    <option value="2010">2010</option>
-                                    <option value="2011">2011</option>
-                                    <option value="2012">2012</option>
-                                    <option value="2013">2013</option>
-                                    <option value="2014">2014</option>
-                                    <option value="2015">2015</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2018">2018</option>
-                                    <option value="2019">2019</option>
+                                    @while ($year <=2022)
+
+                                    <option value="{{$year}}">{{$year}}</option>
+
+                                    @php
+                                        $year ++;
+                                    @endphp
+
+                                    @endwhile
+
+
 
 
                                 </select>

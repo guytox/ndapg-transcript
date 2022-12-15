@@ -47,21 +47,21 @@
         <li>
             <a href="{{ route('applicant.add_result') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
                 <i class="mdi mdi-file-document-edit"></i>
-                <span>Submit Result</span>
+                <span>Add O-Level Result</span>
             </a>
         </li>
 
         <li>
             <a href="{{ route('applicant.add_card') }}" class="@if (Request::is('applicant/profile/*')) active @endif waves-effect">
                 <i class="mdi mdi-file-document-box-check"></i>
-                <span>Verification Cards</span>
+                <span>Add Verification Cards</span>
             </a>
         </li>
 
         <li>
             <a href="{{ route('applicant.view_result') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
                 <i class="mdi mdi-file-document-box-multiple"></i>
-                <span>Olevel Result(s)</span>
+                <span>View O-level Result(s)</span>
             </a>
         </li>
 
