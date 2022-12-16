@@ -7,7 +7,7 @@ use App\Models\FeePayment;
 use Illuminate\Http\Request;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
-
+use App\Models\CredoResponse;
 
 class PaymentHandleController extends Controller
 {
@@ -183,7 +183,8 @@ class PaymentHandleController extends Controller
 
         $parameters = json_decode($response->getBody());
 
-        return $parameters;
+        //return $parameters;
+
 
         if ($request->has('transRef') && $request->has('transAmount')) {
 
@@ -192,11 +193,22 @@ class PaymentHandleController extends Controller
             $statusCode = $request->get('status');
             $amount = $request->get('transAmount');
 
+            //  return $transactionId;
+
+            #store the response
+
+            $newrequest = CredoResponse::updateOrCreate(['transRef'=>$request->transRef],[
+                'transRef'=>$request->transRef,
+                'currency'=>$request->currency,
+                'status'=>$request->status,
+                'transAmount'=>$request->transAmount,
+            ]);
+
 
             // send background job to confirm the payment with checksum and transaction id
             ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
 
-            return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing']);
+            return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
         }
 
         abort(403, 'Unable to confirm payment information');

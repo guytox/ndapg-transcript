@@ -13,6 +13,7 @@ use App\Models\PaymentLog;
 use App\Models\FeePayment;
 use Illuminate\Support\Facades\Log;
 use App\Models\ApplicationFeeRequest;
+use App\Models\CredoResponse;
 use App\Models\User;
 
 class ConfirmCredoApplicationPaymentJob implements ShouldQueue
@@ -29,11 +30,10 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($transactionId, $currency, $finalchecksum, $statusCode, $amount, $email)
+    public function __construct($transactionId, $currency, $statusCode, $amount)
     {
         $this->transactionId = $transactionId;
         $this->currency = $currency;
-        $this->finalchecksum = $finalchecksum;
         $this->statusCode = $statusCode;
         $this->amount = $amount;
     }
@@ -55,14 +55,85 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
 
         # confirm payment using the privae key
 
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => config('app.credo.private_key'),
+        ];
 
+        $newurl = 'api.public.credodemo.com/transaction/'.$this->transactionId.'/verify';
 
+        $client = new \GuzzleHttp\Client();
 
-        if (strtoupper($this->statusCode) === strtoupper($this->finalchecksum)) {
+        $response = $client->request('GET', $newurl,[
+            'headers' => $headers,
+        ]);
+
+        $parameters = json_decode($response->getBody());
+
+        #store Response
+        foreach ($parameters->data->metadata as $k) {
+            if ($k->insightTag == 'name') {
+
+                $payee_name = $k->insightTagValue;
+
+            }elseif ($k->insightTag == 'payee_id') {
+
+                $payee_id = $k->insightTagValue;
+
+            }elseif ($k->insightTag == 'verification_code') {
+
+                $payee_code = $k->insightTagValue;
+            }
+        }
+
+        //return $parameters->data;
+        $businessCode = $parameters->data->businessCode;
+        $transRef = $parameters->data->transRef;
+        $businessRef = $parameters->data->businessRef;
+        $debitedAmount = $parameters->data->debitedAmount;
+        $verified_transAmount = $parameters->data->transAmount;
+        $transFeeAmount = $parameters->data->transFeeAmount;
+        $settlementAmount = $parameters->data->settlementAmount;
+        $customerId = $parameters->data->customerId;
+        $transactionDate = $parameters->data->transactionDate;
+        $channelId = $parameters->data->channelId;
+        $currencyCode = $parameters->data->currencyCode;
+        $response_status = $parameters->data->status;
+
+        #first update the log
+
+        $responseRecords = CredoResponse::updateOrCreate(['transRef'=>$transRef],[
+            'transRef'=>$transRef,
+            'businessCode'=>$businessCode,
+            'businessRef'=>$businessRef,
+            'debitedAmount'=>$debitedAmount,
+            'verified_transAmount'=>$verified_transAmount,
+            'transFeeAmount'=>$transFeeAmount,
+            'settlementAmount'=>$settlementAmount,
+            'customerId'=>$customerId,
+            'transactionDate'=>$transactionDate,
+            'channelId'=>$channelId,
+            'response_status'=>$response_status,
+            'currencyCode'=>$currencyCode,
+            'payee_name'=>$payee_name,
+            'payee_id'=>$payee_id,
+            'payee_code'=>$payee_code,
+        ]);
+
+        #now let us do some basic checks and pass this payment (make sure you avoid replay)
+        #get the submitted request
+        $submission = ApplicationFeeRequest::where('uid', $payee_code)->first();
+        $submittedAmount = $submission->amount;
+
+        if ($submittedAmount == $settlementAmount && $submission->uid == $payee_code && $response_status==0) {
+            # make log entry
             Log::info('payment has been confirmed');
-            $user = User::whereEmail($this->email)->first();
+            #find the user based on retrieved payment details
+            $user = User::find($payee_id);
+            # get the configuration for applicaton fees
             $applicationFeeConfiguration = PaymentConfiguration::where('payment_purpose_slug', 'application-fee')->first();
-
+            #
             $feeRequest = ApplicationFeeRequest::where('payee_id', $user->id)->first();
 
             $feePaymentTransaction = FeePayment::create([
@@ -71,8 +142,8 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                 'payment_config_id' => $applicationFeeConfiguration->id,
                 'academic_session_id' => activeSession()->id,
                 'payment_status' => config('app.status.paid'),
-                'amount_paid' => $feeRequest->amount,
-                'uid' => uniqid('fp_'),
+                'amount_paid' => $verified_transAmount,
+                'uid' => $payee_code,
                 'balance' => 0,
                 'txn_id' => generateUniqueTransactionReference(), // change the transaction id to avoid replay attacks
             ]);
@@ -80,8 +151,9 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
             PaymentLog::create([
                 'fee_payment_id' => $feePaymentTransaction->id,
                 'amount_paid' => $feePaymentTransaction->amount_paid,
-                'uid' => uniqid('pl_'),
-                'payment_channel' => config('app.payment_methods.e-tranzact')
+                'uid' => $payee_code,
+                'tx_id' => $businessRef,
+                'payment_channel' => config('app.payment_methods.credo')
             ]);
 
             $feeRequest->status = 'paid';
@@ -89,9 +161,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
 
             // genericMail($emailSubject, $validPaymentMessage, $this->email);
         } else {
-            FeePayment::where('txn_id', $this->transactionId)->where('checksum', $this->checksum)->update([
-                'payment_status' => 'pending'
-            ]);
+            #nothing found
             // genericMail($emailSubject, $invalidPaymentMessage, $this->email);
         }
     }
