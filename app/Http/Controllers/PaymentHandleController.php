@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ConfirmApplicationPaymentJob;
 use App\Models\FeePayment;
 use Illuminate\Http\Request;
-use App\Jobs\ConfirmApplicationPaymentJob;
+use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
 
 
@@ -163,19 +164,37 @@ class PaymentHandleController extends Controller
     {
 
         return $request;
-        
-        if ($request->has('TRANSACTION_ID') && $request->has('CHECKSUM')) {
 
-            $transactionId = $request->get('TRANSACTION_ID');
-            $checkSum = $request->get('CHECKSUM');
-            $finalCheckSum = $request->get('FINAL_CHECKSUM');
-            $statusCode = $request->get('SUCCESS');
-            $amount = $request->get('AMOUNT');
+        # prepare for validation
 
-            $email = $request->get('EMAIL');
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => config('app.credo.private_key'),
+        ];
+
+        $newurl = 'api.public.credodemo.com/transaction/'.$request->transRef.'/verify';
+
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->request('POST', $newurl,[
+            'headers' => $headers,
+        ]);
+
+        $parameters = json_decode($response->getBody());
+
+        return $parameters;
+
+        if ($request->has('transRef') && $request->has('transAmount')) {
+
+            $transactionId = $request->get('transRef');
+            $currency = $request->get('currency');
+            $statusCode = $request->get('status');
+            $amount = $request->get('transAmount');
+
 
             // send background job to confirm the payment with checksum and transaction id
-            ConfirmApplicationPaymentJob::dispatch($transactionId, $checkSum, $finalCheckSum, $statusCode, $amount, $email);
+            ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
 
             return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing']);
         }
