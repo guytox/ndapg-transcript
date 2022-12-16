@@ -280,6 +280,15 @@ return [
         'logo_url' => 'https://ugpayment.umm.edu.ng/images/ummlogo.jpg'
     ],
 
+    'credo' => [
+
+
+        //'public_key' => '0PUB0012f9rmLs12X88ejhrIyG53VyNh',
+        'public_key' => '0PUB0188Fn3J7HFsE0FQ703xwn7h5jwm',
+        'private_key' => '0PRI0188Dk0I9T0jOoFE3KCoOhO1uO5b',
+        'response_url' => env('APP_URL').'/api/payb',
+    ],
+
     'status' => [
         'pending' => 'pending',
         'paid' => 'paid'
