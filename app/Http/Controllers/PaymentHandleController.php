@@ -177,7 +177,7 @@ class PaymentHandleController extends Controller
 
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->request('POST', $newurl,[
+        $response = $client->request('GET', $newurl,[
             'headers' => $headers,
         ]);
 
