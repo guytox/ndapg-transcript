@@ -33,7 +33,7 @@ class PaymentHandleController extends Controller
 
                 $transactionId = generateUniqueTransactionReference();
 
-                $amount = $validated['amount'];
+                $amount = convertToKobo($validated['amount']);
 
                 $transaction = FeePayment::where('uid', $validated['fee_payment_uid'])->first();
 
@@ -63,6 +63,48 @@ class PaymentHandleController extends Controller
                         'logourl' => $logoURL,
                     ];
 
+                    # Start credo processing here
+
+                    $body = [
+                        'amount' => $amount,
+                        'email' => $transaction->user->email,
+                        'bearer' => 1,
+                        'callbackUrl' => config('app.credo.response_url'),
+                        'channels' => 'card, bank, ussd, QR, mobile_money, bank_transfer',
+                        'currency' => 'NGN',
+                        'customerPhoneNumber' => $transaction->user->phone_number,
+                        'metadata' => [
+                            'customFields' => [
+                                [
+                                    'variable_name' => 'payee_id',
+                                    'value' => $transaction->user->id,
+                                    'display_name' => 'StudentID'
+                                ],[
+                                    'variable_name' => 'name',
+                                    'value' => $transaction->user->name,
+                                    'display_name' => 'StudentName'
+                                ],
+                            ]
+                        ],
+                        'reference' => $transaction->txn_id,
+                    ];
+
+                    $headers = [
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
+                        'Authorization' => config('app.credo.public_key'),
+                    ];
+
+                    $client = new \GuzzleHttp\Client();
+
+                    $response = $client->request('POST', 'api.public.credodemo.com',[
+                        'headers' => $headers,
+                        'json' => $body
+                    ]);
+
+                    print_r($response->getBody()->getContents());
+
+                    return "these are the payment details";
                     return redirect()->route('pay.now')->with(['paymentData' => $paymentData]);
                 }
             }else {
@@ -98,6 +140,30 @@ class PaymentHandleController extends Controller
 
     public function confirmApplicationPayment(Request $request)
     {
+        if ($request->has('TRANSACTION_ID') && $request->has('CHECKSUM')) {
+
+            $transactionId = $request->get('TRANSACTION_ID');
+            $checkSum = $request->get('CHECKSUM');
+            $finalCheckSum = $request->get('FINAL_CHECKSUM');
+            $statusCode = $request->get('SUCCESS');
+            $amount = $request->get('AMOUNT');
+
+            $email = $request->get('EMAIL');
+
+            // send background job to confirm the payment with checksum and transaction id
+            ConfirmApplicationPaymentJob::dispatch($transactionId, $checkSum, $finalCheckSum, $statusCode, $amount, $email);
+
+            return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing']);
+        }
+
+        abort(403, 'Unable to confirm payment information');
+    }
+
+    public function confirmcredoApplicationPayment(Request $request)
+    {
+
+        return $request;
+        
         if ($request->has('TRANSACTION_ID') && $request->has('CHECKSUM')) {
 
             $transactionId = $request->get('TRANSACTION_ID');

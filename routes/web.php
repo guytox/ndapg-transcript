@@ -340,4 +340,6 @@ Route::get('complete-application-payment', function () {
 })->name('pay.application.now');
 
 Route::get('api/paya', [PaymentHandleController::class, 'confirmApplicationPayment']);
+Route::get('api/payb', [PaymentHandleController::class, 'confirmcredoApplicationPayment']);
+Route::post('api/payb', [PaymentHandleController::class, 'confirmcredoApplicationPayment']);
 
