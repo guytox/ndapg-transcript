@@ -298,6 +298,7 @@ return [
     'payment_methods' => [
         'umm-wallet' => 'umm-wallet',
         'e-tranzact' => 'e-tranzact',
+        'credo' => 'credo-online',
     ],
 
 ];
