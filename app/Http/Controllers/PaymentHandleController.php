@@ -163,7 +163,7 @@ class PaymentHandleController extends Controller
     public function confirmcredoApplicationPayment(Request $request)
     {
 
-        return $request;
+        //return $request;
 
         # prepare for validation
 
