@@ -11,7 +11,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="">Name / Certificate Type</label>
-                            <input type="text" name="certificate_type" placeholder="e.g MNSE" class="form-control">
+                            <input type="text" name="certificate_type" placeholder="e.g MNSE, ANAN, ICAN" class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -74,7 +74,7 @@
                                 <td>{{ $qualification->certificate_no }}</td>
                                 <td>{{ \Carbon\Carbon::parse($qualification->year_obtained)->year  }}</td>
                                 <td>{{ \Carbon\Carbon::parse($qualification->expiry_date)->year  }}</td>
-                                <td><button class="btn btn-success btn-sm">edit</button></td>
+                                <td><a class="btn btn-success btn-sm" href="{{route('applicant.delete.qualification',['id'=>$qualification->uid])}}">Remove</a></td>
 
                             </tr>
                         @endforeach

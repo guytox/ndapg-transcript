@@ -252,6 +252,7 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 
     Route::prefix('qualifications')->group(function () {
         Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicant.qualifications.school');
+        Route::get('/delete/{id}', [\App\Http\Controllers\Applicant\QualificationsController::class, 'deleteQualification'])->name('applicant.delete.qualification');
         Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicant.qualifications.professional');
         Route::post('/store', [\App\Http\Controllers\Applicant\QualificationsController::class, 'store'])->name('applicant.qualifications.store');
     });

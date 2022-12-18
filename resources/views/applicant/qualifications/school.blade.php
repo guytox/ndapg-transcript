@@ -5,13 +5,13 @@
             <div class="card">
                 @include('includes.messages')
                 <div class="card-body">
-                    <h2 class="header-title">Schools' Qualifications Submission</h2>
+                    <h2 class="header-title">Academic Qualifications Submission</h2>
 
                     <form method="post" action="{{ route('applicant.qualifications.store') }}" class="mt-5">
                         @csrf
                         <div class="form-group">
                             <label for="">Name / Certificate Type</label>
-                            <input type="text" name="certificate_type" placeholder="e.g SSCE" class="form-control">
+                            <input type="text" name="certificate_type" placeholder="e.g HND, B.Sc., M.Sc." class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -48,7 +48,7 @@
         <div class="col-xl-8">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="header-title">Submitted Schools' Qualifications</h2>
+                    <h2 class="header-title">Submitted Academic Qualifications</h2>
 
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
@@ -70,9 +70,9 @@
                                 <td>{{ $qualification->certificate_type  }}</td>
                                 <td>{{ $qualification->awarding_institution  }}</td>
                                 <td>{{ $qualification->qualification_obtained  }}</td>
-                                <td>{{ $qualification->qualification_obtained ?? 'N/A'  }}</td>
+                                <td>{{ $qualification->class ?? 'N/A'  }}</td>
                                 <td>{{ \Carbon\Carbon::parse($qualification->year_obtained)->year  }}</td>
-                                <td><button class="btn btn-success btn-sm">edit</button></td>
+                                <td><a class="btn btn-success btn-sm" href="{{route('applicant.delete.qualification',['id'=>$qualification->uid])}}">Remove</a></td>
 
                             </tr>
                         @endforeach

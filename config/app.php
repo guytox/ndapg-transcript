@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'NDA|SPGS'),
 
     /*
     |--------------------------------------------------------------------------
@@ -283,11 +283,17 @@ return [
     'credo' => [
 
 
-        //'public_key' => '0PUB0012f9rmLs12X88ejhrIyG53VyNh',
-        'public_key' => '0PUB0188Fn3J7HFsE0FQ703xwn7h5jwm',
-        'private_key' => '0PRI0188Dk0I9T0jOoFE3KCoOhO1uO5b',
-        //'private_key' => '0PRI0188Dk0I9T0jOoFE3KCoOhO1uO5b',
+        'public_key' => '1PUB0012vXuHt6ltBtM1LGgI44KLmkq8m63X7I', # For Live
+        //'public_key' => '0PUB0188Fn3J7HFsE0FQ703xwn7h5jwm', # for test
+        //'private_key' => '0PRI0188Dk0I9T0jOoFE3KCoOhO1uO5b', # For Test
+        'private_key' => '1PRI0012vheBWJ7z6v5pyUVAZ7KUUqC9V7n2px', #for Live
         'response_url' => env('APP_URL').'/api/payb',
+        'serviceCode' => [
+            'applicationFee' => '000012WFOFIG',
+            'lateRegistration' => '000012BD5LZB',
+            'acceptanceFee' => '000012UPV6OU',
+            'TuitionFee' => '000012HGPXKW',
+        ],
     ],
 
     'status' => [
