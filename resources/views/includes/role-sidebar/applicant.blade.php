@@ -84,7 +84,7 @@
 
     <ul>
         <li>
-            <a href="#" class="@if (Request::is('applicant/profile/*')) active @endif waves-effect">
+            <a href="{{route('applicant.profile.biodata')}} " class="@if (Request::is('applicant/profile/*')) active @endif waves-effect">
                 <i class="mdi mdi-face-recognition"></i>
                 <span>Biodata</span>
             </a>

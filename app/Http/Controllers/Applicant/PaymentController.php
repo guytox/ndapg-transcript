@@ -122,15 +122,17 @@ class PaymentController extends Controller
 
             $client = new \GuzzleHttp\Client();
 
-            $response = $client->request('POST', 'api.public.credodemo.com/transaction/initialize',[
-                'headers' => $headers,
-                'json' => $body
-            ]);
-
-            // $response = $client->request('POST', 'https://api.credocentral.com/transaction/',[
+            # These settings are for a demo environment
+            // $response = $client->request('POST', 'api.public.credodemo.com/transaction/initialize',[
             //     'headers' => $headers,
             //     'json' => $body
             // ]);
+
+            # These setting are for the live environment
+            $response = $client->request('POST', 'https://api.credocentral.com/transaction/',[
+                'headers' => $headers,
+                'json' => $body
+            ]);
 
 
 

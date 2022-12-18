@@ -248,6 +248,10 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::get('/contact-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'contactDetails'])->name('applicant.profile.contact_details');
         Route::get('/personal-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'personalDetails'])->name('applicant.profile.personal_details');
         Route::post('/store', [\App\Http\Controllers\Applicant\ProfileController::class, 'storeUserProfile'])->name('applicant.profile.store');
+        Route::get('/bio-data', [\App\Http\Controllers\Applicant\ProfileController::class, 'applicantProfile'])->name('applicant.profile.biodata');
+        Route::post('/store-biodata', [\App\Http\Controllers\Applicant\ProfileController::class, 'storeApplicantBiodata'])->name('applicant.biodata.store');
+
+
     });
 
     Route::prefix('qualifications')->group(function () {
