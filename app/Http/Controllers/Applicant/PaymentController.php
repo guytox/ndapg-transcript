@@ -16,12 +16,20 @@ class PaymentController extends Controller
         if($applicationFeeConfiguration) {
 
 
-            $feePayment = FeePayment::where(['user_id' => user()->id, 'payment_config_id' => $applicationFeeConfiguration->id])->first();
-
+            $feePayment = FeePayment::where(['user_id' => user()->id, 'payment_config_id' => $applicationFeeConfiguration->id, 'payment_status'=>'paid','academic_session_id'=>activeSession()->id])->first();
 
 
             if($feePayment !== null){
                 return view('applicant.application_fee', compact('feePayment'));
+            }else{
+                # check to see if he/she abandoned the transaction and redirect to the same page for payment
+                $prevousPayment = ApplicationFeeRequest::where('payee_id', user()->id)->where('status','pending')->first();
+
+                if ($prevousPayment) {
+                    # forward for payment
+                    return redirect()->away($prevousPayment->credo_url);
+
+                }
             }
 
             $terminalId = config('app.etranzact.terminal_id');
@@ -80,6 +88,7 @@ class PaymentController extends Controller
                 'currency' => 'NGN',
                 //'customerPhoneNumber' => $transaction->user->phone_number,
                 'reference' => $transaction->txn_id,
+                'serviceCode' => config('app.credo.serviceCode.applicationFee'),
                 'metadata' => [
                     'customFields' =>[
                         [
@@ -100,6 +109,8 @@ class PaymentController extends Controller
                     ]
                 ]
             ];
+
+            return $body;
 
             $headers = [
                 'Content-Type' => 'application/json',
