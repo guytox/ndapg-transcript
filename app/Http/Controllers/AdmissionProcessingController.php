@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\OlevelCard;
 use App\Models\OlevelResult;
+use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\UserReferee;
 use Illuminate\Http\Request;
 
 class AdmissionProcessingController extends Controller
@@ -96,13 +98,23 @@ class AdmissionProcessingController extends Controller
         }elseif ($applicantProfile->applicant_program =='') {
             # No Programme Selected
             return redirect(route('home'))->with('error'," You have to select a programme");
+
         }elseif ($applicantProfile->state_id =='') {
             # No State Selected
             return redirect(route('home'))->with('error'," You have to select your state of origin");
 
-        }elseif ($applicantProfile->state_id =='') {
+        }elseif ($applicantProfile->dob =='') {
             # No Date Of Birth Selected
             return redirect(route('home'))->with('error'," You have to select your Date of Birth");
+
+        }elseif ($applicantProfile->gender =='') {
+            # No Date Of Birth Selected
+            return redirect(route('home'))->with('error'," You have to select your Gender");
+
+        }elseif ($applicantProfile->marital_status =='') {
+            # No Date Of Birth Selected
+            return redirect(route('home'))->with('error'," You have to select your Marrital Status");
+
         }
 
         #next, check the olevel entries and verification cards
@@ -112,6 +124,7 @@ class AdmissionProcessingController extends Controller
         if (!$OlevelResults) {
             # No Oleve result found return candidate back
             return redirect(route('home'))->with('error'," You have not uploaded any O-Level Results, Pleas upload before you proceed");
+
         }elseif ($OlevelResults) {
             # find out if there are oLevel cards for each sitting
             foreach ($OlevelResults as $vt) {
@@ -126,6 +139,35 @@ class AdmissionProcessingController extends Controller
                 }
             }
         }
+
+        #next obtain the user and beging checks for passport gsm and email
+        $applicantUser = User::find($id);
+
+        #check for phone number
+        if ($applicantUser) {
+            if ($applicantUser->phone_number=='') {
+                # phone number not found
+                return redirect(route('home'))->with('error'," You have to provide your gsm number!!!");
+
+            }elseif ($applicantUser->passport=='') {
+                #passport not found
+                return redirect(route('home'))->with('error'," You have to provide your passport!!!");
+            }
+
+        }else{
+            return back()->with('error'," This is strange, but this user has not been found!!!");
+        }
+
+        #next fetch the Referee information and perform checks
+        $userReferee = UserReferee::where('user_id',$id)->get();
+
+        if (!$userReferee) {
+            # code...
+            return back()->with('error'," User Referee  has not been found!!!");
+
+        }
+
+        return "All clear to move";
 
 
     }

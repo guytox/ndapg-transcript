@@ -278,6 +278,9 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
     });
+
+    //Route::prefix('preview')->group(function())
+
 });
 
 Route::get('departments-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getDepartmentsFromFaculty']);
