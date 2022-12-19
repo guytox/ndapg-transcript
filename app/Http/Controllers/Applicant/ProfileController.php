@@ -32,6 +32,17 @@ class ProfileController extends Controller
     }
 
     public function applicantProfile(Request $request) {
+        $uprofile = UserProfile::where('user_id', user()->id)->first();
+
+        if ($uprofile) {
+            #profile found just redirect
+        }else{
+            #create the profile before you forward
+
+            $newprofile = UserProfile::updateOrCreate(['user_id'=> user()->id],[
+                'user_id'=> user()->id,
+            ]);
+        }
         return view('applicant.profile_form');
     }
 
