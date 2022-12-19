@@ -110,7 +110,7 @@ class PaymentController extends Controller
                 ]
             ];
 
-            return $body;
+            //return $body;
 
             $headers = [
                 'Content-Type' => 'application/json',
