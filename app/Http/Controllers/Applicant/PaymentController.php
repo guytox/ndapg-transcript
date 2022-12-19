@@ -25,7 +25,7 @@ class PaymentController extends Controller
                 # check to see if he/she abandoned the transaction and redirect to the same page for payment
                 $prevousPayment = ApplicationFeeRequest::where('payee_id', user()->id)->where('status','pending')->first();
 
-                if ($prevousPayment) {
+                if ($prevousPayment->credo_url !='') {
                     # forward for payment
                     return redirect()->away($prevousPayment->credo_url);
 
@@ -110,7 +110,7 @@ class PaymentController extends Controller
                 ]
             ];
 
-            //return $body;
+
 
             $headers = [
                 'Content-Type' => 'application/json',
@@ -118,6 +118,7 @@ class PaymentController extends Controller
                 'Authorization' => config('app.credo.public_key'),
             ];
 
+            //return $headers;
             //return $body;
 
             $client = new \GuzzleHttp\Client();

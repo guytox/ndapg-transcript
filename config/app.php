@@ -284,8 +284,8 @@ return [
 
 
         'public_key' => '1PUB0012vXuHt6ltBtM1LGgI44KLmkq8m63X7I', # For Live
-        //'public_key' => '0PUB0188Fn3J7HFsE0FQ703xwn7h5jwm', # for test
-        //'private_key' => '0PRI0188Dk0I9T0jOoFE3KCoOhO1uO5b', # For Test
+        'test_public_key' => '0PUB0188Fn3J7HFsE0FQ703xwn7h5jwm', # for test
+        'test_private_key' => '0PRI0188Dk0I9T0jOoFE3KCoOhO1uO5b', # For Test
         'private_key' => '1PRI0012vheBWJ7z6v5pyUVAZ7KUUqC9V7n2px', #for Live
         'response_url' => env('APP_URL').'/api/payb',
         'serviceCode' => [
