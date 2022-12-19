@@ -61,7 +61,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
             'Authorization' => config('app.credo.private_key'),
         ];
 
-        $newurl = 'api.credocentral.com/transaction/'.$this->transactionId.'/verify';
+        $newurl = 'https://api.credocentral.com/transaction/'.$this->transactionId.'/verify';
 
         $client = new \GuzzleHttp\Client();
 
