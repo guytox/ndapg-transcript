@@ -129,7 +129,7 @@ class PaymentController extends Controller
             // ]);
 
             # These setting are for the live environment
-            $response = $client->request('POST', 'https://api.credocentral.com/transaction/',[
+            $response = $client->request('POST', 'https://api.credocentral.com/transaction/initialize',[
                 'headers' => $headers,
                 'json' => $body
             ]);
