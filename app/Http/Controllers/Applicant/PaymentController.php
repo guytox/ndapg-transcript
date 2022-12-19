@@ -86,7 +86,7 @@ class PaymentController extends Controller
             $body = [
                 'amount' => $amount,
                 'email' => $transaction->user->email,
-                'bearer' => 1,
+                'bearer' => 0,
                 'callbackUrl' => config('app.credo.response_url'),
                 'channels' => ['card', 'bank'],
                 'currency' => 'NGN',
