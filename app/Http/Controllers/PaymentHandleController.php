@@ -173,7 +173,7 @@ class PaymentHandleController extends Controller
             'Authorization' => config('app.credo.private_key'),
         ];
 
-        $newurl = 'api.public.credodemo.com/transaction/'.$request->transRef.'/verify';
+        $newurl = 'api.credocentral.com/transaction/'.$request->transRef.'/verify';
 
         $client = new \GuzzleHttp\Client();
 
