@@ -25,9 +25,13 @@ class PaymentController extends Controller
                 # check to see if he/she abandoned the transaction and redirect to the same page for payment
                 $prevousPayment = ApplicationFeeRequest::where('payee_id', user()->id)->where('status','pending')->first();
 
-                if ($prevousPayment->credo_url !='') {
+                if ($prevousPayment) {
                     # forward for payment
-                    return redirect()->away($prevousPayment->credo_url);
+                    if ($prevousPayment->credo_url !='') {
+                        # the credo response code is not  empty
+                        return redirect()->away($prevousPayment->credo_url);
+                    }
+
 
                 }
             }
