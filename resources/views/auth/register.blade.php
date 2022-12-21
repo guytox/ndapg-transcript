@@ -69,7 +69,7 @@
                 <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Create Account and Login to continue Application</button>
             </div>
             <hr>
-            <a href="{{ asset('assets/img/logo/Logo_mobile_dark.png') }}" target="_blank" class="btn btn-secondary  waves-effect waves-light" type="submit">Application Guidelines </a>
+            <a href="{{ asset('assets/NDA_SPGS_OnlineApplicationGuide.pdf') }}" target="_blank" class="btn btn-secondary  waves-effect waves-light" type="submit">Application Guidelines </a>
             <hr>
             <div class="mt-4 text-center">
                 <a href="{{ route('login') }}" class=" text-muted"><i class="mdi mdi-account-circle mr-1"></i>
