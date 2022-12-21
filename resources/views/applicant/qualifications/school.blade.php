@@ -7,36 +7,45 @@
                 <div class="card-body">
                     <h2 class="header-title">Academic Qualifications Submission</h2>
 
-                    <form method="post" action="{{ route('applicant.qualifications.store') }}" class="mt-5">
-                        @csrf
+                        {!! Form::open(['route' => 'applicant.qualifications.store', 'method' => 'POST', 'file'=>true, 'enctype'=>"multipart/form-data", 'class'=>"mt-5"]) !!}
+
+                        {!! Form::hidden('action', 'school', []) !!}
+
                         <div class="form-group">
-                            <label for="">Name / Certificate Type</label>
-                            <input type="text" name="certificate_type" placeholder="e.g HND, B.Sc., M.Sc." class="form-control">
+                            {!! Form::label('certificate_type', 'Name / Certificate Type') !!}
+                            {!! Form::text('certificate_type', null, ['class'=>'form-control', 'required',  'placeholder'=>"e.g HND, B.Sc., M.Sc."]) !!}
                         </div>
 
                         <div class="form-group">
-                            <label for="">Awarding Institution</label>
-                            <input type="text" name="awarding_institution" value="" class="form-control">
+                            {!! Form::label('awarding_institution', 'Awarding Institution') !!}
+                            {!! Form::text('awarding_institution', null, ['class'=>'form-control', 'required',  'placeholder'=>""]) !!}
                         </div>
 
                         <div class="form-group">
-                            <label for="">Qualification Obtained</label>
-                            <input type="text" name="qualification_obtained" value="" class="form-control">
+                            {!! Form::label('qualification_obtained', 'Qualification Obtained') !!}
+                            {!! Form::text('qualification_obtained', null, ['class'=>'form-control', 'required',  'placeholder'=>""]) !!}
                         </div>
 
                         <div class="form-group">
-                            <label for="">Class</label>
-                            <input type="text" name="class" value="" class="form-control">
+                            {!! Form::label('class', 'Certificate Class') !!}
+                            {!! Form::text('class', null, ['class'=>'form-control', 'required',  'placeholder'=>""]) !!}
                         </div>
-                        <input type="hidden" name="type" value="school">
+
                         <div class="form-group">
-                            <label for="">Year Obtained</label>
-                            <input type="date" name="year_obtained" value="" class="form-control">
+                            {!! Form::label('year_obtained', 'Year Obtained') !!}
+                            {!! Form::date('year_obtained', null, ['class'=>'form-control','required']) !!}
                         </div>
 
+                        <div class="form-group">
+                            {!! Form::label('file', 'Upload Certificate here, Note***(Must be jpeg or png of not more than 100kb)') !!}
+                            {!! Form::file('file', ['class'=> 'form-control']) !!}
+                        </div>
+
+                        {!! Form::submit('Submit Academic Qualification',['class'=>'form-control btn btn-success']) !!}
+
+                        {!! Form::close() !!}
 
 
-                        <button type="submit" class="btn btn-primary">Save</button>
                     </form>
 
 
@@ -72,7 +81,11 @@
                                 <td>{{ $qualification->qualification_obtained  }}</td>
                                 <td>{{ $qualification->class ?? 'N/A'  }}</td>
                                 <td>{{ \Carbon\Carbon::parse($qualification->year_obtained)->year  }}</td>
-                                <td><a class="btn btn-success btn-sm" href="{{route('applicant.delete.qualification',['id'=>$qualification->uid])}}">Remove</a></td>
+                                <td><a class="btn btn-success btn-sm" href="{{route('applicant.delete.qualification',['id'=>$qualification->uid])}}">Remove</a>
+                                {{-- <a href="{{$qualification->uid}}" target="_blank" class="btn btn-danger btn-sm" target="_blank">View Certificate</a> --}}
+                                <img class="rounded-circle header-profile-user" src="{{ asset($qualification->path) }}" alt="No Upload Yet">
+                                <a href="{{asset($qualification->path)}}" target="_blank" class="btn btn-warning btn-sm">Show Certificate</a>
+                                </td>
 
                             </tr>
                         @endforeach

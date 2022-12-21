@@ -41,7 +41,36 @@ class QualificationsController extends Controller
     {
         $validated = $request->validated();
 
-        (new StoreQualificationsService($validated, user()))->run();
+        //get the file object and perform checks
+        $file = $request->file('file');
+
+        //Get the file size to and determine if we should proceed or not
+
+        $picSize = $file->getSize();
+
+        if ($picSize>='100101') {
+            //return error because the picture is greater than the 60Kb
+            return back()->with('error', "This Picture is too big, reduce it to 100kb");
+        }
+        //all set to go upload the passport to the server
+        $path = $request->file('file')->store('storage/images/userCertificates');
+
+
+
+        $newQualification = UserQualification::updateOrCreate(['user_id' => user()->id, 'certificate_type' => $request->certificate_type], [
+            'certificate_type' => $request->certificate_type ?? user()->qualifications->certificate_type ?? null,
+            'qualification_obtained' => $request->qualification_obtained ?? null,
+            'year_obtained' => $request->year_obtained ?? user()->qualifications->year_obtained ?? null,
+            'type' => $request->action ?? user()->qualifications->action ?? 'school',
+            'class' => $request->class ?? null,
+            'expiry_date' => $request->expiry_date ?? null,
+            'certificate_no' => $request->certificate_no ?? null,
+            'awarding_institution' => $request->awarding_institution ?? null,
+            'user_id' => user()->id,
+            'path' => $path,
+        ]);
+
+        //(new StoreQualificationsService($validated, user()))->run();
 
         return redirect()->back()->with(['success' => 'qualification saved successfully']);
     }

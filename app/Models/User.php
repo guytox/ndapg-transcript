@@ -47,6 +47,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function qualifications()
     {
-        return $this->hasOne(UserQualification::class);
+        return $this->hasMany(UserQualification::class,'user_id','id');
     }
 }

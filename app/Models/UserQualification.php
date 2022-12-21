@@ -32,4 +32,9 @@ class UserQualification extends Model
             $model->uid = self::generateUniqueCert();
         });
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'id','user_id');
+    }
 }

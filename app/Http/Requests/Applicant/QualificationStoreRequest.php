@@ -31,7 +31,9 @@ class QualificationStoreRequest extends FormRequest
             'year_obtained' => 'sometimes|date|required',
             'class' => 'nullable',
             'type' => 'sometimes|required|in:school,professional',
-            'expiry_date' => 'sometimes|date|required|after:'.$this->year_obtained
+            'expiry_date' => 'sometimes|date|required|after:'.$this->year_obtained,
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:64101',
+            'action' => 'required'
         ];
     }
 }
