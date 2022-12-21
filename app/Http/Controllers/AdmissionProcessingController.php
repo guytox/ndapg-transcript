@@ -6,6 +6,7 @@ use App\Models\OlevelCard;
 use App\Models\OlevelResult;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\UserQualification;
 use App\Models\UserReferee;
 use Illuminate\Http\Request;
 
@@ -159,13 +160,105 @@ class AdmissionProcessingController extends Controller
         }
 
         #next fetch the Referee information and perform checks
-        $userReferee = UserReferee::where('user_id',$id)->get();
+        $userReferee = UserReferee::where('user_id',$id)
+                                    ->select('uid','is_filled','email','name','phone')
+                                    ->get();
 
         if (!$userReferee) {
             # code...
             return back()->with('error'," User Referee  has not been found!!!");
 
+        }elseif($userReferee){
+
+            foreach ($userReferee as $v) {
+                if ($v->is_filled ==0) {
+                    return redirect(route('home'))->with('error'," One of Your Referees has not responded, Pleas ensure they all respond. Note!!! You can replace them");
+                }
+            }
         }
+
+        #Next check qualificatons
+        $userQualifications = UserQualification::where('user_id',$id)->where('type', 'school')->get();
+
+
+        if (!$userQualifications) {
+
+            return back()->with('error'," No Academic Qualification Found!!!");
+
+        }elseif ($userQualifications) {
+            # qualifications are found, proceed to check count and uploads
+            if (count($userQualifications)<3) {
+                # Not enough qualifications
+
+                return back()->with('error'," You do not have sufficient Academic Qualifications. At least three required (FSLC, SSCE and one of OND/HND/B.Sc)!!!");
+            }elseif (count($userQualifications) >=3) {
+                # found, loop through and check for consistency
+                foreach ($userQualifications as $q) {
+                    if ($q->path =='') {
+                        # no upload found, return back
+                        return back()->with('error'," Your Uploads for Academic Qualifications is not complete");
+
+                    }elseif ($q->year_obtained =='') {
+                        # no year obtained
+                        return back()->with('error'," Kindly specify year obtained for all Academic Qualifications");
+
+                    }elseif ($q->certificate_type =='') {
+                        # no year obtained
+                        return back()->with('error'," Kindly specify certificate type for all Academic Qualifications");
+
+                    }elseif ($q->awarding_institution =='') {
+                        # no year obtained
+                        return back()->with('error'," Awarding institution cannot be empty for Academic Qualifications");
+
+                    }elseif ($q->uid =='') {
+                        # no year obtained
+                        return back()->with('error',"Some Academic Qualifications are not uploaded correctly");
+
+                    }
+
+                }
+            }
+        }
+
+        # professional qualifications are not a must but any one listed must be uploaded
+        $userProfessionalQualifications = UserQualification::where('user_id','$id')->where('type', 'professional')->get();
+
+        if (!$userProfessionalQualifications) {
+
+            return back()->with('error'," No Academic Qualification Found!!!");
+
+        }elseif ($userProfessionalQualifications) {
+            # qualifications are found, proceed to check count and uploads
+            if($userProfessionalQualifications) {
+                # found, loop through and check for consistency
+                foreach ($userProfessionalQualifications as $v) {
+                    if ($v->path =='') {
+                        # no upload found, return back
+                        return back()->with('error'," Your Uploads for Professional Qualifications is not complete");
+
+                    }elseif ($v->year_obtained =='') {
+                        # no year obtained
+                        return back()->with('error'," Kindly specify year obtained for all Professional Qualifications");
+
+                    }elseif ($v->certificate_type =='') {
+                        # no year obtained
+                        return back()->with('error'," Kindly specify certificate type for all Professional Qualifications");
+
+                    }elseif ($v->awarding_institution =='') {
+                        # no year obtained
+                        return back()->with('error'," Awarding institution cannot be empty for Professional Qualifications");
+
+                    }elseif ($v->uid =='') {
+                        # no year obtained
+                        return back()->with('error',"Some Professional Qualifications are not uploaded correctly");
+
+                    }
+
+                }
+            }
+        }
+
+        return view('applicant.view_preview', compact('applicantUser','applicantProfile', 'OlevelResults','userReferee', 'userQualifications','userProfessionalQualifications'));
 
         return "All clear to move";
 

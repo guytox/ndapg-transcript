@@ -41,16 +41,31 @@
 
                     <form method="post" action="{{ route('applicant.add_card.store') }}" class="mt-2">
                         @csrf
+
                         <div class="form-group">
-                            <label for="">Exam Type </label>
-                            <select class="form-control show-tick" name="exam_type">
-                                <option value="">-- Select Examination type --</option>
-                                <option value="WASCCE JAN/FEB">WASSCE JAN/FEB</option>
-                                <option value="WASCCE MAY/JUNE">WASSCE MAY/JUNE</option>
-                                <option value="WASCCE GCE NOV/DEC">WASSCE GCE NOV/DEC</option>
+                            <label for="exam_body">Exam Body </label>
+                            <select class="form-control show-tick" name="exam_body">
+                                <option value="">-- Select Examination body --</option>
+                                <option value="WAEC">WAEC</option>
+                                <option value="WASCCE">WASCCE</option>
+                                <option value="NECO">NECO</option>
+                                <option value="NABTEB">NABTEB</option>
                                 <option value="IGCE">IGCE</option>
 
                             </select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exam_type">Exam Type </label>
+                            <select class="form-control show-tick" name="exam_type">
+                                <option value="">-- Select Examination type --</option>
+                                <option value="JAN/FEB">JAN/FEB</option>
+                                <option value="MAY/JUNE">MAY/JUNE</option>
+                                <option value="NOV/DEC">NOV/DEC</option>
+
+                            </select>
+
                         </div>
 
                         <div class="form-group">
@@ -58,25 +73,19 @@
                             <select class="form-control show-tick" name="exam_year">
                                 <option value="">Select Your Examination year</option>
 
-                                <option value="2001">2001</option>
-                                <option value="2002">2002</option>
-                                <option value="2003">2003</option>
-                                <option value="2004">2004</option>
-                                <option value="2005">2005</option>
-                                <option value="2006">2006</option>
-                                <option value="2007">2007</option>
-                                <option value="2008">2008</option>
-                                <option value="2009">2009</option>
-                                <option value="2010">2010</option>
-                                <option value="2011">2011</option>
-                                <option value="2012">2012</option>
-                                <option value="2013">2013</option>
-                                <option value="2014">2014</option>
-                                <option value="2015">2015</option>
-                                <option value="2016">2016</option>
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
+                                @php
+                                $year = 1950;
+                            @endphp
+
+                            @while ($year <=2022)
+
+                            <option value="{{$year}}">{{$year}}</option>
+
+                            @php
+                                $year ++;
+                            @endphp
+
+                            @endwhile
 
 
                             </select>

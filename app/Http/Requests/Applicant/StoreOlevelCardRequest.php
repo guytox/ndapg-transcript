@@ -27,6 +27,7 @@ class StoreOlevelCardRequest extends FormRequest
             'exam_year' => 'required|integer|min:1952|max:'.date("Y"),
             'sitting'=> 'required|in:first,second',
             'card_pin' => 'required',
+            'exam_body' => 'required',
             'card_serial_no' => 'required',
             'exam_type' => 'required'
         ];

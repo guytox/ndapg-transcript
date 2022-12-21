@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcademicSessionsController;
 use App\Http\Controllers\Admin\AdminReportsController;
 use App\Http\Controllers\AdmissionController;
+use App\Http\Controllers\AdmissionProcessingController;
 use App\Http\Controllers\PaymentHandleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -279,7 +280,11 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
     });
 
-    //Route::prefix('preview')->group(function())
+    Route::prefix('preview')->group(function(){
+
+        Route::get('/applicationPreview/{id}',[AdmissionProcessingController::class, 'previewApplication'])->name('preview.application');
+
+    });
 
 });
 
