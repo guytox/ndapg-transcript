@@ -2,78 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ConfirmApplicationPaymentJob;
 use App\Models\FeePayment;
 use Illuminate\Http\Request;
-use App\Jobs\ConfirmApplicationPaymentJob;
+use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
-
+use App\Models\CredoResponse;
 
 class PaymentHandleController extends Controller
 {
-    public function initiatePayment(Request $request)
-    {
-        $feePayment = FeePayment::where('uid', $request->get('fee_payment_uid'))->first();
-        if ($feePayment) {
-            $validated = $request->validate([
-                'fee_payment_uid' => 'required',
-                'amount' => 'required|integer|max:' . $feePayment->balance,
-                'payment_method' => 'required|in:card,umm-wallet'
-            ]);
 
-            if($request->get('payment_method') === 'card') {
-
-
-                $terminalId = config('app.etranzact.terminal_id');
-
-                $responseURL = config('app.etranzact.response_url');
-
-                $secretKey = config('app.etranzact.secret_key');
-
-                $logoURL = config('app.etranzact.logo_url');
-
-                $transactionId = generateUniqueTransactionReference();
-
-                $amount = $validated['amount'];
-
-                $transaction = FeePayment::where('uid', $validated['fee_payment_uid'])->first();
-
-                $checkSum = generateCheckSum(
-                    $amount,
-                    $transactionId,
-                    $terminalId,
-                    $responseURL,
-                    $secretKey
-                );
-
-                if ($transaction) {
-                    $transaction->update([
-                        'txn_id' => $transactionId,
-                        'checksum' => $checkSum
-                    ]);
-
-                    $paymentData = [
-                        'email' => $transaction->user->email,
-                        'amount' => $amount,
-                        'description' => $transaction->description,
-                        'txn_id' => $transaction->txn_id,
-                        'checksum' => $transaction->checksum,
-                        'name' => $transaction->user->name,
-                        'payee_id' => $transaction->user->id,
-                        'responseurl' => $responseURL,
-                        'logourl' => $logoURL,
-                    ];
-
-                    return redirect()->route('pay.now')->with(['paymentData' => $paymentData]);
-                }
-            }else {
-//                return $this->payWithWallet($feePayment->uid, $validated['amount']);
-            }
-
-            abort(403, 'Invalid transaction');
-        }
-
-        abort(403, 'Invalid transaction');
-    }
 
     public function confirmPayment(Request $request)
     {
@@ -112,6 +50,64 @@ class PaymentHandleController extends Controller
             ConfirmApplicationPaymentJob::dispatch($transactionId, $checkSum, $finalCheckSum, $statusCode, $amount, $email);
 
             return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing']);
+        }
+
+        abort(403, 'Unable to confirm payment information');
+    }
+
+    public function confirmcredoApplicationPayment(Request $request)
+    {
+
+        //return $request;
+
+        # prepare for validation
+
+        $headers = [
+            'Content-Type' => 'application/JSON',
+            'Accept' => 'application/JSON',
+            'Authorization' => config('app.credo.private_key'),
+        ];
+
+        //return $headers;
+
+        $newurl = 'https://api.credocentral.com/transaction/'.$request->transRef.'/verify';
+
+        //return $newurl;
+
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->request('GET', $newurl,[
+            'headers' => $headers,
+        ]);
+
+        $parameters = json_decode($response->getBody());
+
+        //return $parameters;
+
+
+        if ($request->has('transRef') && $request->has('transAmount')) {
+
+            $transactionId = $request->get('transRef');
+            $currency = $request->get('currency');
+            $statusCode = $request->get('status');
+            $amount = $request->get('transAmount');
+
+            //  return $transactionId;
+
+            #store the response
+
+            $newrequest = CredoResponse::updateOrCreate(['transRef'=>$request->transRef],[
+                'transRef'=>$request->transRef,
+                'currency'=>$request->currency,
+                'status'=>$request->status,
+                'transAmount'=>$request->transAmount,
+            ]);
+
+
+            // send background job to confirm the payment with checksum and transaction id
+            ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+
+            return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
         }
 
         abort(403, 'Unable to confirm payment information');

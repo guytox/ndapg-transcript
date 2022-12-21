@@ -41,12 +41,23 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-4">
-                <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Log In (For All Users and Returning Applicants) </button>
+            <br>
+      
+                <div class="mt-4">
+                    <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Log In (For All Users and Returning Applicants) </button>
+                </div>
+          
+
+            <hr>
+
+            <div class="row">
+            <div class="col-4">
+                    <a href="{{ asset('assets/img/logo/Logo_mobile_dark.png') }}" target="_blank" class="btn btn-secondary  waves-effect waves-light" type="submit">Application Guidelines </a>
             </div>
-            <div class="mt-4 text-center">
+            <div class="col-8">
                 <a href="{{ route('register') }}" class="btn btn-danger "><i class="mdi mdi-account-circle mr-1"></i>
                     Begin Application (For New Applicants Only)</a>
+            </div>
             </div>
         </div>
     </div>

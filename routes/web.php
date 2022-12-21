@@ -248,10 +248,15 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::get('/contact-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'contactDetails'])->name('applicant.profile.contact_details');
         Route::get('/personal-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'personalDetails'])->name('applicant.profile.personal_details');
         Route::post('/store', [\App\Http\Controllers\Applicant\ProfileController::class, 'storeUserProfile'])->name('applicant.profile.store');
+        Route::get('/bio-data', [\App\Http\Controllers\Applicant\ProfileController::class, 'applicantProfile'])->name('applicants.profile.biodata');
+        Route::post('/store-biodata', [\App\Http\Controllers\Applicant\ProfileController::class, 'storeApplicantBiodata'])->name('applicant.biodata.store');
+
+
     });
 
     Route::prefix('qualifications')->group(function () {
         Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicant.qualifications.school');
+        Route::get('/delete/{id}', [\App\Http\Controllers\Applicant\QualificationsController::class, 'deleteQualification'])->name('applicant.delete.qualification');
         Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicant.qualifications.professional');
         Route::post('/store', [\App\Http\Controllers\Applicant\QualificationsController::class, 'store'])->name('applicant.qualifications.store');
     });
@@ -273,6 +278,9 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
     });
+
+    //Route::prefix('preview')->group(function())
+
 });
 
 Route::get('departments-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getDepartmentsFromFaculty']);
@@ -340,4 +348,6 @@ Route::get('complete-application-payment', function () {
 })->name('pay.application.now');
 
 Route::get('api/paya', [PaymentHandleController::class, 'confirmApplicationPayment']);
+Route::get('api/payb', [PaymentHandleController::class, 'confirmcredoApplicationPayment']);
+Route::post('api/payb', [PaymentHandleController::class, 'confirmcredoApplicationPayment']);
 

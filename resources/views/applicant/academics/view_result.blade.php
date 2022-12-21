@@ -12,7 +12,7 @@
 
                     @foreach($olevels as $olevel)
 
-                        <h4>Result For: {{ $olevel->exam_details['Exam_type'] }} {{ $olevel->exam_details['Exam_year'] }}  - {{ $olevel->sitting }}</h4>
+                        <h4>Result For: {{ $olevel->exam_details['Exam_body'] }}  {{ $olevel->exam_details['Exam_type'] }} {{ $olevel->exam_details['Exam_year'] }}  - {{ $olevel->sitting }}</h4>
                         <br>
                     <div class="body table-responsive mt-4">
                         <table class="table table-hover table-bordered">

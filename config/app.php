@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'NDA|SPGS'),
 
     /*
     |--------------------------------------------------------------------------
@@ -280,6 +280,22 @@ return [
         'logo_url' => 'https://ugpayment.umm.edu.ng/images/ummlogo.jpg'
     ],
 
+    'credo' => [
+
+
+        'public_key' => '1PUB0012vXuHt6ltBtM1LGgI44KLmkq8m63X7I', # For Live
+        'private_key' => '1PRI0012vheBWJ7z6v5pyUVAZ7KUUqC9V7n2px', #for Live
+        'test_public_key' => '0PUB0188Fn3J7HFsE0FQ703xwn7h5jwm', # for test
+        'test_private_key' => '0PRI0188Dk0I9T0jOoFE3KCoOhO1uO5b', # For Test
+        'response_url' => env('APP_URL').'/api/payb',
+        'serviceCode' => [
+            'applicationFee' => '000012WFOFIG',
+            'lateRegistration' => '000012BD5LZB',
+            'acceptanceFee' => '000012UPV6OU',
+            'TuitionFee' => '000012HGPXKW',
+        ],
+    ],
+
     'status' => [
         'pending' => 'pending',
         'paid' => 'paid'
@@ -288,6 +304,7 @@ return [
     'payment_methods' => [
         'umm-wallet' => 'umm-wallet',
         'e-tranzact' => 'e-tranzact',
+        'credo' => 'credo-online',
     ],
 
 ];

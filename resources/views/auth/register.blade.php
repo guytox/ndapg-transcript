@@ -2,6 +2,8 @@
 
 @section('content')
 <h5 class="mb-5 text-center">Begin Applicaition <span class="text text-success"><i>(Create and Verify Account)</i></span> </h5>
+
+
 <p class="text text-danger">NOTE:****** You are required to create and account and verify your email, then login to complete the application process</p>
 <form class="form-horizontal" method="POST" action="{{ route('register') }}">
     @csrf
@@ -66,6 +68,9 @@
             <div class="mt-4">
                 <button class="btn btn-success btn-block waves-effect waves-light" type="submit">Create Account and Login to continue Application</button>
             </div>
+            <hr>
+            <a href="{{ asset('assets/img/logo/Logo_mobile_dark.png') }}" target="_blank" class="btn btn-secondary  waves-effect waves-light" type="submit">Application Guidelines </a>
+            <hr>
             <div class="mt-4 text-center">
                 <a href="{{ route('login') }}" class=" text-muted"><i class="mdi mdi-account-circle mr-1"></i>
                     Already have an account

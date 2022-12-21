@@ -32,6 +32,7 @@ class StoreOlevelService extends BaseService implements ServiceInterface
         if($this->action === 'card'){
            $olevelCard = OlevelCard::updateOrCreate(['user_id' => $this->user->id, 'sitting' => $this->data['sitting']], [
                'exam_year' => $data['exam_year'],
+               'exam_body' => $data['exam_body'],
                'exam_type' => $data['exam_type'],
                'sitting' => $data['sitting'],
                'card_pin' => $data['card_pin'],
@@ -42,6 +43,7 @@ class StoreOlevelService extends BaseService implements ServiceInterface
 
             $examDetails = [];
             $examDetails['Exam_type'] = $data['exam_type'];
+            $examDetails['Exam_body'] = $data['exam_body'];
             $examDetails['Exam_year'] = $data['exam_year'];
             $examDetails['Mathematics'] = $data['mathematics'];
             $examDetails['English'] = $data['english'];
