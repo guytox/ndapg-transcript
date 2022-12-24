@@ -113,15 +113,8 @@
 <li>
     <a href="{{ route('preview.application',['id'=>user()->id]) }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
-        <span>Preview Submission</span>
+        <span>Preview And Submit</span>
     </a>
-</li>
-
-<li>
-    <a href="{{ route('home') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
-        <i class="mdi mdi-cash-marker"></i>
-        <span>submit Application</span>
-    </a>
-</li>
+</li>   
 
 @endrole

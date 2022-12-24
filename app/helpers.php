@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AcademicSession;
+use App\Models\AdmissionCount;
 use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\FeePayment;
@@ -55,6 +56,19 @@ function generateMatriculationNumber()
         }
     }
 
+}
+
+function getformNumber(){
+    $formNumber = AdmissionCount::where('category','pg')->first();
+
+    $newCount = $formNumber->count + 1;
+
+    $returned = $formNumber->prefix . $newCount;
+    #increment the count
+    $formNumber->count = $newCount;
+    $formNumber->save();
+
+    return $returned;
 }
 
 function updateMatriculationNumber($number)
