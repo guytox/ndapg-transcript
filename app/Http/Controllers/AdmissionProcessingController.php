@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApplicantAdmissionRequest;
 use App\Models\OlevelCard;
 use App\Models\OlevelResult;
 use App\Models\User;
@@ -124,7 +125,7 @@ class AdmissionProcessingController extends Controller
 
         if (!$OlevelResults) {
             # No Oleve result found return candidate back
-            return redirect(route('home'))->with('error'," You have not uploaded any O-Level Results, Pleas upload before you proceed");
+            return redirect(route('home'))->with('error'," You have not uploaded any O-Level Results, Please upload before you proceed");
 
         }elseif ($OlevelResults) {
             # find out if there are oLevel cards for each sitting
@@ -170,6 +171,11 @@ class AdmissionProcessingController extends Controller
 
         }elseif($userReferee){
 
+            if (count($userReferee)<3) {
+                # Return too few referees error
+                return back()->with('error',"Error!!! You need at least three(3) Referees, please add more referees till you have up to three(3)");
+            }
+
             foreach ($userReferee as $v) {
                 if ($v->is_filled ==0) {
                     return redirect(route('home'))->with('error'," One of Your Referees has not responded, Pleas ensure they all respond. Note!!! You can replace them");
@@ -214,6 +220,10 @@ class AdmissionProcessingController extends Controller
                         # no year obtained
                         return back()->with('error',"Some Academic Qualifications are not uploaded correctly");
 
+                    }elseif ($q->path =='') {
+                        # no year obtained
+                        return back()->with('error',"Some Academic Certificate Uploads are missing, Please Check and re-upload");
+
                     }
 
                 }
@@ -221,7 +231,8 @@ class AdmissionProcessingController extends Controller
         }
 
         # professional qualifications are not a must but any one listed must be uploaded
-        $userProfessionalQualifications = UserQualification::where('user_id','$id')->where('type', 'professional')->get();
+        $userProfessionalQualifications = UserQualification::where('user_id', $id)->where('type', 'professional')->get();
+        //return $userProfessionalQualifications;
 
         if (!$userProfessionalQualifications) {
 
@@ -252,13 +263,32 @@ class AdmissionProcessingController extends Controller
                         # no year obtained
                         return back()->with('error',"Some Professional Qualifications are not uploaded correctly");
 
+                    }elseif ($v->path =='') {
+                        # no year obtained
+                        return back()->with('error',"Some Professional Certificate Uploads are missing, Please Check and re-upload");
+
                     }
 
                 }
             }
         }
 
-        return view('applicant.view_preview', compact('applicantUser','applicantProfile', 'OlevelResults','userReferee', 'userQualifications','userProfessionalQualifications'));
+        # check admission status entry for staff
+        $submitted = ApplicantAdmissionRequest::where('user_id', $id)->where('session_id', getActiveAcademicSessionId()+1)->first();
+
+        if (!$submitted) {
+            # The user has not submitted any application this session
+
+            $submitted = ApplicantAdmissionRequest::updateOrCreate(['user_id'=>$id, 'session_id'=>getActiveAcademicSessionId()+1],[
+                'user_id'=> $id,
+                'session_id' => getActiveAcademicSessionId()+1,
+                'program_id' => $applicantProfile->applicant_program,
+                'uid' => uniqid('NDAPG_'),
+                'form_number'=> getformNumber(),
+            ]);
+        }
+
+        return view('applicant.view_preview', compact('applicantUser','applicantProfile', 'OlevelResults','userReferee', 'userQualifications','userProfessionalQualifications', 'submitted'));
 
         return "All clear to move";
 

@@ -37,7 +37,7 @@
 
 
                         <td >
-                            {!! QrCode::size(160)->generate(route('verify.student.reg',['$id'=>user()->id])) !!}
+                            {!! QrCode::size(160)->generate(route('verify.student.reg',['$id'=> $submitted->uid])) !!}
                         </td>
                     </tr>
                 </table>
@@ -54,7 +54,7 @@
 
                             </td>
                             <td class="text-right"> <b>Application No:</b> </td>
-                            <td class="text-danger text-left font-size-20"><b>NDA/SPGS/2022/000001</b></td>
+                            <td class="text-danger text-left font-size-20"><b>{{$submitted->form_number}}</b></td>
 
                         </tr>
                         <tr>
@@ -72,15 +72,15 @@
                             <td class="text-right">
                                 <b>Session.
                                 <br> Semester
-                                <br> Level
-                                <br> <i class="text-danger">Approval Status</i>
+                                <br> Study Level
+                                <br> <i class="text-danger">Admission Status</i>
                                 </b>
                             </td>
                             <td class="text-left">
                                 {{ getsessionById(2)->name}}
                                 <br> {{ getSemesterDetailsById(2)}}
                                 <br> ......
-                                <br> ....
+                                <br> Not Admitted
 
                             </td>
                         </tr>
@@ -105,31 +105,240 @@
                                 <b>Gender
                                 <br>Marrital Status
                                 <br>Date of Birth
-                                <br>Faculty</b>
+                                <br>E-mail</b>
                             </td>
                             <td class="text-left">{{$applicantProfile->gender}}
                                 <br>{{$applicantProfile->marital_status}}
                                 <br>{{$applicantProfile->dob}}
-                                <br> {{getDepartmentDetailById(getProgrammeDetailById($applicantProfile->applicant_program, 'department'), 'all')->faculty->name}} </td>
+                                <br> {{$applicantUser->email}} </td>
                             <td></td>
                             <td class="text-right">
                                 <b>Nationality.
                                 <br>State.
                                 <br> Local Government
-                                <br> Town
+                                <br> GSM
                                 </b>
                             </td>
                             <td class="text-left">
                                 {{$applicantProfile->nationality}}
                                 <br> {{$applicantProfile->state_id}}
                                 <br> {{$applicantProfile->local_government}}
-                                <br> {{$applicantProfile->town}}
+                                <br> {{$applicantUser->phone_number                                                                                                                                                                                                         }}
 
                             </td>
                         </tr>
 
                     </table>
+                    <hr>
 
+
+                </div>
+
+                <div class="text-center">
+                    <h5><b> O-LEVEL DETAILS </b></h5>
+                    <hr>
+                    {{-- Begin O-level details --}}
+
+                    @foreach($OlevelResults as $olevel)
+
+                        <h4>Result For: {{ $olevel->exam_details['Exam_body'] }}  {{ $olevel->exam_details['Exam_type'] }} {{ $olevel->exam_details['Exam_year'] }}  - {{ $olevel->sitting }}</h4>
+                        <br>
+                    <div class="body table-responsive mt-4">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>1</td>
+                                <td>English Language</td>
+                                <td>{{ $olevel->exam_details['English'] }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Mathematics </td>
+                                <td>{{ $olevel->exam_details['Mathematics'] }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>3</td>
+                                <td>{{ $olevel->exam_details['subject_3']['subject_name'] }}</td>
+                                <td>{{ $olevel->exam_details['subject_3']['grade'] }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>4</td>
+                                <td>{{ $olevel->exam_details['subject_4']['subject_name'] }}</td>
+                                <td>{{ $olevel->exam_details['subject_4']['grade'] }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>5</td>
+                                <td>{{ $olevel->exam_details['subject_5']['subject_name'] }}</td>
+                                <td>{{ $olevel->exam_details['subject_5']['grade'] }}</td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    @endforeach
+
+                    {{-- Begin Academic Qualifications Upload --}}
+
+                </div>
+
+                <hr>
+
+                <div class="text-center">
+                    <h5><b> Academic Qualifications </b></h5>
+                    <hr>
+                    {{-- Begin O-level details --}}
+                    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>Cert Type</th>
+                            <th>Awarding Institution</th>
+                            <th>Qualification Obtained</th>
+                            <th>Class</th>
+                            <th>Year Obtained</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                        @foreach($userQualifications as $qualification)
+                            <tr>
+                                <td>{{ $qualification->certificate_type  }}</td>
+                                <td>{{ $qualification->awarding_institution  }}</td>
+                                <td>{{ $qualification->qualification_obtained  }}</td>
+                                <td>{{ $qualification->class ?? 'N/A'  }}</td>
+                                <td>{{ \Carbon\Carbon::parse($qualification->year_obtained)->year  }}</td>
+                                <td>
+                                {{-- <a href="{{$qualification->uid}}" target="_blank" class="btn btn-danger btn-sm" target="_blank">View Certificate</a> --}}
+                                <img class="rounded-circle header-profile-user" src="{{ asset($qualification->path) }}" alt="No Upload Yet">
+                                <a href="{{asset($qualification->path)}}" target="_blank" class="btn btn-warning btn-sm">Show Certificate</a>
+                                </td>
+
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+                    {{-- End Academic Qualifications Upload --}}
+                </div>
+
+
+                <hr>
+
+                <div class="text-center">
+                    <h5><b> Professional Qualifications </b></h5>
+                    <hr>
+                    {{-- Begin O-level details --}}
+                    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>Cert Type</th>
+                            <th>Awarding Institution</th>
+                            <th>Qualification Obtained</th>
+                            <th>Class</th>
+                            <th>Year Obtained</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                        @foreach($userProfessionalQualifications as $q)
+                            <tr>
+                                <td>{{ $q->certificate_type  }}</td>
+                                <td>{{ $q->awarding_institution  }}</td>
+                                <td>{{ $q->qualification_obtained  }}</td>
+                                <td>{{ $q->class ?? 'N/A'  }}</td>
+                                <td>{{ \Carbon\Carbon::parse($q->year_obtained)->year  }}</td>
+                                <td>
+                                {{-- <a href="{{$qualification->uid}}" target="_blank" class="btn btn-danger btn-sm" target="_blank">View Certificate</a> --}}
+                                <img class="rounded-circle header-profile-user" src="{{ asset($q->path) }}" alt="No Upload Yet">
+                                <a href="{{asset($q->path)}}" target="_blank" class="btn btn-warning btn-sm">Show Certificate</a>
+                                </td>
+
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+                    {{-- End Academic Qualifications Upload --}}
+                </div>
+
+                <hr>
+
+                <div class="text-center">
+                    <h5><b> List of Nominated Referees </b></h5>
+                    <hr>
+                    {{-- Begin O-level details --}}
+
+                    <h2 class="header-title">List of Nominated Referees</h2>
+
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>s/n</th>
+                                <th>Name</th>
+                                <th>email</th>
+                                <th>gsm</th>
+                                <th>Respnse Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($userReferee)
+                            @php
+                                $sn = 1;
+                            @endphp
+                                @foreach ($userReferee as $v)
+
+                                <tr>
+                                    <td> {{$sn}}</td>
+                                    <td>{{$v->name}}</td>
+                                    <td>{{$v->email}}</td>
+                                    <td>{{$v->phone}}</td>
+                                    @if ($v->is_filled ==1)
+                                        <td class="text text-success">Referee has Responded</td>
+                                    @else
+                                        <td class="text text-danger">Not Responded <a href="{{route('delete.referee',['uid'=>$v->uid])}}" class="btn btn-danger"> Remove</a></td>
+                                    @endif
+
+                                </tr>
+
+                                @php
+                                    $sn++
+                                @endphp
+
+                                @endforeach
+                            @else
+                            <tr>
+                                <td colspan="5"> No Referees Nominated Yet</td>
+                            </tr>
+
+                            @endif
+
+
+                        </tbody>
+                    </table>
+
+
+                    {{-- End Academic Qualifications Upload --}}
+                </div>
+
+                <div class="text-center">
+                    <a href="" class="btn btn-danger form-control">Submit Application Form</a>
 
                 </div>
 
