@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="text-center">
-                            <a href="{{ route('register') }}" class="btn btn-primary">Register</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <a href="{{ route('register') }}" class="btn btn-primary">Create Account for Fresh Application</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <a href="{{ route('login') }}" class="btn btn-success">Login</a>
                         </div>
                     </div>
