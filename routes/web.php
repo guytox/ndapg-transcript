@@ -45,7 +45,7 @@ use Illuminate\Support\Str;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('index');
 });
 
 Auth::routes([
