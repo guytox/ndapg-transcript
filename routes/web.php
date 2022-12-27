@@ -244,7 +244,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
 });
 
-Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified'])->group(function () {
+Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified','application.submission'])->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/contact-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'contactDetails'])->name('applicant.profile.contact_details');
         Route::get('/personal-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'personalDetails'])->name('applicant.profile.personal_details');
@@ -260,6 +260,11 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::get('/delete/{id}', [\App\Http\Controllers\Applicant\QualificationsController::class, 'deleteQualification'])->name('applicant.delete.qualification');
         Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicant.qualifications.professional');
         Route::post('/store', [\App\Http\Controllers\Applicant\QualificationsController::class, 'store'])->name('applicant.qualifications.store');
+
+        # NYSC
+        Route::get('/nysc', [\App\Http\Controllers\Applicant\QualificationsController::class, 'nyscget'])->name('applicant.nysc');
+        Route::post('/nysc/store', [\App\Http\Controllers\Applicant\QualificationsController::class, 'nyscStore'])->name('applicant.nysc.store');
+
     });
 
     Route::prefix('referees')->group(function() {
@@ -278,6 +283,12 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
         Route::get('view-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'viewApprovedProgrammes'])->name('applicant.view_programme');
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
         Route::post('add-programme', [\App\Http\Controllers\Applicant\AcademicController::class, 'addProgrammeStore'])->name('applicant.add_programme.store');
+
+        # Research Proposal
+        Route::get('/research', [\App\Http\Controllers\Applicant\QualificationsController::class, 'researchget'])->name('applicant.research');
+        Route::post('/research/store', [\App\Http\Controllers\Applicant\QualificationsController::class, 'researchStore'])->name('applicant.research.store');
+
+
     });
 
     Route::prefix('preview')->group(function(){
@@ -286,7 +297,21 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 
     });
 
+
+    # Submit form Here
+    Route::get('/application/submit/{id}',[AdmissionProcessingController::class, 'submitApplication'])->name('application.submit');
+
 });
+
+Route::prefix('submission')->group(function(){
+
+    Route::get('preview/applicationPreview/{id}',[AdmissionProcessingController::class, 'printAcknowledgement'])->name('print.acknowledgment');
+    Route::get('/applicationPreview/{id}',[AdmissionProcessingController::class, 'previewApplication'])->name('preview.submitted.application');
+
+
+});
+
+
 
 Route::get('departments-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getDepartmentsFromFaculty']);
 Route::get('programmes-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getProgrammeFromDepartment']);

@@ -28,7 +28,9 @@
 
                         <div class="form-group">
                             {!! Form::label('class', 'Certificate Class') !!}
-                            {!! Form::text('class', null, ['class'=>'form-control', 'required',  'placeholder'=>""]) !!}
+                            {!! Form::select('class',[''=>"------",'First Class'=>"First Class",
+                            "Second Class Upper"=>"Second Class Upper", 'Second Class Lower'=>"Second Class Lower", 'Third Class'=>"Third Class",'Pass'=>"Pass",
+                            'Distinction'=>"Distinction",'Upper Credit'=>"Upper Credit", 'Lower Credit'=>"Lower Credit",'Merit'=>"Merit", 'NA'=>"Not Applicable"], null, ['class'=>'form-control', 'required',  'placeholder'=>""]) !!}
                         </div>
 
                         <div class="form-group">

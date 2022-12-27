@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserQualification;
 use App\Models\UserReferee;
+use App\Models\UserResearch;
 use Illuminate\Http\Request;
 
 class AdmissionProcessingController extends Controller
@@ -125,7 +126,7 @@ class AdmissionProcessingController extends Controller
 
         if (!$OlevelResults) {
             # No Oleve result found return candidate back
-            return redirect(route('home'))->with('error'," You have not uploaded any O-Level Results, Please upload before you proceed");
+            //return redirect(route('home'))->with('error'," You have not uploaded any O-Level Results, Please upload before you proceed");
 
         }elseif ($OlevelResults) {
             # find out if there are oLevel cards for each sitting
@@ -137,7 +138,7 @@ class AdmissionProcessingController extends Controller
 
                 if (!$ecard) {
                     # card not found return back
-                    return redirect(route('home'))->with('error'," You have to Upload additional OLevel Verification Card before you continue");
+                    //return redirect(route('home'))->with('error'," You have to Upload additional OLevel Verification Card before you continue");
                 }
             }
         }
@@ -167,18 +168,18 @@ class AdmissionProcessingController extends Controller
 
         if (!$userReferee) {
             # code...
-            return back()->with('error'," User Referee  has not been found!!!");
+            //return back()->with('error'," User Referee  has not been found!!!");
 
         }elseif($userReferee){
 
             if (count($userReferee)<3) {
                 # Return too few referees error
-                return back()->with('error',"Error!!! You need at least three(3) Referees, please add more referees till you have up to three(3)");
+                //return back()->with('error',"Error!!! You need at least three(3) Referees, please add more referees till you have up to three(3)");
             }
 
             foreach ($userReferee as $v) {
                 if ($v->is_filled ==0) {
-                    return redirect(route('home'))->with('error'," One of Your Referees has not responded, Pleas ensure they all respond. Note!!! You can replace them");
+                    //return redirect(route('home'))->with('error'," One of Your Referees has not responded, Pleas ensure they all respond. Note!!! You can replace them");
                 }
             }
         }
@@ -189,40 +190,40 @@ class AdmissionProcessingController extends Controller
 
         if (!$userQualifications) {
 
-            return back()->with('error'," No Academic Qualification Found!!!");
+            //return back()->with('error'," No Academic Qualification Found!!!");
 
         }elseif ($userQualifications) {
             # qualifications are found, proceed to check count and uploads
             if (count($userQualifications)<3) {
                 # Not enough qualifications
 
-                return back()->with('error'," You do not have sufficient Academic Qualifications. At least three required (FSLC, SSCE and one of OND/HND/B.Sc)!!!");
+                //return back()->with('error'," You do not have sufficient Academic Qualifications. At least three required (FSLC, SSCE and one of OND/HND/B.Sc)!!!");
             }elseif (count($userQualifications) >=3) {
                 # found, loop through and check for consistency
                 foreach ($userQualifications as $q) {
                     if ($q->path =='') {
                         # no upload found, return back
-                        return back()->with('error'," Your Uploads for Academic Qualifications is not complete");
+                        //return back()->with('error'," Your Uploads for Academic Qualifications is not complete");
 
                     }elseif ($q->year_obtained =='') {
                         # no year obtained
-                        return back()->with('error'," Kindly specify year obtained for all Academic Qualifications");
+                        //return back()->with('error'," Kindly specify year obtained for all Academic Qualifications");
 
                     }elseif ($q->certificate_type =='') {
                         # no year obtained
-                        return back()->with('error'," Kindly specify certificate type for all Academic Qualifications");
+                        //return back()->with('error'," Kindly specify certificate type for all Academic Qualifications");
 
                     }elseif ($q->awarding_institution =='') {
                         # no year obtained
-                        return back()->with('error'," Awarding institution cannot be empty for Academic Qualifications");
+                        //return back()->with('error'," Awarding institution cannot be empty for Academic Qualifications");
 
                     }elseif ($q->uid =='') {
                         # no year obtained
-                        return back()->with('error',"Some Academic Qualifications are not uploaded correctly");
+                        //return back()->with('error',"Some Academic Qualifications are not uploaded correctly");
 
                     }elseif ($q->path =='') {
                         # no year obtained
-                        return back()->with('error',"Some Academic Certificate Uploads are missing, Please Check and re-upload");
+                        //return back()->with('error',"Some Academic Certificate Uploads are missing, Please Check and re-upload");
 
                     }
 
@@ -236,7 +237,7 @@ class AdmissionProcessingController extends Controller
 
         if (!$userProfessionalQualifications) {
 
-            return back()->with('error'," No Academic Qualification Found!!!");
+            //return back()->with('error'," No Professional Qualification Found!!!");
 
         }elseif ($userProfessionalQualifications) {
             # qualifications are found, proceed to check count and uploads
@@ -245,27 +246,27 @@ class AdmissionProcessingController extends Controller
                 foreach ($userProfessionalQualifications as $v) {
                     if ($v->path =='') {
                         # no upload found, return back
-                        return back()->with('error'," Your Uploads for Professional Qualifications is not complete");
+                        //return back()->with('error'," Your Uploads for Professional Qualifications is not complete");
 
                     }elseif ($v->year_obtained =='') {
                         # no year obtained
-                        return back()->with('error'," Kindly specify year obtained for all Professional Qualifications");
+                        //return back()->with('error'," Kindly specify year obtained for all Professional Qualifications");
 
                     }elseif ($v->certificate_type =='') {
                         # no year obtained
-                        return back()->with('error'," Kindly specify certificate type for all Professional Qualifications");
+                        //return back()->with('error'," Kindly specify certificate type for all Professional Qualifications");
 
                     }elseif ($v->awarding_institution =='') {
                         # no year obtained
-                        return back()->with('error'," Awarding institution cannot be empty for Professional Qualifications");
+                        //return back()->with('error'," Awarding institution cannot be empty for Professional Qualifications");
 
                     }elseif ($v->uid =='') {
                         # no year obtained
-                        return back()->with('error',"Some Professional Qualifications are not uploaded correctly");
+                        //return back()->with('error',"Some Professional Qualifications are not uploaded correctly");
 
                     }elseif ($v->path =='') {
                         # no year obtained
-                        return back()->with('error',"Some Professional Certificate Uploads are missing, Please Check and re-upload");
+                        //return back()->with('error',"Some Professional Certificate Uploads are missing, Please Check and re-upload");
 
                     }
 
@@ -273,22 +274,33 @@ class AdmissionProcessingController extends Controller
             }
         }
 
+        #get the Research Proposal
+        $proposal = UserResearch::where('user_id', $id)->first();
+
+        if (!$proposal) {
+            # Proposal not found, make entry for this person with blank proposal and allow him/her to submit without proposal
+            $proposal = UserResearch::updateOrCreate(['user_id'=>$id, 'session_id'=>getApplicationSession()],[
+                'user_id'=>$id,
+                'session_id'=>getApplicationSession(),
+            ]);
+        }
+
         # check admission status entry for staff
-        $submitted = ApplicantAdmissionRequest::where('user_id', $id)->where('session_id', getActiveAcademicSessionId()+1)->first();
+        $submitted = ApplicantAdmissionRequest::where('user_id', $id)->where('session_id', getApplicationSession())->first();
 
         if (!$submitted) {
             # The user has not submitted any application this session
 
-            $submitted = ApplicantAdmissionRequest::updateOrCreate(['user_id'=>$id, 'session_id'=>getActiveAcademicSessionId()+1],[
+            $submitted = ApplicantAdmissionRequest::updateOrCreate(['user_id'=>$id, 'session_id'=> getApplicationSession()],[
                 'user_id'=> $id,
-                'session_id' => getActiveAcademicSessionId()+1,
+                'session_id' => getApplicationSession(),
                 'program_id' => $applicantProfile->applicant_program,
                 'uid' => uniqid('NDAPG_'),
                 'form_number'=> getformNumber(),
             ]);
         }
 
-        return view('applicant.view_preview', compact('applicantUser','applicantProfile', 'OlevelResults','userReferee', 'userQualifications','userProfessionalQualifications', 'submitted'));
+        return view('applicant.view_preview', compact('applicantUser','applicantProfile', 'OlevelResults','userReferee', 'userQualifications','userProfessionalQualifications', 'submitted','proposal'));
 
         return "All clear to move";
 
@@ -296,9 +308,38 @@ class AdmissionProcessingController extends Controller
     }
 
 
-    public function submitApplication(){
+    public function submitApplication($id){
 
         # this id is for the user who wants to submit an application, get the user parameters and submit an application for the user
+        $submission = ApplicantAdmissionRequest::where('user_id',$id)->first();
+        //return $submission;
+
+        if ($submission->is_submitted==0) {
+            # submit and move on
+            $submission->is_submitted = 1;
+            $submission->submitted_at = now();
+            $submission->save();
+
+            return back()->with('success', "Congratulations! ! ! Form Submitted Successfully");
+
+        }
+
 
     }
+
+
+    public function viewApplicantAcknowledement($id){
+
+        return "You have submitted your form already, You can check back in order to print out your Acknowledement Slip later";
+
+        # this id is for the user who wants to submit an application, get the user parameters and submit an application for the user
+        $submission = ApplicantAdmissionRequest::where('user_id',$id)->first();
+        //return $submission;
+
+
+
+    }
+
+
+
 }

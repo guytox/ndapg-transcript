@@ -39,7 +39,7 @@ type="text/css" />
 
         <div class="form-group">
             {!! Form::label('file', 'Select Your Passport Photo Note***(Must be jpeg or png of not more than 50kb)') !!}
-            {!! Form::file('file', ['class'=> 'form-control']) !!}
+            {!! Form::file('file', ['class'=> 'form-control', 'required']) !!}
         </div>
 
         {!! Form::submit('Submit Bio-data Form',['class'=>'form-control btn btn-success']) !!}

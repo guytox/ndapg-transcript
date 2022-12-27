@@ -43,6 +43,16 @@ function getSessionsDropdown(){
     return $session;
 }
 
+function getApplicationSession(){
+    $sessionId = AcademicSession::where('isApplicationSession',1)->first();
+
+    if ($sessionId) {
+        return $sessionId->id;
+    }
+
+    return false;
+}
+
 
 function generateMatriculationNumber()
 {

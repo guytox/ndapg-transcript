@@ -4,12 +4,12 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Maintenance | Apaxy - Responsive Bootstrap 4 Admin Dashboard</title>
+        <title>NDA|App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesdesign" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link rel="shortcut icon" href="admin/assets/images/favicon.ico">
 
         <!-- Bootstrap Css -->
         <link href="{{ asset('admin/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -36,10 +36,10 @@
                     <div class="col-lg-7">
                         <div class="text-center mb-5">
                             <div class="mb-5">
-                                <h1>National Defence Academy </h1>
+                                <h1>Nigerian Defence Academy </h1>
                             </div>
                             <h4 class="mt-4">Postgraduate School</h4>
-                            <p>The Nigerian Defence Academy Postgraduate School Admission into various Posgraduate Programmes for the 2022/2023 Academic Session as Approved By the Commandant, NDA is here by released</p>
+                            <p>The Nigerian Defence Academy Postgraduate School Admission into various Posgraduate Programmes for the 2022/2023 Academic Session is hereby released. Click on the links below to check conditions before applying</p>
                         </div>
 
                         <div class="text-center">
@@ -70,7 +70,7 @@
 
                                             <p class="text-muted mb-0"><a
                                                 href="{{ asset('assets/NDA_SPGS_OnlineApplicationGuide.pdf') }}"
-                                                class="text-decoration-underline">Download Advert for Academic Programmes</a></p>
+                                                class="text-decoration-underline">Download Application Guidelines</a></p>
                                         </div>
                                     </div>
                                 </div>
