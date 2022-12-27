@@ -306,7 +306,7 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 Route::prefix('submission')->group(function(){
 
     Route::get('preview/applicationPreview/{id}',[AdmissionProcessingController::class, 'printAcknowledgement'])->name('print.acknowledgment');
-    Route::get('/applicationPreview/{id}',[AdmissionProcessingController::class, 'viewApplicantAcknowledement'])->name('preview.submitted.application');
+    Route::get('/applicationPreview/{id}',[AdmissionProcessingController::class, 'previewApplication'])->name('preview.submitted.application');
 
 
 });
