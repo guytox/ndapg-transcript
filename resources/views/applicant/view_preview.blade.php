@@ -25,6 +25,8 @@
         <div class="card">
             <div class="card-body">
 
+                @include('includes.messages')
+
                 <table class="table table-centered table-nowrap mb-0"">
                     <tr>
                         <td colspan="">
@@ -132,7 +134,44 @@
                     <hr>
 
 
+
+
                 </div>
+
+                <hr>
+
+                <div class="text-center">
+                    <h5><b> Service Records</b></h5>
+                    <hr>
+
+                    <h2 class="header-title">NYSC Discharge Status</h2>
+
+                    <hr>
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>NYSC Status</th>
+                                <td><b><i>"{{$applicantProfile->nysc}}"</i></b></td>
+                            </tr>
+                            <tr>
+                                <th>NYSC Certificate</th>
+                                <td><a class="btn btn-success" href="{{asset($applicantProfile->nysc_path)}}">View NYSC Certificate</a></td>
+                            </tr>
+                            <tr>
+                                <th>Serving Military Official</th>
+                                @if ($applicantProfile->is_serving_officer==1)
+                                <th>Yes</th>
+
+                                @else
+                                <th>No</th>
+                                @endif
+                            </tr>
+                        </thead>
+                    </table>
+
+                </div>
+
+                <hr>
 
                 <div class="text-center">
                     <h5><b> O-LEVEL DETAILS </b></h5>
@@ -281,7 +320,31 @@
                 <hr>
 
                 <div class="text-center">
-                    <h5><b> List of Nominated Referees </b></h5>
+                    <h5><b> Research Proposal </b></h5>
+                    <hr>
+
+                    <h2 class="header-title">Details of Research Proposal</h2>
+
+                    <hr>
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <td><b><i>"{{$proposal->summary}}"</i></b></td>
+                            </tr>
+                            <tr>
+                                <th>Proposal text</th>
+                                <td><a class="btn btn-success" href="{{asset($proposal->path)}}">View Research Proposal text</a></td>
+                            </tr>
+                        </thead>
+                    </table>
+
+                </div>
+
+                <hr>
+
+                <div class="text-center">
+                    <h5><b> Referees </b></h5>
                     <hr>
                     {{-- Begin O-level details --}}
 
@@ -337,10 +400,20 @@
                     {{-- End Academic Qualifications Upload --}}
                 </div>
 
-                <div class="text-center">
-                    <a href="" class="btn btn-danger form-control">Submit Application Form</a>
+                @if ($submitted->is_submitted ==0)
+                    <div class="text-center">
+                        <a href="{{route('application.submit',['id'=>$applicantUser->id])}}" class="btn btn-danger form-control">Submit Application Form</a>
 
-                </div>
+                    </div>
+                @else
+
+                    <div class="text-center">
+                        <a href="{{route('preview.submitted.application',['id'=>$applicantUser->id])}}" class="btn btn-success form-control">Print Acknowledgement Slip</a>
+
+                    </div>
+                @endif
+
+
 
 
             </div>

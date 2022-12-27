@@ -95,11 +95,19 @@
     <ul>
 
         <li>
+            <a href="{{ route('applicant.nysc') }}" class="@if (Request::is('applicant.nysc')) active @endif waves-effect">
+                <i class="mdi mdi-school-outline"></i>
+                <span>NYSC</span>
+            </a>
+        </li>
+
+        <li>
             <a href="{{ route('applicant.qualifications.school') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
                 <i class="mdi mdi-school-outline"></i>
                 <span>School</span>
             </a>
         </li>
+
         <li>
             <a href="{{ route('applicant.qualifications.professional') }}" class="@if (Request::is('applicant.profile.personal_details')) active @endif waves-effect">
                 <i class="mdi mdi-file-account"></i>
@@ -111,10 +119,17 @@
 </li>
 
 <li>
+    <a href="{{ route('applicant.research') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
+        <i class="mdi mdi-cash-marker"></i>
+        <span>Research Proposal</span>
+    </a>
+</li>
+
+<li>
     <a href="{{ route('preview.application',['id'=>user()->id]) }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Preview And Submit</span>
     </a>
-</li>   
+</li>
 
 @endrole
