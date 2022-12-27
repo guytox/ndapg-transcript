@@ -20,19 +20,27 @@ class CheckApplicantSubmission
 
         $userDetails = ApplicantAdmissionRequest::where('user_id', user()->id)->first();
 
-        if ($userDetails->is_submitted==0) {
-            # prepare to write the requested resource.
-            return $next($request);
+        if ($userDetails) {
 
-        }elseif ($userDetails->is_submitted==1) {
-            # code...
-            return redirect(route('preview.submitted.application',['id'=>user()->id]))->with('error', "This form has been submitted before");
+            if ($userDetails->is_submitted==0) {
+                # prepare to write the requested resource.
+                return $next($request);
 
+            }elseif ($userDetails->is_submitted==1) {
+                # code...
+                return redirect(route('preview.submitted.application',['id'=>user()->id]))->with('error', "This form has been submitted before");
+
+            }else{
+
+                return redirect(route('preview.submitted.application',['id'=>user()->id]))->with('error', "This form has been submitted before");
+
+            }
         }else{
 
-            return redirect(route('preview.submitted.application',['id'=>user()->id]))->with('error', "This form has been submitted before");
-
+            return $next($request);
         }
+
+
 
     }
 }
