@@ -36,7 +36,7 @@
                     <div class="col-lg-7">
                         <div class="text-center mb-5">
                             <div class="mb-5">
-                                <h1>National Defence Academy </h1>
+                                <h1>Nigerian Defence Academy </h1>
                             </div>
                             <h4 class="mt-4">Postgraduate School</h4>
                             <p>The Nigerian Defence Academy Postgraduate School Admission into various Posgraduate Programmes for the 2022/2023 Academic Session as Approved By the Commandant, NDA is here by released</p>
@@ -70,7 +70,7 @@
 
                                             <p class="text-muted mb-0"><a
                                                 href="{{ asset('assets/NDA_SPGS_OnlineApplicationGuide.pdf') }}"
-                                                class="text-decoration-underline">Download Advert for Academic Programmes</a></p>
+                                                class="text-decoration-underline">Download Application Guidelines</a></p>
                                         </div>
                                     </div>
                                 </div>
