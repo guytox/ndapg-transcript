@@ -39,7 +39,7 @@
                                 <h1>Nigerian Defence Academy </h1>
                             </div>
                             <h4 class="mt-4">Postgraduate School</h4>
-                            <p>The Nigerian Defence Academy Postgraduate School Admission into various Posgraduate Programmes for the 2022/2023 Academic Session is hereby released. Click on the links below to check conditions before applying</p>
+                            <p>The Nigerian Defence Academy Postgraduate School Admission Form into various Postgraduate Programmes for the 2022/2023 Academic Session is hereby released. Click on the links below to check conditions before applying</p>
                         </div>
 
                         <div class="text-center">
