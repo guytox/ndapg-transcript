@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="media-body">
                                             <h5 class="font-size-15 text-uppercase">
-                                                Advert for Academic Programs</h5>
+                                                Advert for Academic Programmes</h5>
                                                 <p class="text-muted mb-0"><a
                                                     href="{{ asset('assets/PG-Fulltime_programmes.pdf') }}"
                                                     class="text-decoration-underline">Download Advert for Academic Programmes</a></p>
@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="media-body">
                                             <h5 class="font-size-15 text-uppercase">
-                                                Advert For professional programs</h5>
+                                                Advert For Professional Programmes</h5>
                                             <p class="text-muted mb-0"><a
                                                 href="{{ asset('assets/PG-Professional_programmes.pdf') }}"
                                                         class="text-decoration-underline">Download Advert For Professional Programmes</a></p>
