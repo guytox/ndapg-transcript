@@ -39,7 +39,7 @@
                                 <h1>Nigerian Defence Academy </h1>
                             </div>
                             <h4 class="mt-4">Postgraduate School</h4>
-                            <p>The Nigerian Defence Academy Postgraduate School Admission into various Posgraduate Programmes for the 2022/2023 Academic Session is hereby released. Click on the links below to check conditions before applying</p>
+                            <p>The Nigerian Defence Academy Postgraduate School Admission Form into various Postgraduate Programmes for the 2022/2023 Academic Session is hereby released. Click on the links below to check conditions before applying</p>
                         </div>
 
                         <div class="text-center">
@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="media-body">
                                             <h5 class="font-size-15 text-uppercase">
-                                                Advert for Academic Programs</h5>
+                                                Advert for Academic Programmes</h5>
                                                 <p class="text-muted mb-0"><a
                                                     href="{{ asset('assets/PG-Fulltime_programmes.pdf') }}"
                                                     class="text-decoration-underline">Download Advert for Academic Programmes</a></p>
@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="media-body">
                                             <h5 class="font-size-15 text-uppercase">
-                                                Advert For professional programs</h5>
+                                                Advert For Professional Programmes</h5>
                                             <p class="text-muted mb-0"><a
                                                 href="{{ asset('assets/PG-Professional_programmes.pdf') }}"
                                                         class="text-decoration-underline">Download Advert For Professional Programmes</a></p>
