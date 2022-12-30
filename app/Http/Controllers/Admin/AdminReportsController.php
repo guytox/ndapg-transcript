@@ -583,7 +583,7 @@ class AdminReportsController extends Controller
             //get the user and change the username and password
 
 
-            if ($student = User::where('username', $request->matric)->first()) {
+            if ($student = User::where('username', $request->matric)->orWhere('email', $request->matric)->first()) {
 
 
                 $student->password = Hash::make($request->newpass);
