@@ -303,10 +303,10 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 
 });
 
-Route::prefix('submission')->middleware(['auth','role:admin|ict_support|dean|hod|exam_officer|reg_officer|dean_pg'])->group(function(){
+Route::prefix('submission')->middleware(['auth','role:admin|ict_support|dean|hod|exam_officer|reg_officer|dean_pg|applicant'])->group(function(){
 
     Route::get('preview/applicationPreview/{id}',[AdmissionProcessingController::class, 'printAcknowledgement'])->name('print.acknowledgment');
-    Route::get('/applicationPreview/{id}',[AdmissionProcessingController::class, 'previewApplication'])->name('preview.submitted.application');
+    Route::get('submitted/applicationPreview/{id}',[AdmissionProcessingController::class, 'previewApplication'])->name('preview.submitted.application');
 
     # Applliction Processing Reports
     Route::get('/view/Applicant/Payments',[AdmissionProcessingController::class, 'viewPaidApplicants'])->name('view.applicant.payments');

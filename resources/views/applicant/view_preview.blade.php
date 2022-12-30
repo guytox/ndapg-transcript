@@ -30,7 +30,7 @@
                 <table class="table table-centered table-nowrap mb-0"">
                     <tr>
                         <td colspan="">
-                            <img src="{{asset(user()->passport)}}" alt="Passport Not Yet Uploaded" height="200" width="150">
+                            <img src="{{asset($applicantUser->passport)}}" alt="Passport Not Yet Uploaded" height="200" width="150">
                         </td>
                         <td>
                             @include('includes.applicantPreviewSheet')
@@ -123,7 +123,7 @@
                             </td>
                             <td class="text-left">
                                 {{$applicantProfile->nationality}}
-                                <br> {{$applicantProfile->state_id}}
+                                <br> {{getStateNameById($applicantProfile->state_id)}}
                                 <br> {{$applicantProfile->local_government}}
                                 <br> {{$applicantUser->phone_number                                                                                                                                                                                                         }}
 
