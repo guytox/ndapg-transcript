@@ -18,7 +18,7 @@ class CheckApplicantSubmission
     public function handle(Request $request, Closure $next)
     {
 
-        $userDetails = ApplicantAdmissionRequest::where('user_id', user()->id)->first();
+        $userDetails = ApplicantAdmissionRequest::where('user_id', user()->id)->where('session_id',getApplicationSession())->first();
 
         if ($userDetails) {
 

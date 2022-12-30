@@ -140,7 +140,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                 'amount_billed' => $feeRequest->amount,
                 'user_id' => $user->id,
                 'payment_config_id' => $applicationFeeConfiguration->id,
-                'academic_session_id' => activeSession()->id,
+                'academic_session_id' => getApplicationSession(),
                 'payment_status' => config('app.status.paid'),
                 'amount_paid' => $verified_transAmount,
                 'uid' => $payee_code,

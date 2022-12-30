@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApplicantAdmissionRequest;
+use App\Models\FeePayment;
 use App\Models\OlevelCard;
 use App\Models\OlevelResult;
 use App\Models\User;
@@ -338,6 +339,78 @@ class AdmissionProcessingController extends Controller
 
 
 
+    }
+
+
+    public function viewPaidApplicants(){
+        # get all the applicants that have applied for this session and loop through to get their details
+
+        $allPaidApplicants = FeePayment::where('payment_config_id', 1)->where('payment_status','paid')->where('academic_session_id', getApplicationSession())->get();
+
+        #some applicants found next initialize some counters
+        $totalAmount = 0;
+
+        foreach ($allPaidApplicants as $m) {
+            # increment the total sum collected
+            $totalAmount = $totalAmount + $m->amount_paid;
+
+            #next find the user
+            $applicant = User::find($m->user_id);
+
+            $paidApplicants[]= collect([
+                'userName' => $applicant->name,
+                'userEmail' => $applicant->email,
+                'userGsm' => $applicant->phone_number,
+                'userAmount' => $m->amount_paid,
+                'userStatus' => $m->payment_status,
+                'userTxId' => $m->txn_id,
+                'userPayment' => $m->created_at
+
+            ]);
+        }
+        return view('admin.viewPaidApplicants',compact('paidApplicants', 'totalAmount'));
+    }
+
+
+
+    public function viewSubmittedApplications(){
+        #get a list of submitted applications from the table for this session
+        $submitted = ApplicantAdmissionRequest::where('session_id', getApplicationSession())->where('is_submitted',1)->get();
+
+
+
+        foreach ($submitted as $n) {
+            #get the user applicant
+            $appUser = User::find($n->user_id);
+            $appProfile = UserProfile::where('user_id', $n->user_id)->first();
+
+
+            # collect the orders
+            $appList[] = collect([
+                'apName' => $appUser->name,
+                'apFormNumber' => $n->form_number,
+                'uid' => $n->uid,
+                'submitted' => $n->is_submitted,
+                'oLevelVerified' => $n->is_olevel_verified,
+                'sentToDepartment' => $n->is_sent_dept,
+                'pg_coord' =>$n->pg_coord,
+                'hod' =>$n->hod,
+                'dean' =>$n->dean,
+                'dean_spgs' =>$n->dean_spgs,
+                'admitted' =>$n->is_admitted,
+                'programid' => $n->program_id,
+                'gender' => $appProfile->gender,
+                'userId' => $appUser->id,
+
+
+            ]);
+        }
+
+        //return $appList;
+
+        $title = "List of Applicants that have Submitted Application Form";
+
+        return view('admin.viewSubmittedApplications',compact('appList','title'));
     }
 
 
