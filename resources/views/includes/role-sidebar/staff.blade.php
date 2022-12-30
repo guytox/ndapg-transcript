@@ -271,6 +271,32 @@
 
     @endrole
 
+    @role('ict_support|admin|dean_pg')
 
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>App Form Reports</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="{{route('view.applicant.payments')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View App Payments</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('view.submitted.applications')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Submitted Applications</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+
+    @endrole
 
 @endrole
