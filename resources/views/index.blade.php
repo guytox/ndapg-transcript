@@ -115,7 +115,18 @@
                     </div>
 
 
+
+
                 </div>
+
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="text-center">
+                        <p>The help lines are 09120353957 or 08164403543 (08:00am to 6:00pm)
+Email: <a href="mailto: pgenquiries@nda.edu.ng"> pgenquiries@nda.edu.ng </a></p>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
         <!-- end Account pages -->
