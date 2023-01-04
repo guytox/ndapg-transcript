@@ -15,8 +15,8 @@ class PaymentController extends Controller
         $applicationFeeConfiguration = PaymentConfiguration::where('payment_purpose_slug', 'application-fee')->first();
         if($applicationFeeConfiguration) {
 
-
-            $feePayment = FeePayment::where(['user_id' => user()->id, 'payment_config_id' => $applicationFeeConfiguration->id, 'payment_status'=>'paid','academic_session_id'=>activeSession()->id])->first();
+            # check to see if
+            $feePayment = FeePayment::where(['user_id' => user()->id, 'payment_config_id' => $applicationFeeConfiguration->id, 'payment_status'=>'paid','academic_session_id'=>getApplicationSession()->id])->first();
 
 
             if($feePayment !== null){
