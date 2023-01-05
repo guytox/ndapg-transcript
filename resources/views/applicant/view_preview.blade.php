@@ -80,7 +80,7 @@
                                 </b>
                             </td>
                             <td class="text-left">
-                                {{ getsessionById(2)->name}}
+                                {{ getsessionById(getApplicationSession())->name}}
                                 <br> {{ getSemesterDetailsById(2)}}
                                 <br> ......
                                 <br> Not Admitted
