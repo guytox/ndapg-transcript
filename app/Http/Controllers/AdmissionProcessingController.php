@@ -331,11 +331,39 @@ class AdmissionProcessingController extends Controller
 
     public function viewApplicantAcknowledement($id){
 
+        # fetch the user with the attached parameters and forward same to the user
+        $toVerify = ApplicantAdmissionRequest::where('uid', $id)->where('session_id', getApplicationSession())->first();
+
+        //return $toVerify;
+
+        if (!$toVerify) {
+            return "Error!!!!! This is not Valid";
+        }elseif ($toVerify) {
+            #applicant found fetch other parameters and return acknowledgement page
+
+            return view('applicant.view_AcknowledgmentSlip',compact('toVerify'));
+
+            return redirect(route('preview.submitted.application',['id'=> $toVerify->user_id]));
+        }
+
         return "You have submitted your form already, You can check back in order to print out your Acknowledement Slip later";
 
-        # this id is for the user who wants to submit an application, get the user parameters and submit an application for the user
-        $submission = ApplicantAdmissionRequest::where('user_id',$id)->first();
-        //return $submission;
+
+
+    }
+
+    public function verifyApplicantPreviewPage($id){
+
+        # fetch the user with the attached parameters and forward same to the user
+        $toVerify = ApplicantAdmissionRequest::where('uid', $id)->first();
+
+        if (!$toVerify) {
+            return "Error!!!!! This is not Valid";
+        }elseif ($toVerify) {
+            return redirect(route('preview.submitted.application',['id'=> $toVerify->user_id]));
+        }
+
+        return "You have submitted your form already, You can check back in order to print out your Acknowledement Slip later";
 
 
 

@@ -305,7 +305,7 @@ Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_f
 
 Route::prefix('submission')->middleware(['auth','role:admin|ict_support|dean|hod|exam_officer|reg_officer|dean_pg|applicant'])->group(function(){
 
-    Route::get('preview/applicationPreview/{id}',[AdmissionProcessingController::class, 'printAcknowledgement'])->name('print.acknowledgment');
+    Route::get('preview/applicationPreview/{id}',[AdmissionProcessingController::class, 'viewApplicantAcknowledement'])->name('print.acknowledgment');
     Route::get('submitted/applicationPreview/{id}',[AdmissionProcessingController::class, 'previewApplication'])->name('preview.submitted.application');
 
     # Applliction Processing Reports
@@ -365,7 +365,10 @@ Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bur
 
 
 
+# To view/verify Preview of Application Form
+Route::get('/AppFormPreview/{id}/verify', [AdmissionProcessingController::class, 'verifyApplicantPreviewPage'])->middleware('auth', 'role:staff')->name('verify.applicant.form');
 
+# To view/verify courseReg
 Route::get('/Confirmation/CourseReg/{$id}', [StudentRegistrationController::class, 'verifyReg'])->middleware('auth', 'role:staff')->name('verify.student.reg');
 
 

@@ -39,7 +39,8 @@
 
 
                         <td >
-                            {!! QrCode::size(160)->generate(route('verify.student.reg',['$id'=> $submitted->uid])) !!}
+                            {!! QrCode::size(160)->generate(route('verify.applicant.form',['id'=> $submitted->uid])) !!}
+                            {{-- <a href="{{route('verify.applicant.form',['id'=> $submitted->uid])}}"> Visit Link</a> --}}
                         </td>
                     </tr>
                 </table>
@@ -400,6 +401,8 @@
                     {{-- End Academic Qualifications Upload --}}
                 </div>
 
+                @role('applicant')
+
                 @if ($submitted->is_submitted ==0)
                     <div class="text-center">
                         <a href="{{route('application.submit',['id'=>$applicantUser->id])}}" class="btn btn-danger form-control">Submit Application Form</a>
@@ -407,11 +410,14 @@
                     </div>
                 @else
 
-                    <div class="text-center">
-                        <a href="{{route('preview.submitted.application',['id'=>$applicantUser->id])}}" class="btn btn-success form-control">Print Acknowledgement Slip</a>
+                        <div class="text-center">
+                            <a href="{{route('print.acknowledgment',['id'=>$submitted->uid])}}" class="btn btn-success form-control">Print Acknowledgement Slip</a>
 
-                    </div>
+                        </div>
+
                 @endif
+
+                @endrole
 
 
 
