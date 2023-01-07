@@ -315,6 +315,15 @@ class AdmissionProcessingController extends Controller
         $submission = ApplicantAdmissionRequest::where('user_id',$id)->first();
         //return $submission;
 
+        #find get the user profile and update the program_id if it is different (This happens when the user changes their programme after preview)
+        $applicantUser = getUserById($submission->user_id);
+
+        if ($applicantUser->profile->applicant_program != $submission->program_id) {
+            # program_id is different so correct the submission to reflect the profile
+            $submission->program_id = $applicantUser->profile->applicant_program;
+        }
+
+
         if ($submission->is_submitted==0) {
             # submit and move on
             $submission->is_submitted = 1;
