@@ -128,7 +128,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
 
         if ($submittedAmount == $settlementAmount && $submission->uid == $payee_code && $response_status==0) {
             # make log entry
-            Log::info('payment has been confirmed');
+            Log::info('payment has been confirmed -'.$businessRef);
             #find the user based on retrieved payment details
             $user = User::find($payee_id);
             # get the configuration for applicaton fees
