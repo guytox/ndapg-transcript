@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Models\ApplicationFeeRequest;
+use App\Models\CredoResponse;
 use App\Models\FeePayment;
 use App\Models\PaymentConfiguration;
 use Illuminate\Http\Request;
@@ -13,6 +15,7 @@ class PaymentController extends Controller
     public function applicationFee()
     {
         $applicationFeeConfiguration = PaymentConfiguration::where('payment_purpose_slug', 'application-fee')->first();
+
         if($applicationFeeConfiguration) {
 
             # check to see if
@@ -26,7 +29,64 @@ class PaymentController extends Controller
                 $prevousPayment = ApplicationFeeRequest::where('payee_id', user()->id)->where('status','pending')->first();
 
                 if ($prevousPayment) {
-                    # forward for payment
+                    #previous payment attempt has been found perform
+
+                    if ($prevousPayment->credo_ref !='') {
+
+                            $headers = [
+                                'Content-Type' => 'application/JSON',
+                                'Accept' => 'application/JSON',
+                                'Authorization' => config('app.credo.private_key'),
+                            ];
+
+                            //return $headers;
+
+                            $newurl = 'https://api.credocentral.com/transaction/'.$prevousPayment->credo_ref.'/verify';
+
+                            //return $newurl;
+
+                            $client = new \GuzzleHttp\Client();
+
+                            $response = $client->request('GET', $newurl,[
+                                'headers' => $headers,
+                            ]);
+
+                            $parameters = json_decode($response->getBody());
+
+                            $businessCode = $parameters->data->businessCode;
+                            $transRef = $parameters->data->transRef;
+                            $businessRef = $parameters->data->businessRef;
+                            $debitedAmount = $parameters->data->debitedAmount;
+                            $verified_transAmount = $parameters->data->transAmount;
+                            $transFeeAmount = $parameters->data->transFeeAmount;
+                            $settlementAmount = $parameters->data->settlementAmount;
+                            $customerId = $parameters->data->customerId;
+                            $transactionDate = $parameters->data->transactionDate;
+                            $channelId = $parameters->data->channelId;
+                            $currencyCode = $parameters->data->currencyCode;
+                            $response_status = $parameters->data->status;
+
+                            //return $parameters;
+
+
+                            if ($response_status ==0) {
+                                #store the response
+
+                                $newrequest = CredoResponse::updateOrCreate(['transRef'=>$transRef],[
+                                    'transRef'=>$transRef,
+                                    'currency'=>$currencyCode,
+                                    'status'=>$response_status,
+                                    'transAmount'=>$verified_transAmount,
+                                ]);
+
+
+                                // send background job to confirm the payment with checksum and transaction id
+                                ConfirmCredoApplicationPaymentJob::dispatch($businessRef, $currencyCode, $response_status, $verified_transAmount);
+
+                                return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
+                            }
+                    }
+                    # forward for payment because nothing has been found
                     if ($prevousPayment->credo_url !='') {
                         # the credo response code is not  empty
                         return redirect()->away($prevousPayment->credo_url);
