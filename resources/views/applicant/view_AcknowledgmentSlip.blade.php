@@ -115,6 +115,8 @@
                 <p><b>NOTE:</b> Printing this form only signifes that your application is received and being processed. You
                     are required to bring along this "ACKNOWLEDGEMENT SLIP" and a print out of your  submitted "SPGS APPLICATION FORM"  to the PG School on the screening date.</p>
 
+                    <p>All Academic transcripts should be sent in hard copy by respective University to the Secretary, Nigerian Defence Academy Postgraduate School, Kaduna.</p>
+
 
 
 
