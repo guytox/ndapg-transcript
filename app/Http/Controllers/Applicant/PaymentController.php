@@ -23,7 +23,9 @@ class PaymentController extends Controller
 
 
             if($feePayment !== null){
+                
                 return view('applicant.application_fee', compact('feePayment'));
+
             }else{
                 # check to see if he/she abandoned the transaction and redirect to the same page for payment
                 $prevousPayment = ApplicationFeeRequest::where('payee_id', user()->id)->where('status','pending')->first();
