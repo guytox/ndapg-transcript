@@ -23,17 +23,17 @@ class PaymentController extends Controller
 
 
             if($feePayment !== null){
-                
+
                 return view('applicant.application_fee', compact('feePayment'));
 
             }else{
                 # check to see if he/she abandoned the transaction and redirect to the same page for payment
-                $prevousPayment = ApplicationFeeRequest::where('payee_id', user()->id)->where('status','pending')->first();
+                $prevousPayment = ApplicationFeeRequest::where('payee_id', user()->id)->where('session_id',getApplicationSession())->first();
 
                 if ($prevousPayment) {
                     #previous payment attempt has been found perform
 
-                    if ($prevousPayment->credo_ref !='') {
+                    if ($prevousPayment->credo_ref !='' && $prevousPayment->status=='pending') {
 
                             $headers = [
                                 'Content-Type' => 'application/JSON',
@@ -55,22 +55,20 @@ class PaymentController extends Controller
 
                             $parameters = json_decode($response->getBody());
 
-                            $businessCode = $parameters->data->businessCode;
+                            //$businessCode = $parameters->data->businessCode;
                             $transRef = $parameters->data->transRef;
                             $businessRef = $parameters->data->businessRef;
-                            $debitedAmount = $parameters->data->debitedAmount;
+                            //$debitedAmount = $parameters->data->debitedAmount;
                             $verified_transAmount = $parameters->data->transAmount;
-                            $transFeeAmount = $parameters->data->transFeeAmount;
-                            $settlementAmount = $parameters->data->settlementAmount;
-                            $customerId = $parameters->data->customerId;
-                            $transactionDate = $parameters->data->transactionDate;
-                            $channelId = $parameters->data->channelId;
+                            //$transFeeAmount = $parameters->data->transFeeAmount;
+                            //$settlementAmount = $parameters->data->settlementAmount;
+                            //$customerId = $parameters->data->customerId;
+                            //$transactionDate = $parameters->data->transactionDate;
+                            //$channelId = $parameters->data->channelId;
                             $currencyCode = $parameters->data->currencyCode;
                             $response_status = $parameters->data->status;
 
                             //return $parameters;
-
-
                             if ($response_status ==0) {
                                 #store the response
 
@@ -86,7 +84,12 @@ class PaymentController extends Controller
                                 ConfirmCredoApplicationPaymentJob::dispatch($businessRef, $currencyCode, $response_status, $verified_transAmount);
 
                                 return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
+                            }else{
+                                # the status of this payment is not paid so forward the user to go and pay again
+                                return redirect()->away($prevousPayment->credo_url);
                             }
+                    }elseif($prevousPayment->status == 'paid'){
+                        return view('home')->with('info', "Error!!! This payment has been made before, contact support if in doubt");
                     }
                     # forward for payment because nothing has been found
                     if ($prevousPayment->credo_url !='') {
@@ -122,12 +125,13 @@ class PaymentController extends Controller
 
             $uid = uniqid('fw');
 
-            $transaction = ApplicationFeeRequest::updateOrCreate(['payee_id' =>user()->id], [
+            $transaction = ApplicationFeeRequest::updateOrCreate(['payee_id' =>user()->id, 'session_id' => getApplicationSession()], [
                 'amount' => $applicationFeeConfiguration->amount,
                 'payee_id' => user()->id,
                 'txn_id' => $transactionId,
                 'checksum' => $checkSum,
                 'uid' => $uid,
+                'session_id' => getApplicationSession(),
             ]);
 
             $paymentData = [
@@ -226,7 +230,7 @@ class PaymentController extends Controller
 
         }
 
-        abort(403, 'Application not configured');
+        abort(403, 'Application Fee not configured');
 
     }
 }
