@@ -62,27 +62,27 @@ class PaymentHandleController extends Controller
 
         # prepare for validation
 
-        $headers = [
-            'Content-Type' => 'application/JSON',
-            'Accept' => 'application/JSON',
-            'Authorization' => config('app.credo.private_key'),
-        ];
+        // $headers = [
+        //     'Content-Type' => 'application/JSON',
+        //     'Accept' => 'application/JSON',
+        //     'Authorization' => config('app.credo.private_key'),
+        // ];
 
-        //return $headers;
+        // //return $headers;
 
-        $newurl = 'https://api.credocentral.com/transaction/'.$request->transRef.'/verify';
+        // $newurl = 'https://api.credocentral.com/transaction/'.$request->transRef.'/verify';
 
-        //return $newurl;
+        // //return $newurl;
 
-        $client = new \GuzzleHttp\Client();
+        // $client = new \GuzzleHttp\Client();
 
-        $response = $client->request('GET', $newurl,[
-            'headers' => $headers,
-        ]);
+        // $response = $client->request('GET', $newurl,[
+        //     'headers' => $headers,
+        // ]);
 
-        $parameters = json_decode($response->getBody());
+        // $parameters = json_decode($response->getBody());
 
-        //return $parameters;
+        // //return $parameters;
 
 
         if ($request->has('transRef') && $request->has('transAmount')) {
