@@ -117,7 +117,7 @@ class SemesterCourseAllocationController extends Controller
             // You have all the allocations aleady
 
             //get all lectures
-            $lecturers = User::role('lecturer')->get()->pluck('name','id');
+            $lecturers = User::role('lecturer')->orderBy('name')->get()->pluck('name','id');
 
             //get all courses for user department
             $semesterCourses = getUserSemesterCoursesDropdown(user()->id);
