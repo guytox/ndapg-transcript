@@ -228,6 +228,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{route('search.notregistered.students')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Not Registered Students</span>
+                    </a>
+                </li>
+
             </ul>
         </li>
 

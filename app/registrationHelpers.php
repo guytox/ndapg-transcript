@@ -198,6 +198,35 @@ function getRegStudentsReport($jurisdiction, $sess, $sem ){
 
 }
 
+function getNotRegisteredStudentsReport($jurisdiction, $sess, $sem ){
+
+    # get a list of students who have registered
+    $registeredStudents = RegMonitor::where('session_id', $sess)->where('semester_id', $sem)->get()->pluck('student_id');
+
+    $notRegStudents = User::role('student')
+                            ->join('student_records as s', 's.user_id','=','users.id')
+                            ->join('programs','programs.id','=','s.program_id')
+                            ->whereNotIn('s.id', $registeredStudents)
+                            ->orderBy('programs.name','asc')
+                            ->orderBy('users.name')
+                            ->select('s.matric', 's.matric', 's.user_id','s.id as studentId' , 'users.current_level as LevelId' ,'users.name as studentName', 'users.phone_number','users.email', 'programs.name as programme')
+                            ->get();
+
+    return $notRegStudents;
+
+    // $pendingRegs = RegMonitor::join('programs','programs.id','=','reg_monitors.program_id')
+    //                                 ->join('departments','departments.id','=','programs.department_id')
+    //                                 ->join('student_records', 'student_records.id','=','reg_monitors.student_id')
+    //                                 ->join('user_profiles', 'user_profiles.user_id','=','student_records.user_id')
+    //                                 ->whereIn('departments.id', $jurisdiction)
+    //                                 ->where(['session_id'=>$sess, 'semester_id'=>$sem])
+    //                                 ->select('reg_monitors.*', 'user_profiles.gender','student_records.state_origin', 'programs.category','programs.level_id')
+    //                                 ->get();
+
+    // return $pendingRegs;
+
+}
+
 
 function getRoleIdByRoleName($name){
     $roleFind = Role::where('name',$name)->first();

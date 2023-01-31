@@ -20,4 +20,8 @@ class StudentRecord extends Model
 
         return $this->hasMany(UploadedPayment::class, 'student_id','id');
     }
+
+    public function programme(){
+        return $this->belongsTo(Program::class, 'id','program_id');
+    }
 }
