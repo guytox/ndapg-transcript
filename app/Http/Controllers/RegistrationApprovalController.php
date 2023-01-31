@@ -265,13 +265,10 @@ class RegistrationApprovalController extends Controller
 
         if (user()->hasRole('admin|dean_pg')) {
 
-
-
             $this->validate($request, [
 
                 'schoolsession'=>'required',
                 'semester'=>'required',
-
 
             ]);
 
@@ -281,7 +278,6 @@ class RegistrationApprovalController extends Controller
 
             $sess = $request->schoolsession;
             $sem = $request->semester;
-
 
             //fetch all regMonitors
 
@@ -298,7 +294,6 @@ class RegistrationApprovalController extends Controller
                 return view('admin.viewStudentRegReport', compact('pendingStdRegs','title'));
 
 
-
         }elseif(user()->hasRole('reg_officer|hod|dean|admin|vc|dvc')){
 
 
@@ -306,7 +301,48 @@ class RegistrationApprovalController extends Controller
             abort(403,"You do not have permission to view this page, Please Contact ICT");
         }
 
+    }
 
+
+    public function NotRegisteredStudentsReport(Request $request){
+
+        if (user()->hasRole('admin|dean_pg')) {
+
+            $this->validate($request, [
+
+                'schoolsession'=>'required',
+                'semester'=>'required',
+
+            ]);
+
+            //return $request;
+
+            $role = 'ReportsGenerator';
+
+            $sess = $request->schoolsession;
+            $sem = $request->semester;
+
+            //fetch all regMonitors
+
+                $staffJurisdiction = getAcademicDepts(user()->id, $role);
+
+                $title = "List Students who have NOT Registered for " . ucfirst(getSemesterDetailsById($sem))." Semester, ". getSessionById($sess)->name." Session";
+
+                //select students in jurisdiction
+
+                $pendingStdRegs = getNotRegisteredStudentsReport($staffJurisdiction, $sess, $sem);
+
+                //return $pendingStdRegs;
+
+                return view('admin.viewNotRegisteredStudentReport', compact('pendingStdRegs','title'));
+
+
+        }elseif(user()->hasRole('reg_officer|hod|dean|admin|vc|dvc')){
+
+
+        }else{
+            abort(403,"You do not have permission to view this page, Please Contact ICT");
+        }
 
     }
 
