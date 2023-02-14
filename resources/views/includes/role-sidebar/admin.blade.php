@@ -80,9 +80,9 @@
             </a>
         </li>
         <li>
-            <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+            <a href="{{route('verify.applicant.payments')}}" class="@if (Request::is('verify.applicant.payments')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
-                <span>Search/Verify Transactions</span>
+                <span>Verify Transactions</span>
             </a>
         </li>
 
@@ -191,6 +191,8 @@
         <span>Update User Password</span>
     </a>
 </li>
+
+
 
 {{-- Change of Matric Number --}}
 <li>

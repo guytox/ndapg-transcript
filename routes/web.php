@@ -128,6 +128,12 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
         Route::get('/studentlist', [StudentInformationController::class, 'index'])->name('view.all.active');
     });
 
+    Route::prefix('paymentMgt')->group(function(){
+        # Applicant payment report
+        Route::get('/view/Applicant/PendingPayments',[AdmissionProcessingController::class, 'verifyApplicantPayments'])->name('verify.applicant.payments');
+        Route::get('/check/Applicant/PendingPayments/{id}',[AdmissionProcessingController::class, 'checkPaymentStatus'])->name('check.payment.status');
+    });
+
     Route::prefix('configurations')->group(function(){
         Route::resource('/faculties', FacultyController::class);
         Route::resource('/departments', DepartmentController::class);

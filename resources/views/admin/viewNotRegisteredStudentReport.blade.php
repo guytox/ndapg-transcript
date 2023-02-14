@@ -55,11 +55,11 @@
 
                                     <tr>
                                         <td>{{$sn}}</td>
-                                        <td>{{ $v->matric}}</td>
+                                        <td>{{ substr($v->matric,-15,15)}}</td>
                                         <td>{{ $v->studentName}}</td>
                                         {{-- <td>{{getFacultyByStudentId($v->student_id)}}</td>
                                         <td>{{getDepartmentByStudentId($v->student_id)}}</td> --}}
-                                        <td>{{$v->programme}}</td>
+                                        <td>{{Str::limit($v->programme, 30)}}</td>
                                         {{-- <td>{{ucfirst($v->category)}}</td> --}}
                                         <td>{{$v->email}}</td>
                                         <td>{{$v->phone_number}}</td>
@@ -85,6 +85,7 @@
                                                     <span title="registration Officer" > &#9989;</span>
                                                 @endif
 
+                                                
                                                 @if (getRegMonitorById($v->id, 'hodstatus')==0)
                                                     <span title="HOD"> &#10060; </span>
                                                 @elseif (getRegMonitorById($v->id, 'hodstatus')==1)
