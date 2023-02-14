@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Models\ApplicantAdmissionRequest;
+use App\Models\ApplicationFeeRequest;
 use App\Models\FeePayment;
 use App\Models\OlevelCard;
 use App\Models\OlevelResult;
@@ -11,6 +13,7 @@ use App\Models\UserProfile;
 use App\Models\UserQualification;
 use App\Models\UserReferee;
 use App\Models\UserResearch;
+use Illuminate\Console\Application;
 use Illuminate\Http\Request;
 
 class AdmissionProcessingController extends Controller
@@ -406,6 +409,77 @@ class AdmissionProcessingController extends Controller
             ]);
         }
         return view('admin.viewPaidApplicants',compact('paidApplicants', 'totalAmount'));
+    }
+
+    public function verifyApplicantPayments(){
+
+
+        # get all the applicants that have applied for this session and loop through to get their details
+
+        $allPendingApplicants = ApplicationFeeRequest::join('users as u','u.id','=','application_fee_requests.payee_id')
+                                    ->where('status', 'pending')
+                                    ->where('session_id', getApplicationSession())
+                                    ->select('application_fee_requests.*','u.name as name','u.phone_number as gsm', 'u.email as email')
+                                    ->get();
+        # return all pendin gapplicants found
+        return view('admin.viewPendingApplicantPayments',compact('allPendingApplicants'));
+
+    }
+
+    public function checkPaymentStatus($id){
+        if (user()->hasRole('admin')) {
+            #proceed
+        }else{
+            return redirect(route('home'))->with('error', "Error!!! You do not have the required priviledges to access this resource");
+        }
+        #all Clear to move, lets extract the payment details ready for verification
+        $paymentDetails = ApplicationFeeRequest::find($id);
+
+        if ($paymentDetails) {
+            # something found
+
+
+            $headers = [
+            'Content-Type' => 'application/JSON',
+            'Accept' => 'application/JSON',
+            'Authorization' => config('app.credo.private_key'),
+            ];
+
+            //return $headers;
+
+            $newurl = 'https://api.credocentral.com/transaction/'.$paymentDetails->credo_ref.'/verify';
+
+
+
+            $client = new \GuzzleHttp\Client();
+
+            $response = $client->request('GET', $newurl,[
+                'headers' => $headers,
+            ]);
+
+            $parameters = json_decode($response->getBody());
+
+            //$parameters;
+
+            $transactionId = $parameters->data->transRef;
+            $currency = $parameters->data->currencyCode;
+            $statusCode = $parameters->data->status;
+            $amount = $parameters->data->transAmount;
+
+            if ($statusCode==0) {
+                // send background job to confirm the payment with checksum and transaction id
+                ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                return redirect(route('verify.applicant.payments'))->with('info', "Payment Successfully Submitted for processing, check back again after a minute");
+
+            }else{
+
+                return redirect(route('verify.applicant.payments'))->with('error', "Error!!! Payment was not successful");
+            }
+
+
+        }else{
+            return redirect(route('home'))->with('error', "Error!!! Requested resource not found");
+        }
     }
 
 
