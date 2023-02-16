@@ -3,6 +3,10 @@
 @include('includes.messages')
 
 @section('content')
+
+<div class="text-danger" ><marquee behavior="" direction="left"> <b> <font size="6">Notice!!!   Sales of Application Form Closes on Tuesday, 28th March, 2023</font> </b> </marquee></div>
+
+
 <h5 class="mb-5 text-center">Sign in to your account.</h5>
 <form class="form-horizontal" method="POST" action="{{ route('login') }}">
     @csrf
