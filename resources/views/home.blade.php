@@ -4,6 +4,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            
+            <div class="text-danger" ><marquee behavior="" direction="left"> <b> <font size="6">Notice!!!   Sales of Application Form Closes on Tuesday, 28th March, 2023</font> </b> </marquee></div>
+
             <div class="card">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
