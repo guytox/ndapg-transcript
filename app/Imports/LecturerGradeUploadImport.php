@@ -284,7 +284,7 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
                                                                             ->select('m.ltotal','grading_system_items.*')
                                                                             ->get();
                                                 foreach ($grade as $key => $v) {
-                                                    if ($v->ltotal > $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
+                                                    if ($v->ltotal >= $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
 
                                                         $gradeLetter = $v->grade_letter;
 
