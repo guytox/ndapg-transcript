@@ -154,7 +154,7 @@ class PaymentController extends Controller
                 'email' => $transaction->user->email,
                 'bearer' => 0,
                 'callbackUrl' => config('app.credo.response_url'),
-                'channels' => ['card', 'bank'],
+                'channels' => ['card'],
                 'currency' => 'NGN',
                 //'customerPhoneNumber' => $transaction->user->phone_number,
                 'reference' => $transaction->txn_id,
