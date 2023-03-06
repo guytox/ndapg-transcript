@@ -2,6 +2,12 @@
 
 use App\Http\Controllers\AcademicSessionsController;
 use App\Http\Controllers\Admin\AdminReportsController;
+use App\Http\Controllers\Admin\FeeCategoriesController;
+use App\Http\Controllers\Admin\FeeConfigurationsController;
+use App\Http\Controllers\Admin\FeeItemsController;
+use App\Http\Controllers\Admin\FeeTemplateItemsController;
+use App\Http\Controllers\Admin\FeeTemplatessController;
+use App\Http\Controllers\Admin\FeeTypesController;
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\AdmissionProcessingController;
 use App\Http\Controllers\PaymentHandleController;
@@ -19,12 +25,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\RegistrationApprovalController;
 use App\Http\Controllers\RoleManagementController;
+use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\SemesterCourseAllocationController;
 use App\Http\Controllers\SemesterCoursesController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\Student\StudentRegistrationController;
 use App\Http\Controllers\StudentInformationController;
 use App\Http\Controllers\StudyLevelsController;
+use App\Http\Controllers\SystemVariablesController;
 use App\Jobs\RegistrationApprovalJob;
 use App\Models\Faculty;
 use Illuminate\Auth\Events\PasswordReset;
@@ -140,6 +148,8 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
         Route::resource('/programs', ProgrammeController::class);
         Route::resource('/studylevels', StudyLevelsController::class);
         Route::resource('/semestercourses', SemesterCoursesController::class);
+        Route::resource('/systemvariables', SystemVariablesController::class);
+        Route::resource('/scholarsips', ScholarshipController::class);
         Route::post('/semcoursesupload', [SemesterCoursesController::class, 'uploadSemesterCourse'])->name('semestercourses.upload');
         Route::resource('/curricula', curriculaController::class);
         Route::resource('/curriculaitems', CurriculaItemsController::class);
@@ -178,10 +188,19 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
 
 Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|dean_pg|admin', 'profile_completed', 'verified')->group(function(){
 
-    Route::prefix('Approvals')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer')->group(function(){
+    Route::prefix('Approvals')->middleware('role:hod|dean|admin|reg_officer|vc|dvc|exam_officer')->group(function(){
         Route::resource('reg', RegistrationApprovalController::class);
         Route::get('get/Approvals', [RegistrationApprovalController::class, 'showApproved'])->name('reg.approvals');
         Route::get('get/Approvals/{id}/{student_id}', [RegistrationApprovalController::class, 'showStudentConfirmedReg'])->name('show.single.student.reg');
+
+    });
+
+    Route::prefix('bulk')->middleware('role:admin')->group(function(){
+        Route::get('/RegisterCourse',[StudentRegistrationController::class, 'searchBulkRegistration'])->name('add.bulk.registration');
+        Route::post('/RegisterCourse',[StudentRegistrationController::class, 'bulkRegistration'])->name('add.bulk.reg');
+        Route::get('/RegisterSingleCourse',[StudentRegistrationController::class, 'searchSingleRegistration'])->name('add.single.course');
+        Route::post('/RegisterSingleCourse',[StudentRegistrationController::class, 'singleRegistration'])->name('add.single.reg');
+
 
     });
 
@@ -337,7 +356,7 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
     });
 
     Route::prefix('registration')->group(function () {
-        Route::resource('/coursereg', StudentRegistrationController::class);
+        Route::resource('/coursereg', StudentRegistrationController::class)->middleware('check.late.reg');
         Route::get('/viewMyRegistrations/{id}',[StudentRegistrationController::class, 'showPrevious'])->name('student.registration.viewAll');
         Route::get('/viewSingleRegistration/{id}',[StudentRegistrationController::class, 'showSingleReg'])->name('student.registration.viewSingle');
         Route::get('/showSubmitedRegistration/{id}',[StudentRegistrationController::class, 'showConfirmedReg'])->name('student.registration.viewMyConfirmed');
@@ -349,6 +368,85 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
     });
 
 
+});
+
+Route::prefix('bursary')->middleware(['auth', 'role:admin|bursar|bursary|dap'])->group(function () {
+
+    //Fee Configuration Routes
+
+    Route::resource('/fee-items', FeeItemsController::class);
+    Route::resource('/fee-categories', FeeCategoriesController::class);
+    Route::resource('/fee-types', FeeTypesController::class);
+    Route::resource('/fee-templates', FeeTemplatessController::class);
+    Route::resource('/fee-configs', FeeConfigurationsController::class);
+
+    // Student Billing routes
+
+    Route::get('/tuition-billing/confirmation', [BillingsController::class, 'getBillingForConfirmations'])->name('billing.confirmation');
+    Route::get('/tuition-billing/checking', [BillingsController::class, 'getBillingForChecking'])->name('billing.checking');
+    Route::get('/tuition-billing/approval', [BillingsController::class, 'getBillingForApproval'])->name('billing.approval');
+    Route::get('/tuition-billing/approved', [BillingsController::class, 'getApprovedBilling'])->name('billing.approved');
+    Route::get('/tuition-billing/{id}/deleteAction', [BillingsController::class, 'deleteProposal'])->name('delete.bill.proposal');
+    Route::get('/tuition-billing/{id}/reverseAction', [BillingsController::class, 'reverseProposal'])->name('reverse.bill.proposal');
+    Route::get('/tuition-billing/confirmAction', [BillingsController::class, 'confirmBilling'])->name('billing.confirm.action');
+    Route::get('/tuition-billing/checkAction', [BillingsController::class, 'checkBilling'])->name('billing.check.action');
+    Route::get('/tuition-billing/approveAction', [BillingsController::class, 'approveBilling'])->name('billing.approve.action');
+    Route::view('/tuition-billing/uploadAcceptance', 'bursar.initiate-acceptance-billing')->name('acceptance.bill.upload');
+    Route::post('/tuition-billing/accptanceBilling', [BillingsController::class, 'initiateAcceptanceBilling'])->name('acceptance.billing.upload');
+    Route::resource('/tuition-billing', BillingsController::class);
+
+
+    //Scholarship Processing Routes
+    Route::get('/schorlarship-processing/confirmation', [ScholarshipProcessingController::class, 'getScholarshipForConfirmations'])->name('scholarship.confirmation');
+    Route::get('/schorlarship-processing/checking', [ScholarshipProcessingController::class, 'getScholarshipForChecking'])->name('scholarship.checking');
+    Route::get('/schorlarship-processing/approval', [ScholarshipProcessingController::class, 'getScholarshipForApproval'])->name('scholarship.approval');
+    Route::get('/schorlarship-processing/approved', [ScholarshipProcessingController::class, 'getApprovedScholarship'])->name('scholarship.approved');
+
+    Route::get('/schorlarship-processing/{id}/deleteAction', [ScholarshipProcessingController::class, 'deleteProposal'])->name('delete.scholarship.proposal');
+    Route::get('/schorlarship-processing/{id}/reverseAction', [ScholarshipProcessingController::class, 'reverseProposal'])->name('reverse.scholarship.proposal');
+    Route::get('/schorlarship-processing/confirmAction', [ScholarshipProcessingController::class, 'confirmBilling'])->name('scholarship.confirm.action');
+    Route::get('/schorlarship-processing/checkAction', [ScholarshipProcessingController::class, 'checkBilling'])->name('scholarship.check.action');
+    Route::get('/schorlarship-processing/approveAction', [ScholarshipProcessingController::class, 'approveBilling'])->name('scholarship.approve.action');
+    Route::get('/schorlarship-processing/disApproveAction', [ScholarshipProcessingController::class, 'DeConfirmBilling'])->name('scholarship.disapprove.action');
+
+    Route::get('/schorlarship-processing/viewExcessReport', [ScholarshipProcessingController::class, 'viewExcessReport'])->name('scholarship.excess.report');
+
+    Route::get('/schorlarship-processing/deleteExcessReport/{id}', [ScholarshipProcessingController::class, 'deleteExcessScholarship'])->name('scholarship.excess.delete');
+
+    Route::resource('/schorlarship-processing', ScholarshipProcessingController::class);
+
+
+
+
+    //Manual Payment Processing Routes
+    Route::get('/manual-payment-processing/confirmation', [StudentManualPaymentController::class, 'getManualPaymentForConfirmations'])->name('manual.payment.confirmation');
+    Route::get('/manual-payment-processing/checking', [StudentManualPaymentController::class, 'getManualPaymentForChecking'])->name('manual.payment.checking');
+    Route::get('/manual-payment-processing/approval', [StudentManualPaymentController::class, 'getManualPaymentForApproval'])->name('manual.payment.approval');
+    Route::get('/manual-payment-processing/approved', [StudentManualPaymentController::class, 'getApprovedManualPayment'])->name('manual.payment.approved');
+
+    Route::get('/manual-payment-processing/{id}/deleteAction', [StudentManualPaymentController::class, 'deleteProposal'])->name('delete.manual.payment.proposal');
+    Route::get('/manual-payment-processing/{id}/reverseAction', [StudentManualPaymentController::class, 'reverseProposal'])->name('reverse.manual.payment.proposal');
+    Route::get('/manual-payment-processing/confirmAction', [StudentManualPaymentController::class, 'confirmBilling'])->name('manual.payment.confirm.action');
+    Route::get('/manual-payment-processing/checkAction', [StudentManualPaymentController::class, 'checkBilling'])->name('manual.payment.check.action');
+    Route::get('/manual-payment-processing/approveAction', [StudentManualPaymentController::class, 'approveBilling'])->name('manual.payment.approve.action');
+    Route::get('/manual-payment-processing/disApproveAction', [StudentManualPaymentController::class, 'DeConfirmBilling'])->name('manual.payment.disapprove.action');
+
+    Route::get('/manual-payment-processing/viewExcessReport', [StudentManualPaymentController::class, 'viewExcessReport'])->name('manual.payment.excess.report');
+
+    Route::get('/manual-payment-processing/deleteExcessReport/{id}', [StudentManualPaymentController::class, 'deleteExcessScholarship'])->name('manual.payment.excess.delete');
+
+    Route::resource('/manual-payment-processing', StudentManualPaymentController::class);
+
+
+
+    //Manual Payment Proccessing routes
+
+    Route::post('/delete-template-item/{id}', [FeeTemplateItemsController::class, 'deleteFeeTemplateItem'])->name('delete.template.item');
+    Route::post('/edit-template-item/{id}', [FeeTemplateItemsController::class, 'editFeeTemplateItem'])->name('edit.template.item');
+    Route::post('/add-template-item', [FeeTemplateItemsController::class, 'addNewTemplateItem'])->name('new.template.item');
+
+    // Student Wallet Routes
+    Route::resource('/student-wallets', StudentWalletController::class);
 });
 
 

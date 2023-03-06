@@ -233,7 +233,7 @@ class RegistrationApprovalController extends Controller
 
     public function showStudentConfirmedReg($id, $student_id){
 
-        if (user()->hasRole('reg_officer|hod|dean|admin|vc|dvc')) {
+        if (user()->hasRole('reg_officer|hod|dean|admin|vc|dvc|dap|acad_eo|exam_officer')) {
 
             //fetch all regMonitors
 
@@ -334,7 +334,7 @@ class RegistrationApprovalController extends Controller
 
                 //return $pendingStdRegs;
 
-                return view('admin.viewNotRegisteredStudentReport', compact('pendingStdRegs','title'));
+                return view('admin.viewNotRegister  edStudentReport', compact('pendingStdRegs','title'));
 
 
         }elseif(user()->hasRole('reg_officer|hod|dean|admin|vc|dvc')){

@@ -4,7 +4,12 @@ use App\Models\AcademicSession;
 use App\Models\AdmissionCount;
 use App\Models\Department;
 use App\Models\Faculty;
+use App\Models\FeeCategory;
+use App\Models\FeeConfig;
+use App\Models\FeeItem;
 use App\Models\FeePayment;
+use App\Models\FeeTemplate;
+use App\Models\FeeType;
 use App\Models\MatricConfig;
 use App\Models\MatricConfiguration;
 use App\Models\PaymentConfiguration;
@@ -66,6 +71,23 @@ function generateMatriculationNumber()
         }
     }
 
+}
+
+function getAllStudyLevelsDropdown(){
+    $session = StudyLevel::orderBy('id', 'asc')->get()->pluck('level','id');
+
+    return $session;
+}
+
+
+
+
+
+function getAllSemesters(){
+    //get Study levels
+    $studyLevels = Semester::all()->pluck('name', 'id');
+
+    return $studyLevels;
 }
 
 function getformNumber(){
@@ -264,12 +286,7 @@ function getBalanceFromUID($uid)
     throw new Exception('Invalid UID');
 }
 
-function getPaymentPurposeById($paymentConfigId){
 
-    $purpose = PaymentConfiguration::where('id', $paymentConfigId)->first();
-
-    return $purpose->purpose;
-}
 
 function getActiveAcademicSessionId() {
     $academicSession = \App\Models\AcademicSession::where('status',1)->first();
@@ -311,14 +328,7 @@ function convertToNaira($koboFigure){
     return $nairaFigure;
 }
 
-//*********************************************************************************************** */
-// StudyLevel Helpers
-//*********************************************************************************************** */
 
-function getStudyLevelDetailsById($id){
-    $level = StudyLevel::find($id);
-    return $level->level;
-}
 
 
 //*********************************************************************************************** */
@@ -340,7 +350,205 @@ function getSemestersDropdown(){
     return $semesters;
 }
 
+function getActiveSemesterId() {
+    $acad = activeSession();
 
+    if($acad) {
+        $semId = getSemesterIdByName($acad->currentSemester);
+        return $semId;
+    }
+
+    abort(403, 'Session Not Configured');
+}
+
+
+// ******************************************************************************************************************
+// Semester  Helpers
+// ******************************************************************************************************************
+
+
+function getSemesterNameById($id){
+    if ($id=='') {
+        return "N/A";
+    }
+
+    if($semester = Semester::where('id', $id)->first()){
+
+        return $semester->name;
+    } else{
+        return "Wrong Study Level";
+    }
+}
+
+function getInStateValue($id){
+
+    if ($id== '') {
+        return "N/A";
+    }
+
+    if($id == 2){
+
+        return "NO";
+
+    } elseif ($id== 1) {
+
+        return "YES";
+    }else{
+
+        return "Invalid Figure Supplied";
+    }
+}
+
+
+// ******************************************************************************************************************
+// Fee Cateogory Helpers
+// ******************************************************************************************************************
+function getFeeCategoryName($id){
+
+    $feeCategory = FeeCategory::find($id);
+
+    return $feeCategory->category_name;
+}
+
+function getfeeCategoryIdByCategoryName($categoryName){
+
+    $purpose = FeeCategory::where('category_name', $categoryName)->first();
+
+    return $purpose->id;
+}
+
+// ******************************************************************************************************************
+// Fee Template  Helpers
+// ******************************************************************************************************************
+function getFeeTemplateAmount($id){
+    $teeTemplateAmount = FeeTemplate::find($id);
+
+    return $teeTemplateAmount->total_amount;
+}
+
+function getFeeTemplateIdByTemplateName($name){
+
+    $feeTemplateId = FeeTemplate::where('narration', $name)->first();
+
+    return $feeTemplateId->id;
+}
+
+function getPaymentTemplateByTypeName($name){
+
+    $feeTemplates = FeeTemplate::where('fee_types.name', $name)
+                                    ->join('fee_types', 'fee_types.id', '=', 'fee_templates.fee_type_id')
+                                    ->get()->pluck('narration', 'id');
+
+    return $feeTemplates;
+}
+
+function getTemplateFromConfigId($id){
+    $feeConfig = FeeConfig::find($id);
+
+    $feeTemplate = FeeTemplate::find($feeConfig->fee_template_id);
+
+    return $feeTemplate;
+}
+
+// ******************************************************************************************************************
+// fee Payment Helpers
+// ******************************************************************************************************************
+
+function getPaymentPurposeById($id){
+    $purpose = FeeConfig::find($id);
+
+    return $purpose->narration;
+}
+
+
+
+// ******************************************************************************************************************
+// Study Level  Helpers
+// ******************************************************************************************************************
+
+function getAllStudyLevels(){
+    //get Study levels
+    $studyLevels = StudyLevel::all()->pluck('level', 'id');
+
+    return $studyLevels;
+}
+
+function getStudyLevelNameById($id){
+    if ($id=='') {
+        return "N/A";
+    }
+
+    if($studylevel = StudyLevel::where('id', $id)->first()){
+
+        return $studylevel->level;
+    } else{
+        return "Wrong Study Level";
+    }
+}
+
+function getStudyLevelDetailsById($id){
+    $level = StudyLevel::find($id);
+    return $level->level;
+}
+
+function getStudyLevelIdByName($name){
+    $level = StudyLevel::where('level',$name)->first();
+    return $level->id;
+}
+
+
+// ******************************************************************************************************************
+// Programme Helpers
+// ******************************************************************************************************************
+
+function getAllProgrammes(){
+    //get all active programmes
+    $programs = Program::orderBy('name')->get()->pluck('name','id');
+
+    return $programs;
+}
+
+function getProgrammeNameById($id){
+    if ($id=='') {
+        return "N/A";
+    }
+
+    if($program = Program::where('id', $id)->first()){
+
+        return $program->name;
+    } else{
+        return "Wrong Program";
+    }
+
+
+}
+
+// ******************************************************************************************************************
+// Fee Item Helpers
+//*******************************************************************************************************************
+
+function getFeeItemName($id){
+    $feeItemName = FeeItem::find($id);
+
+    return $feeItemName->name;
+}
+
+
+// ******************************************************************************************************************
+// Fee Type Helpers
+// ******************************************************************************************************************
+function getFeeTypeName($id){
+    $feeItemName = FeeType::find($id);
+
+    return $feeItemName->name;
+}
+
+function getFeeTypeIdByTypeName($typeName){
+
+    $feeTypeId = FeeType::where('name', $typeName)->first();
+
+    return $feeTypeId->id;
+}
 //*********************************************************************************************** */
 // Semester Course Helpers
 //*********************************************************************************************** */

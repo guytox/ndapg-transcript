@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AcademicSession;
 use App\Models\Curriculum;
 use App\Models\CurriculumItem;
 use App\Models\Department;
@@ -376,6 +377,101 @@ function getUserDepartmentsDropdown($id){
 
 
     return "N/A";
+}
+
+
+
+function getUserCurriculumCoursesDropdown($id){
+
+    $user = User::find($id);
+
+        $dept = SemesterCourse::where('activeStatus',1)->orderBy('courseCode','asc')->get()->pluck('courseCode','id');
+
+        return $dept;
+
+
+}
+
+
+function getUserProgramsDropdown($id){
+    $user = User::find($id);
+    if ($user->hasRole('vc')) {
+        $dept = Program::orderBy('name', 'asc')->get()->pluck('name','id');
+        return $dept;
+    }
+    if ($user->hasRole('admin')) {
+        $dept = Program::orderBy('name', 'asc')->get()->pluck('name','id');
+        return $dept;
+    }
+    if ($user->hasRole('dap')) {
+        $dept = Program::orderBy('name', 'asc')->get()->pluck('name','id');
+        return $dept;
+    }
+    if ($user->hasRole('acad_eo')) {
+        $dept = Program::orderBy('name', 'asc')->get()->pluck('name','id');
+        return $dept;
+    }
+    if ($user->hasRole('dean')) {
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('faculties.dean_id', $id)
+                                ->orWhere('departments.hod_id', $id)
+                                ->orWhere('departments.registration_officer_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->select('programs.*')
+                                ->get()
+                                ->pluck('name','id');
+        return $dept;
+    }
+    if ($user->hasRole('hod')) {
+        //return $user;
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('departments.hod_id', $id)
+                                ->orWhere('departments.registration_officer_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->select('programs.*')
+                                ->get()
+                                ->pluck('name','id');
+        return $dept;
+    }
+    if ($user->hasRole('reg_officer')) {
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('departments.registration_officer_id', $id)
+                                ->orWhere('departments.hod_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->select('programs.*')
+                                ->get()
+                                ->pluck('name','id');
+        return $dept;
+    }
+    if ($user->hasRole('exam_officer')) {
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('departments.exam_officer_id', $id)
+                                ->orWhere('departments.registration_officer_id', $id)
+                                ->orWhere('departments.hod_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->select('programs.*')
+                                ->get()
+                                ->pluck('name','id');
+        return $dept;
+    }
+    return "N/A";
+}
+
+
+function getCurrentSessionDropdown(){
+    $curSess = AcademicSession::where('status',1)->get()->pluck('name','id');
+    return $curSess;
 }
 
 

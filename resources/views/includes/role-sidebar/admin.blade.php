@@ -61,6 +61,65 @@
             </a>
         </li>
 
+        <li>
+            <a href="{{ route('systemvariables.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>System Variables</span>
+            </a>
+        </li>
+
+
+    </ul>
+</li>
+
+{{-- Payment Config --}}
+<li>
+    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+        <i class="mdi mdi-tag-heart"></i>
+        <span>Payment Config</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{{ route('fee-items.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Fee Items Config</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('scholarsips.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Scholarhip Types Config</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('fee-types.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Fee Types Config</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('fee-categories.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Categories Config</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('fee-templates.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Templates Config</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('fee-configs.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>PG Fee Configs</span>
+            </a>
+        </li>
 
     </ul>
 </li>
@@ -70,7 +129,7 @@
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
         <i class="mdi mdi-tag-heart"></i>
-        <span>Payment</span>
+        <span>Payment Reports</span>
     </a>
     <ul>
         <li>
@@ -212,6 +271,7 @@
 
 
 
+
 {{-- Manage Emails --}}
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif active has-arrow waves-effect">
@@ -243,6 +303,41 @@
         <span>Upload Student Balances</span>
     </a>
 </li>
+
+
+{{-- Registration Management--}}
+<li>
+    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+        <i class="mdi mdi-book-information-variant"></i>
+        <span>Registration Mgt</span>
+    </a>
+    <ul>
+
+        <li>
+            <a href="{{ route('add.bulk.registration') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Add/Remove Bulk Course</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('add.single.course',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Add/Remove Single Course</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('hod-confirm.index',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>View Grading Report</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+
 
 
 
