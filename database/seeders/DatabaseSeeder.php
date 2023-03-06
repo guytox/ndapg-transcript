@@ -29,9 +29,12 @@ class DatabaseSeeder extends Seeder
                 //SemesterSeeder::class,
                 //MatricConfigSeeder::class,
                 //BillingItemSeeder::class,
-                StatesSeeder::class,
-                LocalGovernmentSeeder::class,
-                ErrorCodesSeeder::class
+                FeeItemsSeeder::class,
+                FeeCategoriesSeeder::class,
+                FeeTypesSeeder::class,
+                //StatesSeeder::class,
+                //LocalGovernmentSeeder::class,
+                //ErrorCodesSeeder::class
             ]
 
         );

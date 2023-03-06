@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\BulkRegistrationJob;
+use App\Jobs\BulkSingleRegistrationJob;
 use App\Models\Curriculum;
 use App\Models\CurriculumItem;
 use App\Models\DroppedCourses;
@@ -10,6 +12,7 @@ use App\Models\RegClearance;
 use App\Models\RegMonitor;
 use App\Models\RegMonitorItems;
 use App\Models\SemesterCourse;
+use App\Models\StudentRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
@@ -681,6 +684,93 @@ class StudentRegistrationController extends Controller
 
             }
         }
+
+    }
+
+
+
+
+    public function searchBulkRegistration(){
+        #get all courses according to user
+        $semCourses = getUserCurriculumCoursesDropdown(user()->id);
+        #get affected programme
+        $programs = getUserProgramsDropdown(user()->id);
+
+        #load the page from here
+        return view('admin.select-bulk-registration', compact('semCourses','programs'));
+
+    }
+
+    public function searchSingleRegistration(){
+        #get all courses according to user
+        $semCourses = getUserCurriculumCoursesDropdown(user()->id);
+        #get affected programme
+        $programs = getUserProgramsDropdown(user()->id);
+
+        #load the page from here
+        return view('admin.select-single-registration', compact('semCourses','programs'));
+
+    }
+
+    public function bulkRegistration(Request $request){
+        #lets validate some stuff
+        $validated = $request->validate([
+            'c_prog' => 'required',
+            'c_code' => 'required',
+            'school_session' => 'required',
+            'semester' => 'required',
+            'study_level' => 'required',
+            'cCategory' => 'required',
+            'action' => 'required',
+        ]);
+
+        # Pass these entries to the job
+        BulkRegistrationJob::dispatch($request->c_prog, $request->c_code, $request->school_session, $request->semester, $request->study_level, $request->cCategory, $request->action);
+
+        //return $request;
+        return back()->with('info', "Request Successfully submitted for processing");
+
+    }
+
+    public function singleRegistration(Request $request){
+        #lets validate some stuff
+        $validated = $request->validate([
+            'c_std' => 'required',
+            'c_code' => 'required',
+            'school_session' => 'required',
+            'semester' => 'required',
+            'cCategory' => 'required',
+            'action' => 'required',
+        ]);
+
+
+        $studentRecord = StudentRecord::where('matric', $request->c_std)->first();
+
+        if ($studentRecord) {
+
+            #get the regMonitor for this registration
+            $allRegistrants = RegMonitor::where('student_id', $studentRecord->id)
+                                        ->where('semester_id', $request->semester)
+                                        ->where('session_id', $request->school_session)
+                                        ->first();
+            if ($allRegistrants) {
+                #pass the findings to the registration job
+                BulkSingleRegistrationJob::dispatch($allRegistrants->id, $request->c_code, $request->cCategory, $request->action);
+                #return $request;
+                return back()->with('info', "Request Successfully submitted for processing");
+
+            }else{
+                # No Registration Record found for this student for the selected session and semester
+                return back()->with('error', "Error!!!!! The Selected Student has not registered courses for the selected Session and Semester");
+
+            }
+
+        }else{
+
+            return back()->with('error', "Error!!!!! Student Record not found, Please try again.");
+        }
+
+
 
     }
 

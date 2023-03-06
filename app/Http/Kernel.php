@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\CheckApplicantSubmission;
 use App\Http\Middleware\CheckApplicationFeePayment;
+use App\Http\Middleware\CheckLateRegistration;
 use App\Http\Middleware\CheckProfileCompleted;
 use App\Http\Middleware\CheckRegistrationClearance;
 use App\Http\Middleware\CheckUserSubmittedResult;
@@ -76,6 +77,7 @@ class Kernel extends HttpKernel
         'coursereg_clearance.confirm' => CheckRegistrationClearance::class,
         'application_submitted_result' => CheckUserSubmittedResult::class,
         'profile_completed' => CheckProfileCompleted::class,
-        'application.submission' => CheckApplicantSubmission::class
+        'application.submission' => CheckApplicantSubmission::class,
+        'check.late.reg' => CheckLateRegistration::class
     ];
 }
