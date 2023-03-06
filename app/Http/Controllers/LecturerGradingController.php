@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\CourseRegistrantExport;
 use App\Imports\LecturerGradeUploadImport;
+use App\Jobs\HodGradeApprovalJob;
 use App\Jobs\LecturerGradeUploadJob;
 use App\Jobs\LecturerSemesterCourseGradingJob;
 use App\Models\CourseAllocationItems;
@@ -614,6 +615,8 @@ class LecturerGradingController extends Controller
                 $course->submitted_at = now();
                 $course->save();
 
+                #ToDo: submit this entire course to be graded by a job before hod approval
+
                 return back()->with('success',"Grade Submitted to HOD Successfully !!!!");
             }
 
@@ -721,6 +724,9 @@ class LecturerGradingController extends Controller
                     $course->grading_completed = 1;
 
                     $course->save();
+
+                    #send approval job here
+                    HodGradeApprovalJob::dispatch($course->id);
 
                     return back()->with('success',"HOD Accept/Reject registered Successfully !!!!");
 
