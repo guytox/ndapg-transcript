@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\CourseRegistrantExport;
 use App\Imports\LecturerGradeUploadImport;
 use App\Jobs\LecturerGradeUploadJob;
+use App\Jobs\LecturerSemesterCourseGradingJob;
 use App\Models\CourseAllocationItems;
 use App\Models\CourseAllocationMonitor;
 use App\Models\CurriculumItem;
@@ -465,15 +466,18 @@ class LecturerGradingController extends Controller
                                                                             //->whereBetween('m.ltotal',['grading_system_items.lower_boundary', 'grading_system_items.upper_boundary'])
                                                                             ->select('m.ltotal','grading_system_items.*')
                                                                             ->get();
-                                                foreach ($grade as $key => $v) {
-                                                    if ($v->ltotal >= $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
+                                        foreach ($grade as $key => $v) {
+                                            if ($v->ltotal >= $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
 
-                                                        $gradeLetter = $v->grade_letter;
+                                                $gradeLetter = $v->grade_letter;
 
-                                                        $oldentries->lgrade = $gradeLetter;
-                                                        $oldentries->save();
-                                                    }
-                                                }
+                                                $oldentries->lgrade = $gradeLetter;
+                                                $oldentries->save();
+                                            }
+                                        }
+
+                                        LecturerSemesterCourseGradingJob::dispatch($oldentries->id);
+
 
                                     //return back()->with('success', "Records updated Successfully");
                                 }

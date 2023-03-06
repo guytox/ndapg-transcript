@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Jobs\LecturerSemesterCourseGradingJob;
 use App\Models\CourseAllocationItems;
 use App\Models\GradingSystemItems;
 use App\Models\RegMonitorItems;
@@ -283,15 +284,19 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
                                                                             //->whereBetween('m.ltotal',['grading_system_items.lower_boundary', 'grading_system_items.upper_boundary'])
                                                                             ->select('m.ltotal','grading_system_items.*')
                                                                             ->get();
-                                                foreach ($grade as $key => $v) {
-                                                    if ($v->ltotal >= $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
+            foreach ($grade as $key => $v) {
+                if ($v->ltotal >= $v->lower_boundary && $v->ltotal <= $v->upper_boundary) {
 
-                                                        $gradeLetter = $v->grade_letter;
+                    $gradeLetter = $v->grade_letter;
 
-                                                        $tograde->lgrade = $gradeLetter;
-                                                        $tograde->save();
-                                                    }
-                                                }
+                    $tograde->lgrade = $gradeLetter;
+                    $tograde->save();
+                }
+            }
+
+            LecturerSemesterCourseGradingJob::dispatch($tograde->id);
+
+
 
 
         }
