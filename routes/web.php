@@ -29,6 +29,7 @@ use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\SemesterCourseAllocationController;
 use App\Http\Controllers\SemesterCoursesController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\Student\StudentPaymentController;
 use App\Http\Controllers\Student\StudentRegistrationController;
 use App\Http\Controllers\StudentInformationController;
 use App\Http\Controllers\StudyLevelsController;
@@ -353,6 +354,7 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
         Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicants.qualifications.school');
         Route::get('/professional', [\App\Http\Controllers\Applicant\QualificationsController::class, 'professional'])->name('applicantss.qualifications.professional');
         Route::post('/payments', [\App\Http\Controllers\Applicant\QualificationsController::class, 'store'])->name('student.outstanding.payments');
+        Route::get('/lateRegInitiate', [StudentPaymentController::class ,'lateRegistrationFee'])->name('initiate.late.reg');
     });
 
     Route::prefix('registration')->group(function () {

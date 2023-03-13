@@ -23,7 +23,7 @@ class CheckLateRegistration
         $lateRegVal = SystemVariable::where('name','late_reg')->first();
 
         if ($lateRegVal->value ==='On') {
-            #late Reg is on  now check to see if he has paid
+            #late Reg is on  now check to see if std has paid already then proceed, if not check further
             $StdLateReg = RegMonitor::where('student_id', user()->student->id)
                                     ->where('session_id', getActiveAcademicSessionId())
                                     ->where('semester_id', getActiveSemesterId())
@@ -33,12 +33,13 @@ class CheckLateRegistration
                 return redirect(route('student.registration.viewAll',['id'=>user()->id]))->with('error', "You have Registered for this Semester Already!!!!!");
 
             }else{
-                #check if the student has paid late registrations
+                #check if the student has paid late registration fee and allow if status is paid, otherwise forward to payment page
 
                 $ChkLateReg = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
                                         ->join('fee_categories as c','c.id','=','f.fee_category_id')
                                         ->where('fee_payments.user_id', user()->id)
                                         ->where('c.payment_purpose_slug', 'late-registration')
+                                        ->where('fee_payments.academic_session_id', getActiveAcademicSessionId())
                                         ->select('fee_payments.*')
                                         ->first();
                 if ($ChkLateReg) {
@@ -49,9 +50,14 @@ class CheckLateRegistration
 
                     }else{
 
+                        #this entry is pending take the necessary action
+                        return redirect(route('initiate.late.reg'));
                         return back()->with('error', "We are in Late Registration Now, Your Payment Ref is unpaid");
                     }
                 }else{
+
+                    #There is no entry found, so crate an entry and foward this student to pay
+                    return redirect(route('initiate.late.reg'));
 
                     return back()->with('error', "We are in Late Registration Now, you need to generate a transaction Id");
 
