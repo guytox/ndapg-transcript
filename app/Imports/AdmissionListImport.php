@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class AdmissionListImport implements ToModel, WithHeadingRow
 {
+    
     /**
     * @param array $row
     *
