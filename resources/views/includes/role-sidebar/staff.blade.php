@@ -12,6 +12,14 @@
                         <span>Admissions</span>
                     </a>
                     <ul>
+
+                        <li>
+                            <a href="{{ route('select.applicant.download',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>Download Applicant List</span>
+                            </a>
+                        </li>
+
                         @role('dean')
                         <li>
                             <a href="{{ route('select.admission.applicants', ['as'=>'ityoughKiVesen']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
@@ -73,6 +81,14 @@
                         <span>Admissions</span>
                     </a>
                     <ul>
+
+                        <li>
+                            <a href="{{ route('select.applicant.download',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>Download Applicant List</span>
+                            </a>
+                        </li>
+
                         @role('hod')
                         <li>
                             <a href="{{ route('select.admission.applicants', ['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
@@ -173,6 +189,14 @@
                         <span>Admissions</span>
                     </a>
                     <ul>
+
+                        <li>
+                            <a href="{{ route('select.applicant.download',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>Download Applicant List</span>
+                            </a>
+                        </li>
+                        
                         @role('reg_officer')
                         <li>
                             <a href="{{ route('select.admission.applicants', ['as'=>'ityoughKiNgeren']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
@@ -320,6 +344,13 @@
                 <span>Admissions</span>
             </a>
             <ul>
+                <li>
+                    <a href="{{ route('select.applicant.download',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Download Applicant List</span>
+                    </a>
+                </li>
+
                 @role('dean_pg')
                 <li>
                     <a href="{{ route('select.admission.applicants', ['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">

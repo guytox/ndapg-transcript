@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ApplicantExport;
 use App\Imports\AdmissionOfferImport;
 use App\Jobs\AdmissionRecommendationJob;
 use App\Models\Admission;
 use App\Models\ApplicantAdmissionRequest;
+use App\Models\OlevelResult;
 use App\Models\Program;
 use App\Models\RegClearance;
 use App\Models\StudentRecord;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\UserQualification;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Traits\HasRoles;
@@ -182,6 +187,15 @@ class AdmissionController extends Controller
 
     }
 
+    public function selectProgrammeForDownload(){
+        #select programme based on user and fire on
+
+        #get all academic programmes
+
+        return view('admin.select-applicants-for-download');
+
+    }
+
     public function selectApplicantsForAdmission(Request $request){
 
 
@@ -211,6 +225,78 @@ class AdmissionController extends Controller
 
 
     }
+
+
+
+    public function selectApplicantsForDownload(Request $request){
+
+
+        if (user()->hasRole('admin|dean_pg|dean|hod|reg_officer|acad_eo')) {
+            $validated = $request->validate([
+                'c_prog' => 'required',
+                'school_session' => 'required|numeric'
+            ]);
+
+            $sessionId = $request->school_session;
+            $programId = $request->c_prog;
+            $filename = $request->c_prog."_".$request->school_session."_applicants.xlsx";
+
+            #extract the list
+            return Excel::download(new ApplicantExport($sessionId, $programId), $filename);
+
+            // #get the list of applicants based on specified parameters
+            // $appList =  ApplicantAdmissionRequest::where('program_id', $request->c_prog)
+            //                                 ->where('session_id', $request->school_session)
+            //                                 ->get();
+
+            // $newList = new Collection();
+            // $sno=1;
+            // foreach ($appList as $k) {
+
+            //     $apUser = getUserById($k->user_id);
+            //     $oLevel = OlevelResult::where('user_id', $apUser->id)->get();
+            //     $qualf = UserQualification::where('user_id', $apUser->id)->get();
+            //     #get the result details
+            //     $result = '';
+            //     foreach ($oLevel as $o) {
+            //         //return $o->exam_details;
+            //         $result = $result.$o->sitting."->".$o->exam_details['Exam_body']."-".$o->exam_details['Exam_type']."(".$o->exam_details['Exam_year'].")"."-[English-".$o->exam_details['English'].": ".$o->exam_details['subject_3']['subject_name']."-".$o->exam_details['subject_3']['grade'].": ".$o->exam_details['subject_4']['subject_name']."-".$o->exam_details['subject_4']['grade'].": ".$o->exam_details['subject_5']['subject_name']."-".$o->exam_details['subject_5']['grade']."] ";
+            //     }
+            //     #next sort out the qualifications
+            //     $qualifications = '';
+            //     foreach ($qualf as $q) {
+            //         #return the qualification details
+            //         $qualifications = $qualifications. $q->certificate_type."->".$q->qualification_obtained."(".$q->year_obtained.") ";
+            //     }
+
+
+            //     $newList->push((object)[
+            //         'sno' => $sno,
+            //         'formnumber' => $k->form_number,
+            //         'name' => $apUser->name,
+            //         'matricno' => $k->form_number,
+            //         'gender' => $apUser->profile->gender,
+            //         'state' => getStateNameById($apUser->profile->state_id),
+            //         'program' => getProgramNameById($k->program_id),
+            //         'Dept' => getProgrammeDetailById($k->program_id, 'all')->department->name,
+            //         'country' => $apUser->profile->nationality,
+            //         'olevel' => $result,
+            //         'qualification' => $qualifications
+            //     ]);
+
+            //     $sno++;
+            // }
+
+            // return $newList;
+
+        }
+
+
+
+    }
+
+
+
 
     public function recommendSelectedApplicants(Request $request){
 

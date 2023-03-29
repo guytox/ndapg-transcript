@@ -704,7 +704,7 @@ function getProgrammeDetailById($id,$param){
             break;
 
         default:
-            return "N/A";
+            return $value;
             break;
     }
 

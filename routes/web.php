@@ -197,6 +197,9 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::get('admissionHome', [AdmissionController::class, 'selectProgrammeForAdmission'])->name('select.admission.applicants');
         Route::post('selectApplicants', [AdmissionController::class, 'selectApplicantsForAdmission'])->name('search.applicants.torecommend');
         Route::post('recommendApplicants', [AdmissionController::class, 'recommendSelectedApplicants'])->name('recommend.selected.applicants');
+        #download applicant routes
+        Route::get('downloadApplicants', [AdmissionController::class, 'selectProgrammeForDownload'])->name('select.applicant.download');
+        Route::post('selectDownloadApplicants', [AdmissionController::class, 'selectApplicantsForDownload'])->name('search.applicants.todownload');
     });
 
 });
