@@ -31,6 +31,7 @@ use App\Http\Controllers\SemesterCoursesController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\Student\StudentPaymentController;
 use App\Http\Controllers\Student\StudentRegistrationController;
+use App\Http\Controllers\StudentDeffermentController;
 use App\Http\Controllers\StudentInformationController;
 use App\Http\Controllers\StudyLevelsController;
 use App\Http\Controllers\SystemVariablesController;
@@ -123,7 +124,7 @@ Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware(
 
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
 
-Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_officer|ict_support','auth', 'profile_completed', 'verified'])->group(function(){
+Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support','auth', 'profile_completed', 'verified'])->group(function(){
 
     Route::prefix('appointments')->group(function(){
         Route::get('/getdeans', '\App\Http\Controllers\FacultyController@getDeans')->name('appointments.get.deans');
@@ -183,6 +184,19 @@ Route::prefix('admin')->middleware(['role:admin|dean|hod|reg_officer|exam_office
         Route::post('/userNameUpdate', [AdminReportsController::class, 'changeOfName'])->name('username.update');
 
 
+    });
+
+    Route::prefix('StudentManagement')->middleware('auth','role:admin|dean_pg|dap|vc|dvc','profile_completed','verified')->group(function(){
+        Route::post('submitDeffermentDetails', [StudentDeffermentController::class, 'viewStudentDetails'])->name('view.defferment.student');
+        Route::resource('defermentMgt', StudentDeffermentController::class);
+
+    });
+
+
+    Route::prefix('admissionProcessing')->middleware('auth','role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support')->group(function(){
+        Route::get('admissionHome', [AdmissionController::class, 'selectProgrammeForAdmission'])->name('select.admission.applicants');
+        Route::post('selectApplicants', [AdmissionController::class, 'selectApplicantsForAdmission'])->name('search.applicants.torecommend');
+        Route::post('recommendApplicants', [AdmissionController::class, 'recommendSelectedApplicants'])->name('recommend.selected.applicants');
     });
 
 });

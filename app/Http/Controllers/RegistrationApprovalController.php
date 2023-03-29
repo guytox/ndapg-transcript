@@ -37,7 +37,6 @@ class RegistrationApprovalController extends Controller
 
        //return $roleMenu;
 
-
        //get appointment jurrisdiction
        $staffJurisdiction = getAcademicDepts(user()->id, $role);
        $staffJurisdiction;
@@ -334,7 +333,7 @@ class RegistrationApprovalController extends Controller
 
                 //return $pendingStdRegs;
 
-                return view('admin.viewNotRegister  edStudentReport', compact('pendingStdRegs','title'));
+                return view('admin.viewNotRegisteredStudentReport', compact('pendingStdRegs','title'));
 
 
         }elseif(user()->hasRole('reg_officer|hod|dean|admin|vc|dvc')){

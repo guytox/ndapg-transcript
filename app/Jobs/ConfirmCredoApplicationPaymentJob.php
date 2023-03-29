@@ -13,7 +13,9 @@ use App\Models\PaymentLog;
 use App\Models\FeePayment;
 use Illuminate\Support\Facades\Log;
 use App\Models\ApplicationFeeRequest;
+use App\Models\CredoRequest;
 use App\Models\CredoResponse;
+use App\Models\FeeConfig;
 use App\Models\User;
 
 class ConfirmCredoApplicationPaymentJob implements ShouldQueue
@@ -121,48 +123,120 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
             'payee_code'=>$payee_code,
         ]);
 
-        #now let us do some basic checks and pass this payment (make sure you avoid replay)
-        #get the submitted request
+        #find what the payment is for
         $submission = ApplicationFeeRequest::where('uid', $payee_code)->first();
-        $submittedAmount = $submission->amount;
+        if (!$submission) {
+            #payment is for application, follow the application route
+            $payCheck = CredoRequest::where('uid', $payee_code)->first();
 
-        if ($submittedAmount == $settlementAmount && $submission->uid == $payee_code && $response_status==0) {
-            # make log entry
-            Log::info('payment has been confirmed -'.$businessRef);
-            #find the user based on retrieved payment details
-            $user = User::find($payee_id);
-            # get the configuration for applicaton fees
-            $applicationFeeConfiguration = PaymentConfiguration::where('payment_purpose_slug', 'application-fee')->first();
-            #
-            $feeRequest = ApplicationFeeRequest::where('payee_id', $user->id)->first();
+            if ($payCheck) {
+                # this payment is not applicaiton fee, check the status before proceeding
+                if ($response_status==0) {
+                    #the payment returns as paid get what this payment is for
+                    $feeReason = FeePayment::find($payCheck->fee_payment_id);
+                    if ($feeReason) {
+                        #feePayment found proceed with checks
+                        #verify the amount paid
+                        if (convertToNaira($feeReason->amount_billed) == $settlementAmount) {
+                            # find out the reason why the payment was made and treat as such
+                            $payCheck->status = 'paid';
+                            $payCheck->save();
 
-            $feePaymentTransaction = FeePayment::create([
-                'amount_billed' => $feeRequest->amount,
-                'user_id' => $user->id,
-                'payment_config_id' => $applicationFeeConfiguration->id,
-                'academic_session_id' => getApplicationSession(),
-                'payment_status' => config('app.status.paid'),
-                'amount_paid' => $verified_transAmount,
-                'uid' => $payee_code,
-                'balance' => 0,
-                'txn_id' => generateUniqueTransactionReference(), // change the transaction id to avoid replay attacks
-            ]);
+                            #write the log
+                            PaymentLog::create([
+                                'fee_payment_id' => $feeReason->id,
+                                'amount_paid' => $settlementAmount,
+                                'uid' => $payee_code,
+                                'tx_id' => $businessRef,
+                                'payment_channel' => config('app.payment_methods.credo')
+                            ]);
+                            #update the fee payment monitor with the amount paid
+                            $feeReason->amount_paid = $feeReason->amount_paid + convertToKobo($settlementAmount);
+                            if ($feeReason->amount_paid == $feeReason->amount_billed) {
+                                #payment complete mark as paid
+                                $feeReason->status = 'paid';
+                            }
+                            $feeReason->save();
 
-            PaymentLog::create([
-                'fee_payment_id' => $feePaymentTransaction->id,
-                'amount_paid' => $feePaymentTransaction->amount_paid,
-                'uid' => $payee_code,
-                'tx_id' => $businessRef,
-                'payment_channel' => config('app.payment_methods.credo')
-            ]);
+                            # Next find the reason
+                            $feePurpose = FeeConfig::join('fee_categories as f', 'f.id','=','fee_configs.fee_category_id')
+                                                    ->where('fee_configs.id', $feeReason->payment_config_id)
+                                                    ->select('fee_configs.*', 'fee_categories.payment_purpose_slug')
+                                                    ->first();
 
-            $feeRequest->status = 'paid';
-            $feeRequest->save();
+                            switch ($feePurpose->payment_purpose_slug) {
+                                
+                                case 'late-registration':
+                                    # code...
+                                    break;
 
-            // genericMail($emailSubject, $validPaymentMessage, $this->email);
-        } else {
-            #nothing found
-            // genericMail($emailSubject, $invalidPaymentMessage, $this->email);
+                                case 'acceptance-fee':
+                                    # code...
+                                    break;
+
+                                default:
+                                    # code...
+                                    break;
+                            }
+                        }
+
+                    }else{
+                        #this feePayment entry is not found Do nothing (this is strange)
+                    }
+
+                }else{
+                    #Do nothing because the payment has not been made (payment status is not 0)
+                }
+            }else{
+
+                # Do Nothing because this payment is not found
+
+            }
+
+
+        }elseif($submission) {
+            #payment found for application
+            $submittedAmount = $submission->amount;
+
+            if ($submittedAmount == $settlementAmount && $submission->uid == $payee_code && $response_status==0) {
+                # make log entry
+                Log::info('payment has been confirmed -'.$businessRef);
+                #find the user based on retrieved payment details
+                $user = User::find($payee_id);
+                # get the configuration for applicaton fees
+                $applicationFeeConfiguration = PaymentConfiguration::where('payment_purpose_slug', 'application-fee')->first();
+                #
+                $feeRequest = ApplicationFeeRequest::where('payee_id', $user->id)->first();
+
+                $feePaymentTransaction = FeePayment::create([
+                    'amount_billed' => $feeRequest->amount,
+                    'user_id' => $user->id,
+                    'payment_config_id' => $applicationFeeConfiguration->id,
+                    'academic_session_id' => getApplicationSession(),
+                    'payment_status' => config('app.status.paid'),
+                    'amount_paid' => $verified_transAmount,
+                    'uid' => $payee_code,
+                    'balance' => 0,
+                    'txn_id' => generateUniqueTransactionReference(), // change the transaction id to avoid replay attacks
+                ]);
+
+                PaymentLog::create([
+                    'fee_payment_id' => $feePaymentTransaction->id,
+                    'amount_paid' => $feePaymentTransaction->amount_paid,
+                    'uid' => $payee_code,
+                    'tx_id' => $businessRef,
+                    'payment_channel' => config('app.payment_methods.credo')
+                ]);
+
+                $feeRequest->status = 'paid';
+                $feeRequest->save();
+
+                // genericMail($emailSubject, $validPaymentMessage, $this->email);
+            } else {
+                #nothing found
+                // genericMail($emailSubject, $invalidPaymentMessage, $this->email);
+            }
         }
+
     }
 }
