@@ -83,7 +83,12 @@
                                 {{ getsessionById(getApplicationSession())->name}}
                                 <br> {{ getSemesterDetailsById(2)}}
                                 <br> ......
-                                <br> Not Admitted
+                                <br>
+                                    @if ($submitted->is_admitted == 1)
+                                        <b> Admitted</b>
+                                    @elseif ($submitted->is_admitted == 0)
+                                        Not Admitted
+                                    @endif
 
                             </td>
                         </tr>

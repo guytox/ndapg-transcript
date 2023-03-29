@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Models\CredoRequest;
 use App\Models\CredoResponse;
 use App\Models\FeeConfig;
@@ -182,7 +183,7 @@ class StudentPaymentController extends Controller
                                 'fee_payment_id' => $feePymntEntry->id,
                                 'amount' => convertToNaira($feePymntEntry->amount_billed),
                                 'session_id' => $feePymntEntry->academic_session_id,
-                                'uid' => $feePymntEntry->uid,
+                                'uid' => uniqid('cfw'),
                                 'txn_id' => $feePymntEntry->txn_id,
                             ];
 

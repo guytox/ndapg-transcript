@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Imports\AdmissionOfferImport;
+use App\Jobs\AdmissionRecommendationJob;
 use App\Models\Admission;
+use App\Models\ApplicantAdmissionRequest;
 use App\Models\Program;
 use App\Models\RegClearance;
 use App\Models\StudentRecord;
@@ -41,8 +43,6 @@ class AdmissionController extends Controller
     }
 
 
-
-
     public function uploadStudentsAdmissionForm(){
         if (user()->hasRole('admin')) {
 
@@ -57,7 +57,6 @@ class AdmissionController extends Controller
 
 
 
-
     public function selecPayCodeApplicant(Request $request){
         if (user()->hasRole('admin|bursary|pay_processor')) {
 
@@ -68,9 +67,6 @@ class AdmissionController extends Controller
             return view('bursary.search-applicant-paycode', compact('applicant','lasttenapplicants'));
         }
     }
-
-
-
 
 
     public function activateStudentAccount(Request $request){
@@ -177,7 +173,65 @@ class AdmissionController extends Controller
     }
 
 
+    public function selectProgrammeForAdmission(){
+        #select programme based on user and fire on
 
+        #get all academic programmes
+
+        return view('admin.select-applicants-for-admission');
+
+    }
+
+    public function selectApplicantsForAdmission(Request $request){
+
+
+        if (user()->hasRole('admin|dean_pg|dean|hod|reg_officer|acad_eo')) {
+            $validated = $request->validate([
+                'c_prog' => 'required',
+                'school_session' => 'required|numeric'
+            ]);
+
+            #get the list of applicants based on specified parameters
+            $applicants = ApplicantAdmissionRequest::where('session_id', $request->school_session)
+                                                    ->where('program_id', $request->c_prog)
+                                                    ->where('is_submitted', 1)
+                                                    ->orderBy('is_admitted','asc')
+                                                    ->orderBy('pg_coord','asc')
+                                                    ->orderBy('hod','asc')
+                                                    ->orderBy('dean','asc')
+                                                    ->get();
+            #get the academic roles
+            $staffRoles = getAcademicRoles(user()->id);
+            #set the title of the page
+            $title = "List of Applicants for ".getProgramNameById($request->c_prog)." ";
+
+            return view('admin.viewAdmissionRecommendedList',compact('applicants','title','staffRoles'));
+        }
+
+
+
+    }
+
+    public function recommendSelectedApplicants(Request $request){
+
+        //return $request;
+        #The request is here, perform some variation and proceed to see the behaviour
+        #find out who is taking an action and spread accross
+        foreach ($request->regMonitor as $m) {
+            $appId = $m;
+            $actionBy = user()->id;
+            $actionAt = now();
+            $as = $request->approveAs;
+            $actionToTake = $request->action;
+
+            AdmissionRecommendationJob::dispatch($appId, $actionBy, $actionAt, $as, $actionToTake);
+
+
+        }
+
+        return redirect(route('select.admission.applicants'))->with('info', "Candidates recommended successfully!!!");
+
+    }
 
 
 

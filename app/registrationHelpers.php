@@ -235,6 +235,12 @@ function getRoleIdByRoleName($name){
     return $roleId;
 }
 
+function getRoleNameByRoleId($id){
+    $roleFind = Role::find($id);
+    $roleName = $roleFind->name;
+    return $roleName;
+}
+
 
 
 function getAcademicDepts($id, $role){
@@ -395,10 +401,17 @@ function getUserCurriculumCoursesDropdown($id){
 
 function getUserProgramsDropdown($id){
     $user = User::find($id);
+
     if ($user->hasRole('vc')) {
         $dept = Program::orderBy('name', 'asc')->get()->pluck('name','id');
         return $dept;
     }
+
+    if ($user->hasRole('dean_pg')) {
+        $dept = Program::orderBy('name', 'asc')->get()->pluck('name','id');
+        return $dept;
+    }
+
     if ($user->hasRole('admin')) {
         $dept = Program::orderBy('name', 'asc')->get()->pluck('name','id');
         return $dept;
