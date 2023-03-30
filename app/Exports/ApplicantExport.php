@@ -42,6 +42,11 @@ class ApplicantExport implements FromCollection, WithHeadings
             $apUser = getUserById($k->user_id);
             $oLevel = OlevelResult::where('user_id', $apUser->id)->get();
             $qualf = UserQualification::where('user_id', $apUser->id)->get();
+            if ($apUser->profile->is_serving_officer == "1") {
+                $serviceStatus= 'YES';
+            }else{
+                $serviceStatus = 'NO';
+            }
             #get the result details
             $result = '';
             foreach ($oLevel as $o) {
@@ -63,6 +68,7 @@ class ApplicantExport implements FromCollection, WithHeadings
                 'matricno' => $k->form_number,
                 'gender' => $apUser->profile->gender,
                 'state' => getStateNameById($apUser->profile->state_id),
+                'servingofficer' => $serviceStatus,
                 'program' => getProgramNameById($k->program_id),
                 'Dept' => getProgrammeDetailById($k->program_id, 'all')->department->name,
                 'country' => $apUser->profile->nationality,
@@ -81,7 +87,7 @@ class ApplicantExport implements FromCollection, WithHeadings
 
     public function headings(): array{
 
-        return ['sno', 'formnumber','name','matricno','gender','state','program','Dept','country','olevel','qualification'];
+        return ['sno', 'formnumber','name','matricno','gender','state','servingofficer','program','Dept','country','olevel','qualification'];
 
     }
 
