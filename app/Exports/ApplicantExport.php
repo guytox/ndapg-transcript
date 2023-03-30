@@ -52,7 +52,7 @@ class ApplicantExport implements FromCollection, WithHeadings
             $qualifications = '';
             foreach ($qualf as $q) {
                 #return the qualification details
-                $qualifications = $qualifications. $q->certificate_type."->".$q->qualification_obtained."(".$q->year_obtained.") ";
+                $qualifications = $qualifications. $q->certificate_type."->".$q->qualification_obtained."(".$q->year_obtained."): [GRADE:-".$q->class."] ";
             }
 
 
