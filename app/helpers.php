@@ -340,6 +340,13 @@ function getSemesterDetailsById($id){
     return $semester->name;
 }
 
+function getSemesterById($id){
+    
+    $semester = Semester::find($id);
+
+    return $semester;
+}
+
 function getSemesterIdByName($id){
     $semester = Semester::where('name', $id)->first();
     return $semester->id;
