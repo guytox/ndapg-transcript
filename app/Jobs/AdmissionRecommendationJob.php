@@ -160,11 +160,9 @@ class AdmissionRecommendationJob implements ShouldQueue
             }elseif ($this->actionToTake == 2) {
                 #effect dissaproval for dean at all times
                 $toadmin = ApplicantAdmissionRequest::where('uid', $this->appId)
-                                                    ->where('is_admitted', 1)
                                                     ->where('pg_coord',1)
                                                     ->where('hod',1)
                                                     ->where('dean',1)
-                                                    ->where('dean_spgs',1)
                                                     ->first();
                 if ($toadmin) {
                     $toadmin->dean_spgs = 0;
@@ -174,6 +172,18 @@ class AdmissionRecommendationJob implements ShouldQueue
                     $toadmin->is_admitted = 0;
                     $toadmin->admitted_at = null;
                     $toadmin->admitted_by = null;
+                    #rollback dean
+                    $toadmin->dean = 0;
+                    $toadmin->dean_at = null;
+                    $toadmin->dean_by = null;
+                    #rollback hod
+                    $toadmin->hod = 0;
+                    $toadmin->hod_at = null;
+                    $toadmin->hod_by = null;
+                    #rollback exam_officer
+                    $toadmin->pg_coord = 0;
+                    $toadmin->pg_coord_at = null;
+                    $toadmin->pg_coord_by = null;
                     #done save the entry
                     $toadmin->save();
                     #next notify the student via email of the admission
