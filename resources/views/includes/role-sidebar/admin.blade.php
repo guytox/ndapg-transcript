@@ -218,7 +218,21 @@
         <li>
             <a href="{{ route('defermentMgt.create') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
-                <span>initiate Defferment</span>
+                <span>initiate Session Defferment</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('defermentMgt.create') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>initiate Semester Defferment</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('defermentMgt.create') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>initiate Course Defferment</span>
             </a>
         </li>
 
