@@ -24,4 +24,8 @@ class StudentRecord extends Model
     public function programme(){
         return $this->belongsTo(Program::class, 'id','program_id');
     }
+
+    public function defferment(){
+        return $this->hasMany(Defferment::class, 'student_id', 'id');
+    }
 }
