@@ -33,6 +33,7 @@ class ApplicantExport implements FromCollection, WithHeadings
     {
         $appList =  ApplicantAdmissionRequest::where('program_id', $this->programId)
                                             ->where('session_id', $this->sessionId)
+                                            ->where('downloaded',0)
                                             ->get();
 
         $newList = new Collection();

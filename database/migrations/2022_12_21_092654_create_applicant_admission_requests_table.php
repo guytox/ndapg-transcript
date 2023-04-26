@@ -21,6 +21,7 @@ class CreateApplicantAdmissionRequestsTable extends Migration
             $table->string('form_number')->nullable();
             $table->string('uid')->nullable();
             $table->boolean('is_submitted')->nullable()->default(false);
+            $table->integer('downloaded')->nullable()->default(0);
             $table->timestamp('submitted_at')->nullable();
             $table->boolean('is_admitted')->nullable()->default(false);
             $table->timestamp('admitted_at')->nullable();
