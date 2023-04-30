@@ -226,6 +226,182 @@ class AdmissionController extends Controller
 
     }
 
+    public function viewCurrentAdmissionList(){
+
+
+        if (user()->hasRole('admin|dean_pg|dean|hod|reg_officer|acad_eo')) {
+            $sessionId = activeSession()->id+1;
+
+            #get the list of applicants based on specified parameters
+            $applicants = ApplicantAdmissionRequest::where('session_id', $sessionId)
+                                                    ->where('is_admitted', 1)
+                                                    ->orderBy('program_id','asc')
+                                                    ->orderBy('form_number','asc')
+                                                    ->get();
+            #get the academic roles
+            $staffRoles = getAcademicRoles(user()->id);
+            #set the title of the page
+            $title = "Admission List for ".getsessionById($sessionId)->name." Session";
+
+            return view('admin.viewAdmissionList',compact('applicants','title','staffRoles'));
+        }
+
+
+
+    }
+
+    public function viewListForVeto(){
+
+
+        if (user()->hasRole('admin|dean_pg|dean|hod|reg_officer|acad_eo')) {
+            $sessionId = activeSession()->id+1;
+
+            #get the list of applicants based on specified parameters
+            $applicants = ApplicantAdmissionRequest::where('session_id', $sessionId)
+                                                    ->where('is_admitted', 0)
+                                                    ->where('is_submitted', 1)
+                                                    ->orderBy('program_id','asc')
+                                                    ->orderBy('form_number','asc')
+                                                    ->get();
+            #get the academic roles
+            $staffRoles = getAcademicRoles(user()->id);
+            #set the title of the page
+            $title = "List of Applicants for ".getsessionById($sessionId)->name." Session";
+
+            return view('admissions.viewVetoApplicantList',compact('applicants','title','staffRoles'));
+        }
+
+
+
+    }
+
+
+    public function viewListForChangeAdmission(){
+
+
+        if (user()->hasRole('admin|dean_pg|dean|hod|reg_officer|acad_eo')) {
+            $sessionId = activeSession()->id+1;
+
+            #get the list of applicants based on specified parameters
+            $applicants = ApplicantAdmissionRequest::where('session_id', $sessionId)
+                                                    ->where('is_admitted', 0)
+                                                    ->where('is_submitted', 1)
+                                                    ->orderBy('program_id','asc')
+                                                    ->orderBy('form_number','asc')
+                                                    ->get();
+            #get the academic roles
+            $staffRoles = getAcademicRoles(user()->id);
+            #set the title of the page
+            $title = "Change of Programme Admission Applicant List for ".getsessionById($sessionId)->name." Session";
+
+            return view('admissions.viewChangeBeforeAdmissionList',compact('applicants','title','staffRoles'));
+        }
+
+
+
+    }
+
+
+    public function previewBeforeChangeAdmission($id){
+        #get the applciant
+        $applicant = ApplicantAdmissionRequest::where('uid', $id)->first();
+
+        if ($applicant) {
+            # applicant found
+            # get the staff roles just in case you need it later
+            $staffRoles = getAcademicRoles(user()->id);
+            #set the title
+            $title = "Change Candidate Programme and Approve Admission ";
+            #return the view
+            return view('admissions.previewBeforeChangeAdmission',compact('applicant','title','staffRoles'));
+        }
+    }
+
+    public function processChangeAdmission(Request $request){
+        #first validate the entry
+        $validated = $request->validate([
+            'id' => 'required',
+            'progId' => 'required|numeric'
+        ]);
+
+        #get the applicant
+
+        $applicant = ApplicantAdmissionRequest::where('uid', $request->id)->first();
+        #first change the course candidate has applied for;
+        $applicant->program_id = $request->progId;
+        #set appropriate parameters to continue
+        $actionat = now();
+        #next check the pg_coord admission status
+        if ($applicant->pg_coord == 0) {
+            #pg coordinator has not approved so procedd
+            $applicant->pg_coord = 1;
+            $applicant->pg_coord_at = $actionat;
+            $applicant->pg_coord_by = user()->id;
+        }
+
+        if ($applicant->hod== 0) {
+            # hod approval pending proceed to approve
+            $applicant->hod = 1;
+            $applicant->hod_at = $actionat;
+            $applicant->hod_by = user()->id;
+        }
+
+        if ($applicant->dean == 0) {
+            #dean has not approved
+            $applicant->dean = 1;
+            $applicant->dean_at = $actionat;
+            $applicant->dean_by = user()->id;
+        }
+
+        if ($applicant->dean_spgs==0) {
+            #dean spgs has not approved proceed with the rest
+            $applicant->dean_spgs = 1;
+            $applicant->dean_spgs_at = $actionat;
+            $applicant->dean_spgs_by = user()->id;
+        }
+        #general admission of candidate
+        $applicant->is_admitted = 1;
+        $applicant->admitted_at = $actionat;
+        $applicant->admitted_by = user()->id;
+        $applicant->save();
+
+        return back()->with('info', "Change of Programme and Admission Successfully Processed!!!");
+
+
+
+        return $request;
+    }
+
+
+    public function vetoAdmission($id){
+
+        #get the applicant
+        $applicant = ApplicantAdmissionRequest::where('uid',$id)->first();
+        $actionat = now();
+
+        $applicant->pg_coord = 1;
+        $applicant->pg_coord_at = $actionat;
+        $applicant->pg_coord_by = user()->id;
+        $applicant->hod = 1;
+        $applicant->hod_at = $actionat;
+        $applicant->hod_by = user()->id;
+        $applicant->dean = 1;
+        $applicant->dean_at = $actionat;
+        $applicant->dean_by = user()->id;
+        $applicant->dean_spgs = 1;
+        $applicant->dean_spgs_at = $actionat;
+        $applicant->dean_spgs_by = user()->id;
+        $applicant->is_admitted = 1;
+        $applicant->admitted_at = $actionat;
+        $applicant->admitted_by = user()->id;
+        $applicant->save();
+
+        return back()->with('info', "Veto Admission Successful!!!");
+
+        return $applicant;
+
+    }
+
 
 
     public function selectApplicantsForDownload(Request $request){
