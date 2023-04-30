@@ -200,6 +200,18 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         #download applicant routes
         Route::get('downloadApplicants', [AdmissionController::class, 'selectProgrammeForDownload'])->name('select.applicant.download');
         Route::post('selectDownloadApplicants', [AdmissionController::class, 'selectApplicantsForDownload'])->name('search.applicants.todownload');
+        #view admission List
+        Route::get('viewAdmissinList', [AdmissionController::class, 'viewCurrentAdmissionList'])->name('view.admission.list');
+
+        Route::get('vetoAdmission', [AdmissionController::class, 'viewListForVeto'])->middleware('role:admin|dean_pg')->name('view.for.veto');
+        Route::get('vetoAdmission/{id}', [AdmissionController::class, 'vetoAdmission'])->middleware('role:admin|dean_pg')->name('veto.admission');
+
+        #change before admitting
+        Route::get('viewChangeAdmission', [AdmissionController::class, 'viewListForChangeAdmission'])->middleware('role:admin|dean_pg')->name('view.for.change.admission');
+        Route::get('changeAdmission/{id}', [AdmissionController::class, 'previewBeforeChangeAdmission'])->middleware('role:admin|dean_pg')->name('select.change.admission');
+        Route::post('changeAdmission', [AdmissionController::class, 'processChangeAdmission'])->middleware('role:admin|dean_pg')->name('effect.change.admission');
+
+
     });
 
 });

@@ -27,6 +27,9 @@
     <!-- App Css-->
     <link href="{{ asset('admin/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
 
+
+    @livewireStyles
+
     @yield('css')
 
 </head>
@@ -507,6 +510,9 @@
     @yield('js')
     <script src="{{ asset('admin/assets/js/app.js') }}"></script>
 
+
+
+    @livewireScripts
 
 </body>
 

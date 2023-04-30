@@ -196,7 +196,7 @@
                                 <span>Download Applicant List</span>
                             </a>
                         </li>
-                        
+
                         @role('reg_officer')
                         <li>
                             <a href="{{ route('select.admission.applicants', ['as'=>'ityoughKiNgeren']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
@@ -361,16 +361,23 @@
                 @endrole
 
                 <li>
-                    <a href="{{ route('reg.approvals',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <a href="{{ route('view.admission.list',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
                         <span>View Approved Admissions</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('reg.approvals',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <a href="{{ route('view.for.veto',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
-                        <span>Submitted Applications</span>
+                        <span>Veto Admission</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('view.for.change.admission',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Change Program Admission</span>
                     </a>
                 </li>
 
