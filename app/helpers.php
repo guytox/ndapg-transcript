@@ -17,6 +17,7 @@ use App\Models\Program;
 use App\Models\RegMonitor;
 use App\Models\Semester;
 use App\Models\SemesterCourse;
+use App\Models\SiteNotification;
 use App\Models\State;
 use App\Models\StudentRecord;
 use App\Models\StudyLevel;
@@ -56,6 +57,16 @@ function getApplicationSession(){
     }
 
     return false;
+}
+
+function getSiteNotification(){
+    $notification = SiteNotification::where('n_status', 1)->first();
+
+    if ($notification) {
+        return $notification->n_message;
+    }else{
+        return false;
+    }
 }
 
 
@@ -341,7 +352,7 @@ function getSemesterDetailsById($id){
 }
 
 function getSemesterById($id){
-    
+
     $semester = Semester::find($id);
 
     return $semester;

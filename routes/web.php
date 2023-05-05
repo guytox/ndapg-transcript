@@ -211,6 +211,9 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::get('changeAdmission/{id}', [AdmissionController::class, 'previewBeforeChangeAdmission'])->middleware('role:admin|dean_pg')->name('select.change.admission');
         Route::post('changeAdmission', [AdmissionController::class, 'processChangeAdmission'])->middleware('role:admin|dean_pg')->name('effect.change.admission');
 
+        #Notify un-notified candidates here
+        Route::get('sendAdmissionNotification', [AdmissionController::class, 'notifyCandiates'])->name('send.admission.notifications');
+
 
     });
 

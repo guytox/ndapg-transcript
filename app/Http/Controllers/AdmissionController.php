@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Exports\ApplicantExport;
 use App\Imports\AdmissionOfferImport;
+use App\Jobs\AdmissionNotificationJob;
 use App\Jobs\AdmissionRecommendationJob;
+use App\Mail\AdmissionOfferNotification;
 use App\Models\Admission;
 use App\Models\ApplicantAdmissionRequest;
 use App\Models\OlevelResult;
@@ -18,6 +20,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -493,6 +496,24 @@ class AdmissionController extends Controller
 
         return redirect(route('select.admission.applicants'))->with('info', "Candidates recommended successfully!!!");
 
+    }
+
+
+    public function notifyCandiates(){
+
+
+        $toNotify = ApplicantAdmissionRequest::where('is_admitted', 1)
+                                            ->where('adm_notification',0)
+                                            ->get();
+        if ($toNotify) {
+            #notifications found loop through
+            foreach ($toNotify as $v) {
+                #forward the job for those users
+                AdmissionNotificationJob::dispatch($v->id);
+            }
+        }
+
+        return redirect(route('home'))->with('info', "Mail Sending Successful");
     }
 
 
