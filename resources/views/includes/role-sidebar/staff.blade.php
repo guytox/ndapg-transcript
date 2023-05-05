@@ -381,6 +381,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('send.admission.notifications',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Notify Students</span>
+                    </a>
+                </li>
+
             </ul>
         </li>
 

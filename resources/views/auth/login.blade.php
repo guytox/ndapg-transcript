@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="text-danger" ><marquee behavior="" direction="left"> <b> <font size="6">Notice!!!   Sales of Application Form is Extended to Now Close on Friday, 28th April, 2023</font> </b> </marquee></div>
+<div class="text-danger" ><marquee behavior="" direction="left"> <b> <font size="6">{{ getSiteNotification()}}</font> </b> </marquee></div>
 
 
 <h5 class="mb-5 text-center">Sign in to your account.</h5>

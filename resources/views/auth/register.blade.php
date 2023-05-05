@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="text-danger" ><marquee behavior="" direction="left"> <b> <font size="6">Notice!!!   Sales of Application Form Closes on Tuesday, 28th March, 2023</font> </b> </marquee></div>
+<div class="text-danger" ><marquee behavior="" direction="left"> <b> <font size="6">{{ getSiteNotification()}}</font> </b> </marquee></div>
 
 <h5 class="mb-5 text-center">Begin Applicaition <span class="text text-success"><i>(Create and Verify Account)</i></span> </h5>
 
