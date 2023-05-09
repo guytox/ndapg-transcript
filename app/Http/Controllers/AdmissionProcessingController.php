@@ -525,5 +525,89 @@ class AdmissionProcessingController extends Controller
     }
 
 
+    public function admittedHome(){
+
+        if (user()->hasRole('admin')) {
+
+            #correct admission processing roles
+            $admitted = ApplicantAdmissionRequest::where('is_admitted',1)->where('acceptance_paid', 0)->get();
+
+            foreach ($admitted as $v) {
+                $adUser = User::find($v->user_id);
+                $adUser->assignRole('admitted');
+            }
+        }
+
+
+
+        if (user()->hasRole('admitted')) {
+            # user is admitted return the admitted home view
+            #find the applicant instance
+            $appData = ApplicantAdmissionRequest::where('user_id', user()->id)->first();
+            return view('admissions.admissionsHome', compact('appData'));
+
+        }else{
+
+            return view('home')->with('error', "Admission Not Offered  Yet");
+
+        }
+    }
+
+
+
+    public function admissionProcessingHome(){
+        return view('admissions.admissions-processing-home');
+    }
+
+    public function getApplicantAdmissionDetails(Request $request){
+        $validated = $request->validate([
+            'form_number' => 'required',
+        ]);
+
+        if (user()->hasRole('admin|registry|bursary')) {
+            #user is free to view this action page
+            #get the applicant
+            $appData = ApplicantAdmissionRequest::where('form_number',$request->form_number)->first();
+            $appUser = User::find($appData->user_id);
+
+
+            return view('admissions.admissions-action-processing',compact('appData','appUser'));
+
+
+
+        }
+    }
+
+
+    public function effectApplicantAdmissionProcessing(Request $request){
+        $validated = $request->validate([
+            'appId' => 'required',
+            'form_action' =>'required|numeric'
+        ]);
+
+        switch ($request->form_action) {
+            case '1':
+                # code...
+                break;
+            case '2':
+                # code...
+                break;
+            case '3':
+                # code...
+                break;
+            case '4':
+                return redirect(route('admission.processing.home'))->with('info',"Verified Successfully");
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+    }
+
+    
+
+
 
 }

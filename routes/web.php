@@ -123,8 +123,9 @@ Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware(
 
 
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
+Route::get('/applicant/acceptance-fee', [ApplicantPaymentController::class, 'acceptanceFee'])->name('acceptance.fee');
 
-Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support','auth', 'profile_completed', 'verified'])->group(function(){
+Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support|bursary|dap|registry','auth', 'profile_completed', 'verified'])->group(function(){
 
     Route::prefix('appointments')->group(function(){
         Route::get('/getdeans', '\App\Http\Controllers\FacultyController@getDeans')->name('appointments.get.deans');
@@ -193,7 +194,7 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
     });
 
 
-    Route::prefix('admissionProcessing')->middleware('auth','role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support')->group(function(){
+    Route::prefix('admissionProcessing')->middleware('auth','role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support|dap|registry|bursary')->group(function(){
         Route::get('admissionHome', [AdmissionController::class, 'selectProgrammeForAdmission'])->name('select.admission.applicants');
         Route::post('selectApplicants', [AdmissionController::class, 'selectApplicantsForAdmission'])->name('search.applicants.torecommend');
         Route::post('recommendApplicants', [AdmissionController::class, 'recommendSelectedApplicants'])->name('recommend.selected.applicants');
@@ -213,6 +214,11 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
 
         #Notify un-notified candidates here
         Route::get('sendAdmissionNotification', [AdmissionController::class, 'notifyCandiates'])->name('send.admission.notifications');
+
+        #Admission Processing Home
+        Route::get('processingHome',[AdmissionProcessingController::class, 'admissionProcessingHome'])->middleware('role:admin|registry|dap|bursary')->name('admission.processing.home');
+        Route::post('getApplicantForProcessing',[AdmissionProcessingController::class, 'getApplicantAdmissionDetails'])->middleware('role:admin|registry|dap|bursary')->name('admission.processing.details');
+        Route::post('effectAdmissionProcessing',[AdmissionProcessingController::class, 'effectApplicantAdmissionProcessing'])->middleware('role:admin|registry|dap|bursary')->name('effect.admission.processing');
 
 
     });
@@ -371,6 +377,12 @@ Route::prefix('submission')->middleware(['auth','role:admin|ict_support|dean|hod
     # Applliction Processing Reports
     Route::get('/view/Applicant/Payments',[AdmissionProcessingController::class, 'viewPaidApplicants'])->name('view.applicant.payments');
     Route::get('/view/Applicant/Submissions',[AdmissionProcessingController::class, 'viewSubmittedApplications'])->name('view.submitted.applications');
+
+});
+
+Route::prefix('admissionProcessing')->middleware('auth', 'role:admin|admitted|')->group(function(){
+
+    Route::get('admittedHome', [AdmissionProcessingController::class, 'admittedHome'])->name('admitted.home');
 
 });
 
