@@ -107,7 +107,7 @@ class PaymentHandleController extends Controller
             #next find the fee_payment entry for this record
             $fpayment = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
                                     ->join('fee_categories as c','c.id','=','f.fee_category_id')
-                                    ->where('id',$pDetails->fee_payment_id)
+                                    ->where('fee_payments.id',$pDetails->fee_payment_id)
                                     ->first();
 
             switch ($fpayment->payment_purpose_slug) {

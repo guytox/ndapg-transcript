@@ -527,16 +527,16 @@ class AdmissionProcessingController extends Controller
 
     public function admittedHome(){
 
-        if (user()->hasRole('admin')) {
+        // if (user()->hasRole('admin')) {
 
-            #correct admission processing roles
-            $admitted = ApplicantAdmissionRequest::where('is_admitted',1)->where('acceptance_paid', 0)->get();
+        //     #correct admission processing roles
+        //     $admitted = ApplicantAdmissionRequest::where('is_admitted',1)->where('acceptance_paid', 0)->get();
 
-            foreach ($admitted as $v) {
-                $adUser = User::find($v->user_id);
-                $adUser->assignRole('admitted');
-            }
-        }
+        //     foreach ($admitted as $v) {
+        //         $adUser = User::find($v->user_id);
+        //         $adUser->assignRole('admitted');
+        //     }
+        // }
 
 
 
@@ -606,7 +606,7 @@ class AdmissionProcessingController extends Controller
 
     }
 
-    
+
 
 
 
