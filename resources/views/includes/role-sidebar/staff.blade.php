@@ -482,7 +482,7 @@
 
     @endrole
 
-    @role('admin|dap|dean_pg|registry')
+    @role('admin|dap|dean_pg|registry|bursary')
 
     <li>
         <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">

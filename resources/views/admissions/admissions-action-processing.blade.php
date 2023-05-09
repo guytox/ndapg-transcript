@@ -193,7 +193,7 @@
 
                                     @elseif ($appData->is_screened==0 && $appData->acc_verified==1)
 
-                                    @role('registry')
+                                    @role('admin|registry')
                                         <a href="#" class="btn btn-danger">Screen Applicant</a>  Action No 3<br>
                                     @endrole
 
