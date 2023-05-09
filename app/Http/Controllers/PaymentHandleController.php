@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ConfirmApplicationPaymentJob;
+use App\Jobs\ConfirmCredoAcceptancePaymentJob;
 use App\Models\FeePayment;
 use Illuminate\Http\Request;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
+use App\Models\CredoRequest;
 use App\Models\CredoResponse;
 
 class PaymentHandleController extends Controller
@@ -91,11 +93,8 @@ class PaymentHandleController extends Controller
             $currency = $request->get('currency');
             $statusCode = $request->get('status');
             $amount = $request->get('transAmount');
-
             //  return $transactionId;
-
             #store the response
-
             $newrequest = CredoResponse::updateOrCreate(['transRef'=>$request->transRef],[
                 'transRef'=>$request->transRef,
                 'currency'=>$request->currency,
@@ -103,11 +102,51 @@ class PaymentHandleController extends Controller
                 'transAmount'=>$request->transAmount,
             ]);
 
+            #next find what the payment is all about and route it appropriately
+            $pDetails = CredoRequest::where('credo_ref', $newrequest->transRef)->first();
+            #next find the fee_payment entry for this record
+            $fpayment = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
+                                    ->join('fee_categories as c','c.id','=','f.fee_category_id')
+                                    ->where('id',$pDetails->fee_payment_id)
+                                    ->first();
 
-            // send background job to confirm the payment with checksum and transaction id
-            ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+            switch ($fpayment->payment_purpose_slug) {
+                case 'application-fee':
+                        # this payment is for application
+                        // send background job to confirm the payment with checksum and transaction id
+                        ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                        # return home and give the job some time to confirm payment
+                        return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
+                    break;
+                case 'acceptance-fee':
+                    # send to acceptance fee job
+                    // send background job to confirm the payment with checksum and transaction id
+                    ConfirmCredoAcceptancePaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                    # return home and give the job some time to confirm payment
+                    return redirect()->route('home')->with(['message' => 'Your Acceptance Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
+                    break;
+                case 'late-registration':
+                    # code...
+                    break;
+                case 'first-tuition':
+                    # code...
+                    break;
+                case 'tuition':
+                    # code...
+                    break;
+                case 'wallet-fund':
+                    # code...
+                    break;
 
-            return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
+                default:
+                    # code...
+                    break;
+            }
+
+
+
+
+
         }
 
         abort(403, 'Unable to confirm payment information');

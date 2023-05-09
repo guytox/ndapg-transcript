@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\ApplicantAdmissionRequest;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -154,6 +155,9 @@ class AdmissionRecommendationJob implements ShouldQueue
                     $toadmin->admitted_by = $this->actionBy;
                     #done save the entry
                     $toadmin->save();
+                    #next assign role of admitted to the candidate
+                    $appDetails = User::find($toadmin->user_id);
+                    $appDetails->assignRole('admitted');
                     #next notify the student via email of the admission
                 }
 
@@ -186,6 +190,9 @@ class AdmissionRecommendationJob implements ShouldQueue
                     $toadmin->pg_coord_by = null;
                     #done save the entry
                     $toadmin->save();
+                    #next assign role of admitted to the candidate
+                    $appDetails = User::find($toadmin->user_id);
+                    $appDetails->removeRole('admitted');
                     #next notify the student via email of the admission
                 }
 

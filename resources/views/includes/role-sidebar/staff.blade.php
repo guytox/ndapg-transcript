@@ -482,4 +482,25 @@
 
     @endrole
 
+    @role('admin|dap|dean_pg|registry')
+
+    <li>
+        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+            <i class="mdi mdi-tag-heart"></i>
+            <span>Admission Processing</span>
+        </a>
+        <ul>
+            <li>
+                <a href="{{route('admission.processing.home')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                    <i class="mdi mdi-tag-heart"></i>
+                    <span>Clear Students</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+    @endrole
+
 @endrole

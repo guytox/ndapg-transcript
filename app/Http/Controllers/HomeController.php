@@ -23,8 +23,20 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if (user()->hasRole('admitted')) {
+
+            return redirect(route('admitted.home'));
+
+        }elseif (user()->hasRole('newstudent')) {
+            # return applicant home (this is a placeholder for newly admitted students to take them to their new dashboard)
+            return redirect(route('admitted.home'));
+
+        }{
+
+            return view('home');
+        }
+
     }
 
-    
+
 }
