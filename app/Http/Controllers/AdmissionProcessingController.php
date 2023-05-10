@@ -8,6 +8,7 @@ use App\Models\ApplicationFeeRequest;
 use App\Models\FeePayment;
 use App\Models\OlevelCard;
 use App\Models\OlevelResult;
+use App\Models\Program;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserQualification;
@@ -544,7 +545,15 @@ class AdmissionProcessingController extends Controller
             # user is admitted return the admitted home view
             #find the applicant instance
             $appData = ApplicantAdmissionRequest::where('user_id', user()->id)->first();
-            return view('admissions.admissionsHome', compact('appData'));
+            $acceptPymnt = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
+                                    ->join('fee_categories as c','c.id','=','f.fee_category_id')
+                                    ->where('c.payment_purpose_slug','acceptance-fee')
+                                    ->where('fee_payments.academic_session_id', getApplicationSession())
+                                    ->first();
+
+            $acceptanceFee = $acceptPymnt->uid;
+
+            return view('admissions.admissionsHome', compact('appData','acceptanceFee'));
 
         }else{
 
@@ -604,6 +613,18 @@ class AdmissionProcessingController extends Controller
                 break;
         }
 
+    }
+
+    public function printAdmissionLetter($id){
+
+        $appDetails = ApplicantAdmissionRequest::where('uid', $id)->first();
+        $apUser = User::find($appDetails->user_id);
+        $apProg = Program::find($appDetails->program_id);
+
+
+
+
+        return view('applicant.pringAdmissionLetter', compact('appDetails','apUser', 'apProg'));
     }
 
 

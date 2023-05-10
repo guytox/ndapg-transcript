@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Applicant;
 use App\Http\Controllers\Controller;
 use App\Jobs\ConfirmCredoAcceptancePaymentJob;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
+use App\Models\ApplicantAdmissionRequest;
 use App\Models\ApplicationFeeRequest;
 use App\Models\CredoRequest;
 use App\Models\CredoResponse;
 use App\Models\FeeConfig;
 use App\Models\FeePayment;
+use App\Models\FeePaymentItem;
 use App\Models\PaymentConfiguration;
+use App\Models\Program;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -471,6 +475,34 @@ class PaymentController extends Controller
 
 
 
+    }
+
+    public function viewAcceptanceInvoice($id){
+        #get the payment
+        $paymentData = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
+                                        ->where('uid',$id)
+                                        ->select('fee_payments.*','f.narration')
+                                        ->first();
+        #get the payment items
+        $pitems = FeePaymentItem::where('fee_payment_id', $paymentData->id)->get();
+
+        $pLogs = $paymentData->paymentLogs;
+
+        $studentData = User::find($paymentData->user_id);
+
+        $appData = ApplicantAdmissionRequest::where('user_id',$studentData->id)
+                                            ->where('session_id',$paymentData->academic_session_id)
+                                            ->first();
+        $dept = Program::find($appData->program_id);
+
+        $payurl = route('view.acceptance.invoice',['id'=>$paymentData->uid]);
+
+        return view('applicant.acceptance_fee_invoice', compact('paymentData','pitems','pLogs','studentData','payurl','appData','dept'));
+
+    }
+
+    public function viewInvoice($id){
+        return $id;
     }
 
 

@@ -386,6 +386,13 @@ Route::prefix('admissionProcessing')->middleware('auth', 'role:admin|admitted|')
 
 });
 
+Route::prefix('printReports')->middleware('auth','role:bursary|admitted|student|admin|dean_pg|dap')->group(function(){
+    Route::get('printAcceptanceInvoice/{id}', [ApplicantPaymentController::class, 'viewAcceptanceInvoice'])->name('view.acceptance.invoice');
+    Route::get('printInvoice/{id}', [ApplicantPaymentController::class, 'viewInvoice'])->name('view.invoice');
+    #Admission Letter printing
+    Route::get('printAdmissionLetter/{id}', [AdmissionProcessingController::class, 'printAdmissionLetter'])->name('admission.letter.printing');
+});
+
 
 
 Route::get('departments-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getDepartmentsFromFaculty']);
