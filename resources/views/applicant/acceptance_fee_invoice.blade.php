@@ -42,7 +42,7 @@
 
                 <table class="table">
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" width="20%">
                             <div class="text-left mb-5">
 
                                 <img src="{{asset($studentData->passport)}}" height="240" width="220" alt="Student passport Should appear here">
@@ -51,7 +51,7 @@
                         <td>
                             @include('includes.studentInvoiceReportHeader')
                         </td>
-                        <td colspan="2">
+                        <td colspan="2" width="20%">
                             <div class="text-right mb-5" >
 
                                 {!! QrCode::size(200)->generate($payurl) !!}
@@ -64,7 +64,7 @@
                     <tr >
                         <td>Date</td>
                         <td>{{$paymentData->created_at}}</td>
-                        <td class="text-center">
+                        <td class="text-center" width="15">
                             <u>APPLICANT DATA</u>
                         </td>
                         <td class="text-right"> <b>Ref:</b> </td>
@@ -73,8 +73,7 @@
                     </tr>
                     <tr>
                         <td><b>Name <br> <br>Programme <br>Department <br>Faculty</b></td>
-                        <td class="text-left">{{$studentData->name}} <br>{{$dept->name}} <br> {{$dept->department->name}} <br> {{$dept->department->faculty->name}} </td>
-                        <td></td>
+                        <td class="text-left" colspan="2">{{$studentData->name}} <br>{{$dept->name}} <br> {{$dept->department->name}} <br> {{$dept->department->faculty->name}} </td>
                         <td class="text-right"><b>Matric No. <br> Level <br> Amount Paid <br> Status </b></td>
                         <td class="text-left">{{$paymentData->user->username}} <br> {{$paymentData->user->current_level}} <br> {{number_format(convertToNaira($paymentData->amount_paid),2)}} <br> {{$paymentData->payment_status}} </td>
                     </tr>
