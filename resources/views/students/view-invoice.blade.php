@@ -49,14 +49,7 @@
                             </div>
                         </td>
                         <td>
-                            <div class="text-center mb-5">
-                                <a href="{{ route('index') }}" class="logo"><img src="https://umm.edu.ng/assets/images/ummlogo.jpg" alt="logo"></a>
-                                <br><br>
-                                <h5 class="font-size-24 text-default mb-4">UNIVERSIT OF MKAR, MKAR <br>
-                                    <span class="text-success font-size-16" >P.M.B. 05 Gboko, Benue State</span> <br>
-                                    <span class="text-success font-size-16">https://umm.edu.ng, +234 803 314 2160</span> <br>
-                                    <span class="text-danger font-size-20"> <U>PAYMENT INVOICE</U> </span></h5>
-                            </div>
+                            @include('includes.studentInvoiceReportHeader')
                         </td>
                         <td colspan="2">
                             <div class="text-right mb-5" >
@@ -72,7 +65,7 @@
                         <td>Date</td>
                         <td>{{$paymentData->created_at}}</td>
                         <td class="text-center">
-                            <u>STUDENT DATA</u>
+                            <u>PAYEE DATA</u>
                         </td>
                         <td class="text-right"> <b>Ref:</b> </td>
                         <td class="text-danger text-left font-size-20"><b>{{$paymentData->txn_id}}</b></td>
@@ -80,7 +73,7 @@
                     </tr>
                     <tr>
                         <td><b>Name <br>Programme <br>Department <br>Faculty</b></td>
-                        <td class="text-left">{{$studentData->name}} <br>{{$studentData->programme->name}} <br> {{$studentDepartment}} <br> {{$studentFaculty}} </td>
+                        <td class="text-left">{{'student name'}} <br>{{"student name"}} <br> {{"Department"}} <br> {{"faculty"}} </td>
                         <td></td>
                         <td class="text-right"><b>Matric No. <br> Level <br> Amount Paid <br> Status </b></td>
                         <td class="text-left">{{$paymentData->user->username}} <br> {{$paymentData->user->current_level}} <br> {{number_format(convertToNaira($paymentData->amount_paid),2)}} <br> {{$paymentData->payment_status}} </td>
