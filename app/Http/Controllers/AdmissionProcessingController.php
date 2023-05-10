@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
+use App\Jobs\FirstTuitionGenerationJob;
 use App\Models\ApplicantAdmissionRequest;
 use App\Models\ApplicationFeeRequest;
 use App\Models\FeePayment;
@@ -616,7 +617,23 @@ class AdmissionProcessingController extends Controller
                 # code...
                 break;
             case '3':
-                # code...
+                # request is for screening
+                if (user()->hasRole('registry|admin')) {
+                    #find the user using the appID
+                    $appStd = ApplicantAdmissionRequest::find($request->appId);
+                    $appStd->is_screened=1;
+                    $appStd->is_screened_at = now();
+                    $appStd->is_screened_by = user()->id;
+                    $appStd->save();
+                    FirstTuitionGenerationJob::dispatch($request->appId);
+                    return redirect(route('admission.processing.home'))->with('info',"Candidate Screened Successfully");
+
+                }else{
+
+                    return redirect(route('admission.processing.home'))->with('error',"You do not have the priviledges to perform the action you are seeking");
+
+                }
+
                 break;
             case '4':
                 if (user()->hasRole('bursary')) {
@@ -631,6 +648,10 @@ class AdmissionProcessingController extends Controller
                     return redirect(route('admission.processing.home'))->with('error',"You do not have the priviledges to perform the action you are seeking");
                 }
 
+                break;
+            case '10':
+                # request rejected
+                return redirect(route('admission.processing.home'))->with('error', "Rejection/Disapproval Registered Successfully, Request Applicant to correct and return");
                 break;
 
             default:

@@ -194,7 +194,17 @@
                                     @elseif ($appData->is_screened==0 && $appData->acc_verified==1)
 
                                     @role('admin|registry')
-                                        <a href="#" class="btn btn-danger">Screen Applicant</a>  Action No 3<br>
+                                        <a href="{{route('preview.submitted.application',['id'=>$appData->user_id])}} " class="btn btn-danger" target="_blank">Preview Application</a> <br>
+                                        {!! Form::open(['route'=>'effect.admission.processing', 'method'=>'POST']) !!}
+                                            {!! Form::hidden('appId', $appData->id, []) !!}
+
+                                            <div class="form-group">
+                                                {!! Form::label('form_action', 'Select What you want to do') !!}
+                                                {!! Form::select('form_action', [''=>'N/A', '3'=>'Screen Candidate','10'=>'Reject Candidate'], '', ['class'=>'form-control','required']) !!}
+                                            </div>
+
+                                            {!! Form::submit('Screen Applicant', ['class'=>' btn btn-success']) !!}
+                                            {!! Form::close() !!}
                                     @endrole
 
                                     @role('admin|bursary')
