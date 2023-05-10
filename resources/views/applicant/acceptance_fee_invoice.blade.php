@@ -45,7 +45,7 @@
                         <td colspan="2">
                             <div class="text-left mb-5">
 
-                                <img src="{{asset('/images/'.$studentData->passport)}}" height="240" width="220" alt="Student passport Should appear here">
+                                <img src="{{asset($studentData->passport)}}" height="240" width="220" alt="Student passport Should appear here">
                             </div>
                         </td>
                         <td>
