@@ -545,7 +545,7 @@ class AdmissionProcessingController extends Controller
             # user is admitted return the admitted home view
             #find the applicant instance
             $appData = ApplicantAdmissionRequest::where('user_id', user()->id)->first();
-            return $acceptPymnt = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
+            $acceptPymnt = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
                                     ->join('fee_categories as c','c.id','=','f.fee_category_id')
                                     ->where('c.payment_purpose_slug','acceptance-fee')
                                     ->where('fee_payments.academic_session_id', getApplicationSession())
