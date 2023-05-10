@@ -152,7 +152,7 @@
                                         @elseif ($appData->acceptance_paid==1 && $appData->acc_verified==0)
 
                                         @role('admin|bursary')
-                                            <a href="#" class="btn btn-danger">Verify Payment</a>  Action No 2<br> <br>
+                                            <a href="{{route('view.acceptance.invoice',['id'=>$acceptanceFee])}}" class="btn btn-danger" target="_blank">Check Payment Evidence</a><br> <br>
                                             {!! Form::open(['route'=>'effect.admission.processing', 'method'=>'POST']) !!}
                                             {!! Form::hidden('appId', $appData->id, []) !!}
 
