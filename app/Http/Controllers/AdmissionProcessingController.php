@@ -549,6 +549,7 @@ class AdmissionProcessingController extends Controller
                                     ->join('fee_categories as c','c.id','=','f.fee_category_id')
                                     ->where('c.payment_purpose_slug','acceptance-fee')
                                     ->where('fee_payments.academic_session_id', getApplicationSession())
+                                    ->where('fee_payments.user_id', user()->id)
                                     ->select('fee_payments.*','f.narration')
                                     ->first();
 
