@@ -149,7 +149,7 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                             #write the log
                             PaymentLog::create([
                                 'fee_payment_id' => $feeReason->id,
-                                'amount_paid' => $settlementAmount,
+                                'amount_paid' => convertToKobo($settlementAmount),
                                 'uid' => $payee_code,
                                 'tx_id' => $businessRef,
                                 'payment_channel' => config('app.payment_methods.credo')
@@ -222,7 +222,7 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                 # Enter the payment log
                 PaymentLog::create([
                     'fee_payment_id' => $fpEntry->id,
-                    'amount_paid' => $settlementAmount,
+                    'amount_paid' => convertToKobo($settlementAmount),
                     'uid' => $payee_code,
                     'tx_id' => $businessRef,
                     'payment_channel' => config('app.payment_methods.credo')
