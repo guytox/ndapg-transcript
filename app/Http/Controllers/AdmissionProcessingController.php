@@ -545,17 +545,17 @@ class AdmissionProcessingController extends Controller
             # user is admitted return the admitted home view
             #find the applicant instance
             $appData = ApplicantAdmissionRequest::where('user_id', user()->id)->first();
-            $acceptPymnt = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
-                                    ->join('fee_categories as c','c.id','=','f.fee_category_id')
-                                    ->where('c.payment_purpose_slug','acceptance-fee')
-                                    ->where('fee_payments.academic_session_id', getApplicationSession())
-                                    ->where('fee_payments.user_id', user()->id)
-                                    ->select('fee_payments.*','f.narration')
-                                    ->first();
+            // $acceptPymnt = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
+            //                         ->join('fee_categories as c','c.id','=','f.fee_category_id')
+            //                         ->where('c.payment_purpose_slug','acceptance-fee')
+            //                         ->where('fee_payments.academic_session_id', getApplicationSession())
+            //                         ->where('fee_payments.user_id', user()->id)
+            //                         ->select('fee_payments.*','f.narration')
+            //                         ->first();
 
-            $acceptanceFee = $acceptPymnt->uid;
+            // $acceptanceFee = $acceptPymnt->uid;
 
-            return view('admissions.admissionsHome', compact('appData','acceptanceFee'));
+            return view('admissions.admissionsHome', compact('appData'));
 
         }else{
 
@@ -606,9 +606,7 @@ class AdmissionProcessingController extends Controller
             'form_action' =>'required|numeric'
         ]);
 
-        return $request;
-
-
+        // return $request;
 
         switch ($request->form_action) {
             case '1':
@@ -623,7 +621,11 @@ class AdmissionProcessingController extends Controller
             case '4':
                 if (user()->hasRole('bursary')) {
                     #find the user using the appID
-                    $appStd = ApplicantAdmissionRequest::find($request->appID);
+                    $appStd = ApplicantAdmissionRequest::find($request->appId);
+                    $appStd->acc_verified=1;
+                    $appStd->acc_verified_at = now();
+                    $appStd->acc_verified_by = user()->id;
+                    $appStd->save();
                     return redirect(route('admission.processing.home'))->with('info',"Verified Successfully");
                 }else{
                     return redirect(route('admission.processing.home'))->with('error',"You do not have the priviledges to perform the action you are seeking");

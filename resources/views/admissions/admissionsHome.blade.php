@@ -74,7 +74,7 @@
 
                                     @elseif ($appData->acceptance_paid==1 && $appData->acc_verified==0)
 
-                                        <a href="{{route('view.acceptance.invoice',['id'=>$acceptanceFee])}}" class="btn btn-success" target="_blank">Print Acceptance Invoice</a> <br> <br>
+                                        <a href="{{route('view.acceptance.invoice',['id'=>$appData->uid])}}" class="btn btn-success" target="_blank">Print Acceptance Invoice</a> <br> <br>
 
                                         <a href="{{route('admission.letter.printing',['id'=>$appData->uid])}}" class="btn btn-danger" target="_blank">Print Admission Letter</a> <br>
 
