@@ -677,6 +677,8 @@ class AdmissionProcessingController extends Controller
     }
 
     public function beginFresherFeePayment($id){
+
+        return back()->with('info', "please refresh and try again");
         #first get the student
         $appData = ApplicantAdmissionRequest::where('uid', $id)->first();
         #next get the associated first tuition fee
