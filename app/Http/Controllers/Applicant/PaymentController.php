@@ -477,6 +477,194 @@ class PaymentController extends Controller
 
     }
 
+    public function firstTuitionFee(Request $request){
+        #validate the entry
+        $validated = $request->validate([
+            'usr' =>'required|numeric',
+            'fConfig' =>'required|numeric',
+            'pAmount' =>'required|numeric'
+        ]);
+        #ensure there is no pending credo request, if there is forward the student back to pay so we don't have two
+        $pendingPayment = CredoRequest::where('status','pending')
+                                        ->where('fee_payment_id', $request->fConfig)
+                                        ->first();
+        if ($pendingPayment) {
+            #payment found
+            return back()->with('error',"Error!!! Please pay for previous pending transactions before intiating another one");
+
+        }else{
+            #get the transaction from the fee payment
+            $transaction = FeePayment::find($request->fConfig);
+            #get the transaction id to use
+            $transactionId = $transaction->txn_id;
+            #get the specified amount to pass to credo
+            $amount =  convertToKobo($request->pAmount);
+            #generate the checksum for further processing
+            $checkSum = md5($transactionId.'nda.@edu.ng'.$amount);
+            #get the uid from the fee payment record
+            $uid = $transaction->uid;
+            # Start Credo processes here
+            #first enter details in the credo transaction table
+            $CredoTransaction = CredoRequest::updateOrCreate(['payee_id' => $transaction->user->id, 'session_id' => $transaction->academic_session_id, 'fee_payment_id' => $transaction->id, 'amount'=>$amount, 'status'=>'pending'], [
+                'payee_id' => $transaction->user->id,
+                'uid' => $uid,
+                'fee_payment_id' => $transaction->id,
+                'amount' => $amount,
+                'session_id' => $transaction->academic_session_id,
+                'txn_id' => $transactionId,
+                'checksum' => $checkSum,
+            ]);
+            //return config('app.credo.response_url');
+
+            $body = [
+                'amount' => $amount,
+                'email' => $transaction->user->email,
+                'bearer' => 0,
+                'callbackUrl' => config('app.credo.response_url'),
+                'channels' => ['card'],
+                'currency' => 'NGN',
+                //'customerPhoneNumber' => $transaction->user->phone_number,
+                'reference' => $transaction->txn_id,
+                'serviceCode' => config('app.credo.serviceCode.TuitionFee'),
+                'metadata' => [
+                    'customFields' =>[
+                        [
+                            'variable_name' => 'name',
+                            'value' => $transaction->user->name,
+                            'display_name' => 'Payers Name'
+                        ],
+                        [
+                            'variable_name' => 'payee_id',
+                            'value' => $transaction->user->id,
+                            'display_name' => 'Payee ID'
+                        ],
+                        [
+                            'variable_name' => 'verification_code',
+                            'value' => $uid,
+                            'display_name' => 'Verification Code'
+                        ]
+                    ]
+                ]
+            ];
+
+
+
+            $headers = [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => config('app.credo.public_key'),
+            ];
+
+            $client = new \GuzzleHttp\Client();
+
+            # These setting are for the live environment
+            $response = $client->request('POST', 'https://api.credocentral.com/transaction/initialize',[
+                'headers' => $headers,
+                'json' => $body
+            ]);
+
+            //print_r($response->getBody()->getContents());
+
+            $credoReturns = json_decode($response->getBody());
+
+            $CredoTransaction->channel = 'credo';
+            $CredoTransaction->credo_ref = $credoReturns->data->credoReference;
+            $CredoTransaction->credo_url = $credoReturns->data->authorizationUrl;
+            $CredoTransaction->save();
+
+            // return $CredoTransaction;
+
+            return redirect()->away($credoReturns->data->authorizationUrl);
+
+            return $credoReturns->data->authorizationUrl;
+            return $response->getBody()->getContents();
+        }
+
+
+    }
+
+    public function reprocessCredoFee($id){
+        #this is to be used to reprocess credo transactions only
+        #get the Credo Request details
+        $credoRequest = CredoRequest::find($id);
+        #get the user for some personal details
+        $transaction = FeePayment::find($credoRequest->fee_payment_id);
+
+        if ($credoRequest->status =='pending' && $credoRequest->credo_url !='') {
+            #this means you can redirect away
+            return redirect()->away($credoRequest->credo_url);
+
+        }else{
+            // return "Nothing found so proceed to regenerate";
+        }
+
+        //return config('app.credo.response_url');
+
+        $body = [
+            'amount' => convertToNaira($credoRequest->amount),
+            'email' => $transaction->user->email,
+            'bearer' => 0,
+            'callbackUrl' => config('app.credo.response_url'),
+            'channels' => ['card'],
+            'currency' => 'NGN',
+            //'customerPhoneNumber' => $transaction->user->phone_number,
+            'reference' => $transaction->txn_id,
+            'serviceCode' => config('app.credo.serviceCode.TuitionFee'),
+            'metadata' => [
+                'customFields' =>[
+                    [
+                        'variable_name' => 'name',
+                        'value' => $transaction->user->name,
+                        'display_name' => 'Payers Name'
+                    ],
+                    [
+                        'variable_name' => 'payee_id',
+                        'value' => $transaction->user->id,
+                        'display_name' => 'Payee ID'
+                    ],
+                    [
+                        'variable_name' => 'verification_code',
+                        'value' => $credoRequest->uid,
+                        'display_name' => 'Verification Code'
+                    ]
+                ]
+            ]
+        ];
+
+
+
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => config('app.credo.public_key'),
+        ];
+
+        $client = new \GuzzleHttp\Client();
+
+        # These setting are for the live environment
+        $response = $client->request('POST', 'https://api.credocentral.com/transaction/initialize',[
+            'headers' => $headers,
+            'json' => $body
+        ]);
+
+        //print_r($response->getBody()->getContents());
+
+        $credoReturns = json_decode($response->getBody());
+
+        $credoRequest->channel = 'credo';
+        $credoRequest->credo_ref = $credoReturns->data->credoReference;
+        $credoRequest->credo_url = $credoReturns->data->authorizationUrl;
+        $credoRequest->save();
+
+        // return $CredoTransaction;
+
+        return redirect()->away($credoReturns->data->authorizationUrl);
+
+        return $credoReturns->data->authorizationUrl;
+        return $response->getBody()->getContents();
+
+    }
+
     public function viewAcceptanceInvoice($id){
 
         $appStd = ApplicantAdmissionRequest::where('uid', $id)->first();

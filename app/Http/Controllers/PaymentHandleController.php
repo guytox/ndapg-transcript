@@ -7,6 +7,7 @@ use App\Jobs\ConfirmCredoAcceptancePaymentJob;
 use App\Models\FeePayment;
 use Illuminate\Http\Request;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
+use App\Jobs\ConfirmCredoFirstTuitionPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
 use App\Models\CredoRequest;
 use App\Models\CredoResponse;
@@ -129,7 +130,11 @@ class PaymentHandleController extends Controller
                     # code...
                     break;
                 case 'first-tuition':
-                    # code...
+                    # send to first tuition fee job
+                    // send background job to confirm the payment with checksum and transaction id
+                    ConfirmCredoFirstTuitionPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                    # return home and give the job some time to confirm payment
+                    return redirect()->route('home')->with(['message' => 'Your Tuition Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
                     break;
                 case 'tuition':
                     # code...
@@ -152,6 +157,6 @@ class PaymentHandleController extends Controller
         abort(403, 'Unable to confirm payment information');
     }
 
-    
+
 
 }
