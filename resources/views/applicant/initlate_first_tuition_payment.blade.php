@@ -67,7 +67,7 @@
 
                     @foreach ($pcrequest as $m)
 
-                        {{$m->created_at}} => NGN{{number_format(convertToNaira($m->amount),2)}} => <a href="{{route('reprocess.credo.payment',['id'=>$m->id])}}" class="btn btn-danger">Reprocess Payment</a>
+                        {{$m->created_at}} => NGN{{number_format($m->amount,2)}} => <a href="{{route('reprocess.credo.payment',['id'=>$m->id])}}" class="btn btn-danger">Reprocess Payment</a>
 
                     @endforeach
 

@@ -165,7 +165,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                                                     ->first();
 
                             switch ($feePurpose->payment_purpose_slug) {
-                                
+
                                 case 'late-registration':
                                     # code...
                                     break;
@@ -230,6 +230,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
 
                 $feeRequest->status = 'paid';
                 $feeRequest->save();
+                
 
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {
