@@ -495,6 +495,8 @@ class PaymentController extends Controller
         }else{
             #get the transaction from the fee payment
             $transaction = FeePayment::find($request->fConfig);
+            #get the user
+            $pUser = User::find($transaction->user_id);
             #get the transaction id to use
             $transactionId = $transaction->txn_id;
             #get the specified amount to pass to credo
@@ -505,8 +507,13 @@ class PaymentController extends Controller
             $uid = $transaction->uid;
             # Start Credo processes here
             #first enter details in the credo transaction table
-            $CredoTransaction = CredoRequest::updateOrCreate(['payee_id' => $transaction->user->id, 'session_id' => $transaction->academic_session_id, 'fee_payment_id' => $transaction->id, 'amount'=>$amount, 'status'=>'pending'], [
-                'payee_id' => $transaction->user->id,
+            $CredoTransaction = CredoRequest::updateOrCreate(['payee_id' => $pUser->id,
+                'session_id' => $transaction->academic_session_id,
+                'fee_payment_id' => $transaction->id,
+                'amount'=>$amount,
+                'status'=>'pending'],
+                [
+                'payee_id' => $pUser->id,
                 'uid' => $uid,
                 'fee_payment_id' => $transaction->id,
                 'amount' => $amount,
@@ -518,7 +525,7 @@ class PaymentController extends Controller
 
             $body = [
                 'amount' => $amount,
-                'email' => $transaction->user->email,
+                'email' => $pUser->email,
                 'bearer' => 0,
                 'callbackUrl' => config('app.credo.response_url'),
                 'channels' => ['card'],
@@ -530,12 +537,12 @@ class PaymentController extends Controller
                     'customFields' =>[
                         [
                             'variable_name' => 'name',
-                            'value' => $transaction->user->name,
+                            'value' => $pUser->name,
                             'display_name' => 'Payers Name'
                         ],
                         [
                             'variable_name' => 'payee_id',
-                            'value' => $transaction->user->id,
+                            'value' => $pUser->id,
                             'display_name' => 'Payee ID'
                         ],
                         [
@@ -589,6 +596,8 @@ class PaymentController extends Controller
         $credoRequest = CredoRequest::find($id);
         #get the user for some personal details
         $transaction = FeePayment::find($credoRequest->fee_payment_id);
+        #get the user
+        $pUser = User::find($credoRequest->payee_id);
 
         if ($credoRequest->status =='pending' && $credoRequest->credo_url !='') {
             #this means you can redirect away
@@ -601,8 +610,8 @@ class PaymentController extends Controller
         //return config('app.credo.response_url');
 
         $body = [
-            'amount' => convertToNaira($credoRequest->amount),
-            'email' => $transaction->user->email,
+            'amount' => $credoRequest->amount,
+            'email' => $pUser->email,
             'bearer' => 0,
             'callbackUrl' => config('app.credo.response_url'),
             'channels' => ['card'],
@@ -614,12 +623,12 @@ class PaymentController extends Controller
                 'customFields' =>[
                     [
                         'variable_name' => 'name',
-                        'value' => $transaction->user->name,
+                        'value' => $pUser->name,
                         'display_name' => 'Payers Name'
                     ],
                     [
                         'variable_name' => 'payee_id',
-                        'value' => $transaction->user->id,
+                        'value' => $pUser->id,
                         'display_name' => 'Payee ID'
                     ],
                     [
