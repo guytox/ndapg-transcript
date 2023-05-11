@@ -686,6 +686,7 @@ class AdmissionProcessingController extends Controller
                                                 ->join('fee_templates as t','t.id','=','d.fee_template_id')
                                                 ->where('f.payment_purpose_slug', 'first-tuition')
                                                 ->where('fee_payments.academic_session_id', getApplicationSession())
+                                                ->where('fee_payments.user_id',$appData->user_id)
                                                 ->select('fee_payments.*')
                                                 ->first();
         $fConfig = FeeConfig::find($accConfig->payment_config_id);

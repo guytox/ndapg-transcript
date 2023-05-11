@@ -478,6 +478,7 @@ class PaymentController extends Controller
     }
 
     public function firstTuitionFee(Request $request){
+
         #validate the entry
         $validated = $request->validate([
             'usr' =>'required|numeric',
@@ -524,8 +525,8 @@ class PaymentController extends Controller
             //return config('app.credo.response_url');
 
             $body = [
-                'amount' => $amount,
-                'email' => $pUser->email,
+                'amount' => $CredoTransaction->amount,
+                'email' => user()->email,
                 'bearer' => 0,
                 'callbackUrl' => config('app.credo.response_url'),
                 'channels' => ['card'],
@@ -537,12 +538,12 @@ class PaymentController extends Controller
                     'customFields' =>[
                         [
                             'variable_name' => 'name',
-                            'value' => $pUser->name,
+                            'value' => user()->name,
                             'display_name' => 'Payers Name'
                         ],
                         [
                             'variable_name' => 'payee_id',
-                            'value' => $pUser->id,
+                            'value' => user()->id,
                             'display_name' => 'Payee ID'
                         ],
                         [
