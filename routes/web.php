@@ -124,6 +124,8 @@ Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware(
 
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
 Route::get('/applicant/acceptance-fee', [ApplicantPaymentController::class, 'acceptanceFee'])->name('acceptance.fee');
+Route::post('/applicant/first-tuition-fee', [ApplicantPaymentController::class, 'firstTuitionFee'])->name('first.tuition.fee');
+Route::get('/applicant/reprocess-credo-fee/{id}', [ApplicantPaymentController::class, 'reprocessCredoFee'])->name('reprocess.credo.payment');
 
 Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support|bursary|dap|registry','auth', 'profile_completed', 'verified'])->group(function(){
 
@@ -383,6 +385,7 @@ Route::prefix('submission')->middleware(['auth','role:admin|ict_support|dean|hod
 Route::prefix('admissionProcessing')->middleware('auth', 'role:admin|admitted|')->group(function(){
 
     Route::get('admittedHome', [AdmissionProcessingController::class, 'admittedHome'])->name('admitted.home');
+    Route::get('firstTuitionHome/{id}', [AdmissionProcessingController::class, 'beginFresherFeePayment'])->name('begin.first.tuition.payment');
 
 });
 

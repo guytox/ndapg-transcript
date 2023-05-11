@@ -166,7 +166,7 @@
 
                                     @elseif ($appData->is_paid_tuition==0 && $appData->is_screened==1)
 
-                                        <a href="#" class="btn btn-success">Proceed to Pay School Fees</a>
+                                        <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-success">Proceed to Pay School Fees</a>
 
                                     @else
 

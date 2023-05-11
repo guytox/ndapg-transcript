@@ -6,9 +6,12 @@ use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\FirstTuitionGenerationJob;
 use App\Models\ApplicantAdmissionRequest;
 use App\Models\ApplicationFeeRequest;
+use App\Models\CredoRequest;
+use App\Models\FeeConfig;
 use App\Models\FeePayment;
 use App\Models\OlevelCard;
 use App\Models\OlevelResult;
+use App\Models\PaymentLog;
 use App\Models\Program;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -671,6 +674,38 @@ class AdmissionProcessingController extends Controller
 
 
         return view('applicant.pringAdmissionLetter', compact('appDetails','apUser', 'apProg'));
+    }
+
+    public function beginFresherFeePayment($id){
+        #first get the student
+        $appData = ApplicantAdmissionRequest::where('uid', $id)->first();
+        #next get the associated first tuition fee
+        $accConfig = FeePayment::join('fee_configs as d','d.id','=','fee_payments.payment_config_id')
+                                                ->join('fee_categories as f','f.id','=','d.fee_category_id')
+                                                ->join('fee_templates as t','t.id','=','d.fee_template_id')
+                                                ->where('f.payment_purpose_slug', 'first-tuition')
+                                                ->where('fee_payments.academic_session_id', getApplicationSession())
+                                                ->select('fee_payments.*')
+                                                ->first();
+        $fConfig = FeeConfig::find($accConfig->payment_config_id);
+        #check the balance being owed
+        $bal = convertToNaira($accConfig->amount_billed - $accConfig->amount_paid);
+        #determine the min amount to expect based on prevailing circumstances
+        if ($bal < convertToNaira($accConfig->amount_billed)) {
+            #this means this is the second time payment is being made let the complete balance be paid
+            $maxValue = $bal;
+            $minValue = $bal;
+        }else {
+            $maxValue = convertToNaira($accConfig->amount_billed - $accConfig->amount_paid);
+            $minValue = convertToNaira($accConfig->amount_billed/2);
+        }
+
+        #get logs if there are any
+        $pLogs = PaymentLog::where('fee_payment_id', $accConfig->id)->get();
+        #get credo request if this payment has some
+        $pcrequest = CredoRequest::where('fee_payment_id', $accConfig->id)->get();
+
+        return view('applicant.initlate_first_tuition_payment', compact('appData','accConfig','maxValue','minValue','pLogs','fConfig','pcrequest'));
     }
 
 
