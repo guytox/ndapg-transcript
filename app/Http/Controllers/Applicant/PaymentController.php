@@ -501,7 +501,7 @@ class PaymentController extends Controller
             #get the transaction id to use
             $transactionId = $transaction->txn_id;
             #get the specified amount to pass to credo
-            $amount =  convertToKobo($request->pAmount);
+            $amount =  $request->pAmount;
             #generate the checksum for further processing
             $checkSum = md5($transactionId.'nda.@edu.ng'.$amount);
             #get the uid from the fee payment record

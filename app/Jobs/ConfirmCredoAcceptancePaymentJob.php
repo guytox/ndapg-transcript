@@ -182,6 +182,8 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                                     $appInfo->acceptance_paid = 1;
                                     $appInfo->acceptance_paid_at = now();
                                     $appInfo->save();
+                                    $submission->status = 'paid';
+                                    $submission->save();
 
                                     break;
 
@@ -235,6 +237,8 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                 $appInfo->acceptance_paid = 1;
                 $appInfo->acceptance_paid_at = now();
                 $appInfo->save();
+                $submission->status = 'paid';
+                $submission->save();
 
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {
