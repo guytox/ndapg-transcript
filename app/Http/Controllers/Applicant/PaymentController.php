@@ -611,6 +611,7 @@ class PaymentController extends Controller
         //return config('app.credo.response_url');
 
         $body = [
+            
             'amount' => convertToKobo($credoRequest->amount),
             'email' => $pUser->email,
             'bearer' => 0,
