@@ -525,7 +525,7 @@ class PaymentController extends Controller
             //return config('app.credo.response_url');
 
             $body = [
-                'amount' => $CredoTransaction->amount,
+                'amount' => convertToKobo($CredoTransaction->amount),
                 'email' => user()->email,
                 'bearer' => 0,
                 'callbackUrl' => config('app.credo.response_url'),
@@ -611,7 +611,8 @@ class PaymentController extends Controller
         //return config('app.credo.response_url');
 
         $body = [
-            'amount' => $credoRequest->amount,
+            
+            'amount' => convertToKobo($credoRequest->amount),
             'email' => $pUser->email,
             'bearer' => 0,
             'callbackUrl' => config('app.credo.response_url'),
