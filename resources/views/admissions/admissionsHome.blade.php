@@ -171,6 +171,9 @@
 
                                     @elseif ($appData->is_paid_tuition==1 && $appData->schfee_verified==0)
 
+                                        <a href="{{route('print.student.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a>  <br> <br>
+
+
                                         Proceed to Bursary to Verify School Fees <br> <br>
 
                                         <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-dark">Pay Balance of Tuition Fees</a>

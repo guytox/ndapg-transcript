@@ -68,7 +68,11 @@
 
                     @foreach ($pcrequest as $m)
 
-                        {{$m->created_at}} => NGN{{number_format($m->amount,2)}} => <a href="{{route('reprocess.credo.payment',['id'=>$m->id])}}" class="btn btn-danger">Reprocess Payment</a>
+                        {{$m->created_at}} => NGN{{number_format($m->amount,2)}}@if ($m->status = 'pending')
+
+                        => <a href="{{route('reprocess.credo.payment',['id'=>$m->id])}}" class="btn btn-danger">Reprocess Payment</a>
+
+                        @endif
 
                     @endforeach
 
@@ -82,7 +86,7 @@
                     <h4 class="header-title">Previous Payments</h4>
 
                     @foreach ($pLogs as $pl)
-                        {{$pl->created_at}} => {{$pl->amount_paid}}
+                        Date: {{$pl->created_at}} => Ref:{{$pl->uid}} => Amount: NGN{{number_format(convertToNaira($pl->amount_paid),2)}}
                     @endforeach
 
                 @endif
