@@ -210,7 +210,7 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
 
             if ($submittedAmount == $settlementAmount && $submission->uid == $payee_code && $response_status==0) {
                 # make log entry
-                Log::info('payment has been confirmed -'.$businessRef);
+                Log::info('fresher fee payment has been confirmed -'.$businessRef);
 
                 #transaction successful get the reference
                 $fpEntry = FeePayment::find($submission->fee_payment_id);
@@ -239,10 +239,12 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
                     $submission->save();
 
                 }
+                #change the
                 #update fee payment records
-
                 $fpEntry->amount_paid = $totalPaid;
                 $fpEntry->balance = $rBalance;
+                #change the reference to allow user to pay a second time.
+                $fpEntry->txn_id = generateUniqueTransactionReference();
                 $fpEntry->save();
 
                 #next update the Applicant admission table since this is first tuition

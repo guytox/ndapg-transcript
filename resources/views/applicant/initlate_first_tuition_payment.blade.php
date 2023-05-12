@@ -37,6 +37,7 @@
                 <ol>
                     <li>You will be required to make payment online with your ATM Card</li>
                     <li>Clicking on Proceed to Pay above will take you to the payment page</li>
+                    <li class="text-danger"> <b>Note: Part Payment of Fees is only for Professional Programs</b> </li>
                 </ol>
 
             </div>

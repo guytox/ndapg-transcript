@@ -2,6 +2,7 @@
 
 use App\Models\AcademicSession;
 use App\Models\AdmissionCount;
+use App\Models\CredoRequest;
 use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\FeeCategory;
@@ -57,6 +58,37 @@ function getApplicationSession(){
     }
 
     return false;
+}
+
+function getMatricSession(){
+    $sessionId = AcademicSession::where('isApplicationSession',1)->first();
+
+    if ($sessionId) {
+
+        $matricYear = substr ($sessionId->name, -4);
+
+        return $matricYear;
+    }
+
+    return false;
+}
+
+function getMatricSerial(){
+    $matricCounters = AdmissionCount::where('category','matric')->first();
+
+    if ($matricCounters) {
+        #get the present value to return
+        $toreturn = $matricCounters->count;
+        #increment the counter by one and store in the table
+        $newCount = $toreturn + 1;
+        $matricCounters->count = $newCount;
+        $matricCounters->save();
+
+        return $toreturn;
+    }else{
+        return false;
+    }
+
 }
 
 function getSiteNotification(){
@@ -227,7 +259,7 @@ function generateUniqueTransactionReference()
 {
     do {
         $code = random_int(100000, 999999);
-    } while (FeePayment::where("txn_id", "=", $code)->first());
+    } while (CredoRequest::where("txn_id", "=", $code)->first());
 
     return $code;
 }

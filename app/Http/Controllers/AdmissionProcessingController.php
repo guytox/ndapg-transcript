@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
+use App\Jobs\CreateFreshStudentRegClearance;
 use App\Jobs\FirstTuitionGenerationJob;
+use App\Jobs\GenerateStudentRecordJob;
 use App\Models\ApplicantAdmissionRequest;
 use App\Models\ApplicationFeeRequest;
 use App\Models\CredoRequest;
@@ -18,6 +20,7 @@ use App\Models\UserProfile;
 use App\Models\UserQualification;
 use App\Models\UserReferee;
 use App\Models\UserResearch;
+use Carbon\Carbon;
 use Illuminate\Console\Application;
 use Illuminate\Http\Request;
 
@@ -614,10 +617,39 @@ class AdmissionProcessingController extends Controller
 
         switch ($request->form_action) {
             case '1':
-                # code...
+                # At this stage we want to issue file
+                if (user()->hasRole('bursary|admin')) {
+                    #find the user using the appID
+                    $appStd = ApplicantAdmissionRequest::find($request->appId);
+                    $appStd->file_issued=1;
+                    $appStd->file_issued_at = now();
+                    $appStd->file_issued_by = user()->id;
+                    $appStd->save();
+                    return redirect(route('admission.processing.home'))->with('info',"File Issued Successful Successfully!!!");
+
+                }else{
+
+                    return redirect(route('admission.processing.home'))->with('error',"You do not have the priviledges to perform the action you are seeking");
+
+                }
+
                 break;
             case '2':
-                # code...
+                # this request if for school fees verification
+                if (user()->hasRole('bursary|admin')) {
+                    #find the user using the appID
+                    $appStd = ApplicantAdmissionRequest::find($request->appId);
+                    $appStd->schfee_verified=1;
+                    $appStd->schfee_verified_at = now();
+                    $appStd->schfee_verified_by = user()->id;
+                    $appStd->save();
+                    return redirect(route('admission.processing.home'))->with('info',"Tuition Payment Verified Successfully!!!");
+
+                }else{
+
+                    return redirect(route('admission.processing.home'))->with('error',"You do not have the priviledges to perform the action you are seeking");
+
+                }
                 break;
             case '3':
                 # request is for screening
@@ -650,6 +682,23 @@ class AdmissionProcessingController extends Controller
                 }else{
                     return redirect(route('admission.processing.home'))->with('error',"You do not have the priviledges to perform the action you are seeking");
                 }
+
+                break;
+            case '5':
+                #we are ready to clear for registration
+                #find the user using the appID
+                $appStd = ApplicantAdmissionRequest::find($request->appId);
+                $appStd->reg_clearance=1;
+                $appStd->reg_clearance_at = now();
+                $appStd->reg_clearance_by = user()->id;
+                $appStd->save();
+                #Generate a student record for the student
+                GenerateStudentRecordJob::dispatch($request->appId);
+                #Generare a reg clearance for the Applicant
+                $scTime = Carbon::now()->addSeconds(180);
+                CreateFreshStudentRegClearance::dispatch($request->appId)->delay($scTime);
+                #next return to the page
+                return redirect(route('admission.processing.home'))->with('info',"Applicant Clearance for Registration submitted successfully !!! refresh after two minutes to see matric number");
 
                 break;
             case '10':
