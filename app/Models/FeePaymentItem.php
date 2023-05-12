@@ -17,6 +17,11 @@ class FeePaymentItem extends Model
         return $this->belongsTo(FeePayment::class, 'id' , 'fee_payment_id');
     }
 
+    public function feeItem(){
+
+        return $this->belongsTo(FeeItem::class,  'fee_item_id', 'id');
+    }
+
 
 
 

@@ -22,8 +22,18 @@ class FeePayment extends Model
         return $this->belongsTo(PaymentConfiguration::class, 'payment_config_id', 'id');
     }
 
+    public function config()
+    {
+        return $this->belongsTo(FeeConfig::class, 'payment_config_id', 'id');
+    }
+
     public function paymentLogs()
     {
-        return $this->hasMany(PaymentLog::class);
+        return $this->hasMany(PaymentLog::class, 'fee_payment_id', 'id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(FeePaymentItem::class, 'fee_payment_id', 'id');
     }
 }
