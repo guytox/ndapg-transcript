@@ -759,6 +759,25 @@ class AdmissionProcessingController extends Controller
         return view('applicant.initlate_first_tuition_payment', compact('appData','accConfig','maxValue','minValue','pLogs','fConfig','pcrequest'));
     }
 
+    public function printFirstTuitionInvoice($id){
+        #first get the Applicant details
+        $appStd = ApplicantAdmissionRequest::find($id);
+        #next find all the payments beloging to this user
+        $firstTuition = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
+                                        ->join('fee_categories as c', 'c.id','=', 'f.fee_category_id')
+                                        ->where('fee_payments.user_id', $appStd->user_id)
+                                        ->where('c.payment_purpose_slug', 'first-tuition')
+                                        ->select('fee_payments.*')
+                                        ->first();
+        if ($firstTuition) {
+            # first tuition found, send uid for receipt generation
+            return redirect(route('print.general.receipt',['id'=>$firstTuition->uid]));
+        }else {
+            #nothing found, return home
+            return redirect(route('home'))->with('info', "Error !!! Nothing found");
+        }
+    }
+
 
 
 

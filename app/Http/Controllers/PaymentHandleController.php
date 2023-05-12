@@ -11,6 +11,8 @@ use App\Jobs\ConfirmCredoFirstTuitionPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
 use App\Models\CredoRequest;
 use App\Models\CredoResponse;
+use App\Models\Program;
+use App\Models\User;
 
 class PaymentHandleController extends Controller
 {
@@ -155,6 +157,28 @@ class PaymentHandleController extends Controller
         }
 
         abort(403, 'Unable to confirm payment information');
+    }
+
+    public function printGeneralReceipt($id){
+        #first get the fee payment entry
+        $feeEntry = FeePayment::where('uid', $id)->first();
+        #get the user
+        $items = $feeEntry->items;
+
+        if($feeEntry->user->student){
+
+            $prog = Program::find($feeEntry->user->student->program_id);
+
+        }elseif ($feeEntry->user->applicant) {
+
+            $prog = Program::find($feeEntry->user->applicant->program_id);
+
+        }else{
+
+            return redirect(route('home'))->with('error', "The User with this invoice is not found");
+        }
+
+        return view('bursar.print-general-invoice', compact('feeEntry','prog','items'));
     }
 
 

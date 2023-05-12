@@ -70,6 +70,10 @@
 
                                         COMPLETED <br>
 
+                                        <a href="{{route('view.acceptance.invoice',['id'=>$appData->uid])}}" class="btn btn-dark" target="_blank">Print Acceptance Invoice</a> <br> <br>
+
+                                        <a href="{{route('admission.letter.printing',['id'=>$appData->uid])}}" class="btn btn-dark" target="_blank">Print Admission Letter</a> <br>
+
                                         {{-- <a href="#" class="btn btn-danger">Print Admission Letter</a> --}}
 
                                     @elseif ($appData->acceptance_paid==1 && $appData->acc_verified==0)
@@ -160,11 +164,17 @@
 
                                         COMPLETED <br> <br>
 
+                                        <a href="{{route('print.student.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-dark" target="_blank">Print Tuition Fee Receipt</a>  <br> <br>
+
+
                                         <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-success">Pay Balance of Tuition Fees</a>
 
                                     @elseif ($appData->is_paid_tuition==1 && $appData->schfee_verified==0)
 
-                                        Proceed to Bursary to Verify School Fees
+                                        Proceed to Bursary to Verify School Fees <br> <br>
+
+                                        <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-dark">Pay Balance of Tuition Fees</a>
+
 
                                     @elseif ($appData->is_paid_tuition==0 && $appData->is_screened==1)
 

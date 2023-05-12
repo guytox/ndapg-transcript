@@ -148,7 +148,10 @@
                                 <td>
                                     @if ($appData->acc_verified==1 && $appData->is_screened==1)
 
-                                        COMPLETED
+                                        COMPLETED <br>
+
+                                        <a href="{{route('view.acceptance.invoice',['id'=>$appData->uid])}}" class="btn btn-success" target="_blank">Print Acceptance Fee Invoice</a><br> <br>
+
 
                                     @elseif ($appData->acc_verified==1 && $appData->is_screened==0)
 
@@ -273,13 +276,16 @@
                                 <td>
                                     @if ($appData->schfee_verified==1 && $appData->is_paid_tuition==1)
 
-                                        COMPLETED
+                                        COMPLETED <br>
+
+                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a>  <br>
+
 
                                     @elseif ($appData->schfee_verified==0 && $appData->is_paid_tuition==1)
 
                                     @role('admin|bursary')
 
-                                        <a href="#" class="btn btn-danger">Check Tuition Fee Receipt</a>  <br>
+                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-danger">Check Tuition Fee Receipt</a>  <br>
 
                                         {!! Form::open(['route'=>'effect.admission.processing', 'method'=>'POST']) !!}
                                             {!! Form::hidden('appId', $appData->id, []) !!}
@@ -419,7 +425,7 @@
                                     @elseif ($appData->reg_courses==0 && $appData->reg_clearance==1)
 
                                         @role('admin|registry')
-                                            <a href="#" class="btn btn-warning">Print & Issue Matric Number</a>
+                                            <a href="#" class="btn btn-warning">Print & Issue Matric Number</a> <br> <br>
                                         @endrole
 
                                         @role('admin|bursary')

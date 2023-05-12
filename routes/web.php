@@ -222,6 +222,10 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::post('getApplicantForProcessing',[AdmissionProcessingController::class, 'getApplicantAdmissionDetails'])->middleware('role:admin|registry|dap|bursary')->name('admission.processing.details');
         Route::post('effectAdmissionProcessing',[AdmissionProcessingController::class, 'effectApplicantAdmissionProcessing'])->middleware('role:admin|registry|dap|bursary')->name('effect.admission.processing');
 
+        Route::get('firstTuitionInvoice/{id}',[AdmissionProcessingController::class, 'printFirstTuitionInvoice'])->name('print.first.tuition.invoice');
+
+
+
 
     });
 
@@ -389,11 +393,16 @@ Route::prefix('admissionProcessing')->middleware('auth', 'role:admin|admitted|')
 
 });
 
-Route::prefix('printReports')->middleware('auth','role:bursary|admitted|student|admin|dean_pg|dap')->group(function(){
+Route::prefix('printReports')->middleware('auth','role:bursary|admitted|student|admin|dean_pg|dap|applicant|staff')->group(function(){
     Route::get('printAcceptanceInvoice/{id}', [ApplicantPaymentController::class, 'viewAcceptanceInvoice'])->name('view.acceptance.invoice');
     Route::get('printInvoice/{id}', [ApplicantPaymentController::class, 'viewInvoice'])->name('view.invoice');
     #Admission Letter printing
     Route::get('printAdmissionLetter/{id}', [AdmissionProcessingController::class, 'printAdmissionLetter'])->name('admission.letter.printing');
+    #Student Printing for first tuition fee
+    Route::get('firstStdTuitionInvoice/{id}',[AdmissionProcessingController::class, 'printFirstTuitionInvoice'])->name('print.student.first.tuition.invoice');
+
+
+    Route::get('printReceipt/{id}', [PaymentHandleController::class, 'printGeneralReceipt'])->name('print.general.receipt');
 });
 
 
