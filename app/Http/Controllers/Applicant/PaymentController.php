@@ -522,6 +522,9 @@ class PaymentController extends Controller
                 'txn_id' => $transactionId,
                 'checksum' => $checkSum,
             ]);
+            #change the reference to avoid replay of same id
+            $transaction->txn_id = generateUniqueTransactionReference();
+            $transaction->save();
             //return config('app.credo.response_url');
 
             $body = [
@@ -611,7 +614,7 @@ class PaymentController extends Controller
         //return config('app.credo.response_url');
 
         $body = [
-            
+
             'amount' => convertToKobo($credoRequest->amount),
             'email' => $pUser->email,
             'bearer' => 0,

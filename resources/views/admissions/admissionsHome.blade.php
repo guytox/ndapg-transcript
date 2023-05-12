@@ -158,7 +158,9 @@
                                 <td>
                                     @if ($appData->is_paid_tuition==1 && $appData->schfee_verified==1)
 
-                                        COMPLETED
+                                        COMPLETED <br> <br>
+
+                                        <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-success">Pay Balance of Tuition Fees</a>
 
                                     @elseif ($appData->is_paid_tuition==1 && $appData->schfee_verified==0)
 

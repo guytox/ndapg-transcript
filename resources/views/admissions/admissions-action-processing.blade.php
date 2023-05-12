@@ -61,6 +61,11 @@
                             <td>{{$appUser->email}} </td>
                         </tr>
 
+                        <tr>
+                            <th>Matric No:</th>
+                            <td>{{$appData->matric}} </td>
+                        </tr>
+
                     </table>
 
                     <hr>
@@ -274,7 +279,19 @@
 
                                     @role('admin|bursary')
 
-                                        <a href="#" class="btn btn-danger">Verify School Fees</a>  Action No 4<br>
+                                        <a href="#" class="btn btn-danger">Check Tuition Fee Receipt</a>  <br>
+
+                                        {!! Form::open(['route'=>'effect.admission.processing', 'method'=>'POST']) !!}
+                                            {!! Form::hidden('appId', $appData->id, []) !!}
+
+                                            <div class="form-group">
+                                                {!! Form::label('form_action', 'Select What you want to do') !!}
+                                                {!! Form::select('form_action', [''=>'N/A', '2'=>'Verify Tuition Fee','10'=>'Reject Tuition Fee'], '', ['class'=>'form-control','required']) !!}
+                                            </div>
+
+                                            {!! Form::submit('Verify Tuition Payment', ['class'=>' btn btn-success']) !!}
+                                            {!! Form::close() !!}
+
                                     @endrole
 
                                     @role('admin|registry')
@@ -310,7 +327,19 @@
                                     @elseif ($appData->file_issued==0 && $appData->schfee_verified==1)
 
                                         @role('admin|registry')
-                                            <a href="#" class="btn btn-danger">Issue File</a>  Action No 5<br>
+                                            <a href="#" class="btn btn-danger">Issue File</a>  <br>
+
+                                            {!! Form::open(['route'=>'effect.admission.processing', 'method'=>'POST']) !!}
+                                            {!! Form::hidden('appId', $appData->id, []) !!}
+
+                                            <div class="form-group">
+                                                {!! Form::label('form_action', 'Select What you want to do') !!}
+                                                {!! Form::select('form_action', [''=>'N/A', '1'=>'Issue File to Applicant','10'=>'Reject Applicant'], '', ['class'=>'form-control','required']) !!}
+                                            </div>
+
+                                            {!! Form::submit('Verify Tuition Payment', ['class'=>' btn btn-success']) !!}
+                                            {!! Form::close() !!}
+
                                         @endrole
 
                                         @role('admin|bursary')
@@ -344,7 +373,18 @@
                                     @elseif ($appData->reg_clearance==0 && $appData->file_issued==1)
 
                                         @role('admin|registry')
-                                            <a href="#" class="btn btn-danger">Receive File and Clear for Registration</a>  Action No 6<br>
+                                            <a href="#" class="btn btn-danger">Receive File and Clear for Registration</a> <br>
+
+                                            {!! Form::open(['route'=>'effect.admission.processing', 'method'=>'POST']) !!}
+                                            {!! Form::hidden('appId', $appData->id, []) !!}
+
+                                            <div class="form-group">
+                                                {!! Form::label('form_action', 'Select What you want to do') !!}
+                                                {!! Form::select('form_action', [''=>'N/A', '5'=>'Receive File & Clear for Registration','10'=>'Reject Applicant'], '', ['class'=>'form-control','required']) !!}
+                                            </div>
+
+                                            {!! Form::submit('Clear for Registration', ['class'=>' btn btn-success']) !!}
+                                            {!! Form::close() !!}
                                         @endrole
 
                                         @role('admin|bursary')
