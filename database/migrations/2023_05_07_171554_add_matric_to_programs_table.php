@@ -15,6 +15,7 @@ class AddMatricToProgramsTable extends Migration
     {
         Schema::table('programs', function (Blueprint $table) {
             $table->string('matric_prefix')->nullable();
+            $table->string('num_years')->nullable();
         });
     }
 
@@ -27,6 +28,7 @@ class AddMatricToProgramsTable extends Migration
     {
         Schema::table('programs', function (Blueprint $table) {
             $table->dropColumn('matric_prefix');
+            $table->dropColumn('num_years');
         });
     }
 }

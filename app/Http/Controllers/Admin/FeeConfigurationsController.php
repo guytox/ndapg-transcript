@@ -29,10 +29,10 @@ class FeeConfigurationsController extends Controller
         $feeTemplates = $feeTemplate->pluck('narration', 'id');
         $accounts =[
             "school"=>"tuition",
-            "internet_service"=>"UMM Portal Services",
             'late_reg' => "Late Registration",
             'acceptance' => "Acceptance Fees",
-            'other' => "EDC Payments",
+            'extra_charges' => "Extra Charges",
+            'defferment' => "Defferment Fees",
         ];
         // get fee categories
         $categories = FeeCategory::all()->pluck('category_name', 'id');
