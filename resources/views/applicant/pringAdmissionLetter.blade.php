@@ -86,7 +86,8 @@ border: 1px solid #18191a;
                         <ol>
                             <li><h4>I am pleased to inform you that on the recommendation of the Postgraduate School Admission Committee and the
                                 approval of the Commandant Nigerian Defence Academy,you have been offered provisional admission to pursue
-                                a postgraduate programme leading to the award of  <b>{{$apProg->name}} </b> in the Department of <b>{{$apProg->department->name}}</b>.
+                                a postgraduate programme leading to the award of  <b>{{$apProg->name}} </b> in the Department of <b>{{$apProg->department->name}}</b>. The
+                                duration of the course is <b>{{$apProg->num_years}} </b>
                                 </h4>
                             </li>
 
