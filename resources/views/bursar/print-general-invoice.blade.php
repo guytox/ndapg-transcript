@@ -83,7 +83,7 @@
                         <td class="text-left">NGN {{number_format(convertToNaira($feeEntry->amount_billed),2)}}</td>
                         <td></td>
                         <td class="text-right text-danger"><b>Balance</b></td>
-                        <td class="text-left">{{number_format(convertToNaira($feeEntry->balance),2)}}</td>
+                        <td class="text-left">NGN{{number_format(convertToNaira($bal),2)}}</td>
                     </tr>
                     <tr>
                         <td class="text-left">Payment Description</td>

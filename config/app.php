@@ -292,6 +292,7 @@ return [
             'lateRegistration' => '000012BD5LZB',
             'acceptanceFee' => '000012UPV6OU',
             'TuitionFee' => '000012HGPXKW',
+            'ExtraCharges' =>'000012Y3PJ1N',
         ],
     ],
 

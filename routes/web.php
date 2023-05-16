@@ -125,6 +125,7 @@ Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware(
 Route::get('/applicant/application-fee', [ApplicantPaymentController::class, 'applicationFee'])->name('application.fee');
 Route::get('/applicant/acceptance-fee', [ApplicantPaymentController::class, 'acceptanceFee'])->name('acceptance.fee');
 Route::post('/applicant/first-tuition-fee', [ApplicantPaymentController::class, 'firstTuitionFee'])->name('first.tuition.fee');
+Route::post('/applicant/first-extra-charges', [ApplicantPaymentController::class, 'firstExtraCharges'])->name('first.extra.charge');
 Route::get('/applicant/reprocess-credo-fee/{id}', [ApplicantPaymentController::class, 'reprocessCredoFee'])->name('reprocess.credo.payment');
 
 Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support|bursary|dap|registry','auth', 'profile_completed', 'verified'])->group(function(){
@@ -390,6 +391,7 @@ Route::prefix('admissionProcessing')->middleware('auth', 'role:admin|admitted|')
 
     Route::get('admittedHome', [AdmissionProcessingController::class, 'admittedHome'])->name('admitted.home');
     Route::get('firstTuitionHome/{id}', [AdmissionProcessingController::class, 'beginFresherFeePayment'])->name('begin.first.tuition.payment');
+    Route::get('firstExtraChargesHome/{id}', [AdmissionProcessingController::class, 'beginSPGSExtraChargesPayment'])->name('begin.first.spgs.charges');
 
 });
 
@@ -400,6 +402,8 @@ Route::prefix('printReports')->middleware('auth','role:bursary|admitted|student|
     Route::get('printAdmissionLetter/{id}', [AdmissionProcessingController::class, 'printAdmissionLetter'])->name('admission.letter.printing');
     #Student Printing for first tuition fee
     Route::get('firstStdTuitionInvoice/{id}',[AdmissionProcessingController::class, 'printFirstTuitionInvoice'])->name('print.student.first.tuition.invoice');
+    #Student Printing for first SPGS Charges
+    Route::get('firstStdExtraChargesInvoice/{id}',[AdmissionProcessingController::class, 'printFirstExtraChargesInvoice'])->name('print.first.extra.charges.invoice');
 
 
     Route::get('printReceipt/{id}', [PaymentHandleController::class, 'printGeneralReceipt'])->name('print.general.receipt');

@@ -16,7 +16,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class FirstTuitionGenerationJob implements ShouldQueue
+class FirstExtraChargesGenerationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -45,7 +45,7 @@ class FirstTuitionGenerationJob implements ShouldQueue
         #get the fee config for the student
         $proFeeConfig = FeeConfig::join('fee_categories as f','f.id','=','fee_configs.fee_category_id')
                                 ->where('program_id', $stdProg)
-                                ->where('f.payment_purpose_slug', 'first-tuition')
+                                ->where('f.payment_purpose_slug', 'spgs-charges')
                                 ->select('fee_configs.*')
                                 ->first();
         #if found create, if not roll back the screening
@@ -62,7 +62,7 @@ class FirstTuitionGenerationJob implements ShouldQueue
                 'txn_id' => generateUniqueTransactionReference()
             ];
 
-            $rFirstTuition = FeePayment::updateOrCreate([
+            $rFirstExtraCharges = FeePayment::updateOrCreate([
                 'user_id'=> $appStd->user_id,
                 'payment_config_id' => $proFeeConfig->id,
             ], $data);
@@ -72,7 +72,7 @@ class FirstTuitionGenerationJob implements ShouldQueue
             foreach ($templateItems as $v) {
                 #make entries in to the table for the candidate
                 $itemsData = [
-                    'fee_payment_id' => $rFirstTuition->id,
+                    'fee_payment_id' => $rFirstExtraCharges->id,
                     'fee_item_id' => $v->fee_item_id,
                     'amount' => $v->item_amount
                 ];
@@ -80,10 +80,9 @@ class FirstTuitionGenerationJob implements ShouldQueue
                 $entry = FeePaymentItem::updateOrCreate($itemsData, $itemsData);
             }
 
-            Log::info('First Tuition Generation Successful for -'.$this->appId);
+            Log::info('Extra Charges Generation Successful for -'.$this->appId);
 
-            # next create an entry for the extra charges
-            FirstExtraChargesGenerationJob::dispatch($this->appId);
+
 
 
         }else{
@@ -92,10 +91,9 @@ class FirstTuitionGenerationJob implements ShouldQueue
             $appStd->is_screened_at = null;
             $appStd->is_screened_by = null;
             $appStd->save();
-
-            Log::info('First Tuition Generation failed for -'.$this->appId);
-
+            Log::info('First Extra Charges Generation failed for -'.$this->appId);
         }
 
     }
+
 }
