@@ -164,24 +164,35 @@
 
                                         COMPLETED <br> <br>
 
-                                        <a href="{{route('print.student.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-dark" target="_blank">Print Tuition Fee Receipt</a>  <br> <br>
+                                        <a href="{{route('print.student.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-dark" target="_blank">Print Tuition Fee Receipt</a>
+
+                                        <a href="{{route('print.first.extra.charges.invoice',['id'=>$appData->id])}}" class="btn btn-danger" target="_blank">Print Extra Charges Receipt</a>  <br> <br>
 
 
                                         <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-success">Pay Balance of Tuition Fees</a>
 
+                                        <a href="{{route('begin.first.spgs.charges',['id'=>$appData->uid])}}" class="btn btn-danger">Pay Other SPGS Charges</a>
+
                                     @elseif ($appData->is_paid_tuition==1 && $appData->schfee_verified==0)
 
-                                        <a href="{{route('print.student.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a>  <br> <br>
+                                        <a href="{{route('print.student.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a>
+
+                                        <a href="{{route('print.first.extra.charges.invoice',['id'=>$appData->id])}}" class="btn btn-danger" target="_blank">Print Extra Charges Receipt</a>  <br> <br>
 
 
                                         Proceed to Bursary to Verify School Fees <br> <br>
 
                                         <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-dark">Pay Balance of Tuition Fees</a>
 
+                                        <a href="{{route('begin.first.spgs.charges',['id'=>$appData->uid])}}" class="btn btn-danger">Pay Other SPGS Charges</a>
+
+
 
                                     @elseif ($appData->is_paid_tuition==0 && $appData->is_screened==1)
 
                                         <a href="{{route('begin.first.tuition.payment',['id'=>$appData->uid])}}" class="btn btn-success">Proceed to Pay School Fees</a>
+
+                                        <a href="{{route('begin.first.spgs.charges',['id'=>$appData->uid])}}" class="btn btn-danger">Proceed to Pay SPGS Extra Charges</a>
 
                                     @else
 

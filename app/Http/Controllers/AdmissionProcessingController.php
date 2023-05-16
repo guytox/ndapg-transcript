@@ -725,6 +725,7 @@ class AdmissionProcessingController extends Controller
         return view('applicant.pringAdmissionLetter', compact('appDetails','apUser', 'apProg'));
     }
 
+
     public function beginFresherFeePayment($id){
 
         #first get the student
@@ -759,6 +760,47 @@ class AdmissionProcessingController extends Controller
         return view('applicant.initlate_first_tuition_payment', compact('appData','accConfig','maxValue','minValue','pLogs','fConfig','pcrequest'));
     }
 
+    public function beginSPGSExtraChargesPayment($id){
+
+        #first get the student
+        $appData = ApplicantAdmissionRequest::where('uid', $id)->first();
+        #next get the associated first tuition fee
+        $accConfig = FeePayment::join('fee_configs as d','d.id','=','fee_payments.payment_config_id')
+                                                ->join('fee_categories as f','f.id','=','d.fee_category_id')
+                                                ->join('fee_templates as t','t.id','=','d.fee_template_id')
+                                                ->where('f.payment_purpose_slug', 'spgs-charges')
+                                                ->where('fee_payments.academic_session_id', getApplicationSession())
+                                                ->where('fee_payments.user_id',$appData->user_id)
+                                                ->select('fee_payments.*')
+                                                ->first();
+        if (!$accConfig) {
+            # no config found return user home
+            return back()->with('error', "No Extra Charges Config found, pleas contact support");
+        }
+
+        $fConfig = FeeConfig::find($accConfig->payment_config_id);
+        #check the balance being owed
+        $bal = convertToNaira($accConfig->amount_billed - $accConfig->amount_paid);
+        #determine the min amount to expect based on prevailing circumstances
+        if ($bal < convertToNaira($accConfig->amount_billed)) {
+            #this means this is the second time payment is being made let the complete balance be paid
+            $maxValue = $bal;
+            $minValue = $bal;
+        }else {
+            $maxValue = $bal;
+            $minValue = $bal;
+        }
+
+        #get logs if there are any
+        $pLogs = PaymentLog::where('fee_payment_id', $accConfig->id)->get();
+        #get credo request if this payment has some
+        $pcrequest = CredoRequest::where('fee_payment_id', $accConfig->id)->get();
+
+        return view('applicant.initlate_first_extra_charge_payment', compact('appData','accConfig','maxValue','minValue','pLogs','fConfig','pcrequest'));
+    }
+
+
+
     public function printFirstTuitionInvoice($id){
         #first get the Applicant details
         $appStd = ApplicantAdmissionRequest::find($id);
@@ -772,6 +814,25 @@ class AdmissionProcessingController extends Controller
         if ($firstTuition) {
             # first tuition found, send uid for receipt generation
             return redirect(route('print.general.receipt',['id'=>$firstTuition->uid]));
+        }else {
+            #nothing found, return home
+            return redirect(route('home'))->with('info', "Error !!! Nothing found");
+        }
+    }
+
+    public function printFirstExtraChargesInvoice($id){
+        #first get the Applicant details
+        $appStd = ApplicantAdmissionRequest::find($id);
+        #next find all the payments beloging to this user
+        $firstCharges = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
+                                        ->join('fee_categories as c', 'c.id','=', 'f.fee_category_id')
+                                        ->where('fee_payments.user_id', $appStd->user_id)
+                                        ->where('c.payment_purpose_slug', 'spgs-charges')
+                                        ->select('fee_payments.*')
+                                        ->first();
+        if ($firstCharges) {
+            # first tuition found, send uid for receipt generation
+            return redirect(route('print.general.receipt',['id'=>$firstCharges->uid]));
         }else {
             #nothing found, return home
             return redirect(route('home'))->with('info', "Error !!! Nothing found");

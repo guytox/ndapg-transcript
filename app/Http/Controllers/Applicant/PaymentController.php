@@ -155,6 +155,14 @@ class PaymentController extends Controller
             # Start Credo processes here
             //return config('app.credo.response_url');
 
+            #split the name
+            $userName = user()->name;
+            $splitName = explode(' ', $userName, 2);
+            $firstName = $splitName[0];
+            $lastName = !empty($splitName[1]) ? $splitName[1] : '';
+            #get the user number
+            $userNumber = user()->phone_number;
+
             $body = [
                 'amount' => $amount,
                 'email' => $transaction->user->email,
@@ -162,7 +170,9 @@ class PaymentController extends Controller
                 'callbackUrl' => config('app.credo.response_url'),
                 'channels' => ['card'],
                 'currency' => 'NGN',
-                //'customerPhoneNumber' => $transaction->user->phone_number,
+                'customerFirstName' => $firstName,
+                'customerLastName' => $lastName,
+                'customerPhoneNumber' => $userNumber,
                 'reference' => $transaction->txn_id,
                 'serviceCode' => config('app.credo.serviceCode.applicationFee'),
                 'metadata' => [
@@ -393,6 +403,14 @@ class PaymentController extends Controller
             ]);
             //return config('app.credo.response_url');
 
+            #split the name
+            $userName = user()->name;
+            $splitName = explode(' ', $userName, 2);
+            $firstName = $splitName[0];
+            $lastName = !empty($splitName[1]) ? $splitName[1] : '';
+            #get the user number
+            $userNumber = user()->phone_number;
+
             $body = [
                 'amount' => $transaction->amount_billed,
                 'email' => $transaction->user->email,
@@ -400,7 +418,9 @@ class PaymentController extends Controller
                 'callbackUrl' => config('app.credo.response_url'),
                 'channels' => ['card'],
                 'currency' => 'NGN',
-                //'customerPhoneNumber' => $transaction->user->phone_number,
+                'customerFirstName' => $firstName,
+                'customerLastName' => $lastName,
+                'customerPhoneNumber' => $userNumber,
                 'reference' => $transaction->txn_id,
                 'serviceCode' => config('app.credo.serviceCode.acceptanceFee'),
                 'metadata' => [
@@ -498,6 +518,13 @@ class PaymentController extends Controller
             $transaction = FeePayment::find($request->fConfig);
             #get the user
             $pUser = User::find($transaction->user_id);
+            #split the name
+            $userName = $pUser->name;
+            $splitName = explode(' ', $userName, 2);
+            $firstName = $splitName[0];
+            $lastName = !empty($splitName[1]) ? $splitName[1] : '';
+            #get the user number
+            $userNumber = $pUser->phone_number;
             #get the transaction id to use
             $transactionId = $transaction->txn_id;
             #get the specified amount to pass to credo
@@ -534,9 +561,139 @@ class PaymentController extends Controller
                 'callbackUrl' => config('app.credo.response_url'),
                 'channels' => ['card'],
                 'currency' => 'NGN',
-                //'customerPhoneNumber' => $transaction->user->phone_number,
+                'customerFirstName' => $firstName,
+                'customerLastName' => $lastName,
+                'customerPhoneNumber' => $userNumber,
                 'reference' => $transaction->txn_id,
                 'serviceCode' => config('app.credo.serviceCode.TuitionFee'),
+                'metadata' => [
+                    'customFields' =>[
+                        [
+                            'variable_name' => 'name',
+                            'value' => user()->name,
+                            'display_name' => 'Payers Name'
+                        ],
+                        [
+                            'variable_name' => 'payee_id',
+                            'value' => user()->id,
+                            'display_name' => 'Payee ID'
+                        ],
+                        [
+                            'variable_name' => 'verification_code',
+                            'value' => $uid,
+                            'display_name' => 'Verification Code'
+                        ]
+                    ]
+                ]
+            ];
+
+
+
+            $headers = [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => config('app.credo.public_key'),
+            ];
+
+            $client = new \GuzzleHttp\Client();
+
+            # These setting are for the live environment
+            $response = $client->request('POST', 'https://api.credocentral.com/transaction/initialize',[
+                'headers' => $headers,
+                'json' => $body
+            ]);
+
+            //print_r($response->getBody()->getContents());
+
+            $credoReturns = json_decode($response->getBody());
+
+            $CredoTransaction->channel = 'credo';
+            $CredoTransaction->credo_ref = $credoReturns->data->credoReference;
+            $CredoTransaction->credo_url = $credoReturns->data->authorizationUrl;
+            $CredoTransaction->save();
+
+            // return $CredoTransaction;
+
+            return redirect()->away($credoReturns->data->authorizationUrl);
+
+            return $credoReturns->data->authorizationUrl;
+            return $response->getBody()->getContents();
+        }
+
+
+    }
+
+    public function firstExtraCharges(Request $request){
+
+        // return "Pls split the name here and include customer details before proceeding, thanks";
+
+        #validate the entry
+        $validated = $request->validate([
+            'usr' =>'required|numeric',
+            'fConfig' =>'required|numeric',
+            'pAmount' =>'required|numeric'
+        ]);
+        #ensure there is no pending credo request, if there is forward the student back to pay so we don't have two
+        $pendingPayment = CredoRequest::where('status','pending')
+                                        ->where('fee_payment_id', $request->fConfig)
+                                        ->first();
+        if ($pendingPayment) {
+            #payment found
+            return back()->with('error',"Error!!! Please pay for previous pending transactions before intiating another one");
+
+        }else{
+            #get the transaction from the fee payment
+            $transaction = FeePayment::find($request->fConfig);
+            #get the user
+            $pUser = User::find($transaction->user_id);
+            #split the name
+            $userName = $pUser->name;
+            $splitName = explode(' ', $userName, 2);
+            $firstName = $splitName[0];
+            $lastName = !empty($splitName[1]) ? $splitName[1] : '';
+            #get the user number
+            $userNumber = $pUser->phone_number;
+            #get the transaction id to use
+            $transactionId = $transaction->txn_id;
+            #get the specified amount to pass to credo
+            $amount =  $request->pAmount;
+            #generate the checksum for further processing
+            $checkSum = md5($transactionId.'nda.@edu.ng'.$amount);
+            #get the uid from the fee payment record
+            $uid = $transaction->uid;
+            # Start Credo processes here
+            #first enter details in the credo transaction table
+            $CredoTransaction = CredoRequest::updateOrCreate(['payee_id' => $pUser->id,
+                'session_id' => $transaction->academic_session_id,
+                'fee_payment_id' => $transaction->id,
+                'amount'=>$amount,
+                'status'=>'pending'],
+                [
+                'payee_id' => $pUser->id,
+                'uid' => $uid,
+                'fee_payment_id' => $transaction->id,
+                'amount' => $amount,
+                'session_id' => $transaction->academic_session_id,
+                'txn_id' => $transactionId,
+                'checksum' => $checkSum,
+            ]);
+            #change the reference to avoid replay of same id
+            $transaction->txn_id = generateUniqueTransactionReference();
+            $transaction->save();
+            //return config('app.credo.response_url');
+
+            $body = [
+                'amount' => convertToKobo($CredoTransaction->amount),
+                'email' => user()->email,
+                'bearer' => 0,
+                'callbackUrl' => config('app.credo.response_url'),
+                'channels' => ['card'],
+                'currency' => 'NGN',
+                'customerFirstName' => $firstName,
+                'customerLastName' => $lastName,
+                'customerPhoneNumber' => $userNumber,
+                'reference' => $transaction->txn_id,
+                'serviceCode' => config('app.credo.serviceCode.ExtraCharges'),
                 'metadata' => [
                     'customFields' =>[
                         [
@@ -603,6 +760,14 @@ class PaymentController extends Controller
         #get the user
         $pUser = User::find($credoRequest->payee_id);
 
+        #split the name
+        $userName = $pUser->name;
+        $splitName = explode(' ', $userName, 2);
+        $firstName = $splitName[0];
+        $lastName = !empty($splitName[1]) ? $splitName[1] : '';
+        #get the user number
+        $userNumber = $pUser->phone_number;
+
         if ($credoRequest->status =='pending' && $credoRequest->credo_url !='') {
             #this means you can redirect away
             return redirect()->away($credoRequest->credo_url);
@@ -621,7 +786,9 @@ class PaymentController extends Controller
             'callbackUrl' => config('app.credo.response_url'),
             'channels' => ['card'],
             'currency' => 'NGN',
-            //'customerPhoneNumber' => $transaction->user->phone_number,
+            'customerFirstName' => $firstName,
+            'customerLastName' => $lastName,
+            'customerPhoneNumber' => $userNumber,
             'reference' => $transaction->txn_id,
             'serviceCode' => config('app.credo.serviceCode.TuitionFee'),
             'metadata' => [

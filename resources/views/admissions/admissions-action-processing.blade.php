@@ -278,14 +278,20 @@
 
                                         COMPLETED <br>
 
-                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a>  <br>
+                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a> 
+
+                                        <a href="{{route('print.first.extra.charges.invoice',['id'=>$appData->id])}}" class="btn btn-danger" target="_blank">Print Extra Charges Receipt</a>  <br> <br>
+
 
 
                                     @elseif ($appData->schfee_verified==0 && $appData->is_paid_tuition==1)
 
                                     @role('admin|bursary')
 
-                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-danger">Check Tuition Fee Receipt</a>  <br>
+                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-danger">Check Tuition Fee Receipt</a>
+
+                                        <a href="{{route('print.first.extra.charges.invoice',['id'=>$appData->id])}}" class="btn btn-danger" target="_blank">Chack Extra Charges Receipt</a>  <br> <br>
+
 
                                         {!! Form::open(['route'=>'effect.admission.processing', 'method'=>'POST']) !!}
                                             {!! Form::hidden('appId', $appData->id, []) !!}

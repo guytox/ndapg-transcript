@@ -7,6 +7,7 @@ use App\Jobs\ConfirmCredoAcceptancePaymentJob;
 use App\Models\FeePayment;
 use Illuminate\Http\Request;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
+use App\Jobs\ConfirmCredoExtraChargesJob;
 use App\Jobs\ConfirmCredoFirstTuitionPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
 use App\Models\CredoRequest;
@@ -144,15 +145,18 @@ class PaymentHandleController extends Controller
                 case 'wallet-fund':
                     # code...
                     break;
+                case 'spgs-charges':
+                    #this payment is for ID card, Medical and Laboratory
+                    #send to background job
+                    ConfirmCredoExtraChargesJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                    # return home and give the job some time to confirm payment
+                    return redirect()->route('home')->with(['message' => 'Your Extra Charges Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
+                    break;
 
                 default:
                     # code...
                     break;
             }
-
-
-
-
 
         }
 
@@ -162,6 +166,12 @@ class PaymentHandleController extends Controller
     public function printGeneralReceipt($id){
         #first get the fee payment entry
         $feeEntry = FeePayment::where('uid', $id)->first();
+        #get balance for fresh entries
+        if ($feeEntry->balance == '') {
+            $bal = $feeEntry->amount_billed;
+        }else {
+            $bal = $feeEntry->balance;
+        }
         #get the user
         $items = $feeEntry->items;
 
@@ -178,7 +188,7 @@ class PaymentHandleController extends Controller
             return redirect(route('home'))->with('error', "The User with this invoice is not found");
         }
 
-        return view('bursar.print-general-invoice', compact('feeEntry','prog','items'));
+        return view('bursar.print-general-invoice', compact('feeEntry','prog','items', 'bal'));
     }
 
 
