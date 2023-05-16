@@ -596,10 +596,7 @@ class AdmissionProcessingController extends Controller
                                     ->select('fee_payments.*','f.narration')
                                     ->first();
 
-            $acceptanceFee = $acceptPymnt->uid;
-
-
-            return view('admissions.admissions-action-processing',compact('appData','appUser','acceptanceFee'));
+            return view('admissions.admissions-action-processing',compact('appData','appUser'));
 
 
 
