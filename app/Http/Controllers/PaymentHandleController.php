@@ -167,11 +167,7 @@ class PaymentHandleController extends Controller
         #first get the fee payment entry
         $feeEntry = FeePayment::where('uid', $id)->first();
         #get balance for fresh entries
-        if ($feeEntry->balance == '') {
-            $bal = $feeEntry->amount_billed;
-        }else {
-            $bal = $feeEntry->balance;
-        }
+        $bal = $feeEntry->amount_billed - $feeEntry->amount_paid;
         #get the user
         $items = $feeEntry->items;
 
