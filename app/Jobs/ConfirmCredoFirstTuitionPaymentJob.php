@@ -211,7 +211,11 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
             if ($submittedAmount == $settlementAmount && $submission->uid == $payee_code && $response_status==0) {
                 # make log entry
                 Log::info('fresher fee payment has been confirmed -'.$businessRef);
-
+                #update the credo request to paid
+                $payCheck2 = CredoRequest::where('uid', $payee_code)->first();
+                $payCheck2->status = 'paid';
+                $payCheck2->save();
+                
                 #transaction successful get the reference
                 $fpEntry = FeePayment::find($submission->fee_payment_id);
                 #reference found
