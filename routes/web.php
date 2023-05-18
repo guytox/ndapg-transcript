@@ -146,6 +146,7 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         # Applicant payment report
         Route::get('/view/Applicant/PendingPayments',[AdmissionProcessingController::class, 'verifyApplicantPayments'])->name('verify.applicant.payments');
         Route::get('/check/Applicant/PendingPayments/{id}',[AdmissionProcessingController::class, 'checkPaymentStatus'])->name('check.payment.status');
+        Route::get('/check/Credo/PendingPayments/{id}',[BillingController::class, 'checkCredoPaymentStatus'])->name('check.credo.payment.status');
     });
 
     Route::prefix('configurations')->group(function(){
@@ -534,6 +535,14 @@ Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bur
         Route::view('/student-payment-report','bursary.search-applicant-payments')->name('search.paid.applicants');
         Route::post('/student-payment-report', [BillingController::class, 'getPaidAdmittedStudents'])->name('view.paid.applicants');
 
+    });
+
+    Route::prefix('PayVerification')->group(function(){
+        Route::get('manualVerification', [BillingController::class, 'verifyManualPayments'])->name('manual.payment.verification');
+    });
+
+    Route::prefix('paymentReports')->group(function(){
+        Route::get('feePaymentReport/{purpose}',[BillingController::class, 'feePaymentReport'])->name('fee.payment.report');
     });
 
 });

@@ -13,6 +13,12 @@ class ApplicantAdmissionRequest extends Model
 
     public function user()
     {
-        return $this->belongsTo('users', 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function program(){
+        return $this->belongsTo(Program::class, 'program_id','id');
+    }
+
+
 }

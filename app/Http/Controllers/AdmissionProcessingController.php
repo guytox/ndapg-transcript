@@ -490,6 +490,8 @@ class AdmissionProcessingController extends Controller
         }
     }
 
+    
+
 
 
     public function viewSubmittedApplications(){
@@ -836,7 +838,7 @@ class AdmissionProcessingController extends Controller
         }
     }
 
-    
+
 
 
 
