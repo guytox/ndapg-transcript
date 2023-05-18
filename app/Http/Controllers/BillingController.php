@@ -214,7 +214,13 @@ class BillingController extends Controller
         }
 
 
-        $paymentDetails = FeePaymentItem::where('fee_item_id', $feePurpose->id)->where('status','paid')->get();
+        $paymentDetails = FeePaymentItem::join('fee_payments as f', 'f.id','=','fee_payment_items.fee_payment_id')
+                                                ->where('fee_payment_items.fee_item_id', $feePurpose->id)
+                                                ->where('f.academic_session_id', getApplicationSession())
+                                                ->where('fee_payment_items.status','paid')
+                                                ->select('fee_payment_items.*')
+                                                ->get();
+
 
         $totalPaid = $paymentDetails->sum('amount');
 
