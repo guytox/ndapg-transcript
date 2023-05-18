@@ -308,14 +308,21 @@
 
     @endrole
 
-    @role('admin|bursar|pay_processor|dean_pg')
+    @role('admin')
 
         <li>
             <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
-                <span>Pay Code Processing</span>
+                <span>Payment Processing</span>
             </a>
             <ul>
+                <li>
+                    <a href="{{route('manual.payment.verification')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Manual Verification</span>
+                    </a>
+                </li>
+
                 <li>
                     <a href="{{route('applicant.paycode.form')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
@@ -327,6 +334,54 @@
                     <a href="{{ route('search.paid.applicants')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
                         <span>View Uploaded Payments</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+    @endrole
+
+    @role('admin|bursar|pay_processor|dean_pg')
+
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Financial Reports</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="{{route('fee.payment.report',['purpose'=>'acceptance'])}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Acceptance Fee</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('fee.payment.report',['purpose'=>'idcard'])}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>ID Card</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('fee.payment.report',['purpose'=>'medical'])}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Medical Fees</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('fee.payment.report',['purpose'=>'laboratory'])}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Laboratory Fees</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('fee.payment.report',['purpose'=>'pgfees'])}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Postgraduate Fees</span>
                     </a>
                 </li>
 
@@ -484,21 +539,21 @@
 
     @role('admin|dap|dean_pg|registry|bursary')
 
-    <li>
-        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
-            <i class="mdi mdi-tag-heart"></i>
-            <span>Admission Processing</span>
-        </a>
-        <ul>
-            <li>
-                <a href="{{route('admission.processing.home')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                    <i class="mdi mdi-tag-heart"></i>
-                    <span>Clear Students</span>
-                </a>
-            </li>
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Admission Processing</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="{{route('admission.processing.home')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Clear Students</span>
+                    </a>
+                </li>
 
-        </ul>
-    </li>
+            </ul>
+        </li>
 
 
     @endrole
