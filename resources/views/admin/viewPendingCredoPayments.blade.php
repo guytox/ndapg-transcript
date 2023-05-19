@@ -48,7 +48,7 @@
 
                                 @foreach( $payList as $key => $v )
                                 <tr>
-                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $v->payment->user->applicant->form_number }}</td>
                                     <td>{{ $v->txn_id }}</td>
                                     <td>{{ $v->payment->user->name }}</td>
                                     <td>{{ $v->payment->user->email }}</td>
