@@ -35,7 +35,7 @@
                                     <th>Tx ID</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>GSM</th>
+                                    <th>CRef</th>
                                     <th>Amount </th>
                                     <th>Status</th>
                                     <th>Date</th>
@@ -52,7 +52,7 @@
                                     <td>{{ $v->txn_id }}</td>
                                     <td>{{ $v->payment->user->name }}</td>
                                     <td>{{ $v->payment->user->email }}</td>
-                                    <td>{{ $v->payment->user->phone_number }}</td>
+                                    <td>{{ $v->credo_ref }}</td>
                                     <td>{{ number_format($v->amount,2) }}</td>
                                     <td>{{ $v->status }}</td>
                                     <td>{{ $v->updated_at }}</td>
