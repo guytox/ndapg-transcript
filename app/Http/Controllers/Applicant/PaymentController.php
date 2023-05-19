@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Applicant;
 use App\Http\Controllers\Controller;
 use App\Jobs\ConfirmCredoAcceptancePaymentJob;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
+use App\Jobs\ConfirmCredoExtraChargesJob;
+use App\Jobs\ConfirmCredoFirstTuitionPaymentJob;
 use App\Models\ApplicantAdmissionRequest;
 use App\Models\ApplicationFeeRequest;
 use App\Models\CredoRequest;
@@ -756,7 +758,7 @@ class PaymentController extends Controller
         #get the Credo Request details
         $credoRequest = CredoRequest::find($id);
         #get the user for some personal details
-        $transaction = FeePayment::find($credoRequest->fee_payment_id);
+         $transaction = FeePayment::find($credoRequest->fee_payment_id);
         #get the user
         $pUser = User::find($credoRequest->payee_id);
 
@@ -770,7 +772,91 @@ class PaymentController extends Controller
 
         if ($credoRequest->status =='pending' && $credoRequest->credo_url !='') {
             #this means you can redirect away
-            return redirect()->away($credoRequest->credo_url);
+            # call verify
+            $headers = [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => config('app.credo.private_key'),
+            ];
+
+            $newurl = 'https://api.credocentral.com/transaction/'.$credoRequest->credo_ref.'/verify';
+
+            $client = new \GuzzleHttp\Client();
+
+            $response = $client->request('GET', $newurl,[
+                'headers' => $headers,
+            ]);
+
+            $parameters = json_decode($response->getBody());
+
+            //return $parameters->data;
+            $businessCode = $parameters->data->businessCode;
+            $transRef = $parameters->data->transRef;
+            $businessRef = $parameters->data->businessRef;
+            $debitedAmount = $parameters->data->debitedAmount;
+            $verified_transAmount = $parameters->data->transAmount;
+            $transFeeAmount = $parameters->data->transFeeAmount;
+            $settlementAmount = $parameters->data->settlementAmount;
+            $customerId = $parameters->data->customerId;
+            $transactionDate = $parameters->data->transactionDate;
+            $channelId = $parameters->data->channelId;
+            $currencyCode = $parameters->data->currencyCode;
+            $response_status = $parameters->data->status;
+
+            if ($response_status == 0) {
+                # payment is made next search for the status in the switch
+                $fpayment = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
+                                    ->join('fee_categories as c','c.id','=','f.fee_category_id')
+                                    ->where('fee_payments.id',$credoRequest->fee_payment_id)
+                                    ->first();
+
+                switch ($fpayment->payment_purpose_slug) {
+                    case 'application-fee':
+                            # this payment is for application
+                            // send background job to confirm the payment with checksum and transaction id
+                            ConfirmCredoApplicationPaymentJob::dispatch($transRef, $currencyCode, $response_status, $verified_transAmount);
+                            # return home and give the job some time to confirm payment
+                            return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
+                        break;
+                    case 'acceptance-fee':
+                        # send to acceptance fee job
+                        // send background job to confirm the payment with checksum and transaction id
+                        ConfirmCredoAcceptancePaymentJob::dispatch($transRef, $currencyCode, $response_status, $verified_transAmount);
+                        # return home and give the job some time to confirm payment
+                        return redirect()->route('home')->with(['message' => 'Your Acceptance Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
+                        break;
+                    case 'late-registration':
+                        # code...
+                        break;
+                    case 'first-tuition':
+                        # send to first tuition fee job
+                        // send background job to confirm the payment with checksum and transaction id
+                        ConfirmCredoFirstTuitionPaymentJob::dispatch($transRef, $currencyCode, $response_status, $verified_transAmount);
+                        # return home and give the job some time to confirm payment
+                        return redirect()->route('home')->with(['message' => 'Your Tuition Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
+                        break;
+                    case 'tuition':
+                        # code...
+                        break;
+                    case 'wallet-fund':
+                        # code...
+                        break;
+                    case 'spgs-charges':
+                        #this payment is for ID card, Medical and Laboratory
+                        #send to background job
+                        ConfirmCredoExtraChargesJob::dispatch($transRef, $currencyCode, $response_status, $verified_transAmount);
+                        # return home and give the job some time to confirm payment
+                        return redirect()->route('home')->with(['message' => 'Your Extra Charges Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            } else{
+                return redirect()->away($credoRequest->credo_url);
+            }
+
 
         }else{
             // return "Nothing found so proceed to regenerate";
