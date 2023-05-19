@@ -65,7 +65,7 @@ function getMatricSession(){
 
     if ($sessionId) {
 
-        $matricYear = substr ($sessionId->name, -4);
+        $matricYear = substr ($sessionId->name, -2);
 
         return $matricYear;
     }

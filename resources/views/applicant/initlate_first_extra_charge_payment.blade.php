@@ -84,7 +84,7 @@
 
                 @if (count($pLogs))
 
-                    <h4 class="header-title">Previous Payments</h4>
+                    <h4 class="header-title">Previous Successful Payments</h4>
 
                     @foreach ($pLogs as $pl)
                         Date: {{$pl->created_at}} => Ref:{{$pl->uid}} => Amount: NGN{{number_format(convertToNaira($pl->amount_paid),2)}}

@@ -55,6 +55,8 @@ class GenerateStudentRecordJob implements ShouldQueue
         $newStdUser->username = $newMatricNumber;
         $newStdUser->current_level = $stdProg->level_id;
         $newStdUser->save();
+        #assign student role to the user
+        $newStdUser->assignRole('student');
         #get the user profile
         $stdProfile = UserProfile::where('user_id',$appData->user_id)->first();
         #create the student record for the student
