@@ -181,6 +181,7 @@ class BillingController extends Controller
 
             return redirect(route('manual.payment.verification'))->with('error', "Error!!! Requested resource not found");
         }
+
     }
 
     public function feePaymentReport($id){

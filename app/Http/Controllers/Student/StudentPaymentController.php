@@ -275,4 +275,6 @@ class StudentPaymentController extends Controller
         abort(403, 'Late Registration  Fee not configured');
 
     }
+
+
 }
