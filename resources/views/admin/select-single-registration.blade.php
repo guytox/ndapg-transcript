@@ -29,7 +29,7 @@ type="text/css" />
 
             <div class="form-group">
                 {!! Form::label('school_session', 'Select Session') !!}
-                {!! Form::select('school_session', getCurrentSessionDropdown() , null, ['class' => 'form-control' ]) !!}
+                {!! Form::select('school_session', getSessionsDropdown() , null, ['class' => 'form-control' ]) !!}
             </div>
 
             <div class="form-group">
