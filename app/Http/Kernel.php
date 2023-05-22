@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ApplicationOpenStatus;
 use App\Http\Middleware\CheckApplicantSubmission;
 use App\Http\Middleware\CheckApplicationFeePayment;
 use App\Http\Middleware\CheckLateRegistration;
@@ -78,6 +79,7 @@ class Kernel extends HttpKernel
         'application_submitted_result' => CheckUserSubmittedResult::class,
         'profile_completed' => CheckProfileCompleted::class,
         'application.submission' => CheckApplicantSubmission::class,
-        'check.late.reg' => CheckLateRegistration::class
+        'check.late.reg' => CheckLateRegistration::class,
+        'is-application-open' => ApplicationOpenStatus::class
     ];
 }
