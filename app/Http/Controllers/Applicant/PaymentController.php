@@ -796,10 +796,10 @@ class PaymentController extends Controller
             $debitedAmount = $parameters->data->debitedAmount;
             $verified_transAmount = $parameters->data->transAmount;
             $transFeeAmount = $parameters->data->transFeeAmount;
-            $settlementAmount = $parameters->data->settlementAmount;
+            //$settlementAmount = $parameters->data->settlementAmount;
             $customerId = $parameters->data->customerId;
-            $transactionDate = $parameters->data->transactionDate;
-            $channelId = $parameters->data->channelId;
+            //$transactionDate = $parameters->data->transactionDate;
+            //$channelId = $parameters->data->channelId;
             $currencyCode = $parameters->data->currencyCode;
             $response_status = $parameters->data->status;
 
