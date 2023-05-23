@@ -202,9 +202,10 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                 # make log entry
                 Log::info('Application Fee Payment  has been confirmed -'.$businessRef);
                 #get the credo request and flag it as paid
-                $payCheck2 = CredoRequest::where('uid', $payee_code)->first();
-                $payCheck2->status = 'paid';
-                $payCheck2->save();
+                #COMMENTED OUT ON 220523 BECAUSE ENTRY IS NOT MADE INTO CREDO REQUEST AT TIME OF APPLICATION
+                // $payCheck2 = CredoRequest::where('uid', $payee_code)->first();
+                // $payCheck2->status = 'paid';
+                // $payCheck2->save();
                 #find the user based on retrieved payment details
                 $user = User::find($payee_id);
                 # get the configuration for applicaton fees
