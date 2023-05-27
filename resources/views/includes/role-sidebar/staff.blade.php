@@ -337,6 +337,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('clean.payment.log')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Clean Payment Logs</span>
+                    </a>
+                </li>
+
             </ul>
         </li>
 
