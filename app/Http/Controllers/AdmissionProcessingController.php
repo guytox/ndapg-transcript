@@ -6,6 +6,7 @@ use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\CreateFreshStudentRegClearance;
 use App\Jobs\FirstTuitionGenerationJob;
 use App\Jobs\GenerateStudentRecordJob;
+use App\Jobs\PaymentLogSanitationJob;
 use App\Models\ApplicantAdmissionRequest;
 use App\Models\ApplicationFeeRequest;
 use App\Models\CredoRequest;
@@ -490,7 +491,19 @@ class AdmissionProcessingController extends Controller
         }
     }
 
-    
+    public function cleanPaymentLog(){
+
+         $logs = PaymentLog::all();
+        foreach ($logs as $k) {
+            #get al entries with that transaction id
+            PaymentLogSanitationJob::dispatch($k->id);
+
+        }
+
+        return back()->with('info', "payments reverified successfully!!!");
+    }
+
+
 
 
 
