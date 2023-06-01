@@ -344,6 +344,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('automatic.credo.verification')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Automatic Credo Verification</span>
+                    </a>
+                </li>
+
             </ul>
         </li>
 

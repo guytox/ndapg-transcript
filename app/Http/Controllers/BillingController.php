@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\AutomaticCredoVerificationJob;
 use App\Jobs\ConfirmCredoAcceptancePaymentJob;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\ConfirmCredoExtraChargesJob;
@@ -11,6 +12,7 @@ use App\Models\CredoRequest;
 use App\Models\FeeItem;
 use App\Models\FeePaymentItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BillingController extends Controller
 {
@@ -69,6 +71,19 @@ class BillingController extends Controller
 
         return view('admin.viewPendingCredoPayments', compact('payList'));
 
+    }
+
+    public function automaticPaymentVerification(){
+        $payList = CredoRequest::where('status','pending')
+                                        ->get();
+
+        foreach ($payList as $k) {
+            #pass it to the job
+            AutomaticCredoVerificationJob::dispatch($k->uid);
+            Log::info("Automatic Payment Verification Submitted for - ".$k->uid);
+        }
+
+        return back()->with('info', "Payment Verification Successfully Submitted");
     }
 
     public function checkCredoPaymentStatus($id){
