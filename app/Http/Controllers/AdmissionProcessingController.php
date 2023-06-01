@@ -601,6 +601,12 @@ class AdmissionProcessingController extends Controller
             #user is free to view this action page
             #get the applicant
             $appData = ApplicantAdmissionRequest::where('form_number',$request->form_number)->first();
+            if ($appData) {
+                #something found, if not return to back with error
+
+            }else{
+                return back()->with('error', "Error!!!! Requested form Number not found");
+            }
             $appUser = User::find($appData->user_id);
 
             $acceptPymnt = FeePayment::join('fee_configs as f', 'f.id','=','fee_payments.payment_config_id')
@@ -751,6 +757,14 @@ class AdmissionProcessingController extends Controller
                                                 ->where('fee_payments.user_id',$appData->user_id)
                                                 ->select('fee_payments.*')
                                                 ->first();
+
+        if ($accConfig) {
+            #payment config found do nothing
+        }else{
+            #nothing found, return the user back to where he/she came from  
+            return back()->with('error', "Error!!!! Fees not setup for this user yet");
+        }
+
         $fConfig = FeeConfig::find($accConfig->payment_config_id);
         #check the balance being owed
         $bal = convertToNaira($accConfig->amount_billed - $accConfig->amount_paid);

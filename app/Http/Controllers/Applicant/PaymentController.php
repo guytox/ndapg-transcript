@@ -935,6 +935,13 @@ class PaymentController extends Controller
     public function viewAcceptanceInvoice($id){
 
         $appStd = ApplicantAdmissionRequest::where('uid', $id)->first();
+
+        if ($appStd) {
+            #user found, do nothing
+        }else{
+            
+            return redirect(route('home'))->with('error','Error!!!!! Something went wrong');
+        }
         #get the payment
         $paymentData = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
                                         ->join('fee_categories as c','c.id','=','f.fee_category_id')

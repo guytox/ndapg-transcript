@@ -147,6 +147,7 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::get('/view/Applicant/PendingPayments',[AdmissionProcessingController::class, 'verifyApplicantPayments'])->name('verify.applicant.payments');
         Route::get('/check/Applicant/PendingPayments/{id}',[AdmissionProcessingController::class, 'checkPaymentStatus'])->name('check.payment.status');
         Route::get('/check/Credo/PendingPayments/{id}',[BillingController::class, 'checkCredoPaymentStatus'])->name('check.credo.payment.status');
+        Route::get('/Credo/AutomaticPaymentVerification',[BillingController::class, 'automaticPaymentVerification'])->name('automatic.credo.verification');
         Route::get('/cleanPaymentLog', [AdmissionProcessingController::class, 'cleanPaymentLog'])->name('clean.payment.log');
     });
 
