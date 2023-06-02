@@ -147,16 +147,27 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                             $payCheck->save();
 
                             #write the log
-                            PaymentLog::create([
+                            $paData = [
                                 'fee_payment_id' => $feeReason->id,
                                 'amount_paid' => convertToKobo($settlementAmount),
                                 'uid' => $payee_code,
                                 'tx_id' => $businessRef,
                                 'payment_channel' => config('app.payment_methods.credo')
-                            ]);
+                            ];
+
+                            PaymentLog::updateOrCreate([
+                                'fee_payment_id' => $feeReason->id,
+                                'tx_id' => $businessRef,
+                            ], $paData);
+
+                            $totalLogs = PaymentLog::where('fee_payment_id', $fpEntry->id)
+                                        ->get();
+                            $totalPaid = $totalLogs->sum('amount_paid');
+
                             #update the fee payment monitor with the amount paid
-                            $feeReason->amount_paid = $feeReason->amount_paid + convertToKobo($settlementAmount);
-                            if ($feeReason->amount_paid == $feeReason->amount_billed) {
+                            $feeReason->amount_paid = $totalPaid;
+
+                            if ($totalPaid == $feeReason->amount_billed) {
                                 #payment complete mark as paid
                                 $feeReason->status = 'paid';
                             }
@@ -221,18 +232,31 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
 
                 #transaction successful get the reference
                 $fpEntry = FeePayment::find($submission->fee_payment_id);
-                $fpEntry->payment_status = 'paid';
-                $fpEntry->amount_paid = convertToKobo($settlementAmount);
-                $fpEntry->balance = 0;
-                $fpEntry->save();
+
                 # Enter the payment log
-                PaymentLog::create([
+                $paData = [
                     'fee_payment_id' => $fpEntry->id,
                     'amount_paid' => convertToKobo($settlementAmount),
                     'uid' => $payee_code,
                     'tx_id' => $businessRef,
                     'payment_channel' => config('app.payment_methods.credo')
-                ]);
+                ];
+
+                PaymentLog::updateOrCreate([
+                    'fee_payment_id' => $fpEntry->id,
+                    'tx_id' => $businessRef,
+                ], $paData);
+
+                 #first ge the total paid under this payment_id
+                 $totalLogs = PaymentLog::where('fee_payment_id',$fpEntry->id)->get();
+                 #sum the total logs for this fee payment id
+                 $totalPaidLogs = $totalLogs->sum('amount_paid');
+
+                #update the fee payment table
+                $fpEntry->payment_status = 'paid';
+                $fpEntry->amount_paid = $totalPaidLogs;
+                $fpEntry->balance = $fpEntry->amount_billed - $totalPaidLogs;
+                $fpEntry->save();
 
                 #next update the Applicant admission table since this is acceptance
                 $appInfo = ApplicantAdmissionRequest::where('user_id',$payee_id)
