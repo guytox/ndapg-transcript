@@ -394,6 +394,7 @@ Route::prefix('admissionProcessing')->middleware('auth', 'role:admin|admitted|')
 
     Route::get('admittedHome', [AdmissionProcessingController::class, 'admittedHome'])->name('admitted.home');
     Route::get('firstTuitionHome/{id}', [AdmissionProcessingController::class, 'beginFresherFeePayment'])->name('begin.first.tuition.payment');
+    Route::get('deleteCredoRequest/{id}', [AdmissionProcessingController::class, 'deleteCredoRequest'])->name('delete.credo.request');
     Route::get('firstExtraChargesHome/{id}', [AdmissionProcessingController::class, 'beginSPGSExtraChargesPayment'])->name('begin.first.spgs.charges');
 
 });

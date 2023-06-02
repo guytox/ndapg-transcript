@@ -76,6 +76,15 @@
 
                         @endif
 
+                        @if ($m->status == 'pending')
+                            <br>
+                                    OR
+                            <br>
+
+                            <a href="{{route('delete.credo.request',['id'=>$m->id])}}" class="btn btn-success">Delete Transaction</a>(*****NOTE: Do not delete a transaction you have paid for ****)
+
+                        @endif
+
                     @endforeach
 
                 @endif

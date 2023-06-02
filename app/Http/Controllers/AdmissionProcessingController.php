@@ -761,7 +761,7 @@ class AdmissionProcessingController extends Controller
         if ($accConfig) {
             #payment config found do nothing
         }else{
-            #nothing found, return the user back to where he/she came from  
+            #nothing found, return the user back to where he/she came from
             return back()->with('error', "Error!!!! Fees not setup for this user yet");
         }
 
@@ -784,6 +784,13 @@ class AdmissionProcessingController extends Controller
         $pcrequest = CredoRequest::where('fee_payment_id', $accConfig->id)->get();
 
         return view('applicant.initlate_first_tuition_payment', compact('appData','accConfig','maxValue','minValue','pLogs','fConfig','pcrequest'));
+    }
+
+    public function deleteCredoRequest($id){
+        $toDelete = CredoRequest::where('status','pending')->where('id', $id)->first();
+        $toDelete->delete();
+
+        return back()->with('info', "Payment Request deleted successfully");
     }
 
     public function beginSPGSExtraChargesPayment($id){
