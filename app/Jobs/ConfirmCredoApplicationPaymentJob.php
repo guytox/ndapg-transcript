@@ -151,8 +151,14 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                                 'payment_channel' => config('app.payment_methods.credo')
                             ]);
                             #update the fee payment monitor with the amount paid
-                            $feeReason->amount_paid = $feeReason->amount_paid + convertToKobo($settlementAmount);
-                            if ($feeReason->amount_paid == $feeReason->amount_billed) {
+                            #first ge the total paid under this payment_id
+                            $totalLogs = PaymentLog::where('fee_payment_id', $feeReason->id)->get();
+                            #sum the total logs for this fee payment id
+                            $totalPaidLogs = $totalLogs->sum('amount_paid');
+                            # apply the computed total to fee payment model
+                            $feeReason->amount_paid = $totalPaidLogs;
+
+                            if ($totalPaidLogs == $feeReason->amount_billed) {
                                 #payment complete mark as paid
                                 $feeReason->status = 'paid';
                             }
@@ -213,7 +219,11 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                 #
                 $feeRequest = ApplicationFeeRequest::where('payee_id', $user->id)->first();
 
-                $feePaymentTransaction = FeePayment::create([
+                $feePaymentTransaction = FeePayment::updateOrCreate([
+                    'user_id' => $user->id,
+                    'payment_config_id' => $applicationFeeConfiguration->id,
+                    'academic_session_id' => getApplicationSession(),
+                ],[
                     'amount_billed' => $feeRequest->amount,
                     'user_id' => $user->id,
                     'payment_config_id' => $applicationFeeConfiguration->id,
@@ -222,7 +232,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                     'amount_paid' => $verified_transAmount,
                     'uid' => $payee_code,
                     'balance' => 0,
-                    'txn_id' => generateUniqueTransactionReference(), // change the transaction id to avoid replay attacks
+                    'tx_id' =>$businessRef,
                 ]);
 
                 PaymentLog::create([

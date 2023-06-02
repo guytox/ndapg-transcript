@@ -140,16 +140,29 @@ class ConfirmCredoExtraChargesJob implements ShouldQueue
                             $payCheck->save();
 
                             #write the log
-                            PaymentLog::create([
+
+                            $paData = [
                                 'fee_payment_id' => $feeReason->id,
                                 'amount_paid' => convertToKobo($settlementAmount),
                                 'uid' => $payee_code,
                                 'tx_id' => $businessRef,
                                 'payment_channel' => config('app.payment_methods.credo')
-                            ]);
+                            ];
+
+                            PaymentLog::updateOrCreate([
+                                'fee_payment_id' => $feeReason->id,
+                                'tx_id' => $businessRef,
+                            ], $paData);
+
                             #update the fee payment monitor with the amount paid
-                            $feeReason->amount_paid = $feeReason->amount_paid + convertToKobo($settlementAmount);
-                            if ($feeReason->amount_paid == $feeReason->amount_billed) {
+                            #first ge the total paid under this payment_id
+                            $totalLogs = PaymentLog::where('fee_payment_id', $feeReason->id)->get();
+                            #sum the total logs for this fee payment id
+                            $totalPaidLogs = $totalLogs->sum('amount_paid');
+                            # apply the computed total to fee payment model
+                            $feeReason->amount_paid = $totalPaidLogs;
+
+                            if ($totalPaidLogs == $feeReason->amount_billed) {
                                 #payment complete mark as paid
                                 $feeReason->status = 'paid';
                             }
@@ -214,13 +227,18 @@ class ConfirmCredoExtraChargesJob implements ShouldQueue
                 #reference found
 
                 # Enter the payment log
-                PaymentLog::create([
+                $paData = [
                     'fee_payment_id' => $fpEntry->id,
                     'amount_paid' => convertToKobo($settlementAmount),
                     'uid' => $payee_code,
                     'tx_id' => $businessRef,
                     'payment_channel' => config('app.payment_methods.credo')
-                ]);
+                ];
+
+                PaymentLog::updateOrCreate([
+                    'fee_payment_id' => $fpEntry->id,
+                    'tx_id' => $businessRef,
+                ], $paData);
 
                 #get the total this applicant has paid
 

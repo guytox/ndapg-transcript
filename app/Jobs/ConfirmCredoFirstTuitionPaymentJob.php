@@ -146,13 +146,20 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
                             $payCheck->save();
 
                             #write the log
-                            PaymentLog::create([
+                            $paData = [
                                 'fee_payment_id' => $feeReason->id,
                                 'amount_paid' => convertToKobo($settlementAmount),
                                 'uid' => $payee_code,
                                 'tx_id' => $businessRef,
                                 'payment_channel' => config('app.payment_methods.credo')
-                            ]);
+                            ];
+
+                            PaymentLog::updateOrCreate([
+                                'fee_payment_id' => $feeReason->id,
+                                'tx_id' => $businessRef,
+                            ], $paData);
+
+
                             #update the fee payment monitor with the amount paid
                             $feeReason->amount_paid = $feeReason->amount_paid + convertToKobo($settlementAmount);
                             if ($feeReason->amount_paid == $feeReason->amount_billed) {
@@ -215,19 +222,26 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
                 $payCheck2 = CredoRequest::where('uid', $payee_code)->first();
                 $payCheck2->status = 'paid';
                 $payCheck2->save();
-                
+
                 #transaction successful get the reference
                 $fpEntry = FeePayment::find($submission->fee_payment_id);
                 #reference found
 
                 # Enter the payment log
-                PaymentLog::create([
+
+                $paData = [
                     'fee_payment_id' => $fpEntry->id,
                     'amount_paid' => convertToKobo($settlementAmount),
                     'uid' => $payee_code,
                     'tx_id' => $businessRef,
                     'payment_channel' => config('app.payment_methods.credo')
-                ]);
+                ];
+
+                PaymentLog::updateOrCreate([
+                    'fee_payment_id' => $fpEntry->id,
+                    'tx_id' => $businessRef,
+                ], $paData);
+
 
                 #get the total this applicant has paid
 
