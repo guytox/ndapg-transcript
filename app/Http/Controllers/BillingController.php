@@ -79,7 +79,7 @@ class BillingController extends Controller
 
         foreach ($payList as $k) {
             #pass it to the job
-            AutomaticCredoVerificationJob::dispatch($k->uid)->delay(now()->addMinutes(4));
+            AutomaticCredoVerificationJob::dispatch($k->uid);
             Log::info("Automatic Payment Verification Submitted for - ".$k->uid);
         }
 
