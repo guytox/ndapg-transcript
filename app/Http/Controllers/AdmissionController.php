@@ -257,7 +257,7 @@ class AdmissionController extends Controller
 
 
         if (user()->hasRole('admin|dean_pg|dean|hod|reg_officer|acad_eo')) {
-            $sessionId = activeSession()->id+1;
+            $sessionId = getApplicationSession();
 
             #get the list of applicants based on specified parameters
             $applicants = ApplicantAdmissionRequest::where('session_id', $sessionId)
