@@ -398,6 +398,9 @@ class AdmissionController extends Controller
         $applicant->admitted_at = $actionat;
         $applicant->admitted_by = user()->id;
         $applicant->save();
+        # assign admitted role;
+        $apAdmit = User::find($applicant->user_id);
+        $apAdmit->assignRole('admitted');
 
         return back()->with('info', "Veto Admission Successful!!!");
 
