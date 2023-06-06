@@ -227,7 +227,7 @@ class SemesterCourseAllocationController extends Controller
 
             //check to see if the session is the present session, if not redirect back with error
 
-            if ($allocationMonitor->session_id!=activeSession()->id && $allocationMoitor->semester_id != getSemesterIdByName(activeSession()->currentSemester)) {
+            if ($allocationMonitor->session_id!=activeSession()->id && $allocationMonitor->semester_id != getSemesterIdByName(activeSession()->currentSemester)) {
                 return back()->with('error', "This action cannot be performed because this is not the current session and semester");
             }
 
