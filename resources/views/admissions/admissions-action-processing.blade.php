@@ -355,7 +355,7 @@
                                                 {!! Form::select('form_action', [''=>'N/A', '1'=>'Issue File to Applicant','10'=>'Reject Applicant'], '', ['class'=>'form-control','required']) !!}
                                             </div>
 
-                                            {!! Form::submit('Verify Tuition Payment', ['class'=>' btn btn-success']) !!}
+                                            {!! Form::submit('Issue File Now', ['class'=>' btn btn-success']) !!}
                                             {!! Form::close() !!}
 
                                         @endrole
