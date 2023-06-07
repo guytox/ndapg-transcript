@@ -206,7 +206,6 @@ class SemesterCourseAllocationController extends Controller
 
     public function addAllocationItem(Request $request)
     {
-
         //check if the user has hod priviledges
 
         if (user()->hasRole('hod')) {
@@ -217,12 +216,9 @@ class SemesterCourseAllocationController extends Controller
                 'staffId'=>'required',
                 'gradingRights'=>'required',
                 'uid' => 'required'
-
             ]);
 
-
             //get the Allocation
-
             $allocationMonitor = CourseAllocationMonitor::where('uid', $request->MonitorId)->first();
 
             //check to see if the session is the present session, if not redirect back with error
@@ -232,7 +228,6 @@ class SemesterCourseAllocationController extends Controller
             }
 
             //check to see if grding rights have been granted and perform the neccessary checks
-
             $data = [
                 'allocation_id' => $allocationMonitor->id,
                 'course_id' => $request->semester_courses_id,
@@ -250,16 +245,15 @@ class SemesterCourseAllocationController extends Controller
             }else {
 
                 // No grading rights proceed with createOrUpdate
-
                 $allocationItem = CourseAllocationItems::updateOrCreate(['allocation_id' => $allocationMonitor->id,'course_id' => $request->semester_courses_id, 'staff_id' => $request->staffId, ], $data);
 
                 return back()->with('success',"Course Allocation addedd successfully");
-
 
             }
 
             return redirect(route('course-allocation.show',['course_allocation' => $allocationMonitor->uid]))->with('error', "Warning!!! Possible failure, Check last allocation");
         }
+
     }
 
 

@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    
     public function applicationFee(){
         $applicationFeeConfiguration = PaymentConfiguration::where('payment_purpose_slug', 'application-fee')->first();
 
@@ -939,7 +940,7 @@ class PaymentController extends Controller
         if ($appStd) {
             #user found, do nothing
         }else{
-            
+
             return redirect(route('home'))->with('error','Error!!!!! Something went wrong');
         }
         #get the payment

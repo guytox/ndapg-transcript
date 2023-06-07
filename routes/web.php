@@ -149,6 +149,7 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::get('/check/Credo/PendingPayments/{id}',[BillingController::class, 'checkCredoPaymentStatus'])->name('check.credo.payment.status');
         Route::get('/Credo/AutomaticPaymentVerification',[BillingController::class, 'automaticPaymentVerification'])->name('automatic.credo.verification');
         Route::get('/cleanPaymentLog', [AdmissionProcessingController::class, 'cleanPaymentLog'])->name('clean.payment.log');
+        Route::get('/waiveTuitionPayment/{id}', [AdmissionProcessingController::class, 'tuitionFeeWaiver'])->name('tuition.fee.waiver');
     });
 
     Route::prefix('configurations')->group(function(){
