@@ -253,6 +253,12 @@
                                     @elseif ($appData->is_paid_tuition==0 && $appData->is_screened==1)
 
                                         Request Student to go and pay school fees
+                                        @role('admin|dean_pg')
+                                        <br>
+
+                                        <a href="{{route('tuition.fee.waiver',['id'=>$appData->uid])}}" class="btn btn-warning">Waive Tuition Payment</a> (Note*** This will exempt staff from fee payment)
+
+                                        @endrole
 
                                     @else
 
@@ -278,7 +284,7 @@
 
                                         COMPLETED <br>
 
-                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a> 
+                                        <a href="{{route('print.first.tuition.invoice',['id'=>$appData->id])}}" class="btn btn-success" target="_blank">Print Tuition Fee Receipt</a>
 
                                         <a href="{{route('print.first.extra.charges.invoice',['id'=>$appData->id])}}" class="btn btn-danger" target="_blank">Print Extra Charges Receipt</a>  <br> <br>
 

@@ -250,7 +250,7 @@ class ConfirmCredoExtraChargesJob implements ShouldQueue
                 if ($rBalance == 0) {
                     #payment is complete, flag all payments as paid
                     $fpEntry->payment_status = 'paid';
-                    $submission->status = 'paid';
+                    $submission->status = 'paid';payment_purpose_slug
                     $submission->save();
 
                 }

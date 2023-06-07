@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ApplicantExport;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\CreateFreshStudentRegClearance;
 use App\Jobs\FirstTuitionGenerationJob;
@@ -873,8 +874,44 @@ class AdmissionProcessingController extends Controller
     }
 
 
+    public function tuitionFeeWaiver($id){
 
+        if (user()->hasRole('admin|dean_pg')) {
+            #proceed
+        }else{
+            return back()->with('error', "You do not have the required priviledges to perform this action");
+        }
 
+        #find the candidate
+        $toWaive = ApplicantAdmissionRequest::where('uid', $id)->first();
+        # set the tuition fee to paid
+        $fTuition = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
+                                        ->join('fee_categories as d','d.id','=','f.fee_category_id')
+                                        ->where('d.payment_purpose_slug','first-tuition')
+                                        ->select('fee_payments.*')
+                                        ->first();
+        # update the applicantAdmissionRequest
+        $toWaive->is_paid_tuition = 1;
+        $toWaive->paid_tuition_at = now();
+        $toWaive->save();
+        #search for credoRequest and delete if there is
+        $cRequests = CredoRequest::where('fee_payment_id', $fTuition->id)->get();
+
+        if (count($cRequests) >0) {
+            foreach ($cRequests as $p) {
+                $p->delete();
+            }
+        }else{
+            # nothing found just proceed
+        }
+        # delete the feePayment Monitor
+        $newDelete = FeePayment::find($fTuition->id);
+        $newDelete->delete();
+        $fTuition->delete();
+        # enter waiver record table
+        return redirect(route('home'))->with('info', "Payment Successfully waived!!!!");
+
+    }
 
 
 
