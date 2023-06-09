@@ -11,6 +11,7 @@ use App\Models\Admission;
 use App\Models\CredoRequest;
 use App\Models\FeeItem;
 use App\Models\FeePaymentItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -79,7 +80,7 @@ class BillingController extends Controller
 
         foreach ($payList as $k) {
             #pass it to the job
-            AutomaticCredoVerificationJob::dispatch($k->uid);
+            AutomaticCredoVerificationJob::dispatch($k->uid)->delay(Carbon::now()->addMinutes(2));
             Log::info("Automatic Payment Verification Submitted for - ".$k->uid);
         }
 

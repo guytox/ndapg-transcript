@@ -228,6 +228,8 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::post('effectAdmissionProcessing',[AdmissionProcessingController::class, 'effectApplicantAdmissionProcessing'])->middleware('role:admin|registry|dap|bursary')->name('effect.admission.processing');
 
         Route::get('firstTuitionInvoice/{id}',[AdmissionProcessingController::class, 'printFirstTuitionInvoice'])->name('print.first.tuition.invoice');
+        Route::get('/admissionReports', [AdmissionProcessingController::class, 'admissionReports'])->name('view.admission.reports');
+
 
 
 
