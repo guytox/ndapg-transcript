@@ -8,6 +8,7 @@ use App\Jobs\CreateFreshStudentRegClearance;
 use App\Jobs\FirstTuitionGenerationJob;
 use App\Jobs\GenerateStudentRecordJob;
 use App\Jobs\PaymentLogSanitationJob;
+use App\Jobs\RemoveFeePaymentJob;
 use App\Models\ApplicantAdmissionRequest;
 use App\Models\ApplicationFeeRequest;
 use App\Models\CredoRequest;
@@ -905,14 +906,34 @@ class AdmissionProcessingController extends Controller
             # nothing found just proceed
         }
         # delete the feePayment Monitor
-        $newDelete = FeePayment::find($fTuition->id);
-        $newDelete->delete();
-        $fTuition->delete();
+        // $newDelete = FeePayment::find($fTuition->id);
+        // $newDelete->delete();
+        // $fTuition->delete();
+        #dispatch job to finish the deal
+        RemoveFeePaymentJob::dispatch($fTuition->id);
         # enter waiver record table
         return redirect(route('home'))->with('info', "Payment Successfully waived!!!!");
 
     }
 
+
+    public function admissionReports(){
+
+        $report = ApplicantAdmissionRequest::join('programs as p','p.id','=','applicant_admission_requests.program_id')
+                                                    ->where('is_admitted',1)
+                                                    ->select('program_id', 'p.name')
+                                                    ->selectRaw("SUM(is_admitted) as admitted")
+                                                    ->selectRaw("SUM(acceptance_paid) as paidAcceptance")
+                                                    ->selectRaw("SUM(is_screened) as Screened")
+                                                    ->selectRaw("SUM(is_paid_tuition) as paidTuition")
+                                                    ->selectRaw("SUM(file_issued) as collectedFile")
+                                                    ->groupBy('program_id')
+                                                    ->get();
+        $title = "Admission Report for ".getsessionById(getApplicationSession())->name ." Session";
+
+        return view('admin.viewAdmissionReport',compact('report','title'));
+
+    }
 
 
 }

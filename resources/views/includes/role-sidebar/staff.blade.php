@@ -467,6 +467,13 @@
             </a>
             <ul>
                 <li>
+                    <a href="{{route('view.admission.reports')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Admission Report</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{route('search.registered.students')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
                         <span>View Registered Students</span>
