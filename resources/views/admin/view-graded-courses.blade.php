@@ -218,7 +218,7 @@
                                 <div class="card mfp-hide mfp-popup-form mx-auto" id="test-form">
                                     <div class="card-body">
                                         <h4 class="mt-0 mb-4">Specify Details of Session and Semester</h4>
-                                        {!! Form::open(['route' => ['hod-confirm.previous','as'=>'ityoughKiChukur'], 'method' => 'POST']) !!}
+                                        {!! Form::open(['route' => ['change.grading.session','as'=>'ityoughKiChukur'], 'method' => 'POST']) !!}
                                         {{-- {!! Form::hidden('uid',uniqid('dp_'), ['class'=>'form-control']) !!} --}}
 
                                         <div class="form-group">
@@ -233,7 +233,7 @@
 
 
 
-                                        {!! Form::submit('Search Courses') !!}
+                                        {!! Form::submit('Get Grading Report') !!}
 
                                         {!! Form::close() !!}
                                     </div>

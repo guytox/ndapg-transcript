@@ -490,6 +490,24 @@
             </ul>
         </li>
 
+        {{-- Registration Management (for dean_pg alone--}}
+<li>
+    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+        <i class="mdi mdi-book-information-variant"></i>
+        <span>Result Mgt Reports</span>
+    </a>
+    <ul>
+
+        <li>
+            <a href="{{ route('hod-confirm.index',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>View Grading Report</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
     @endrole
 
 
