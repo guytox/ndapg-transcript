@@ -276,9 +276,9 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
 
 });
 
-Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer', 'profile_completed','verified')->group(function(){
+Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer|dap|admin|dean_pg', 'profile_completed','verified')->group(function(){
 
-    Route::prefix('CourseGrading')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer')->group(function(){
+    Route::prefix('CourseGrading')->middleware('role:hod|dean|reg_officer|vc|dvc|exam_officer|lecturer|dap|admin|dean_pg')->group(function(){
         //Semester Course Allcoaton Routes
         Route::resource('/course-allocation', SemesterCourseAllocationController::class);
         Route::post('/add-allocation',[SemesterCourseAllocationController::class, 'addAllocationItem'])->name('add.allocation.staff');
@@ -307,6 +307,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
         Route::post('/lecturerGrading/SubmitGrades/{as}', [LecturerGradingController::class, 'submitGrades'])->name('lecturer.grading.submit');
 
         Route::get('/lecturerGrading/hodHome/{as}', [LecturerGradingController::class, 'hodGradeHome'])->name('hod-confirm.index');
+        Route::post('/GradingReport/hodHome/{as}', [LecturerGradingController::class, 'changeHodGradeHome'])->name('change.grading.session');
 
         Route::post('/lecturerGrading/hodPrevious/{as}', [LecturerGradingController::class, 'hodShowSelected'])->name('hod-confirm.previous');
 
