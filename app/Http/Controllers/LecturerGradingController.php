@@ -660,6 +660,35 @@ class LecturerGradingController extends Controller
 
             return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
 
+        }elseif (user()->hasRole('dean')) {
+
+            $session_id = activeSession()->id;
+            $session_name = activeSession()->name;
+            $semester = activeSession()->currentSemester;
+            $semester_id = getSemesterIdByName($semester);
+
+            $courses = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
+                                            ->join('semester_courses', 'semester_courses.id','=','course_allocation_items.course_id')
+                                            ->join('departments', 'departments.id','=','semester_courses.department_id')
+                                            ->join('faculties','faculties.id','=','departments.faculty_id')
+                                            ->where('faculties.dean_id',user()->id)
+                                            ->where('course_allocation_items.can_grade', 1)
+                                            ->where([
+                                            'm.session_id' => $session_id,
+                                            'm.semester_id' =>$semester_id ])
+                                            ->orderBy('course_allocation_items.accepted', 'asc')
+                                            ->orderBy('course_allocation_items.submitted', 'asc')
+                                            ->orderBy('course_allocation_items.cfm_exam', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca4', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca3', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca2', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca1', 'desc')
+                                            ->select('course_allocation_items.*', 'm.uid as monitor_uid', 'm.id as monitor_id', 'm.session_id', 'm.semester_id')
+                                            ->get();
+
+
+            return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
+
         }elseif (user()->hasRole('dap|acad_eo|admin|dean_pg') && $as =='dap') {
 
             $session_id = activeSession()->id;
@@ -707,6 +736,30 @@ class LecturerGradingController extends Controller
                                             ->join('semester_courses', 'semester_courses.id','=','course_allocation_items.course_id')
                                             ->join('departments', 'departments.id','=','semester_courses.department_id')
                                             ->where('departments.hod_id',user()->id)
+                                            ->where('course_allocation_items.can_grade', 1)
+                                            ->where([
+                                            'm.session_id' => $session_id,
+                                            'm.semester_id' =>$semester_id ])
+                                            ->orderBy('course_allocation_items.accepted', 'asc')
+                                            ->orderBy('course_allocation_items.submitted', 'asc')
+                                            ->orderBy('course_allocation_items.cfm_exam', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca4', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca3', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca2', 'desc')
+                                            ->orderBy('course_allocation_items.cfm_ca1', 'desc')
+                                            ->select('course_allocation_items.*', 'm.uid as monitor_uid', 'm.id as monitor_id', 'm.session_id', 'm.semester_id')
+                                            ->get();
+
+
+            return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
+
+        }elseif (user()->hasRole('dean')) {
+
+            $courses = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
+                                            ->join('semester_courses', 'semester_courses.id','=','course_allocation_items.course_id')
+                                            ->join('departments', 'departments.id','=','semester_courses.department_id')
+                                            ->join('faculties','faculties.id','=','departments.faculty_id')
+                                            ->where('faculties.dean_id',user()->id)
                                             ->where('course_allocation_items.can_grade', 1)
                                             ->where([
                                             'm.session_id' => $session_id,
@@ -777,6 +830,8 @@ class LecturerGradingController extends Controller
 
             return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
 
+        }elseif (user()->hasRole('dap|admin')) {
+            # code...
         }else {
 
             return back()->with('error','Error 40013 !!! Contact ICT');
