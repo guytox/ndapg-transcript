@@ -131,6 +131,7 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                                 ->first();
         if (!$submission) {
             #payment is for application, follow the application route
+            Log::info('Inconsistent Job Submitted in AcceptanceConfirmationJob for - '.$businessRef);
             $payCheck = CredoRequest::where('uid', $payee_code)->first();
 
             if ($payCheck) {
@@ -199,7 +200,7 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                                     break;
 
                                 default:
-                                    # code...
+                                    Log::info('Wrong purpose Job found in ConfirmCredoAcceptancePaymentJob for - '.$businessRef);
                                     break;
                             }
                         }
@@ -271,6 +272,7 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {
                 #nothing found
+                Log::info('Error in Final Acceptance Fee Confirmation for - '.$businessRef);
                 // genericMail($emailSubject, $invalidPaymentMessage, $this->email);
             }
         }

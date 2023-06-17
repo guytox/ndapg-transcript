@@ -129,6 +129,9 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
                                 ->where('c.payment_purpose_slug' ,'first-tuition')
                                 ->first();
         if (!$submission) {
+
+            Log::info('Inconsistent Job Submitted in FirstTuitionConfirmationJob for - '.$businessRef);
+
             #payment is for application, follow the application route
             $payCheck = CredoRequest::where('uid', $payee_code)->first();
 
@@ -193,6 +196,8 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
 
                                 default:
                                     # code...
+                                    Log::info('Wrong purpose Job found in ConfirmCredoFirstTuitionJob for - '.$businessRef);
+
                                     break;
                             }
                         }
@@ -276,6 +281,8 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {
                 #nothing found
+                Log::info('Error in Final First Tuition Confirmation for - '.$businessRef);
+
                 // genericMail($emailSubject, $invalidPaymentMessage, $this->email);
             }
         }

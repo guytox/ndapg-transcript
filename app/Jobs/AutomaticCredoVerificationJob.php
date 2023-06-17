@@ -36,6 +36,7 @@ class AutomaticCredoVerificationJob implements ShouldQueue
     {
         $paymentDetails = CredoRequest::where('uid',$this->uid)
                                         ->where('credo_ref', '!=','')
+                                        ->where('status', 'pending')
                                         ->first();
 
         #get the payment purpose from the request
