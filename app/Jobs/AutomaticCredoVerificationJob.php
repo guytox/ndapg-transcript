@@ -123,7 +123,9 @@ class AutomaticCredoVerificationJob implements ShouldQueue
                         break;
 
                     default:
-                        # code...
+
+                        Log::info("No Transaction Purpose found for - ".$this->uid);
+
                         break;
                 }
 
@@ -132,12 +134,15 @@ class AutomaticCredoVerificationJob implements ShouldQueue
 
             }else{
 
+                Log::info("Credo Transaction Still Pending for - ".$this->uid);
+
                 // return redirect(route('manual.payment.verification'))->with('error', "Error!!! Payment was not successful");
             }
 
 
         }else{
 
+            Log::info("Credo Request Entry Not Found for - ".$this->uid);
 
             // return redirect(route('manual.payment.verification'))->with('error', "Error!!! Requested resource not found");
         }

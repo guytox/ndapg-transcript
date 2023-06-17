@@ -799,8 +799,11 @@ class LecturerGradingController extends Controller
             //$courses;
 
             return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
+            
         }else {
+
             return back()->with('error','Error 40012 !!! Contact ICT');
+
         }
 
     }
