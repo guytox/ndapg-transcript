@@ -123,7 +123,11 @@ class ConfirmCredoExtraChargesJob implements ShouldQueue
                                 ->where('c.payment_purpose_slug' ,'spgs-charges')
                                 ->first();
         if (!$submission) {
+
+            Log::info('Inconsistent Job Submitted in ExtraChargesConfirmationJob for - '.$businessRef);
+
             #payment is for application, follow the application route
+
             $payCheck = CredoRequest::where('uid', $payee_code)->first();
 
             if ($payCheck) {
@@ -193,6 +197,8 @@ class ConfirmCredoExtraChargesJob implements ShouldQueue
 
                                 default:
                                     # code...
+                                    Log::info('Wrong purpose Job found in ConfirmCredoExtraChargesJob for - '.$businessRef);
+
                                     break;
                             }
                         }
@@ -265,6 +271,8 @@ class ConfirmCredoExtraChargesJob implements ShouldQueue
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {
                 #nothing found
+                Log::info('Error in Final Extra Charges Confirmation for - '.$businessRef);
+
                 // genericMail($emailSubject, $invalidPaymentMessage, $this->email);
             }
         }
