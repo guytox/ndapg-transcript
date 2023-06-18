@@ -127,97 +127,12 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                                 ->join('fee_configs as f','f.id','=','s.payment_config_id')
                                 ->join('fee_categories as c','c.id','=','f.fee_category_id')
                                 ->where('credo_requests.uid',$payee_code)
+                                ->where('credo_requests.credo_ref', $transRef)
                                 ->where('c.payment_purpose_slug' ,'acceptance-fee')
                                 ->first();
         if (!$submission) {
             #payment is for application, follow the application route
             Log::info('Inconsistent Job Submitted in AcceptanceConfirmationJob for - '.$businessRef);
-            $payCheck = CredoRequest::where('uid', $payee_code)->first();
-
-            if ($payCheck) {
-                # this payment is not applicaiton fee, check the status before proceeding
-                if ($response_status==0) {
-                    #the payment returns as paid get what this payment is for
-                    $feeReason = FeePayment::find($payCheck->fee_payment_id);
-                    if ($feeReason) {
-                        #feePayment found proceed with checks
-                        #verify the amount paid
-                        if (convertToNaira($feeReason->amount_billed) == $settlementAmount) {
-                            # find out the reason why the payment was made and treat as such
-                            $payCheck->status = 'paid';
-                            $payCheck->save();
-
-                            #write the log
-                            $paData = [
-                                'fee_payment_id' => $feeReason->id,
-                                'amount_paid' => convertToKobo($settlementAmount),
-                                'uid' => $payee_code,
-                                'tx_id' => $businessRef,
-                                'payment_channel' => config('app.payment_methods.credo')
-                            ];
-
-                            PaymentLog::updateOrCreate([
-                                'fee_payment_id' => $feeReason->id,
-                                'tx_id' => $businessRef,
-                            ], $paData);
-
-                            $totalLogs = PaymentLog::where('fee_payment_id', $fpEntry->id)
-                                        ->get();
-                            $totalPaid = $totalLogs->sum('amount_paid');
-
-                            #update the fee payment monitor with the amount paid
-                            $feeReason->amount_paid = $totalPaid;
-
-                            if ($totalPaid == $feeReason->amount_billed) {
-                                #payment complete mark as paid
-                                $feeReason->status = 'paid';
-                            }
-                            $feeReason->save();
-
-                            # Next find the reason
-                            $feePurpose = FeeConfig::join('fee_categories as f', 'f.id','=','fee_configs.fee_category_id')
-                                                    ->where('fee_configs.id', $feeReason->payment_config_id)
-                                                    ->select('fee_configs.*', 'fee_categories.payment_purpose_slug')
-                                                    ->first();
-
-                            switch ($feePurpose->payment_purpose_slug) {
-
-                                case 'late-registration':
-                                    # code...
-                                    break;
-
-                                case 'acceptance-fee':
-                                    # find the Applicant
-                                    $appInfo = ApplicantAdmissionRequest::where('user_id',$payee_id)
-                                                    ->where('session_id', getApplicationSession())
-                                                    ->first();
-                                    $appInfo->acceptance_paid = 1;
-                                    $appInfo->acceptance_paid_at = now();
-                                    $appInfo->save();
-                                    $submission->status = 'paid';
-                                    $submission->save();
-
-                                    break;
-
-                                default:
-                                    Log::info('Wrong purpose Job found in ConfirmCredoAcceptancePaymentJob for - '.$businessRef);
-                                    break;
-                            }
-                        }
-
-                    }else{
-                        #this feePayment entry is not found Do nothing (this is strange)
-                    }
-
-                }else{
-                    #Do nothing because the payment has not been made (payment status is not 0)
-                }
-            }else{
-
-                # Do Nothing because this payment is not found
-
-            }
-
 
         }elseif($submission) {
             #payment found for application
@@ -227,7 +142,7 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                 # make log entry
                 Log::info('Acceptance Fee Payment has been confirmed -'.$businessRef);
                 #get the credo request and flag it as paid
-                $payCheck2 = CredoRequest::where('uid', $payee_code)->first();
+                $payCheck2 = CredoRequest::where('uid', $payee_code)->where('credo_ref', $transRef)->first();
                 $payCheck2->status = 'paid';
                 $payCheck2->save();
 
