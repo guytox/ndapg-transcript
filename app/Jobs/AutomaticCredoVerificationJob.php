@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\CredoRequest;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,16 +16,17 @@ class AutomaticCredoVerificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $uid;
+    public $id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($uid)
+    public function __construct($id)
     {
-        $this->uid = $uid;
+        $this->id = $id;
+
     }
 
     /**
@@ -34,7 +36,7 @@ class AutomaticCredoVerificationJob implements ShouldQueue
      */
     public function handle()
     {
-        $paymentDetails = CredoRequest::where('uid',$this->uid)
+        $paymentDetails = CredoRequest::where('id',$this->id)
                                         ->where('credo_ref', '!=','')
                                         ->where('status', 'pending')
                                         ->first();
@@ -82,16 +84,16 @@ class AutomaticCredoVerificationJob implements ShouldQueue
                         # this is acceptance fees send to appropriate job
                         # send to acceptance fee job
                         // send background job to confirm the payment with checksum and transaction id
-                        ConfirmCredoAcceptancePaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
-                        Log::info("Automatic Acceptance Fees Processing Subitted for - ".$this->uid);
+                        ConfirmCredoAcceptancePaymentJob::dispatch($transactionId, $currency, $statusCode, $amount)->delay(Carbon::now()->addMinutes(5));
+                        Log::info("Automatic Acceptance Fees Processing Subitted for - ".$this->id);
                         # return home and give the job some time to confirm payment
                         // return redirect()->route('manual.payment.verification')->with(['message' => 'Your Acceptance Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
 
                         break;
                     case 'first-tuition':
                         // send background job to confirm the payment with checksum and transaction id
-                        ConfirmCredoFirstTuitionPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
-                        Log::info("Automatic First Tuition Fees Processing Subitted for - ".$this->uid);
+                        ConfirmCredoFirstTuitionPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount)->delay(Carbon::now()->addMinutes(5));
+                        Log::info("Automatic First Tuition Fees Processing Subitted for - ".$this->id);
                         # return home and give the job some time to confirm payment
                         // return redirect()->route('manual.payment.verification')->with(['message' => 'Your Tuition Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
 
@@ -100,8 +102,8 @@ class AutomaticCredoVerificationJob implements ShouldQueue
                     case 'spgs-charges':
                         #this payment is for ID card, Medical and Laboratory
                         #send to background job
-                        ConfirmCredoExtraChargesJob::dispatch($transactionId, $currency, $statusCode, $amount);
-                        Log::info("Automatic Extra Fees Processing Subitted for - ".$this->uid);
+                        ConfirmCredoExtraChargesJob::dispatch($transactionId, $currency, $statusCode, $amount)->delay(Carbon::now()->addMinutes(5));
+                        Log::info("Automatic Extra Fees Processing Subitted for - ".$this->id);
                         # return home and give the job some time to confirm payment
                         // return redirect()->route('manual.payment.verification')->with(['message' => 'Your Extra Charges Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
 
@@ -117,15 +119,15 @@ class AutomaticCredoVerificationJob implements ShouldQueue
 
                     case 'application-fee':
                         #This payment is application fee
-                        ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
-                        Log::info("Automatic Application Fees Processing Subitted for - ".$this->uid);
+                        ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount)->delay(Carbon::now()->addMinutes(5));
+                        Log::info("Automatic Application Fees Processing Subitted for - ".$this->id);
                         // return redirect(route('manual.payment.verification'))->with('info', "Payment Successfully Submitted for processing, check back again after a minute");
 
                         break;
 
                     default:
 
-                        Log::info("No Transaction Purpose found for - ".$this->uid);
+                        Log::info("No Transaction Purpose found for - ".$this->id);
 
                         break;
                 }
@@ -135,7 +137,7 @@ class AutomaticCredoVerificationJob implements ShouldQueue
 
             }else{
 
-                Log::info("Credo Transaction Still Pending for - ".$this->uid);
+                Log::info("Credo Transaction Still Pending for - ".$this->id);
 
                 // return redirect(route('manual.payment.verification'))->with('error', "Error!!! Payment was not successful");
             }
@@ -143,7 +145,7 @@ class AutomaticCredoVerificationJob implements ShouldQueue
 
         }else{
 
-            Log::info("Credo Request Entry Not Found for - ".$this->uid);
+            Log::info("Credo Request Entry Not Found for - ".$this->id);
 
             // return redirect(route('manual.payment.verification'))->with('error', "Error!!! Requested resource not found");
         }
