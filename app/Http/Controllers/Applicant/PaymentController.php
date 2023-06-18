@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    
+
     public function applicationFee(){
         $applicationFeeConfiguration = PaymentConfiguration::where('payment_purpose_slug', 'application-fee')->first();
 
@@ -356,7 +356,7 @@ class PaymentController extends Controller
 
                 }else{
                     #check if the payment is flaggged as paid the forward to job and return home
-                    return $CredoprevousPayment = CredoRequest::where('payee_id', user()->id)
+                    $CredoprevousPayment = CredoRequest::where('payee_id', user()->id)
                                                 ->where('session_id',getApplicationSession())
                                                 ->where('fee_payment_id', $feePayment->id)
                                                 ->where('status','paid')
@@ -395,7 +395,7 @@ class PaymentController extends Controller
 
             # Start Credo processes here
             #first enter details in the credo transaction table
-            $CredoTransaction = CredoRequest::updateOrCreate(['payee_id' =>user()->id, 'session_id' => getApplicationSession(), 'fee_payment_id' => $acceptanceFeeConfiguration->id, 'amount'=>$amount, 'status'=>'pending' ], [
+            $CredoTransaction = CredoRequest::updateOrCreate(['payee_id' =>user()->id, 'session_id' => getApplicationSession(), 'fee_payment_id' => $transaction->id, 'amount'=>$amount, 'status'=>'pending' ], [
                 'payee_id' => user()->id,
                 'uid' => $uid,
                 'fee_payment_id' => $transaction->id,
