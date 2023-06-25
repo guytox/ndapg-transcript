@@ -67,6 +67,24 @@
                                             </span>
                                         </div>
                                         <div class="media-body">
+                                            <h5 class="font-size-15 text-uppercase text-danger">
+                                                ***** Supplementary Admission List*******</h5>
+                                            <p class="text-muted mb-0"><a
+                                                href="{{ asset('assets/2023_2024SupplementaryAdmissionList.pdf') }}"
+                                                        class="text-decoration-underline">Download Supplementary Admission List</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card maintenance-box">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <div class="avatar-xs mr-3">
+                                            <span class="avatar-title rounded-circle bg-primary">
+                                                02
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
                                             <h5 class="font-size-15 text-uppercase">Applications Guidelines</h5>
 
                                             <p class="text-muted mb-0"><a
@@ -81,7 +99,7 @@
                                     <div class="media">
                                         <div class="avatar-xs mr-3">
                                             <span class="avatar-title rounded-circle bg-primary">
-                                                02
+                                                03
                                             </span>
                                         </div>
                                         <div class="media-body">
@@ -99,7 +117,7 @@
                                     <div class="media">
                                         <div class="avatar-xs mr-3">
                                             <span class="avatar-title rounded-circle bg-primary">
-                                                03
+                                                04
                                             </span>
                                         </div>
                                         <div class="media-body">
@@ -112,6 +130,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
