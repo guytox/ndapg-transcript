@@ -82,10 +82,10 @@ class LecturerGradingController extends Controller
             // get the total No of registants grouped by departments
             //perform confirmation checks and pass the records to relevant views
             //
-
-            $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
+            //return $id;
+           $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
                                             ->where(['course_allocation_items.uid' =>$id,
-                                                        'course_allocation_items.staff_id' => user()->id,
+                                                        //'course_allocation_items.staff_id' => user()->id,
                                                         'course_allocation_items.can_grade' =>1
                                             ])
                                             ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id')
@@ -799,7 +799,7 @@ class LecturerGradingController extends Controller
             //$courses;
 
             return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
-            
+
         }else {
 
             return back()->with('error','Error 40012 !!! Contact ICT');

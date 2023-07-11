@@ -69,6 +69,23 @@
 
                     </ul>
                 </li>
+
+                <li>
+                    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Result Management</span>
+                    </a>
+                    <ul>
+
+                        <li>
+                            <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Computed Results</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
             @endrole
 
             @role('hod')
@@ -170,7 +187,7 @@
                         </li>
 
                         <li>
-                            <a href="#" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                            <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                                 <i class="mdi mdi-tag-heart"></i>
                                 <span>View Computed Results</span>
                             </a>
@@ -272,6 +289,31 @@
                                 <span>Approved Registrations</span>
                             </a>
                         </li>
+
+                    </ul>
+
+                </li>
+
+                <li>
+                    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Result Mgt.</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('begin-result-computation',['as'=>'ityoughKiKyaren']) }}" class="@if (Request::is('begin-result-computation')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>Begin Fresh Computation</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.computed.results')}} " class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Computed Results</span>
+                            </a>
+                        </li>
+
 
                     </ul>
                 </li>

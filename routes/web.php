@@ -24,6 +24,7 @@ use App\Http\Controllers\LecturerGradingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\RegistrationApprovalController;
+use App\Http\Controllers\ResultManagementController;
 use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\SemesterCourseAllocationController;
@@ -230,11 +231,10 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::get('firstTuitionInvoice/{id}',[AdmissionProcessingController::class, 'printFirstTuitionInvoice'])->name('print.first.tuition.invoice');
         Route::get('/admissionReports', [AdmissionProcessingController::class, 'admissionReports'])->name('view.admission.reports');
 
-
-
-
-
     });
+
+    #Result Management Routes
+    Route::get('get/Result/{id}/{student_id}/{semester}', [RegistrationApprovalController::class, 'showSingleStudentResult'])->name('show.single.student.result');
 
 });
 
@@ -321,6 +321,29 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
 
     });
+
+    Route::prefix('resultComputation')->middleware('auth', 'role:exam_officer|hod|admin|dean|vc')->group(function(){
+
+        Route::get('resultComputeHome', [ResultManagementController::class, 'resultComputeHome'])->name('begin-result-computation');
+        Route::post('cresultComputeHome/{as}', [ResultManagementController::class, 'checkComputeReadiness'])->name('result-compute-home');
+        Route::post('computeResult/{as}', [ResultManagementController::class, 'computeResult'])->name('compute-selected-result');
+        Route::get('searchComputedResults', [ResultManagementController::class, 'searchComputedResults'])->name('search.computed.results');
+        Route::post('viewComputedResults', [ResultManagementController::class, 'viewComputedResults'])->name('view.computed.results');
+        Route::get('/printSenateSheet/{uid}/{sem}', [ResultManagementController::class , 'viewSenateSheet'])->name('view.senatesheet');
+        Route::get('/printPassedSenateSheet/{uid}/{sem}', [ResultManagementController::class , 'viewPassedSenateSheet'])->name('view.passedsenatesheet');
+        Route::get('/printFailedSenateSheet/{uid}/{sem}', [ResultManagementController::class , 'viewFailedSenateSheet'])->name('view.failedsenatesheet');
+
+        Route::get('/checkComputedResult/{uid}/{sem}', [ResultManagementController::class, 'checkComputedResult'])->name('check.computed.results')->middleware(['auth', 'role:admin|dap|acad_eo|dean|hod|exam_officer|reg_officer|vc']);
+
+
+        Route::post('approveComputedResultss', [ResultManagementController::class, 'approveComputedResults'])->name('approve.computed.results');
+        Route::post('approveSingleComputedResults/{resultId}/{sem}', [ResultManagementController::class, 'singleResultApprovalMgt'])->name('approve.single.computed.results');
+
+        Route::post('/oldResultComputation', [ResultManagementController::class, 'ResultComputation'])->name('recompute.oldResult')->middleware(['auth', 'role:admin|vc|dean|hod|exam_officer']);
+
+
+    });
+
 
 });
 

@@ -345,6 +345,76 @@ class RegistrationApprovalController extends Controller
 
     }
 
+    public function showSingleStudentResult($id, $student_id, $semester){
+
+        if (user()->hasRole('reg_officer|hod|dean|admin|vc|dvc|dap|acad_eo|student|exam_officer')) {
+
+            //fetch all regMonitors
+
+            $Monitors = RegMonitor::where(['student_id'=>$student_id,'std_confirm'=>'1', 'uid'=>$id])->with('RegMonitorItems')->first();
+
+            //return $Monitors;
+
+            if ($Monitors) {
+
+                $staffRoles = $this->getAcademicRoles(user()->id);
+                $semesterId = $semester;
+
+                return view('admin.printStudentStatementOfResult', compact('Monitors', 'staffRoles','semesterId'));
+            }
+            return view('home')->with('error',"Error 40323, Contact ICT");
+
+
+        }else{
+            abort(403,"You do not have permission to view this page, Please Contact ICT");
+        }
+
+
+
+    }
+
+
+    public function showApprovedResults(){
+
+        if (user()->hasRole('student')) {
+            $allResults = RegMonitor::where('student_id', getStudentIdByUserId(user()->id))
+                                    ->where('r_status','approved')
+                                    ->orderBy('semesters_spent','asc')
+                                    ->get();
+
+            $title = "Senate Approved Results for ".user()->username." ( ".user()->name." )";
+
+            return view('results.viewStudentApprovedResultList',compact('allResults','title'));
+        }
+
+    }
+
+
+    public function showRegistrationReport(Request $request){
+
+        //return $request;
+
+        if (user()->hasRole('admin|vc|dvc|dap|acad_eo')) {
+
+
+            $title = "General Registration Report";
+
+            //select students in jurisdiction
+
+            $pendingStdRegs = getGeneralRegReport($request->std_prog,$request->study_level, $request->school_session, $request->semester);
+
+                return view('admin.viewGeneralRegistrationReport', compact('pendingStdRegs','title'));
+
+
+        }else{
+            abort(403,"You do not have permission to view this page, Please Contact ICT");
+        }
+
+
+
+    }
+
+
 
 
 
