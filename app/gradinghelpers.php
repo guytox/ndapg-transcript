@@ -87,6 +87,14 @@ function getGradeLetter($regMonitorId){
 
 }
 
+function getCreditUnitsByCourseId($courseId){
+
+    $course = SemesterCourse::find($courseId);
+
+    return $course->creditUnits;
+
+}
+
 
 
 

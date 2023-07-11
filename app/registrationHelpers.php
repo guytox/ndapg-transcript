@@ -596,3 +596,102 @@ function getAllProgramsDropdown(){
 
 }
 
+function getUserProgramIds($id){
+
+    $user = User::find($id);
+
+    if ($user->hasRole('vc')) {
+        $dept = Program::orderBy('name', 'asc')->select('id')->get();
+
+        return $dept;
+    }
+
+    if ($user->hasRole('admin')) {
+        $dept = Program::orderBy('name', 'asc')->select('id')->get();
+
+        return $dept;
+    }
+
+    if ($user->hasRole('dap')) {
+        $dept = Program::orderBy('name', 'asc')->select('id')->get();
+
+        return $dept;
+    }
+
+    if ($user->hasRole('acad_eo')) {
+        $dept = Program::orderBy('name', 'asc')->select('id')->get();
+
+        return $dept;
+    }
+
+    if ($user->hasRole('dean')) {
+
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('faculties.dean_id', $id)
+                                ->orWhere('departments.hod_id', $id)
+                                ->orWhere('departments.registration_officer_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->select('programs.id')
+                                ->get();
+                                // ->pluck('name','id');
+
+        return $dept;
+    }
+
+    if ($user->hasRole('hod')) {
+
+        //return $user;
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('departments.hod_id', $id)
+                                ->orWhere('departments.registration_officer_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->select('programs.id')
+                                ->get();
+                                // ->pluck('name','id');
+
+        return $dept;
+    }
+
+    if ($user->hasRole('reg_officer')) {
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('departments.registration_officer_id', $id)
+                                ->orWhere('departments.hod_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->select('programs.id')
+                                ->get();
+                                // ->pluck('name','id');
+
+        return $dept;
+    }
+
+    if ($user->hasRole('exam_officer')) {
+        $dept = Program::join('departments','departments.id','=','programs.department_id')
+                                ->join('faculties','faculties.id','=','departments.faculty_id')
+                                ->where('faculties.academic',1)
+                                ->where('departments.exam_officer_id', $id)
+                                ->orWhere('departments.registration_officer_id', $id)
+                                ->orWhere('departments.hod_id', $id)
+                                ->orWhere('departments.exam_officer_id', $id)
+                                ->orWhere('faculties.dean_id', $id)
+                                ->select('programs.id')
+                                ->get();
+                                // ->pluck('name','id');
+
+        return $dept;
+    }
+
+
+
+
+
+    return "N/A";
+}
+
