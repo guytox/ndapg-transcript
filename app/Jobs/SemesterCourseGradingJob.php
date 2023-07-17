@@ -47,6 +47,8 @@ class SemesterCourseGradingJob implements ShouldQueue
 
         $toGrade = RegMonitorItems::find($this->regId);
 
+        # fix all grading confirmation issues for this
+
         $semestercourse = SemesterCourse::find($toGrade->course_id);
 
         //compute the total score and compare with the lecturer total and update where neccessary
@@ -74,12 +76,21 @@ class SemesterCourseGradingJob implements ShouldQueue
 
         if ($toGrade->ltotal != $total) {
 
-            //Log::info('Lecturer Total Updated after Hod Approval');
+            Log::info('Lecturer Total Updated after Hod Approval');
+            //update the totals
+            $toGrade->ltotal = $total;
+            $toGrade->gtotal = $total;
+            $toGrade->save();
 
 
 
         }else{
-            //Log::info("Lecturer Total Same with HOD Total, No Change");
+
+            Log::info("Lecturer Total Same with HOD Total, No Change");
+
+            $toGrade->ltotal = $total;
+            $toGrade->gtotal = $total;
+            $toGrade->save();
 
         }
 
@@ -90,6 +101,8 @@ class SemesterCourseGradingJob implements ShouldQueue
 
         //if registered carryOver, update the entry to the semesters spent where the student first failed the course(co_sem_spent).
         if ($toGrade->is_carryOver ===1) {
+
+            Log::info("Course Registered as Carry Over");
             //find the first entry for this course fetch the semesers spent and update toGrade
             $firstEntry = RegMonitorItems::where('student_id',$toGrade->student_id)
                                         ->where('course_id', $toGrade->course_id)
@@ -101,19 +114,30 @@ class SemesterCourseGradingJob implements ShouldQueue
             //Log:info('First Carry Over Semester spent updated on current registration');
 
         }
+
         //get the grading system from students record.
         $gradeQuery = StudentRecord::find($toGrade->student_id);
 
+        Log::info("checking result for ".$gradeQuery->matric);
+
         if ($gradeQuery) {
 
+            Log::info("Student Record Found");
+
             //fetch the grading system items and run a loop to grade.
-            $gradeItems =GradingSystemItems::where('grading_system_id', $gradeQuery->grading_system)
+            $gradeItems =GradingSystemItems::where('grading_system_id', $gradeQuery->grading_system_id)
                                             ->get();
+
+            //Log::info($gradeItems);
+
+
             foreach ($gradeItems as $v) {
 
                 // check to see if total falls between the lower boundary and the upper boundary
-                if ($total <= convertToKobo($v->upper_boundary) && $total >= convertToKobo($v->lower_boundary)) {
+                if ($total <= $v->upper_boundary && $total >= $v->lower_boundary) {
                     //total matches this particular selection, lets sort out some variables.
+
+                    Log::info($v);
 
                     //gradeLetter.
                     $gradeLetter = $v->grade_letter;
@@ -152,7 +176,7 @@ class SemesterCourseGradingJob implements ShouldQueue
                     $toGrade->twgp = $twgp;
                     $toGrade->save();
 
-                    //Log::info("Total Weighted grade Point Recorded Successfully");
+                    Log::info("Total Weighted grade Point Recorded Successfully");
 
                     if ($v->credit_earned===1) {
                         // Student has passed check if it is a carry over and update the necessary columns
@@ -162,7 +186,7 @@ class SemesterCourseGradingJob implements ShouldQueue
                                                             ->where('course_id', $toGrade->course_id)
                                                             ->update(array('is_co_passed'=>'1', 'co_passed_sem_spent'=>$GradeCheck->semesters_spent));
 
-                            //Log::info("Previous and Present Carry Over details updated successfully !!!");
+                            Log::info("Previous and Present Carry Over details updated successfully !!!");
 
                         }elseif ($toGrade->is_carryOver ===0) {
                             //in the case of recomputation reverse the co_semesters spent and set it to null
@@ -211,6 +235,8 @@ class SemesterCourseGradingJob implements ShouldQueue
             }
 
 
+        }else{
+            Log::info("Error!!! Student Not found");
         }
     }
 }
