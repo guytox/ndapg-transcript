@@ -71,6 +71,6 @@ class SubmitResultComputationJob implements ShouldQueue
         $regMonitorId = $regMonitorEntry->id;
         $scTime = Carbon::now()->addSeconds(10);
         ResultComputeJob::dispatch($regMonitorId)->delay($scTime);
-
+        
     }
 }

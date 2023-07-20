@@ -69,7 +69,7 @@ class ResultComputeJob implements ShouldQueue
         // compute the gpa and set the parameter
         $gpa = $wgp / $cur;
 
-        Log::info("gpa computed successfully");
+        Log::info("gpa computed successfully -".$gpa);
 
         //store the result parameters so far generated
 
