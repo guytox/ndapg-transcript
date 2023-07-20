@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\CourseAllocationItems;
 use App\Models\GradingSystemItems;
 use App\Models\RegMonitor;
 use App\Models\RegMonitorItems;
@@ -44,12 +45,30 @@ class SemesterCourseGradingJob implements ShouldQueue
                                 ->select('reg_monitor_items.*', 'r.semesters_spent')
                                 ->first();
 
+        #correct the grading status
+        $gradedItem = CourseAllocationItems::join('course_allocation_monitors as m','m.id','=', 'course_allocation_items.allocation_id')
+                                            ->where('m.session_id', $GradeCheck->session_id)
+                                            ->where('m.semester_id', $GradeCheck->semester_id)
+                                            ->where('course_allocation_items.course_id', $this->regId)
+                                            ->select('course_allocation_items.*')
+                                            ->get();
+        #
+
 
         $toGrade = RegMonitorItems::find($this->regId);
+        $toGrade->cfm_ca1 = $gradedItem->cfm_ca1;
+        $toGrade->cfm_ca2 = $gradedItem->cfm_ca2;
+        $toGrade->cfm_ca3 = $gradedItem->cfm_ca3;
+        $toGrade->cfm_ca4 = $gradedItem->cfm_ca4;
+        $toGrade->exam = $gradedItem->exam;
+        $toGrade->save();
+
 
         # fix all grading confirmation issues for this
 
         $semestercourse = SemesterCourse::find($toGrade->course_id);
+
+        Log::info("Confirmation records corrected successfully for - ". $semestercourse->courseCode);
 
         //compute the total score and compare with the lecturer total and update where neccessary
         $total=0;
@@ -118,11 +137,11 @@ class SemesterCourseGradingJob implements ShouldQueue
         //get the grading system from students record.
         $gradeQuery = StudentRecord::find($toGrade->student_id);
 
-        Log::info("checking result for ".$gradeQuery->matric);
+        Log::info("checking course grade for ".$gradeQuery->matric." ".$semestercourse->courseCode);
 
         if ($gradeQuery) {
 
-            Log::info("Student Record Found");
+            //Log::info("Student Record Found");
 
             //fetch the grading system items and run a loop to grade.
             $gradeItems =GradingSystemItems::where('grading_system_id', $gradeQuery->grading_system_id)
@@ -136,6 +155,7 @@ class SemesterCourseGradingJob implements ShouldQueue
                 // check to see if total falls between the lower boundary and the upper boundary
                 if ($total <= $v->upper_boundary && $total >= $v->lower_boundary) {
                     //total matches this particular selection, lets sort out some variables.
+                    Log::info("Total is ". $total. " upper boundary is -".$v->upper_boundary);
 
                     Log::info($v);
 
@@ -176,7 +196,7 @@ class SemesterCourseGradingJob implements ShouldQueue
                     $toGrade->twgp = $twgp;
                     $toGrade->save();
 
-                    Log::info("Total Weighted grade Point Recorded Successfully");
+                    Log::info("Total Weighted grade Point Recorded Successfully -". $twgp);
 
                     if ($v->credit_earned===1) {
                         // Student has passed check if it is a carry over and update the necessary columns
