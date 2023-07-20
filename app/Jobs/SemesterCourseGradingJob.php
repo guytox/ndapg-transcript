@@ -60,7 +60,7 @@ class SemesterCourseGradingJob implements ShouldQueue
         $toGrade->cfm_ca2 = $gradedItem->cfm_ca2;
         $toGrade->cfm_ca3 = $gradedItem->cfm_ca3;
         $toGrade->cfm_ca4 = $gradedItem->cfm_ca4;
-        $toGrade->exam = $gradedItem->exam;
+        $toGrade->cfm_exam = $gradedItem->cfm_exam;
         $toGrade->save();
 
 
