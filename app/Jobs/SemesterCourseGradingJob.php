@@ -44,14 +44,19 @@ class SemesterCourseGradingJob implements ShouldQueue
                                 ->where('reg_monitor_items.id', $this->regId)
                                 ->select('reg_monitor_items.*', 'r.semesters_spent')
                                 ->first();
+        Log::info("Session is-".$GradeCheck->session_id);
+        Log::info("Semester is-".$GradeCheck->semester_id);
+        Log::info("Course is-".$GradeCheck->course_id);
+
 
         #correct the grading status
         $gradedItem = CourseAllocationItems::join('course_allocation_monitors as m','m.id','=', 'course_allocation_items.allocation_id')
                                             ->where('m.session_id', $GradeCheck->session_id)
                                             ->where('m.semester_id', $GradeCheck->semester_id)
-                                            ->where('course_allocation_items.course_id', $this->regId)
+                                            ->where('course_allocation_items.course_id', $GradeCheck->course_id)
                                             ->select('course_allocation_items.*')
-                                            ->get();
+                                            ->first();
+        Log::info($gradedItem);
         #
 
 
