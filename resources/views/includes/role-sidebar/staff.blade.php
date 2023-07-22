@@ -486,6 +486,13 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('upload.administrative.admission',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Administrative Admission</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('view.for.change.admission',['as'=>'ityoughKiChukur']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
                         <span>Change Program Admission</span>

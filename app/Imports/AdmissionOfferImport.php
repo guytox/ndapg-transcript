@@ -49,7 +49,7 @@ class AdmissionOfferImport implements ToModel, WithHeadingRow
                 'session_id' => activeSession()->id,
             ];
 
-            $admitted = Admission::updateOrCreate(['form_number' => $row['formnumber']],$data);
+            $admitted = Admission::updateOrCreate(['form_number' => $row['formnumber']],$data); 
             return $admitted;
 
 
