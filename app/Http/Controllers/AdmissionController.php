@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ApplicantExport;
+use App\Imports\AdminAdmissionUpload;
 use App\Imports\AdmissionOfferImport;
 use App\Jobs\AdmissionNotificationJob;
 use App\Jobs\AdmissionRecommendationJob;
@@ -28,6 +29,41 @@ class AdmissionController extends Controller
 {
     use HasRoles;
 
+    public function uploadAdministrativeAdmissionList(Request $request){
+
+        //return $request;
+
+        if (user()->hasRole('admin')) {
+            //return $request;
+
+            $validated = $request->validate([
+                'file' => 'required|mimes:xlsx|max:3048',
+
+            ]);
+
+            $admissionList = $request->file('file');
+            $staff = user()->id;
+
+            Excel::import(new AdminAdmissionUpload($staff), $admissionList);
+
+            return redirect(route('upload.administrative.admission'))->with('success', "Admission List Uploaded Successfully!!!");
+        } else{
+
+            return back()->with('error', 'You do not have the privileges to perform this action, contact ICT');
+
+        }
+    }
+
+
+    public function uploadAdministrativeAdmission(){
+        if (user()->hasRole('admin')) {
+
+
+            return view('admin.configs.admin-admission-upload');
+        }
+    }
+
+
     public function uploadStudentAdmissionList(Request $request){
         if (user()->hasRole('admin')) {
             //return $request;
@@ -49,6 +85,8 @@ class AdmissionController extends Controller
 
         }
     }
+
+
 
 
     public function uploadStudentsAdmissionForm(){

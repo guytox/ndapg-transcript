@@ -215,6 +215,10 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::get('vetoAdmission', [AdmissionController::class, 'viewListForVeto'])->middleware('role:admin|dean_pg')->name('view.for.veto');
         Route::get('vetoAdmission/{id}', [AdmissionController::class, 'vetoAdmission'])->middleware('role:admin|dean_pg')->name('veto.admission');
 
+        # Administrative admission
+        Route::get('adminAdmission', [AdmissionController::class, 'uploadAdministrativeAdmission'])->middleware('role:admin|dean_pg')->name('upload.administrative.admission');
+        Route::post('adminAdmissionUpload', [AdmissionController::class, 'uploadAdministrativeAdmissionList'])->middleware('role:admin|dean_pg')->name('submit.administrative.admission');
+
         #change before admitting
         Route::get('viewChangeAdmission', [AdmissionController::class, 'viewListForChangeAdmission'])->middleware('role:admin|dean_pg')->name('view.for.change.admission');
         Route::get('changeAdmission/{id}', [AdmissionController::class, 'previewBeforeChangeAdmission'])->middleware('role:admin|dean_pg')->name('select.change.admission');
