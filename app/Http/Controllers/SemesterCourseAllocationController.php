@@ -222,10 +222,10 @@ class SemesterCourseAllocationController extends Controller
             $allocationMonitor = CourseAllocationMonitor::where('uid', $request->MonitorId)->first();
 
             //check to see if the session is the present session, if not redirect back with error
-
-            if ($allocationMonitor->session_id!=activeSession()->id && $allocationMonitor->semester_id != getSemesterIdByName(activeSession()->currentSemester)) {
-                return back()->with('error', "This action cannot be performed because this is not the current session and semester");
-            }
+            # THIS SECTION IS COMMENTED OUT TO ALLOW ALLOCATION FOR ALL SESSIONS
+            // if ($allocationMonitor->session_id!=activeSession()->id && $allocationMonitor->semester_id != getSemesterIdByName(activeSession()->currentSemester)) {
+            //     return back()->with('error', "This action cannot be performed because this is not the current session and semester");
+            // }
 
             //check to see if grding rights have been granted and perform the neccessary checks
             $data = [
@@ -247,7 +247,7 @@ class SemesterCourseAllocationController extends Controller
                 // No grading rights proceed with createOrUpdate
                 $allocationItem = CourseAllocationItems::updateOrCreate(['allocation_id' => $allocationMonitor->id,'course_id' => $request->semester_courses_id, 'staff_id' => $request->staffId, ], $data);
 
-                return back()->with('success',"Course Allocation addedd successfully");
+                return back()->with('success',"Course Allocation added successfully");
 
             }
 
