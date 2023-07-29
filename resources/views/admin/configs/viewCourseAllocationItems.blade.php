@@ -63,10 +63,12 @@
                                         {!! Form::select('semester_courses_id', $curriculumCourses, null, ['class' => 'form-control', 'required']) !!}
                                     </div>
 
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         {!! Form::label('staffId', 'Select Semester Course') !!}
                                         {!! Form::select('staffId', $lecturers, null, ['class' => 'form-control', 'required']) !!}
-                                    </div>
+                                    </div> --}}
+
+                                    <livewire:search-lecturer>
 
                                     <div class="form-group">
                                         {!! Form::label('gradingRights', 'Can this User grade (Yes/No)') !!}
