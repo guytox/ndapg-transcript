@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\RegistrationApprovalJob;
+use App\Jobs\SubmitVetoRegistrationApprovalJob;
 use App\Models\Department;
 use App\Models\RegMonitor;
+use App\Models\StudentRecord;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -410,6 +412,27 @@ class RegistrationApprovalController extends Controller
             abort(403,"You do not have permission to view this page, Please Contact ICT");
         }
 
+
+
+    }
+
+
+    public function initiateVetoRegistrationApproval(){
+        return view('admin.select-veto-reg-approval');
+    }
+
+    public function vetoRegistrationApproval(Request $request){
+
+       $student = RegMonitor::find(1224);
+
+        
+
+        $sessionId = $request->c_sess;
+        $semesterId = $request->c_sem;
+
+        SubmitVetoRegistrationApprovalJob::dispatch($sessionId, $semesterId);
+
+        return back()->with('info', "Veto Approval Submitted for processing Successfully");
 
 
     }

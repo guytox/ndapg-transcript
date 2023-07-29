@@ -356,6 +356,13 @@
         </li>
 
         <li>
+            <a href="{{ route('call.veto.approval') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Veto Registration Approval</span>
+            </a>
+        </li>
+
+        <li>
             <a href="{{ route('hod-confirm.index',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>View Grading Report</span>
