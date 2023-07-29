@@ -248,6 +248,10 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
         Route::resource('reg', RegistrationApprovalController::class);
         Route::get('get/Approvals', [RegistrationApprovalController::class, 'showApproved'])->name('reg.approvals');
         Route::get('get/Approvals/{id}/{student_id}', [RegistrationApprovalController::class, 'showStudentConfirmedReg'])->name('show.single.student.reg');
+        #VetoApprovals
+        Route::get('vetoApproval', [RegistrationApprovalController::class, 'initiateVetoRegistrationApproval'])->middleware('role:admin')->name('call.veto.approval');
+        Route::post('vetoApproval', [RegistrationApprovalController::class, 'vetoRegistrationApproval'])->middleware('role:admin')->name('veto.approval');
+
 
     });
 

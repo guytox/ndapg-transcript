@@ -22,7 +22,7 @@ class StudentRecord extends Model
     }
 
     public function programme(){
-        return $this->belongsTo(Program::class, 'id','program_id');
+        return $this->belongsTo(Program::class, 'program_id');
     }
 
     public function defferment(){
