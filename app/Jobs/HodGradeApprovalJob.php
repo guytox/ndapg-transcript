@@ -16,8 +16,6 @@ class HodGradeApprovalJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $toConfirm;
-    
-
 
 
     /**
@@ -38,7 +36,7 @@ class HodGradeApprovalJob implements ShouldQueue
     public function handle()
     {
         //fetch the lecturer course entry from the database
-        $toGrade = CourseAllocationItems::join('course_allocation_monitors as c', 'c.id', '=',          'course_allocation_items.allocation_id')
+        $toGrade = CourseAllocationItems::join('course_allocation_monitors as c', 'c.id', '=', 'course_allocation_items.allocation_id')
                                         ->where('course_allocation_items.id', $this->toConfirm)
                                         ->select('course_allocation_items.*', 'c.session_id', 'c.semester_id')
                                         ->first();

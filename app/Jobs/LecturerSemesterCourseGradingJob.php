@@ -13,10 +13,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class LecturerSemesterCourseGradingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
 
     public $regId;
 
@@ -38,10 +40,9 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
     public function handle()
     {
         //fetch the regMonitorItem including the monitor to determine the present semesters spent
-        $GradeCheck = RegMonitorItems::join('reg_monitors as r','r.id','=', 'reg_monitor_items.monitor_id')
-                                ->where('reg_monitor_items.id', $this->regId)
-                                ->select('reg_monitor_items.*', 'r.semesters_spent')
-                                ->first();
+
+        Log::info("Begining Lecturer Semester Course Grading");
+
 
 
         $toGrade = RegMonitorItems::find($this->regId);
@@ -97,13 +98,15 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
 
                     //determine if the student has passed or failed based on grading system loop.
                     //is passed value.
-                    
+
                     // - weighted points.
 
                     $twgp = $semestercourse->creditUnits * $v->weight_points;
 
                     $toGrade->twgp = $twgp;
                     $toGrade->save();
+
+                    Log::info("Grade Update of ". $semestercourse->courseCode . "Successful for " . $gradeQuery->matric);
 
                     //Log::info("Total Weighted grade Point Recorded Successfully");
 

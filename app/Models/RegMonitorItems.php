@@ -13,6 +13,6 @@ class RegMonitorItems extends Model
 
     public function RegMonitor(){
 
-        return $this->belongsTo(RegMonitor::class,'id','monitor_id');
+        return $this->belongsTo(RegMonitor::class, 'monitor_id','id');
     }
 }
