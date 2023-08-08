@@ -12,6 +12,6 @@ class CourseAllocationItems extends Model
     protected $guarded = [];
 
     public function courseAllocation(){
-        return $this->belongsTo(CourseAllocationMonitor::class, 'id');
+        return $this->belongsTo(CourseAllocationMonitor::class, 'allocation_id');
     }
 }

@@ -83,7 +83,7 @@
 
 
                         <tr>
-                            <td><input type="checkbox" name="student_id[{{$item->id}}][id]" value="{{$item->id}}" checked></td>
+                            <td><input type="checkbox" name="student_id[{{$item->id}}][id]" value="{{$item->id}}" @if ($item->status ==='approved') checked @endif ></td>
 
                             <td>{{$k+1}}</td>
                             <td align="left">{{ getStudentById($item->student_id)->matric }}</td>
