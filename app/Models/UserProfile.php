@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class UserProfile extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
 
     public function state()
     {
-        return $this->belongsTo(State::class);
+        return $this->belongsTo(State::class, 'state_id', 'id');
     }
 
     public function user(){

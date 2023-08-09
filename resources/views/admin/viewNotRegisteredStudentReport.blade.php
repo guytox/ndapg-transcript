@@ -37,10 +37,10 @@
                                     <th scope="col">GSM</th>
                                     {{-- <th scope="col">State</th>
                                     <th scope="col">Gender</th> --}}
-                                    <th scope="col">#Level</th>
+                                    {{-- <th scope="col">#Level</th> --}}
                                     {{-- <th scope="col">#Units</th>
                                     <th scope="col">status</th> --}}
-                                    <th scope="col">Form-Number</th>
+                                    {{-- <th scope="col">Form-Number</th> --}}
                                     {{-- <th scope="col">Approval</th> --}}
                                     {{-- <th scope="col">Recommendation</th> --}}
                                     <th scope="col">Remark</th>
@@ -55,20 +55,21 @@
 
                                     <tr>
                                         <td>{{$sn}}</td>
-                                        <td>{{ substr($v->matric,-15,15)}}</td>
+                                        <td>{{ $v->matric}}</td>
+                                        {{-- <td>{{ substr($v->matric,-20,15)}}</td> --}}
                                         <td>{{ $v->studentName}}</td>
                                         {{-- <td>{{getFacultyByStudentId($v->student_id)}}</td>
                                         <td>{{getDepartmentByStudentId($v->student_id)}}</td> --}}
-                                        <td>{{Str::limit($v->programme, 30)}}</td>
+                                        <td>{{Str::limit($v->programme, 60)}}</td>
                                         {{-- <td>{{ucfirst($v->category)}}</td> --}}
                                         <td>{{$v->email}}</td>
                                         <td>{{$v->phone_number}}</td>
                                         {{-- <td>{{getStateNameById($v->state_origin)}}</td>
                                         <td>{{ucfirst($v->gender)}}</td> --}}
-                                        <td>{{getStudyLevelDetailsById($v->LevelId)}}Level</td>
+                                        {{-- <td>{{getStudyLevelDetailsById($v->LevelId)}}Level</td> --}}
                                         {{-- <td>{{getRegMonitorById($v->id, 'totalcredits')}}</td>
                                         <td>{{getRegMonitorById($v->id, 'status')}}</td> --}}
-                                        <td>{{getFormNumberByStudentId($v->studentId)}}</td>
+                                        {{-- <td>{{getFormNumberByStudentId($v->studentId)}}</td> --}}
 
 
                                         <td>
@@ -85,7 +86,7 @@
                                                     <span title="registration Officer" > &#9989;</span>
                                                 @endif
 
-                                                
+
                                                 @if (getRegMonitorById($v->id, 'hodstatus')==0)
                                                     <span title="HOD"> &#10060; </span>
                                                 @elseif (getRegMonitorById($v->id, 'hodstatus')==1)
