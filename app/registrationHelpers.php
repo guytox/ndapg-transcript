@@ -192,7 +192,7 @@ function getRegStudentsReport($jurisdiction, $sess, $sem ){
                                     ->join('user_profiles', 'user_profiles.user_id','=','student_records.user_id')
                                     ->whereIn('departments.id', $jurisdiction)
                                     ->where(['session_id'=>$sess, 'semester_id'=>$sem])
-                                    ->select('reg_monitors.*', 'user_profiles.gender','student_records.state_origin', 'programs.category','programs.level_id')
+                                    ->select('reg_monitors.*')
                                     ->get();
 
     return $pendingRegs;
@@ -208,6 +208,7 @@ function getNotRegisteredStudentsReport($jurisdiction, $sess, $sem ){
                             ->join('student_records as s', 's.user_id','=','users.id')
                             ->join('programs','programs.id','=','s.program_id')
                             ->whereNotIn('s.id', $registeredStudents)
+                            ->where('s.admission_session', $sess)
                             ->orderBy('programs.name','asc')
                             ->orderBy('users.name')
                             ->select('s.matric', 's.matric', 's.user_id','s.id as studentId' , 'users.current_level as LevelId' ,'users.name as studentName', 'users.phone_number','users.email', 'programs.name as programme')

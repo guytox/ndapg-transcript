@@ -29,18 +29,18 @@
                                     <th scope="col">S/N</th>
                                     <th scope="col">Matric</th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Faculty</th>
-                                    <th scope="col">Department</th>
+                                    {{-- <th scope="col">Faculty</th> --}}
+                                    {{-- <th scope="col">Department</th> --}}
                                     <th scope="col">Prog.</th>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">email</th>
-                                    <th scope="col">GSM</th>
-                                    <th scope="col">State</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">#Level</th>
+                                    {{-- <th scope="col">Category</th> --}}
+                                    {{-- <th scope="col">email</th> --}}
+                                    {{-- <th scope="col">GSM</th> --}}
+                                    {{-- <th scope="col">State</th> --}}
+                                    {{-- <th scope="col">Gender</th> --}}
+                                    {{-- <th scope="col">#Level</th> --}}
                                     <th scope="col">#Units</th>
                                     <th scope="col">status</th>
-                                    <th scope="col">Form-Number</th>
+                                    {{-- <th scope="col">Form-Number</th> --}}
                                     <th scope="col">Approval</th>
                                     {{-- <th scope="col">Recommendation</th> --}}
                                     <th scope="col">Action</th>
@@ -55,20 +55,20 @@
 
                                     <tr>
                                         <td>{{$sn}}</td>
-                                        <td>{{ getStudentByStudentId($v->student_id)->matric}}</td>
-                                        <td>{{ getUserByUsername(getStudentByStudentId($v->student_id)->matric)->name}}</td>
-                                        <td>{{getFacultyByStudentId($v->student_id)}}</td>
-                                        <td>{{getDepartmentByStudentId($v->student_id)}}</td>
-                                        <td>{{getProgrammeDetailById($v->program_id, 'name')}}</td>
-                                        <td>{{ucfirst($v->category)}}</td>
-                                        <td>{{getUserByStudentID($v->student_id)->email}}</td>
-                                        <td>{{getUserByStudentID($v->student_id)->phone_number}}</td>
-                                        <td>{{getStateNameById($v->state_origin)}}</td>
-                                        <td>{{ucfirst($v->gender)}}</td>
-                                        <td>{{getStudyLevelDetailsById($v->level_id)}}Level</td>
-                                        <td>{{getRegMonitorById($v->id, 'totalcredits')}}</td>
-                                        <td>{{getRegMonitorById($v->id, 'status')}}</td>
-                                        <td>{{getFormNumberByStudentId($v->student_id)}}</td>
+                                        <td>{{ $v->student->matric }}</td>
+                                        <td>{{ $v->student->user->name }}</td>
+                                        {{-- <td>{{ $v->student->programme->department->faculty->name}}</td> --}}
+                                        {{-- <td>{{ $v->student->programme->department->name}}</td> --}}
+                                        <td>{{ $v->student->programme->name}}</td>
+                                        {{-- <td>{{ $v->student->programme->category }}</td> --}}
+                                        {{-- <td>{{ $v->student->user->email }}</td> --}}
+                                        {{-- <td>{{ $v->student->user->phone_number }}</td> --}}
+                                        {{-- <td>{{ $v->student->user->name}}</td> --}}
+                                        {{-- <td>{{ $v->student->user->profile->gender}}</td> --}}
+                                        {{-- <td>{{getStudyLevelDetailsById($v->level_id)}}Level</td> --}}
+                                        <td>{{ $v->total_credits}}</td>
+                                        <td>{{ $v->status}}</td>
+                                        {{-- <td>{{getFormNumberByStudentId($v->student_id)}}</td> --}}
 
 
                                         <td>
