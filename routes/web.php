@@ -251,7 +251,9 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
         #VetoApprovals
         Route::get('vetoApproval', [RegistrationApprovalController::class, 'initiateVetoRegistrationApproval'])->middleware('role:admin')->name('call.veto.approval');
         Route::post('vetoApproval', [RegistrationApprovalController::class, 'vetoRegistrationApproval'])->middleware('role:admin')->name('veto.approval');
-
+        #Route for single Veto Registration
+        Route::get('singleVetoReg', [StudentRegistrationController::class, 'initiateSingleVetoReg'])->name('start.single.vetoreg');
+        Route::post('singleVetoReg', [StudentRegistrationController::class, 'effectSingleVetoReg'])->name('post.single.vetoreg');
 
     });
 

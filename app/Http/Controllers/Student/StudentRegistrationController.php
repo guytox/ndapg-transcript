@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Jobs\BulkRegistrationJob;
 use App\Jobs\BulkSingleRegistrationJob;
+use App\Jobs\VetoRegistrationJob;
 use App\Models\Curriculum;
 use App\Models\CurriculumItem;
 use App\Models\DroppedCourses;
@@ -772,6 +773,35 @@ class StudentRegistrationController extends Controller
 
 
 
+    }
+
+    public function initiateSingleVetoReg(){
+        return view('admin.initiate-single-veto-registration');
+    }
+
+    public function effectSingleVetoReg(Request $request){
+        //return $request;
+        #first find the student
+        $std = StudentRecord::where('matric', $request->d_std)->first();
+
+        if ($std) {
+            #std found proceed
+            #set the variables
+            $sessionId = $request->school_session;
+            $semesterId = $request->semester;
+            $studentId = $std->id;
+            $time = now();
+
+            VetoRegistrationJob::dispatch($sessionId, $semesterId, $studentId,$time);
+
+
+
+        }else{
+
+            return back()->with('error', "Student with matric No ". $request->d_std. " Not found");
+        }
+
+        return redirect(route('post.single.vetoreg'))->with('info','Single VetoReg Executed Successfully');
     }
 
 
