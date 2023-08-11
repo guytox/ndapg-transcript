@@ -195,8 +195,9 @@ class LecturerGradingController extends Controller
                 $courseId = $course->course_id;
                 $sessionId = $course->session_id;
                 $semesterId = $course->semester_id;
+                $time = now();
 
-                Excel::import(new LecturerGradeUploadImport($request->id,$request->grading,$courseId,$sessionId,$semesterId,user()->id), $grades);
+                Excel::import(new LecturerGradeUploadImport($request->id,$request->grading,$courseId,$sessionId,$semesterId,user()->id, $time), $grades);
 
 
             }
@@ -290,32 +291,33 @@ class LecturerGradingController extends Controller
                     $matric = $regItem->RegMonitor->student->matric;
                      $regItem->id;
                      $itemId = $v['id'];
+                     $time = now();
 
 
                     if ($grading =='ca1') {
                         $ca1 = floatval($v['ca1']);
                         #Next fire the job
-                        GradeFirstCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca1);
+                        GradeFirstCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca1);
 
                     }elseif ($grading =='ca2') {
                         $ca2 = floatval($v['ca2']);
                         #Next fire the job
-                        GradeSecondCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca2);
+                        GradeSecondCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca2);
 
                     }elseif ($grading =='ca3') {
                         $ca3 = floatval($v['ca3']);
                         #Next fire the job
-                        GradeThirdCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca3);
+                        GradeThirdCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca3);
 
                     }elseif ($grading =='ca4') {
                         $ca4 = floatval($v['ca4']);
                         #Next fire the job
-                        GradeFourthCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca4);
+                        GradeFourthCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca4);
 
                     }elseif ($grading =='exam') {
                         $exam = floatval($v['exam']);
                         #Next fire the job
-                        GradeExamJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $exam);
+                        GradeExamJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $exam);
 
                     }elseif ($grading =='all') {
 
@@ -325,7 +327,7 @@ class LecturerGradingController extends Controller
                         $ca4 = floatval($v['ca4']);
                         $exam = floatval($v['exam']);
                         #Next fire the job
-                        GradeAllJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca1, $ca2, $ca3, $ca4 , $exam);
+                        GradeAllJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca1, $ca2, $ca3, $ca4 , $exam);
                     }
 
 

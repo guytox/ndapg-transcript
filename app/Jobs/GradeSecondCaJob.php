@@ -25,6 +25,7 @@ class GradeSecondCaJob implements ShouldQueue
     public $grading;
     public $allocationUid;
     public $matric;
+    public $time;
     public $ca2;
 
     /**
@@ -32,7 +33,7 @@ class GradeSecondCaJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca2)
+    public function __construct($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca2)
     {
         $this->gradeCourse = $gradeCourse;
         $this->gradeSession = $gradeSession;
@@ -41,6 +42,7 @@ class GradeSecondCaJob implements ShouldQueue
         $this->grading = $grading;
         $this->allocationUid = $allocationUid;
         $this->matric = $matric;
+        $this->time = $time;
         $this->ca2 = $ca2;
     }
 
@@ -51,6 +53,13 @@ class GradeSecondCaJob implements ShouldQueue
      */
     public function handle()
     {
+
+        if ($this->time <= now()) {
+            #nothing unusual
+        }else{
+            Log::info("something unsuual about this First CA grading");
+        }
+
         //get the semester course in question
         $semesterCourse = SemesterCourse::find($this->gradeCourse);
         # get the student in question
@@ -82,7 +91,7 @@ class GradeSecondCaJob implements ShouldQueue
                                 $monitorItem->ca2 = convertToKobo($this->ca2);
                                 $monitorItem->save();
 
-                                LecturerSemesterCourseGradingJob::dispatch($monitorItem->id);
+                                LecturerSemesterCourseGradingJob::dispatch($monitorItem->id,  $this->time);
 
                                 Log::info("CA2 Score of ". $this->ca2 . " for ". $semesterCourse->courseCode. " Entered Successfully for " . $this->matric);
 

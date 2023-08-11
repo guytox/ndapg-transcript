@@ -21,15 +21,17 @@ class SemesterCourseGradingJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $regId;
+    public $time;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($regId)
+    public function __construct($regId, $time)
     {
         $this->regId = $regId;
+        $this->time = $time;
     }
 
     /**
@@ -39,6 +41,14 @@ class SemesterCourseGradingJob implements ShouldQueue
      */
     public function handle()
     {
+
+        if ($this->time >= now()) {
+            # to nothing
+        }else{
+
+            Log::info("Something Unusual about this SemesterCourseGradingJob");
+            
+        }
         //fetch the regMonitorItem including the monitor to determine the present semesters spent
         $GradeCheck = RegMonitorItems::join('reg_monitors as r','r.id','=', 'reg_monitor_items.monitor_id')
                                 ->where('reg_monitor_items.id', $this->regId)
@@ -52,7 +62,7 @@ class SemesterCourseGradingJob implements ShouldQueue
                                             ->where('course_allocation_items.course_id', $GradeCheck->course_id)
                                             ->select('course_allocation_items.*')
                                             ->first();
-        
+
         Log::info("Allocated Course is - " .$gradedItem->course_id);
 
 

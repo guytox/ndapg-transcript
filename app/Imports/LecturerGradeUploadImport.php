@@ -32,9 +32,10 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
     private $sessionId;
     private $semesterId;
     private $staffId;
+    private $time;
 
 
-    public function __construct($id, $grading, $courseId, $sessionId, $semesterId, $staffId)
+    public function __construct($id, $grading, $courseId, $sessionId, $semesterId, $staffId, $time)
     {
         $this->id = $id;
         $this->grading = $grading;
@@ -42,11 +43,13 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
         $this->semesterId = $semesterId;
         $this->staffId = $staffId;
         $this->sessionId = $sessionId;
+        $this->time = $time;
     }
 
 
     public function model(array $row)
     {
+        $time = $this->time;
         #check the grading pattern and do the needful
         if ($this->grading =='ca1') {
 
@@ -60,7 +63,7 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
             $allocationUid = $this->id;
 
             #Next fire the job
-            GradeFirstCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca1);
+            GradeFirstCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca1);
 
         }elseif ($this->grading =='ca2') {
 
@@ -74,7 +77,7 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
             $allocationUid = $this->id;
 
             #Next fire the job
-            GradeSecondCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca2);
+            GradeSecondCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca2);
 
         }elseif ($this->grading =='ca3') {
 
@@ -88,7 +91,7 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
             $allocationUid = $this->id;
 
             #Next fire the job
-            GradeThirdCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca3);
+            GradeThirdCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca3);
 
         }elseif ($this->grading =='ca4') {
 
@@ -102,7 +105,7 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
             $allocationUid = $this->id;
 
             #Next fire the job
-            GradeFourthCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca4);
+            GradeFourthCaJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca4);
 
         }elseif ($this->grading =='exam') {
 
@@ -116,7 +119,7 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
             $allocationUid = $this->id;
 
             #Next fire the job
-            GradeExamJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $exam);
+            GradeExamJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $exam);
 
         }elseif ($this->grading =='all') {
 
@@ -134,7 +137,7 @@ class LecturerGradeUploadImport implements ToModel, WithHeadingRow
             $allocationUid = $this->id;
 
             #Next fire the job
-            GradeAllJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $ca1, $ca2, $ca3, $ca4, $exam);
+            GradeAllJob::dispatch($gradeCourse,$gradeSession,$gradeSemester,$gradeStaff, $grading, $allocationUid, $matric, $time, $ca1, $ca2, $ca3, $ca4, $exam);
         }
         //get details of the regmonitor item and proceed with upload
 
