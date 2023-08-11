@@ -28,4 +28,8 @@ class StudentRecord extends Model
     public function defferment(){
         return $this->hasMany(Defferment::class, 'student_id', 'id');
     }
+
+    public function gradingItems(){
+        return $this->hasMany(GradingSystemItems::class, 'grading_system_id', 'grading_system_id');
+    }
 }

@@ -51,6 +51,8 @@ class HodGradeApprovalJob implements ShouldQueue
                                         ->where('semester_id', $theSemester)
                                         ->where('course_id', $theCourse)
                                         ->get();
+        # set the time
+        $time = now();
         // pass them to the grading job
 
         if (count($allRegistrants)>0) {
@@ -60,7 +62,7 @@ class HodGradeApprovalJob implements ShouldQueue
 
                 $regId = $v->id;
 
-                SemesterCourseGradingJob::dispatch($regId);
+                SemesterCourseGradingJob::dispatch($regId, $time);
 
             }
 

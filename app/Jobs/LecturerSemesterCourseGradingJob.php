@@ -21,15 +21,17 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
 
 
     public $regId;
+    public $time;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($regId)
+    public function __construct($regId, $time)
     {
         $this->regId = $regId;
+        $this->time = $time;
     }
 
     /**
@@ -39,13 +41,23 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
      */
     public function handle()
     {
+
+        if ($this->time <= now()) {
+            #nothing unusual
+        }else{
+
+            Log::info("something unsuual about this First CA grading");
+        }
+
         //fetch the regMonitorItem including the monitor to determine the present semesters spent
 
-        Log::info("Begining Lecturer Semester Course Grading");
+        Log::info("Begining Lecturer Semester Course Grading for ". $this->regId);
 
 
 
         $toGrade = RegMonitorItems::find($this->regId);
+
+        // Log::info($toGrade);
 
         $semestercourse = SemesterCourse::find($toGrade->course_id);
 
@@ -77,40 +89,32 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
         //get the grading system from students record.
         $gradeQuery = StudentRecord::find($toGrade->student_id);
 
+
+
         if ($gradeQuery) {
 
-            //fetch the grading system items and run a loop to grade.
-            $gradeItems =GradingSystemItems::where('grading_system_id', $gradeQuery->grading_system)
-                                            ->get();
-            foreach ($gradeItems as $v) {
+            foreach ($gradeQuery->gradingItems as $gr) {
 
                 // check to see if total falls between the lower boundary and the upper boundary
-                if ($total <= convertToKobo($v->upper_boundary) && $total >= convertToKobo($v->lower_boundary)) {
-                    //total matches this particular selection, lets sort out some variables.
 
-                    //gradeLetter.
-                    $gradeLetter = $v->grade_letter;
+                if ( $total >= $gr->lower_boundary && $total <= $gr->upper_boundary) {
 
-                    $toGrade->lgrade = $gradeLetter;
-                    $toGrade->save();
 
-                    //Log::info("Grade Letter Recorded Successfully !!!");
 
-                    //determine if the student has passed or failed based on grading system loop.
-                    //is passed value.
+                    $toGrade->lgrade = $gr->grade_letter;
 
-                    // - weighted points.
-
-                    $twgp = $semestercourse->creditUnits * $v->weight_points;
+                    $twgp = $semestercourse->creditUnits * $gr->weight_points;
 
                     $toGrade->twgp = $twgp;
+
                     $toGrade->save();
 
+
+                    Log::info("This entry has been saved with total of ".$total." which qualifies for ". $gr->grade_letter);
+
                     Log::info("Grade Update of ". $semestercourse->courseCode . "Successful for " . $gradeQuery->matric);
-
-                    //Log::info("Total Weighted grade Point Recorded Successfully");
-
                 }
+
             }
 
 
