@@ -344,7 +344,39 @@ class LecturerGradingController extends Controller
 
     }
 
+    public function getCoursesForRegrading(){
+        return view('admin.initiate-auto-regrade-registration');
+    }
 
+    public function effectAutoRegrade(Request $request){
+        //return $request;
+        #first find the student
+        $std = RegMonitorItems::where('session_id', $request->school_session)
+                                ->where('semester_id', $request->semester)
+                                ->get();
+        $time = now();
+
+        if ($std) {
+            #std regs found proceed
+            #set the variables
+            foreach ($std as $x) {
+
+                $regId = $x->id;
+
+                LecturerSemesterCourseGradingJob::dispatch($regId, $time);
+            }
+
+
+
+
+
+        }else{
+
+            return back()->with('error', "There was a problem finding regs");
+        }
+
+        return back()->with('info','Auto Regrade Submitted Successfully');
+    }
 
 
     public function gradeConfirmation(Request $request, $as){
