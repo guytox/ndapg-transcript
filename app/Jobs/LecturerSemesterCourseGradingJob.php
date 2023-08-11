@@ -112,7 +112,7 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
 
                     Log::info("This entry has been saved with total of ".$total." which qualifies for ". $gr->grade_letter);
 
-                    Log::info("Grade Update of ". $semestercourse->courseCode . "Successful for " . $gradeQuery->matric);
+                    Log::info("Grade Update of ". $semestercourse->courseCode . " Successful for " . $gradeQuery->matric);
                 }
 
             }

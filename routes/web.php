@@ -328,6 +328,10 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
         Route::get('/lecturerScoreSheet/{as}/{id}', [LecturerGradingController::class, 'showScoreSheet'])->name('lecturer.grading.scoresheet');
 
+        #update all courses
+        Route::get('regradeAllCourses', [LecturerGradingController::class, 'getCoursesForRegrading'])->name('start.auto.grade');
+        Route::post('gradeAllCourses', [LecturerGradingController::class, 'effectAutoRegrade'])->name('effect.auto.grade');
+
 
 
     });
