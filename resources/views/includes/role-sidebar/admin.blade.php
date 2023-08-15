@@ -298,8 +298,6 @@
 </li>
 
 
-
-
 {{-- Manage Emails --}}
 <li>
     <a href="#" class="@if (Request::is('attendee.payment')) active @endif active has-arrow waves-effect">
