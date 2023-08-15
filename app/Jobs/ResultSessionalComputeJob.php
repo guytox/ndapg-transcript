@@ -17,15 +17,17 @@ class ResultSessionalComputeJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $regMonitorId;
+    public $time;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($regMonitorId)
+    public function __construct($regMonitorId, $time)
     {
         $this->regMonitorId = $regMonitorId;
+        $this->time = $time;
     }
 
     /**
@@ -35,6 +37,13 @@ class ResultSessionalComputeJob implements ShouldQueue
      */
     public function handle()
     {
+
+        if ($this->time <= now()) {
+            # then do nothing
+        }else{
+            # think of what to do at this time
+        }
+        
         //We are ready to compute this result
         // fetch the regMonitor items
         $result = RegMonitor::find($this->regMonitorId);
@@ -221,5 +230,5 @@ class ResultSessionalComputeJob implements ShouldQueue
     }
 
 
-    
+
 }

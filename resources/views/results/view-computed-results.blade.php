@@ -77,9 +77,9 @@
                                         <td>
 
                                             @if ($val->eo_approval ===0)
-                                                <span title="Exam Officer" > &#10060;</span>
+                                                <span title="PG COORDINATOR" > &#10060; </span>
                                             @elseif ($val->eo_approval ===1)
-                                                <span title="Exam Officer" > &#9989;</span>
+                                                <span title="PG COORDINATOR" > &#9989;</span>
                                             @endif
 
                                             @if ($val->hod_approval ===0)
@@ -95,9 +95,9 @@
                                             @endif
 
                                             @if ($val->committee_approval ===0)
-                                                <span title="Senate Business Committee" > &#10060;</span>
+                                                <span title="Dean SPGS" > &#10060;</span>
                                             @elseif ($val->committee_approval ===1)
-                                                <span title="Senate Business Committee" > &#9989;</span>
+                                                <span title="Dean SPGS" > &#9989;</span>
                                             @endif
 
                                             @if ($val->senate_approval ===0)
