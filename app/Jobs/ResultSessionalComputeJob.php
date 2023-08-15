@@ -171,7 +171,7 @@ class ResultSessionalComputeJob implements ShouldQueue
 
         if ($creditDifference >= 10) {
 
-            $result->s_message = "To Relegate";
+            $result->s_message = "To Withdraw";
 
         }elseif ($creditDifference >=1) {
             # code...
@@ -219,4 +219,7 @@ class ResultSessionalComputeJob implements ShouldQueue
         // update the ComputedResultId
 
     }
+
+
+    
 }

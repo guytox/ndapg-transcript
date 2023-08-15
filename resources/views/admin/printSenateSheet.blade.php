@@ -133,7 +133,7 @@ border: 1px solid #18191a;
                             <td rowspan="{{$k['regCount']}}" style="vertical-align: middle;"> {{$sno}} </td>
                             <td rowspan="{{$k['regCount']}}" style="vertical-align: middle;">{{$k['matric']}} </td>
                             <td rowspan="{{$k['regCount']}}" style="vertical-align: middle;">{{$k['name']}}  </td>
-                            <td rowspan="{{$k['regCount']}}" style="vertical-align: middle;">{{$k['gender']}} </td>
+                            <td rowspan="{{$k['regCount']}}" style="vertical-align: middle;">{{ ucfirst($k['gender']) }} </td>
                             <td rowspan="{{$k['regCount']}}" style="vertical-align: middle;">{{$k['svc']}} </td>
                             <td rowspan="{{$k['regCount']}}" style="vertical-align: middle;">{{$k['bn']}} </td>
                             @if ($k['regItems'][0]['sessRegCheck'])

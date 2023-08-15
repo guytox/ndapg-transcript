@@ -57,8 +57,9 @@ class SubmitSessionalResultComputationJob implements ShouldQueue
             #All set to shoot the jobs
             foreach ($regEntries as $q) {
                 $regId = $q->id;
-                SemesterCourseGradingJob::dispatch($regId);
-                SemesterCourseSessionalGradingJob::dispatch($regId);
+                $time = now();
+                SemesterCourseGradingJob::dispatch($regId, $time);
+                SemesterCourseSessionalGradingJob::dispatch($regId, $time);
             }
         }
 

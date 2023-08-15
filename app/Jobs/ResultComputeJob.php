@@ -151,7 +151,7 @@ class ResultComputeJob implements ShouldQueue
             $creditDifference = $tcr - $tce;
 
             if ($creditDifference > 0) {
-                $result->message = "TO RESIT";
+                $result->message = "CARRY OVER";
             }else{
                 # do nothing
             }

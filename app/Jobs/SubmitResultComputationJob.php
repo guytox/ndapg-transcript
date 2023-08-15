@@ -63,7 +63,8 @@ class SubmitResultComputationJob implements ShouldQueue
             #All set to shoot the jobs
             foreach ($regEntries as $q) {
                 $regId = $q->id;
-                SemesterCourseGradingJob::dispatch($regId);
+                $time = now();
+                SemesterCourseGradingJob::dispatch($regId, $time);
             }
         }
 
@@ -71,6 +72,6 @@ class SubmitResultComputationJob implements ShouldQueue
         $regMonitorId = $regMonitorEntry->id;
         $scTime = Carbon::now()->addSeconds(10);
         ResultComputeJob::dispatch($regMonitorId)->delay($scTime);
-        
+
     }
 }
