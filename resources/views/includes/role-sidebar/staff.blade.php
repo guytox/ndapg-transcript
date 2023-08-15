@@ -555,6 +555,17 @@
         </li>
 
     </ul>
+
+    <ul>
+
+        <li>
+            <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>View Computed Results</span>
+            </a>
+        </li>
+
+    </ul>
 </li>
 
     @endrole

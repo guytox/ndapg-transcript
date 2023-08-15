@@ -336,7 +336,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 
     });
 
-    Route::prefix('resultComputation')->middleware('auth', 'role:exam_officer|hod|admin|dean|vc')->group(function(){
+    Route::prefix('resultComputation')->middleware('auth', 'role:exam_officer|hod|admin|dean|dean_pg|vc')->group(function(){
 
         Route::get('resultComputeHome', [ResultManagementController::class, 'resultComputeHome'])->name('begin-result-computation');
         Route::post('cresultComputeHome/{as}', [ResultManagementController::class, 'checkComputeReadiness'])->name('result-compute-home');
