@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ResultApprovalManagementJob implements ShouldQueue
 {
@@ -47,11 +48,17 @@ class ResultApprovalManagementJob implements ShouldQueue
         #fetch the result Id
         $toApprove = ComputedResult::where('uid', $this->resultId)->first();
 
+
+
         if ($toApprove) {
             #result found next get the
+
+            Log::info("Result found for Approval of ".$this->resultId);
             if ($this->action==1) {
+
+                Log::info("Request is for approval of ".$this->resultId. " to approve as ".$this->approveAs);
                 #this result is up for approval
-                if ($this->approveAs == getRoleIdByRoleName('exam_officer') && $toApprove->eo_approval==0) {
+                if ($this->approveAs == getRoleIdByRoleName('reg_officer') && $toApprove->eo_approval==0) {
                     # exam officer is ready to approve set the approval parameters now
                     $toApprove->eo_approval = 1;
                     $toApprove->eo_approver = $this->actionBy;
@@ -59,6 +66,9 @@ class ResultApprovalManagementJob implements ShouldQueue
                     $toApprove->last_updated_at = $this->actionDate;
                     #save the
                     $toApprove->save();
+
+                    Log::info("PG Coordinator Approval Successful for ".$this->resultId);
+
                 }elseif ($this->approveAs == getRoleIdByRoleName('hod') && $toApprove->eo_approval==1 && $toApprove->hod_approval==0) {
                     # hod is ready to approve set the approval parameters now
                     $toApprove->hod_approval = 1;
@@ -67,11 +77,22 @@ class ResultApprovalManagementJob implements ShouldQueue
                     $toApprove->last_updated_at = $this->actionDate;
                     #save the
                     $toApprove->save();
+
+                    Log::info("HOD Approval Successful for ".$this->resultId);
+
                 }elseif ($this->approveAs == getRoleIdByRoleName('dean') && $toApprove->eo_approval==1 && $toApprove->hod_approval==1 && $toApprove->dean_approval==0) {
                     # dean is ready to approve set the approval parameters now
                     $toApprove->dean_approval = 1;
                     $toApprove->dean_approver = $this->actionBy;
                     $toApprove->dean_approved_at = $this->actionDate;
+
+                    #save the
+                    $toApprove->save();
+
+                    Log::info("Dean Approval Successful for ".$this->resultId);
+
+                }elseif ($this->approveAs == getRoleIdByRoleName('dean_pg') && $toApprove->eo_approval==1 && $toApprove->hod_approval==1 && $toApprove->dean_approval==1 && $toApprove->committee_approval==0) {
+
                     # dean approval on behalf of the commiittee
                     $toApprove->committee_approval = 1;
                     $toApprove->commitee_approver = $this->actionBy;
@@ -79,6 +100,9 @@ class ResultApprovalManagementJob implements ShouldQueue
                     $toApprove->last_updated_at = $this->actionDate;
                     #save the
                     $toApprove->save();
+
+                    Log::info("Dean SPGS Approval Successful for ".$this->resultId);
+
                 }elseif ($this->approveAs == getRoleIdByRoleName('vc') && $toApprove->eo_approval==1 && $toApprove->hod_approval==1 && $toApprove->dean_approval==1 && $toApprove->committee_approval==1 && $toApprove->senate_approval==0) {
                     # senate approval is ready is ready to approve set the approval parameters now
                     $toApprove->senate_approval = 1;
@@ -89,6 +113,8 @@ class ResultApprovalManagementJob implements ShouldQueue
                     $toApprove->cr_status='approved';
                     #save the entry
                     $toApprove->save();
+
+                    Log::info("FINAL Approval Successful for ".$this->resultId);
 
                 }
             }elseif ($this->action==2) {
@@ -102,7 +128,29 @@ class ResultApprovalManagementJob implements ShouldQueue
                     $toApprove->last_updated_at = $this->actionDate;
                     #save the
                     $toApprove->save();
+
+                    Log::info("HOD Disapproval Successful for ".$this->resultId);
+
                 }elseif ($this->approveAs == getRoleIdByRoleName('dean') && $toApprove->eo_approval==1 && $toApprove->hod_approval==1 && $toApprove->dean_approval==0) {
+                    # dean is ready to approve set the approval parameters now
+                    #roll back exam officer's approval
+                    $toApprove->eo_approval = 0;
+                    $toApprove->eo_approver = null;
+                    $toApprove->eo_approved_at = null;
+                    #rollback hod
+                    $toApprove->hod_approval = 0;
+                    $toApprove->hod_approver = null;
+                    $toApprove->hod_approved_at = null;
+
+                    $toApprove->last_updated_at = $this->actionDate;
+
+
+                    #save the
+                    $toApprove->save();
+
+                    Log::info("Dean Disapproval Successful for ".$this->resultId);
+
+                }elseif ($this->approveAs == getRoleIdByRoleName('dean_pg') && $toApprove->eo_approval==1 && $toApprove->hod_approval==1 && $toApprove->dean_approval==0) {
                     # dean is ready to approve set the approval parameters now
                     #roll back exam officer's approval
                     $toApprove->eo_approval = 0;
@@ -116,13 +164,13 @@ class ResultApprovalManagementJob implements ShouldQueue
                     $toApprove->dean_approval = 0;
                     $toApprove->dean_approver = null;
                     $toApprove->dean_approved_at = null;
-                    # dean approval on behalf of the commiittee
-                    $toApprove->committee_approval = 0;
-                    $toApprove->commitee_approver = null;
-                    $toApprove->committee_approved_at = null;
+
                     $toApprove->last_updated_at = $this->actionDate;
                     #save the
                     $toApprove->save();
+
+                    Log::info("Dean Disapproval Successful for ".$this->resultId);
+
                 }elseif ($this->approveAs == getRoleIdByRoleName('vc') && $toApprove->eo_approval==1 && $toApprove->hod_approval==1 && $toApprove->dean_approval==1 && $toApprove->committee_approval==1) {
                     # senate approval is ready is ready to approve set the approval parameters now
                      #roll back exam officer's approval
@@ -151,9 +199,16 @@ class ResultApprovalManagementJob implements ShouldQueue
                     #save the entry
                     $toApprove->save();
 
+                    Log::info("Senate Disapproval Successful for ".$this->resultId);
+
+
+                }else{
+                    Log::info("Error !!! Disapproval Un-Successful for ".$this->resultId);
                 }
 
             }
+        }else{
+            Log::info("Error !!! Approval Reslt not found");
         }
     }
 }

@@ -19,16 +19,18 @@ class SubmitSessionalResultComputationJob implements ShouldQueue
 
     public $computeResultUId;
     public $regMonitorUid;
+    public $time;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($computeResultUId, $regMonitorUid)
+    public function __construct($computeResultUId, $regMonitorUid, $time)
     {
         $this->computeResultUId = $computeResultUId;
         $this->regMonitorUid = $regMonitorUid;
+        $this->time = $time;
     }
 
     /**
@@ -38,6 +40,12 @@ class SubmitSessionalResultComputationJob implements ShouldQueue
      */
     public function handle()
     {
+
+        if ($this->time <= now()) {
+            # then do nothing
+        }else{
+            # think of what to do at this time
+        }
         #fetch the computed result id here
         $computeResultId = ComputedResult::where('uid', $this->computeResultUId)->first();
         $computeResultId->last_updated_at = now();
@@ -66,7 +74,8 @@ class SubmitSessionalResultComputationJob implements ShouldQueue
         # Schedule the result for computation one minute after now
         $regMonitorId = $regMonitorEntry->id;
         $scTime = Carbon::now()->addSeconds(15);
-        ResultSessionalComputeJob::dispatch($regMonitorId)->delay($scTime);
+        $time = now();
+        ResultSessionalComputeJob::dispatch($regMonitorId, $time)->delay($scTime);
 
     }
 }

@@ -220,7 +220,9 @@ class ResultManagementController extends Controller
 
                         foreach ($regMonitors as $v) {
 
-                            SubmitSessionalResultComputationJob::dispatch($computeResultUId, $v->uid);
+                            $time = now();
+
+                            SubmitSessionalResultComputationJob::dispatch($computeResultUId, $v->uid, $time);
 
                         }
 
@@ -303,7 +305,9 @@ class ResultManagementController extends Controller
 
                             foreach ($regMonitors as $v) {
 
-                                SubmitResultComputationJob::dispatch($computeResultUId, $v->uid);
+                                $time = now();
+
+                                SubmitResultComputationJob::dispatch($computeResultUId, $v->uid, $time);
 
                             }
 
@@ -342,7 +346,9 @@ class ResultManagementController extends Controller
 
                         foreach ($regMonitors as $v) {
 
-                            SubmitResultComputationJob::dispatch($computeResultUId, $v->uid);
+                            $time = now();
+
+                            SubmitResultComputationJob::dispatch($computeResultUId, $v->uid, $time);
                         }
 
                         return redirect(route('begin-result-computation'))->with('info' , "Recompute Submitted Successfully !!! Please check back after One Minute");
@@ -1323,6 +1329,8 @@ class ResultManagementController extends Controller
             'action' =>'required',
         ]);
 
+        //return $request;
+
         if ($request->cResults) {
             # retults present, do the needful and send for processing
             $actionBy = user()->id;
@@ -1412,8 +1420,9 @@ class ResultManagementController extends Controller
                         //return $computeResultUId;
 
                         foreach ($request->regMonitor as $v) {
+                            $time = now();
 
-                            SubmitSessionalResultComputationJob::dispatch($computeResultUId, $v);
+                            SubmitSessionalResultComputationJob::dispatch($computeResultUId, $v, $time);
 
                         }
 
@@ -1476,7 +1485,9 @@ class ResultManagementController extends Controller
 
                             foreach ($request->regMonitor as $v) {
 
-                                SubmitResultComputationJob::dispatch($computeResultUId, $v);
+                                $time = now();
+
+                                SubmitResultComputationJob::dispatch($computeResultUId, $v, $time);
 
                             }
 
@@ -1508,7 +1519,9 @@ class ResultManagementController extends Controller
 
                         foreach ($request->regMonitor as $v) {
 
-                            SubmitResultComputationJob::dispatch($computeResultUId, $v);
+                            $time = now();
+
+                            SubmitResultComputationJob::dispatch($computeResultUId, $v, $time);
                         }
 
                         return back()->with('info' , "Recompute Submitted Successfully !!! Please check back after One Minute");

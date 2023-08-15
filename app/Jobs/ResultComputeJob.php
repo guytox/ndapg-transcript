@@ -19,15 +19,17 @@ class ResultComputeJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $regMonitorId;
+    public $time;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($regMonitorId)
+    public function __construct($regMonitorId, $time)
     {
         $this->regMonitorId = $regMonitorId;
+        $this->time = $time;
     }
 
     /**
@@ -37,6 +39,12 @@ class ResultComputeJob implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->time <= now()) {
+            # then do nothing
+        }else{
+            # think of what to do at this time
+        }
+
         //We are ready to compute this result
         // fetch the regMonitor items
         $result = RegMonitor::find($this->regMonitorId);
@@ -221,8 +229,8 @@ class ResultComputeJob implements ShouldQueue
                     $computeResultEntry = ComputedResult::find($nextResult->r_computed_result_id);
                     $resultUid = $computeResultEntry->uid;
                     # This result has been computed, schedule it for compution
-
-                    SubmitResultComputationJob::dispatch($resultUid, $nextResult->uid);
+                    $time = now();
+                    SubmitResultComputationJob::dispatch($resultUid, $nextResult->uid, $time);
 
                 }
 
@@ -236,7 +244,8 @@ class ResultComputeJob implements ShouldQueue
                 $SessionalcomputeResultEntry = ComputedResult::find($result->r_computed_result_id);
                 $sessionalresultUid = $SessionalcomputeResultEntry->uid;
                 # Send this result for sessional computation
-                SubmitSessionalResultComputationJob::dispatch($sessionalresultUid, $result->uid);
+                $time = now();
+                SubmitSessionalResultComputationJob::dispatch($sessionalresultUid, $result->uid, $time);
 
             }
 
@@ -253,7 +262,8 @@ class ResultComputeJob implements ShouldQueue
                     $resultUid = $computeResultEntry->uid;
                     # This result has been computed, schedule it for compution
                     $scTime = Carbon::now()->addSeconds(30);
-                    SubmitResultComputationJob::dispatch($resultUid, $nextResult->uid)->delay($scTime);
+                    $time = now();
+                    SubmitResultComputationJob::dispatch($resultUid, $nextResult->uid, $time)->delay($scTime);
 
                 }
 
