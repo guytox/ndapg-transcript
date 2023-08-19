@@ -105,6 +105,39 @@ class LecturerGradingController extends Controller
 
             return view('lecturers.viewMyScoresheet', compact('course', 'regs'));
 
+        }elseif (user()->hasRole('hod|dean|dean_pg|vc|admin|dap')) {
+            #get students in the jurisdiction alone
+            //get the course allocation item
+            // get the total No of registants grouped by departments
+            //perform confirmation checks and pass the records to relevant views
+            #get the jurisdiction
+            $role = 'dap';
+            $staffJurisdiction = getAcademicDepts(user()->id, $role);
+            //return $id;
+           $course = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
+                                            ->where(['course_allocation_items.uid' =>$id,
+                                                        //'course_allocation_items.staff_id' => user()->id,
+                                                        'course_allocation_items.can_grade' =>1
+                                            ])
+                                            ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id')
+                                            ->first();
+
+            //return $course;
+
+            $regs = RegMonitorItems::join('reg_monitors as r', 'r.id','=','reg_monitor_items.monitor_id')
+                                    ->join('programs as p', 'p.id','=','r.program_id')
+                                    ->where(['reg_monitor_items.course_id'=>$course->course_id, 'reg_monitor_items.session_id'=>$course->session_id,'reg_monitor_items.semester_id'=>$course->semester_id])
+                                    ->whereIn('p.department_id', $staffJurisdiction)
+                                    ->select('reg_monitor_items.*')
+                                    ->get();
+
+            //return $regs;
+
+            return view('lecturers.viewMyScoresheet', compact('course', 'regs'));
+
+        }else{
+
+            return redirect('home')->with('error', 'You are not allowed to view this scoresheet, contact ICT');
         }
     }
 
@@ -376,6 +409,57 @@ class LecturerGradingController extends Controller
         }
 
         return back()->with('info','Auto Regrade Submitted Successfully');
+    }
+
+    public function effectVetoConfirm($as, $id){
+
+        $toVeto = CourseAllocationItems::where('uid', $id)->first();
+        if ($toVeto) {
+            if ($as ==='confirm') {
+
+                $toVeto->cfm_ca1 = 1;
+                $toVeto->cfm_ca2 = 1;
+                $toVeto->cfm_ca3 = 1;
+                $toVeto->cfm_ca4 = 1;
+                $toVeto->cfm_exam = 1;
+                $toVeto->graded = 1;
+                $toVeto->grading_completed = 1;
+                $toVeto->submitted = 1;
+                $toVeto->submitted_by = $toVeto->staff_id;
+                $toVeto->submitted_at = now();
+                $toVeto->accepted = 1;
+                $toVeto->accepted_by = $toVeto->courseAllocation->department->hod_id;
+                $toVeto->accepted_at = now();
+                $toVeto->save();
+                return redirect(route('hod-confirm.index',['as'=>'dap']))->with('info', 'Veto Grade Confirmation Successful');
+
+            }elseif($as ==='deconfirm'){
+
+                $toVeto->cfm_ca1 = 0;
+                $toVeto->cfm_ca2 = 0;
+                $toVeto->cfm_ca3 = 0;
+                $toVeto->cfm_ca4 = 0;
+                $toVeto->cfm_exam = 0;
+                $toVeto->graded = 1;
+                $toVeto->grading_completed = 2;
+                $toVeto->submitted = 2;
+                $toVeto->submitted_by = null;
+                $toVeto->submitted_at = null;
+                $toVeto->accepted = 2;
+                $toVeto->accepted_by = null;
+                $toVeto->accepted_at = null;
+                $toVeto->save();
+                return redirect(route('hod-confirm.index', ['as'=>'dap']))->with('info', 'Veto Grade Deconfirmation Successful');
+
+            }
+        }else{
+
+            return redirect(route('hod-confirm.index', ['as'=>'dap']))->with('error', 'Something went wrong');
+
+        }
+
+
+
     }
 
 

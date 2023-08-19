@@ -33,10 +33,8 @@
                                     <th scope="col"> Credits</th>
                                     <th scope="col">StaffId</th>
                                     <th scope="col">StaffName</th>
-                                    <th scope="col">gsm</th>
                                     <th scope="col">Grading</th>
-                                    <th scope="col">Submitted</th>
-                                    <th scope="col">Hod Confirm</th>
+                                    <th scope="col">Dept</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -55,8 +53,7 @@
                                         <td>{{getCourseDetailsById($val->course_id,'title')}}</td>
                                         <td>{{getCourseDetailsById($val->course_id,'credits')}}</td>
                                         <td>{{getUserById($val->staff_id)->username}}</td>
-                                        <td>{{getUserById($val->staff_id)->name}}</td>
-                                        <td>{{getUserById($val->staff_id)->phone_number}}</td>
+                                        <td>{{getUserById($val->staff_id)->name}} ({{getUserById($val->staff_id)->phone_number}} )</td>
                                         <td>
 
                                             @if ($val->cfm_ca1 ==='0')
@@ -97,15 +94,14 @@
                                             @elseif ($val->submitted ==='1')
                                                 <span title="Lecturer Submission" > &#9989;</span>
                                             @endif
-                                        </td>
-                                        <td>
+
                                             @if ($val->accepted ==='2')
                                                 <span title="HOD Acceptance" > &#10060;</span>
                                             @elseif ($val->accepted ==='1')
                                                 <span title="HOD Acceptance" > &#9989;</span>
                                             @endif
-
                                         </td>
+
 
                                         <td>
                                             @role('hod')
@@ -122,7 +118,7 @@
 
                                                 @elseif ($val->grading_completed ==='1' )
                                                     Ready for Result Computation <br>
-                                                    <a class="btn btn-success" href="{{route('lecturer.grading.scoresheet',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">View Score Sheet</a>
+                                                    <a target="_blank"  class="btn btn-success" href="{{route('lecturer.grading.scoresheet',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">View Score Sheet</a>
                                                 @endif
 
 
@@ -132,13 +128,33 @@
 
                                             @if ($val->grading_completed ==='1' )
 
-                                                    <a class="popup-form btn btn-primary" href="#deanunconfirm-form{{$key+1}}">Approve/RejectSubmission</a>
+                                                    <a target="_blank" class="popup-form btn btn-primary" href="#deanunconfirm-form{{$key+1}}">Approve/RejectSubmission</a>
 
                                                 @elseif ($val->grading_completed ==='2')
 
                                                     No Action Required
 
                                                 @endif
+
+
+
+
+                                            @endrole
+
+                                            @role('admin')
+                                                @if ($val->accepted==='1')
+
+                                                    <a class="btn btn-danger" href="{{route('veto.lecturer.confirmation',['as'=>'deconfirm','id'=>$val->uid])}}">Deconfirm</a>
+
+                                                @elseif ($val->accepted ==='2')
+
+                                                    <a class="btn btn-primary" href="{{route('veto.lecturer.confirmation',['as'=>'confirm','id'=>$val->uid])}}">Confirm</a>
+
+                                                @endif
+
+                                                <br>
+                                                <a target="_blank"  class="btn btn-success" href="{{route('lecturer.grading.scoresheet',['as'=>'ortesenKwagh', 'id'=>$val->uid])}}">View Score Sheet</a>
+
 
 
                                             @endrole
