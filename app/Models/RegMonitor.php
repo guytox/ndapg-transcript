@@ -14,9 +14,15 @@ class RegMonitor extends Model
     public function RegMonitorItems(){
 
         return $this->hasMany(RegMonitorItems::class,'monitor_id','id');
+
     }
+    
 
     public function student(){
+
         return $this->belongsTo(StudentRecord::class,'student_id');
+
     }
+
+
 }

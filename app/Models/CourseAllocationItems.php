@@ -14,4 +14,6 @@ class CourseAllocationItems extends Model
     public function courseAllocation(){
         return $this->belongsTo(CourseAllocationMonitor::class, 'allocation_id');
     }
+
+    
 }

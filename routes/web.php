@@ -331,6 +331,7 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
         #update all courses
         Route::get('regradeAllCourses', [LecturerGradingController::class, 'getCoursesForRegrading'])->name('start.auto.grade');
         Route::post('gradeAllCourses', [LecturerGradingController::class, 'effectAutoRegrade'])->name('effect.auto.grade');
+        Route::get('vetoGradeConfirmation/{as}/{id}', [LecturerGradingController::class, 'effectVetoConfirm'])->name('veto.lecturer.confirmation');
 
 
 

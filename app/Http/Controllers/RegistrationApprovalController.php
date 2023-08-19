@@ -425,7 +425,7 @@ class RegistrationApprovalController extends Controller
 
        $student = RegMonitor::find(1224);
 
-        
+
 
         $sessionId = $request->c_sess;
         $semesterId = $request->c_sem;

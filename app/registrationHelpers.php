@@ -255,7 +255,7 @@ function getAcademicDepts($id, $role){
     }
 
 
-    if ($user->hasRole('dean') && $role =='ityoughKiVesen') {
+    if ($user->hasRole('dean')) {
 
         $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
                         ->where('faculties.academic', 1)
@@ -267,7 +267,7 @@ function getAcademicDepts($id, $role){
 
     }
 
-    if ($user->hasRole('hod') && $role =='ityoughKiChukur') {
+    if ($user->hasRole('hod')) {
 
         $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
                         ->where('faculties.academic', 1)
@@ -277,7 +277,7 @@ function getAcademicDepts($id, $role){
         return $dept;
     }
 
-    if ($user->hasRole('reg_officer') && $role =='ityoughKiNgeren') {
+    if ($user->hasRole('reg_officer') ) {
 
         $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
                         ->where('faculties.academic', 1)
@@ -288,7 +288,7 @@ function getAcademicDepts($id, $role){
 
     }
 
-    if ($user->hasRole('exam_officer') && $role =='ityoughKiKyaren') {
+    if ($user->hasRole('exam_officer') ) {
 
         $dept = Department::join('faculties', 'faculties.id', '=', 'departments.faculty_id')
                         ->where('faculties.academic', 1)
