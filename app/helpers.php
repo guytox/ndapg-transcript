@@ -934,7 +934,7 @@ function getAcademicRoles($id){
     $allUserRoles = User::join('model_has_roles', 'model_has_roles.model_id','=','users.id')
                                     ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                                     ->where('users.id',$id)
-                                    ->whereIn('roles.name',['dean','hod', 'reg_officer', 'dean_pg'])
+                                    ->whereIn('roles.name',['dean','hod', 'reg_officer', 'dean_pg','vc'])
                                     ->select('roles.*')
                                     ->get()
                                     ->pluck('name','id');
