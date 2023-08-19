@@ -559,7 +559,7 @@ class LecturerGradingController extends Controller
 
             return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
 
-        }elseif (user()->hasRole('dap|acad_eo|admin|dean_pg') && $as =='dap') {
+        }elseif (user()->hasRole('dap|acad_eo|admin|dean_pg|vc') && $as =='dap') {
 
             $session_id = activeSession()->id;
             $session_name = activeSession()->name;
@@ -647,7 +647,7 @@ class LecturerGradingController extends Controller
 
             return view('admin.view-graded-courses', compact('courses','session_name', 'semester'));
 
-        }elseif (user()->hasRole('dap|acad_eo|admin|dean_pg')) {
+        }elseif (user()->hasRole('dap|acad_eo|admin|dean_pg|vc')) {
 
             $courses = CourseAllocationItems::join('course_allocation_monitors as m', 'm.id', '=', 'course_allocation_items.allocation_id')
                                             ->join('semester_courses', 'semester_courses.id','=','course_allocation_items.course_id')

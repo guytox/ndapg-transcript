@@ -56,6 +56,11 @@ class ResultApprovalManagementJob implements ShouldQueue
             Log::info("Result found for Approval of ".$this->resultId);
             if ($this->action==1) {
 
+                $time = now();
+                $resultUid = $this->resultId;
+
+                VetoResultRecomputeJob::dispatch($resultUid, $time);
+
                 Log::info("Request is for approval of ".$this->resultId. " to approve as ".$this->approveAs);
                 #this result is up for approval
                 if ($this->approveAs == getRoleIdByRoleName('reg_officer') && $toApprove->eo_approval==0) {
