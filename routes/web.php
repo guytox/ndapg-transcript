@@ -20,6 +20,7 @@ use App\Http\Controllers\CurriculaItemsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\GradingSystemController;
+use App\Http\Controllers\GraduationManagementController;
 use App\Http\Controllers\LecturerGradingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgrammeController;
@@ -360,6 +361,11 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
     });
 
 
+});
+
+Route::prefix('Graduation')->middleware(['auth','role:exam_officer|hod|admin|dean|dean_pg|vc'])->group(function(){
+    Route::get('search/{id}/{sem}', [GraduationManagementController::class, 'getStudentsForRecommendation'])->name('get.grad.students');
+    Route::post('recommend',[GraduationManagementController::class, 'recommendGraduants'])->name('recommend.graduants');
 });
 
 Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified','application.submission'])->group(function () {

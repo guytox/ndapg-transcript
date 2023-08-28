@@ -95,6 +95,16 @@ function getCreditUnitsByCourseId($courseId){
 
 }
 
+function getCarryOvers($studentId){
+    $carryOvers = RegMonitorItems::where('student_id', $studentId)
+                                    ->where('is_co_passed','0')
+                                    ->distinct('course_id')
+                                    ->select('course_id')
+                                    ->get();
+
+    return $carryOvers;
+}
+
 
 
 
