@@ -366,6 +366,8 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
 Route::prefix('Graduation')->middleware(['auth','role:exam_officer|hod|admin|dean|dean_pg|vc'])->group(function(){
     Route::get('search/{id}/{sem}', [GraduationManagementController::class, 'getStudentsForRecommendation'])->name('get.grad.students');
     Route::post('recommend',[GraduationManagementController::class, 'recommendGraduants'])->name('recommend.graduants');
+    Route::get('search/Approval',[GraduationManagementController::class, 'searchGraduantsForApproval'])->name('search.grad.for.approval');
+    Route::post('recommend/Approval',[GraduationManagementController::class, 'getGraduantsForApproval'])->name('post.grad.for.approval');
 });
 
 Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified','application.submission'])->group(function () {

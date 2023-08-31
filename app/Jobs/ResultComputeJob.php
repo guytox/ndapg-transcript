@@ -161,7 +161,7 @@ class ResultComputeJob implements ShouldQueue
             if ($creditDifference > 0) {
                 $result->message = "CARRY OVER";
             }else{
-                # do nothing
+                $result->message= null;
             }
         }else{
 
@@ -192,15 +192,28 @@ class ResultComputeJob implements ShouldQueue
         //Log::info("Cummulative Result Recorded Successfully");
 
         // Evaluate the probation count based on established records and update the requisite column
-        if ($cgpa <1.5) {
+        if ($result->cgpa <250 && $result->semester_id == '2') {
+
+            switch ($result->level_id) {
+                case '2':
+                        $result->message = "TO WITHDRAW";
+                    break;
+                case '3':
+                        $result->message = "TO WITHDRAW";
+                    break;
+                default:
+                    # code...
+                    break;
+            }
             //You should increment the probation count at this point and update the remark column respectively
             $probationCount = $lprobation +1;
             $result->r_probation_count = $probationCount;
+
             $result->save();
 
             //Log::info("Probation Considerations made successfully");
 
-        }elseif ($cgpa > 1.5) {
+        }elseif ($result->cgpa > 250 && $result->semester_id == '2') {
             //nothing to update here for now since the cgpa is above probation..
 
         }

@@ -3,6 +3,7 @@
 use App\Models\CourseAllocationItems;
 use App\Models\GradingSystemItems;
 use App\Models\Program;
+use App\Models\RegMonitor;
 use App\Models\RegMonitorItems;
 use App\Models\SemesterCourse;
 use App\Models\StudentRecord;
@@ -103,6 +104,42 @@ function getCarryOvers($studentId){
                                     ->get();
 
     return $carryOvers;
+}
+
+function getDegreeClass($monitorId){
+
+    $result = RegMonitor::where('uid', $monitorId)->first();
+
+
+    switch ($result->level_id) {
+        case '1':
+                if ($result->cgpa >=450) {
+                    $gradClass="DISTINCTION";
+                }elseif ($result->cgpa >= 350) {
+                    $gradClass="UPPER CREDIT";
+                }elseif ($result->cgpa >= 300) {
+                    $gradClass="LOWER CREDIT";
+                }elseif ($result->cgpa >= 200) {
+                    $gradClass="PASS";
+                }else{
+                    $gradClass = "FAIL";
+                }
+
+            break;
+        case '2':
+                $gradClass="Masters";
+            break;
+        case '3':
+                $gradClass="PhD";
+            break;
+
+        default:
+               $gradClass="N/A";
+            break;
+    }
+
+    return $gradClass;
+
 }
 
 
