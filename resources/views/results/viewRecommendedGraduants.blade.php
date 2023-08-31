@@ -13,7 +13,7 @@ type="text/css" />
 
 
 
-    <h3>Recommendable Students for {{ getSessionById($schoolSession)->name}} {{getSemesterDetailsById($stdSemester) }} Semester {{getStudyLevelNameById($studyLevel)}} Level , {{getProgrammeDetailById($stdProgram, 'name') }} </h3>
+    <h3>Recommeded Graduants for {{ getSessionById($schoolSession)->name}} {{getSemesterDetailsById($stdSemester) }} Semester</h3>
 
     <div class="row">
         <div class="col-lg-12">
@@ -34,7 +34,7 @@ type="text/css" />
                                     <th scope="col">chk</th>
                                     <th scope="col">Matric</th>
                                     <th scope="col">Name</th>
-                                    {{-- <th scope="col">Prog.</th> --}}
+                                    <th scope="col">Prog.</th>
                                     {{-- <th scope="col">Session</th> --}}
                                     {{-- <th scope="col">Semester</th> --}}
                                     {{-- <th scope="col">Spent</th> --}}
@@ -51,49 +51,48 @@ type="text/css" />
                                     {{-- <th scope="col">Recommendation</th> --}}
                                     <th scope="col">Carry Overs</th>
                                     <th scope="col">Degree Class</th>
+                                    <th scope="col">Approval</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
 
 
 
-                                {!! Form::hidden('programme', $stdProgram, ["class"=>"form-control"]) !!}
+                                {{-- {!! Form::hidden('programme', $stdProgram, ["class"=>"form-control"]) !!} --}}
                                 {!! Form::hidden('schsession', $schoolSession, ["class"=>"form-control"]) !!}
                                 {!! Form::hidden('schsemester', $stdSemester, ["class"=>"form-control"]) !!}
-                                {!! Form::hidden('studylevel', $studyLevel, ["class"=>"form-control"]) !!}
+                                {{-- {!! Form::hidden('studylevel', $studyLevel, ["class"=>"form-control"]) !!} --}}
 
 
                             <tbody>
                                 @php
                                     $sn =1;
                                 @endphp
-                                @foreach ($regStudents as $v)
+
+                                @foreach ($pendingGraduants as $v)
 
                                     <tr>
                                         <td>{{$sn}}</td>
-                                        @if ($v->tcr === $v->tce)
-                                            <td>{!! Form::checkbox('regMonitor[]', $v->uid, true,[]) !!}</td>
-                                        @else
-                                            <td>{!! Form::checkbox('regMonitor[]', $v->uid, false,[]) !!}</td>
-                                        @endif
+
+                                        <td>{!! Form::checkbox('regMonitor[]', $v->uid, true,[]) !!}</td>
 
                                         <td>{{ getStudentByStudentId($v->student_id)->matric}}</td>
                                         <td>{{ getUserByUsername(getStudentByStudentId($v->student_id)->matric)->name}}</td>
-                                        {{-- <td>{{getProgrammeDetailById($v->program_id, 'name')}}</td> --}}
+                                        <td>{{getProgrammeDetailById($v->program_id, 'name')}}</td>
                                         {{-- <td>{{getSessionById($v->session_id)->name}}</td> --}}
                                         {{-- <td>{{ucfirst(getSemesterDetailsById($v->semester_id))}}</td> --}}
 
                                         {{-- <td>{{$v->semesters_spent}}</td> --}}
-                                        <td>{{ $v->semesters_spent}}</td>
+                                        <td>{{ $v->regMonitor->semesters_spent}}</td>
                                         <td>{{$v->r_status =='0'? "Not Computed": "Computed"}}</td>
                                         {{-- <td>{{getRegMonitorById($v->id, 'totalcredits')}}</td> --}}
                                         {{-- <td>{{ $v->ltcr }}</td> --}}
-                                        <td>{{ $v->tcr }}</td>
-                                        <td>{{ $v->tce }}</td>
+                                        <td>{{ $v->regMonitor->tcr }}</td>
+                                        <td>{{ $v->regMonitor->tce }}</td>
                                         {{-- <td>{{ $v->ltwgp }}</td> --}}
                                         {{-- <td>{{ $v->twgp }}</td> --}}
                                         {{-- <td>{{ number_format(convertToNaira($v->lcgpa),2) }}</td> --}}
-                                        <td>{{ number_format(convertToNaira($v->cgpa),2) }}</td>
+                                        <td>{{ number_format(convertToNaira($v->regMonitor->cgpa),2) }}</td>
                                         @if (count(getCarryOvers($v->student_id))>0)
                                             <td>
                                                 @foreach (getCarryOvers($v->student_id) as $co)
@@ -104,14 +103,47 @@ type="text/css" />
                                             <td> PASSED </td>
                                         @endif
 
-                                        <td>{{getDegreeClass($v->uid)}}</td>
+                                        <td>{{getDegreeClass($v->regMonitor->uid)}}</td>
+
+                                        <td>
+
+                                            @if ($v->pg_coord ===0)
+                                                <span title="PG COORDINATOR" > &#10060; </span>
+                                            @elseif ($v->pg_coord ===1)
+                                                <span title="PG COORDINATOR" > &#9989;</span>
+                                            @endif
+
+                                            @if ($v->hod ===0)
+                                                <span title="HOD" > &#10060;</span>
+                                            @elseif ($v->hod ===1)
+                                                <span title="HOD" > &#9989;</span>
+                                            @endif
+
+                                            @if ($v->dean ===0)
+                                                <span title="Dean" > &#10060;</span>
+                                            @elseif ($v->dean ===1)
+                                                <span title="Dean" > &#9989;</span>
+                                            @endif
+
+                                            @if ($v->dean_spgs_by ===0)
+                                                <span title="Dean SPGS" > &#10060;</span>
+                                            @elseif ($v->dean_spgs_by ===1)
+                                                <span title="Dean SPGS" > &#9989;</span>
+                                            @endif
+
+                                            @if ($v->senate ===0)
+                                                <span title="Senate Approval" > &#10060;</span>
+                                            @elseif ($v->senate ===1)
+                                                <span title="Senate Approval" > &#9989;</span>
+                                            @endif
+                                        </td>
 
 
 
                                         <td>
-                                            @if (getRegMonitorById($v->id, 'stdconfirmation')==1 )
+                                            @if (getRegMonitorById($v->regMonitor->id, 'stdconfirmation')==1 )
 
-                                                <a target="_blank" class="btn btn-primary" href="{{ route('show.single.student.result', ['id'=>$v->uid, 'student_id'=>$v->student_id,'semester'=>$stdSemester]) }}">view Transcript</a>
+                                                <a target="_blank" class="btn btn-primary" href="{{ route('show.single.student.result', ['id'=>$v->regMonitor->uid, 'student_id'=>$v->student_id,'semester'=>$stdSemester]) }}">view Transcript</a>
 
                                             @else
 

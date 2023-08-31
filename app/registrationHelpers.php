@@ -625,6 +625,12 @@ function getUserProgramIds($id){
         return $dept;
     }
 
+    if ($user->hasRole('dean_pg')) {
+        $dept = Program::orderBy('name', 'asc')->select('id')->get();
+
+        return $dept;
+    }
+
     if ($user->hasRole('dean')) {
 
         $dept = Program::join('departments','departments.id','=','programs.department_id')

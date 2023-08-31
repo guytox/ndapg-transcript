@@ -314,6 +314,13 @@
                             </a>
                         </li>
 
+                        <li>
+                            <a href="{{route('search.grad.for.approval')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Recommended Graduants</span>
+                            </a>
+                        </li>
+
 
                     </ul>
                 </li>
@@ -659,33 +666,33 @@
 
     @role('vc')
 
-    <li>
-        <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
-            <i class="mdi mdi-book-information-variant"></i>
-            <span>Result Mgt Reports</span>
-        </a>
-        <ul>
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-book-information-variant"></i>
+                <span>Result Mgt Reports</span>
+            </a>
+            <ul>
 
-            <li>
-                <a href="{{ route('hod-confirm.index',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                    <i class="mdi mdi-tag-heart"></i>
-                    <span>View Grading Report</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('hod-confirm.index',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Grading Report</span>
+                    </a>
+                </li>
 
-        </ul>
+            </ul>
 
-        <ul>
+            <ul>
 
-            <li>
-                <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                    <i class="mdi mdi-tag-heart"></i>
-                    <span>View Computed Results</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Computed Results</span>
+                    </a>
+                </li>
 
-        </ul>
-    </li>
+            </ul>
+        </li>
 
     @endrole
 
