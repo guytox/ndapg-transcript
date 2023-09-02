@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentController as ApplicantPaymentController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\curriculaController;
+use App\Http\Controllers\IdCardManagementController;
 use App\Http\Controllers\CurriculaItemsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FacultyController;
@@ -280,6 +281,8 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
         Route::view('/NotRegReport', 'admin.search-notregistered-students')->name('search.notregistered.students');
         Route::post('RegReport', [RegistrationApprovalController::class, 'registeredStudentsReport'])->name('show.registered.students');
         Route::post('NotRegReport', [RegistrationApprovalController::class, 'NotRegisteredStudentsReport'])->name('show.notregistered.students');
+
+        Route::resource('idCard', IdCardManagementController::class);
 
     });
 
