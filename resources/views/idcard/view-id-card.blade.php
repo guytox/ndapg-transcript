@@ -72,7 +72,7 @@
 
                         <tr>
                             <th>Application No:</th>
-                            @if ($std->applicant)
+                            @if ($std->user->applicant)
                                 <td>{{$std->user->applicant->form_number}} </td>
                             @else
                                 <td> N/A </td>
