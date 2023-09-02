@@ -472,7 +472,7 @@ Route::get('departments-get/{id}', [\App\Http\Controllers\Applicant\AcademicCont
 Route::get('programmes-get/{id}', [\App\Http\Controllers\Applicant\AcademicController::class, 'getProgrammeFromDepartment']);
 
 
-Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearance.confirm', 'profile_completed','verified'])->group(function () {
+Route::prefix('student')->middleware(['auth', 'role:student', 'profile_completed','verified'])->group(function () {
 
     Route::prefix('outstanding')->group(function () {
         Route::get('/school', [\App\Http\Controllers\Applicant\QualificationsController::class, 'school'])->name('applicants.qualifications.school');
@@ -482,7 +482,7 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'coursereg_clearan
     });
 
     Route::prefix('registration')->group(function () {
-        Route::resource('/coursereg', StudentRegistrationController::class)->middleware('check.late.reg');
+        Route::resource('/coursereg', StudentRegistrationController::class)->middleware('coursereg_clearance.confirm','check.late.reg');
         Route::get('/viewMyRegistrations/{id}',[StudentRegistrationController::class, 'showPrevious'])->name('student.registration.viewAll');
         Route::get('/viewSingleRegistration/{id}',[StudentRegistrationController::class, 'showSingleReg'])->name('student.registration.viewSingle');
         Route::get('/showSubmitedRegistration/{id}',[StudentRegistrationController::class, 'showConfirmedReg'])->name('student.registration.viewMyConfirmed');
