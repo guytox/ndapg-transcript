@@ -543,37 +543,44 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{route('idCard.index')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View ID Card</span>
+                    </a>
+                </li>
+
             </ul>
         </li>
 
         {{-- Result Management (for dean_pg alone--}}
-<li>
-    <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
-        <i class="mdi mdi-book-information-variant"></i>
-        <span>Result Mgt Reports</span>
-    </a>
-    <ul>
-
         <li>
-            <a href="{{ route('hod-confirm.index',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                <i class="mdi mdi-tag-heart"></i>
-                <span>View Grading Report</span>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-book-information-variant"></i>
+                <span>Result Mgt Reports</span>
             </a>
+            <ul>
+
+                <li>
+                    <a href="{{ route('hod-confirm.index',['as'=>'dap']) }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Grading Report</span>
+                    </a>
+                </li>
+
+            </ul>
+
+            <ul>
+
+                <li>
+                    <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Computed Results</span>
+                    </a>
+                </li>
+
+            </ul>
         </li>
-
-    </ul>
-
-    <ul>
-
-        <li>
-            <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
-                <i class="mdi mdi-tag-heart"></i>
-                <span>View Computed Results</span>
-            </a>
-        </li>
-
-    </ul>
-</li>
 
     @endrole
 
@@ -694,6 +701,24 @@
             </ul>
         </li>
 
+    @endrole
+
+    @role('security')
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>ID Card Processing</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="{{route('idCard.index')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View ID Card</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
     @endrole
 
 @endrole
