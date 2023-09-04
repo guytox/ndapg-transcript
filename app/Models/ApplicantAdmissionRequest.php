@@ -20,5 +20,9 @@ class ApplicantAdmissionRequest extends Model
         return $this->belongsTo(Program::class, 'program_id','id');
     }
 
+    public function schoolsession(){
+        return $this->belongsTo(AcademicSession::class, 'session_id','id');
+    }
+
 
 }

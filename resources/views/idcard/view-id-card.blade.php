@@ -27,12 +27,19 @@
                         <tr>
                             <th>Matric Number</th>
                             <td colspan="2"><h2 class="text-success">{{$std->matric}}</h2></td>
-                            <td rowspan="8"> <img src="{{ asset($std->user->passport)}}" alt="Applicant Passport" height="200" width="150"> </td>
+                            <td rowspan="12"> <img src="{{ asset($std->user->passport)}}" alt="Applicant Passport" height="200" width="150"> </td>
                         </tr>
                         <tr>
                             <th>Student Name</th>
                             <td>{{$std->user->name}}</td>
-
+                        </tr>
+                        <tr>
+                            <th>Faculty Name</th>
+                            <td>{{$std->programme->department->faculty->name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Department Name</th>
+                            <td>{{$std->programme->department->name}}</td>
                         </tr>
                         <tr>
                             <th>Program</th>
@@ -74,6 +81,24 @@
                             <th>Application No:</th>
                             @if ($std->user->applicant)
                                 <td>{{$std->user->applicant->form_number}} </td>
+                            @else
+                                <td> N/A </td>
+                            @endif
+
+                        </tr>
+                        <tr>
+                            <th>Admission Session:</th>
+                            @if ($std->user->applicant)
+                                <td>{{$std->user->applicant->schoolsession->name}} </td>
+                            @else
+                                <td> N/A </td>
+                            @endif
+
+                        </tr>
+                        <tr>
+                            <th>Program Duration:</th>
+                            @if ($std->user->applicant)
+                                <td>{{$std->programme->num_years}} </td>
                             @else
                                 <td> N/A </td>
                             @endif
