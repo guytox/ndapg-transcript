@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SubmitGradRecommendationJob;
+use App\Models\AcademicSession;
 use App\Models\ComputedResult;
 use App\Models\PendingGraduant;
+use App\Models\Program;
 use App\Models\RegMonitor;
+use App\Models\Semester;
 use Illuminate\Http\Request;
 
 class GraduationManagementController extends Controller
@@ -187,5 +190,39 @@ class GraduationManagementController extends Controller
 
         }
     }
+
+    public function searchGraduationSummary(){
+        # get user programmes
+        $programs = getUserProgramsDropdown(user()->id);
+
+        return view('results.search-graduantlist', compact('programs'));
+
+    }
+
+    public function getGraduationSummary(Request $request){
+
+        $lists = PendingGraduant::where('grad_session_id', $request->school_session)
+                                ->where('grad_semester_id', $request->semester)
+                                ->where('program_id', $request->c_prog)
+                                ->get();
+
+
+        $session_id = AcademicSession::find($request->school_session);
+        $semester_id = Semester::find($request->semester);
+        $programme = Program::find($request->c_prog);
+
+        // return $lists->regItems;
+
+        if (count($lists)>1) {
+
+            return view('admin.printRecommendedGraduantsResultSheet', compact('lists','session_id', 'semester_id','programme'));
+
+        }else{
+
+            return back()->with('error', "Error!!!! No Graduants Recommended for this selection");
+        }
+    }
+
+
 
 }

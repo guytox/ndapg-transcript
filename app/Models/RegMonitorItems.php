@@ -15,4 +15,8 @@ class RegMonitorItems extends Model
 
         return $this->belongsTo(RegMonitor::class, 'monitor_id','id');
     }
+
+    public function semesterCourse(){
+        return $this->belongsTo(SemesterCourse::class, 'course_id','id');
+    }
 }
