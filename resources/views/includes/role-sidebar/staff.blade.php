@@ -84,6 +84,13 @@
                             </a>
                         </li>
 
+                        <li>
+                            <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Graduation Summary Sheet</span>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
             @endrole
@@ -190,6 +197,13 @@
                             <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                                 <i class="mdi mdi-tag-heart"></i>
                                 <span>View Computed Results</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Graduation Summary Sheet</span>
                             </a>
                         </li>
 
@@ -318,6 +332,13 @@
                             <a href="{{route('search.grad.for.approval')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
                                 <i class="mdi mdi-tag-heart"></i>
                                 <span>View Recommended Graduants</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Graduation Summary Sheet</span>
                             </a>
                         </li>
 
@@ -576,6 +597,13 @@
                     <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
                         <span>View Computed Results</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Graduation Summary Sheet</span>
                     </a>
                 </li>
 
