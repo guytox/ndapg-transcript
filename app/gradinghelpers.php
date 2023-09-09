@@ -106,6 +106,19 @@ function getCarryOvers($studentId){
     return $carryOvers;
 }
 
+function checkCarryOvers($studentId){
+    $carryOvers = RegMonitorItems::where('student_id', $studentId)
+                                    ->where('is_co_passed','0')
+                                    ->distinct('course_id')
+                                    ->select('course_id')
+                                    ->get();
+    if (count($carryOvers)>0) {
+        return true;
+    }else{
+        return false;
+    }
+    return false;
+}
 function getDegreeClass($monitorId){
 
     $result = RegMonitor::where('uid', $monitorId)->first();

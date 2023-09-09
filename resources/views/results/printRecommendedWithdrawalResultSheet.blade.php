@@ -54,7 +54,7 @@ border: 1px solid #18191a;
                                     {{-- <span class="text-dark font-size-20"> <U>COURSE REGISTRATION FORM</U> </span> --}}
                                     <span class="text-dark font-size-20" >{{strtoupper($programme->department->faculty->name)}}</span> <br>
                                     <span class="text-danger font-size-18" >DEPARTMENT OF {{strtoupper($programme->department->name)}}</span> <br>
-                                    <span class="text-dark font-size-16" >RECOMMENDED GRADUANTS FOR  {{strtoupper($semester_id->name)}} SEMESTER  {{ $session_id->name}} SESSION</span> <br>
+                                    <span class="text-dark font-size-16" >WITHDRAWAL LIST FOR  {{strtoupper($semester_id->name)}} SEMESTER  {{ $session_id->name}} SESSION</span> <br>
                                     <span class="text-dark font-size-16" >{{getStudyLevelNameById($programme->level_id)}} LEVEL {{strtoupper($programme->name)}}</span>
 
                                 </h4>
@@ -130,45 +130,46 @@ border: 1px solid #18191a;
                     @foreach ($lists as $k)
 
                         <tr>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;"> {{$sno}} </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{$k->student->matric}} </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{$k->user->name}}  </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{ ucfirst($k->user->profile->gender) }} </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{$k->student->svc}} </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{$k->student->bn}} </td>
-                            @if ($k->regItems->first()->is_reg_sess==1)
-                                <td style="color: #f83606"><b><u>{{getCourseDetailsById($k->regItems->first()->course_id,'code')}}</u></b></td>
-                                <td>{{getCourseDetailsById($k->regItems->first()->course_id,'credits')}}</td>
-                                <td style="color: #f83606"> <b><u>{{intval(convertToNaira($k->regItems->first()->gtotal))}}</u></b> </td>
-                                <td>{{$k->regItems->first()->ggrade}}</td>
-                                <td>{{$k->regItems->first()->twgp/getCourseDetailsById($k->regItems->first()->course_id,'credits')}}</td>
-                                <td>{{sprintf('%02d', $k->regItems->first()->twgp)}}</td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;"> {{$sno}} </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{$k->student->matric}} </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{$k->student->user->name}}  </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{ ucfirst($k->student->user->profile->gender) }} </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{$k->student->svc}} </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{$k->student->bn}} </td>
+                            @if ($k->regs->first()->is_reg_sess==1)
+                                <td style="color: #f83606"><b><u>{{getCourseDetailsById($k->regs->first()->course_id,'code')}}</u></b></td>
+                                <td>{{getCourseDetailsById($k->regs->first()->course_id,'credits')}}</td>
+                                <td style="color: #f83606"> <b><u>{{intval(convertToNaira($k->regs->first()->gtotal))}}</u></b> </td>
+                                <td>{{$k->regs->first()->ggrade}}</td>
+                                <td>{{$k->regs->first()->twgp/getCourseDetailsById($k->regs->first()->course_id,'credits')}}</td>
+                                <td>{{sprintf('%02d', $k->regs->first()->twgp)}}</td>
                             @else
-                                <td>{{getCourseDetailsById($k->regItems->first()->course_id,'code')}}</td>
-                                <td>{{getCourseDetailsById($k->regItems->first()->course_id,'credits')}}</td>
-                                <td> {{intval(convertToNaira($k->regItems->first()->gtotal))}}</td>
-                                <td>{{$k->regItems->first()->ggrade}}</td>
-                                <td>{{$k->regItems->first()->twgp/getCourseDetailsById($k->regItems->first()->course_id,'credits')}}</td>
-                                <td>{{sprintf('%02d', $k->regItems->first()->twgp)}}</td>
+                                <td>{{getCourseDetailsById($k->regs->first()->course_id,'code')}}</td>
+                                <td>{{getCourseDetailsById($k->regs->first()->course_id,'credits')}}</td>
+                                <td> {{intval(convertToNaira($k->regs->first()->gtotal))}}</td>
+                                <td>{{$k->regs->first()->ggrade}}</td>
+                                <td>{{$k->regs->first()->twgp/getCourseDetailsById($k->regs->first()->course_id,'credits')}}</td>
+                                <td>{{sprintf('%02d', $k->regs->first()->twgp)}}</td>
                             @endif
 
-                            <td rowspan="{{count($k->regItems)+1}}"  style="vertical-align: middle;"> - </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{$k->regMonitor->tcr}} </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;"> - </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{$k->regMonitor->twgp}} </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;"> - </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{convertToNaira($k->grad_cgpa)}} </td>
-                            <td rowspan="{{count($k->regItems)+1}}" style="vertical-align: middle;">{{$k->degree_class}} <br>
+                            <td rowspan="{{count($k->regs)+1}}"  style="vertical-align: middle;"> - </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{$k->tcr}} </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;"> - </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{$k->twgp}} </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;"> - </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{convertToNaira($k->cgpa)}} </td>
+                            <td rowspan="{{count($k->regs)+1}}" style="vertical-align: middle;">{{$k->degree_class}} <br>
+                                {{$k->message}} <br>
                                 @foreach (getCarryOvers($k->student_id) as $m )
-                                    {{ getSemesterCourseById($m)->courseCode}}, <br>
+                                    {{ getSemesterCourseById($m->course_id)->courseCode}}, <br>
                                 @endforeach
 
                             </td>
                         </tr>
 
-                        @foreach ($k->regItems as $m)
+                        @foreach ($k->regs as $m)
 
-                            @if ($m->course_id == $k->regItems->first()->course_id)
+                            @if ($m->course_id == $k->regs->first()->course_id)
 
                             @else
 
@@ -200,11 +201,11 @@ border: 1px solid #18191a;
 
                         <tr>
                             <td></td>
-                            <td>{{$k->regMonitor->tcr}}</td>
+                            <td>{{$k->tcr}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{$k->regMonitor->twgp}}</td>
+                            <td>{{$k->twgp}}</td>
                         </tr>
 
 
