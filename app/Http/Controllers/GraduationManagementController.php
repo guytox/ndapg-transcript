@@ -223,6 +223,108 @@ class GraduationManagementController extends Controller
         }
     }
 
+    public function searchFailListSummary(){
+
+        # get user programmes
+        $programs = getUserProgramsDropdown(user()->id);
+
+        return view('results.search-failist-summary', compact('programs'));
+
+    }
+
+    public function getFailListSummary(Request $request){
+
+        $toCheck = RegMonitor::where('session_id', $request->school_session)
+                                ->where('semester_id', $request->semester)
+                                ->where('program_id', $request->c_prog)
+                                ->get();
+
+        $failStds= [];
+
+        if (count($toCheck)>1) {
+            foreach ($toCheck as $p ) {
+                if (checkCarryOvers($p->student_id)) {
+                    $failStds[] = $p->student_id;
+                }
+            }
+        }
+
+
+        $lists = RegMonitor::where('session_id', $request->school_session)
+                                ->where('semester_id', $request->semester)
+                                ->whereIn('student_id', $failStds)
+                                ->where('program_id', $request->c_prog)
+                                ->get();
+
+        $session_id = AcademicSession::find($request->school_session);
+        $semester_id = Semester::find($request->semester);
+        $programme = Program::find($request->c_prog);
+
+        // return $lists->regItems;
+
+        if (count($lists)>1) {
+
+            return view('results.printFailListResultSheet', compact('lists','session_id', 'semester_id','programme'));
+
+        }else{
+
+            return back()->with('error', "Error!!!! No Graduants Recommended for this selection");
+        }
+    }
+
+
+    public function searchWithdrawalListSummary(){
+        # get user programmes
+        $programs = getUserProgramsDropdown(user()->id);
+
+        return view('results.search-withdrawal-summary', compact('programs'));
+    }
+
+    public function getWithdrawalListSummary(Request $request){
+         $toCheck = RegMonitor::where('session_id', $request->school_session)
+                                ->where('semester_id', $request->semester)
+                                ->where('program_id', $request->c_prog)
+                                ->get();
+
+        $failStds= [];
+
+        if (count($toCheck)>1) {
+            foreach ($toCheck as $p ) {
+                if ($p->cgpa < 250) {
+                    $failStds[] = $p->student_id;
+                    if ($request->semester_id == 2) {
+                        $p->message = "TO WITHDRAW";
+                        $p->save();
+                    }
+
+                }
+            }
+        }
+
+
+        $lists = RegMonitor::where('session_id', $request->school_session)
+                                ->where('semester_id', $request->semester)
+                                ->whereIn('student_id', $failStds)
+                                ->where('program_id', $request->c_prog)
+                                ->get();
+
+        $session_id = AcademicSession::find($request->school_session);
+        $semester_id = Semester::find($request->semester);
+        $programme = Program::find($request->c_prog);
+
+        // return $lists->regItems;
+
+
+        if (count($lists)>1) {
+
+            return view('results.printRecommendedWithdrawalResultSheet', compact('lists','session_id', 'semester_id','programme'));
+
+        }else{
+
+            return back()->with('info', "No Withdrawal Students for this selection");
+        }
+    }
+
 
 
 }

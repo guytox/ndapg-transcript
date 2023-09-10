@@ -342,6 +342,20 @@
                             </a>
                         </li>
 
+                        <li>
+                            <a href="{{route('search.failist.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Fail List</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.withdrawal.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Withdrawal List</span>
+                            </a>
+                        </li>
+
 
                     </ul>
                 </li>

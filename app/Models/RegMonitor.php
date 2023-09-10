@@ -16,7 +16,13 @@ class RegMonitor extends Model
         return $this->hasMany(RegMonitorItems::class,'monitor_id','id');
 
     }
-    
+
+    public function regs(){
+
+        return $this->hasMany(RegMonitorItems::class,'student_id','student_id');
+
+    }
+
 
     public function student(){
 

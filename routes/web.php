@@ -373,6 +373,12 @@ Route::prefix('Graduation')->middleware(['auth','role:exam_officer|hod|admin|dea
     Route::post('recommend/Approval',[GraduationManagementController::class, 'getGraduantsForApproval'])->name('post.grad.for.approval');
     Route::get('Search/Graduants/Recommended',[GraduationManagementController::class, 'searchGraduationSummary'])->name('search.graduation.summary');
     Route::post('Search/Graduants/Recommended',[GraduationManagementController::class, 'getGraduationSummary'])->name('get.graduation.summary');
+    #failed list summary
+    Route::get('Search/Lists/failListSummary',[GraduationManagementController::class, 'searchFailListSummary'])->name('search.failist.summary');
+    Route::post('Search/List/failListSummary',[GraduationManagementController::class, 'getFailListSummary'])->name('get.failist.summary');
+    #withdrawal list summary
+    Route::get('Search/Lists/withdrawalListSummary',[GraduationManagementController::class, 'searchWithdrawalListSummary'])->name('search.withdrawal.summary');
+    Route::post('Search/List/withdrawalListSummary',[GraduationManagementController::class, 'getWithdrawalListSummary'])->name('get.withdrawal.summary');
 });
 
 Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified','application.submission'])->group(function () {
