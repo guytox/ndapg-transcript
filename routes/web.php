@@ -244,7 +244,7 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
 
 });
 
-Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|dean_pg|admin', 'profile_completed', 'verified')->group(function(){
+Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc|dvc|exam_officer|dean_pg|admin|security', 'profile_completed', 'verified')->group(function(){
 
     Route::prefix('Approvals')->middleware('role:hod|dean|admin|reg_officer|vc|dvc|exam_officer')->group(function(){
         Route::resource('reg', RegistrationApprovalController::class);
