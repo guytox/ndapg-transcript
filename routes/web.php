@@ -275,7 +275,7 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
     });
 
 
-    Route::prefix('Reports')->middleware('role:admin|dean_pg')->group(function(){
+    Route::prefix('Reports')->middleware('role:admin|dean_pg|security')->group(function(){
 
         Route::view('/RegReport', 'admin.search-registered-students')->name('search.registered.students');
         Route::view('/NotRegReport', 'admin.search-notregistered-students')->name('search.notregistered.students');
