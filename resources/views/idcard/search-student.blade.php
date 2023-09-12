@@ -22,7 +22,7 @@
                     {{ __('This Page is for ID Card Processing (Enter the Applicant Form Number to Continue)') }}
 
 
-                    @role('admin|registry|bursary')
+                    @role('admin|security')
 
                     <hr>
                     <h2>Search Student for ID Card Production</h2>
