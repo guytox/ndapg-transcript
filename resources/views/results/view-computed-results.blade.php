@@ -114,7 +114,9 @@
                                             @if ($val->semester_id == '1')
                                                 <a href="{{route('get.grad.students', ['id'=>$val->uid, 'sem'=>$val->semester_id])}}" class="btn btn-warning">Graduate Extra-Year</a>
                                             @elseif ($val->semester_id =='2')
-                                                <a href="{{route('get.grad.students', ['id'=>$val->uid, 'sem'=>$val->semester_id])}}" class="btn btn-info">Recommend Graduants</a>
+                                                @role('reg_officer')
+                                                    <a href="{{route('get.grad.students', ['id'=>$val->uid, 'sem'=>$val->semester_id])}}" class="btn btn-info">Recommend Graduants</a>
+                                                @endrole
 
                                             @endif
                                         </td>
