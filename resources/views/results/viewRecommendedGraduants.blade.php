@@ -84,7 +84,7 @@ type="text/css" />
 
                                         {{-- <td>{{$v->semesters_spent}}</td> --}}
                                         <td>{{ $v->regMonitor->semesters_spent}}</td>
-                                        <td>{{$v->r_status =='0'? "Not Computed": "Computed"}}</td>
+                                        <td>{{$v->approval_status }}</td>
                                         {{-- <td>{{getRegMonitorById($v->id, 'totalcredits')}}</td> --}}
                                         {{-- <td>{{ $v->ltcr }}</td> --}}
                                         <td>{{ $v->regMonitor->tcr }}</td>
@@ -125,9 +125,9 @@ type="text/css" />
                                                 <span title="Dean" > &#9989;</span>
                                             @endif
 
-                                            @if ($v->dean_spgs_by ===0)
+                                            @if ($v->dean_spgs ===0)
                                                 <span title="Dean SPGS" > &#10060;</span>
-                                            @elseif ($v->dean_spgs_by ===1)
+                                            @elseif ($v->dean_spgs ===1)
                                                 <span title="Dean SPGS" > &#9989;</span>
                                             @endif
 
@@ -180,7 +180,7 @@ type="text/css" />
                         </table>
                         <table>
                             <hr>
-                            <b>Result Computation:</b>
+                            <b>Graduation List Approval:</b>
                             <thead>
                                 <td></td>
                                 <td></td>
@@ -188,10 +188,32 @@ type="text/css" />
                             <tbody>
 
                                 <tr>
+                                    <td colspan="2">
+                                        {!! Form::label('approveAs', 'In My Capacity As: *') !!}
+                                        {!! Form::select('approveAs', getAcademicRoles(user()->id), null, ['class' => 'form-control', 'required']) !!}
+                                    </td>
+                                </tr>
+
+                                <tr>
 
                                     <td>
+                                        {!! Form::label('action', 'Select Action (Approve or reject)') !!}
+                                        {!! Form::select('action', [''=>'N/A','1'=>"Approve", '2'=>'Reject'], '', ['class'=>'form-control','required']) !!}
+                                    </td>
+                                </tr>
+                                <tr>
 
+                                    {{-- <td>
+                                        {!! Form::label('message', "Insert Message for Stake if you are rejecting") !!}
+                                        {!! Form::text('message', '', ['class'=>'form-control']) !!}
+                                    </td> --}}
 
+                                </tr>
+
+                                <tr>
+
+                                    <td>
+                                        {{-- {!! Form::submit('Submit Approval Decision', ['class'=>'btn btn-success','required']) !!} --}}
                                     </td>
 
                                 </tr>
@@ -213,14 +235,18 @@ type="text/css" />
 
 
                     @if (user()->hasRole('exam_officer'))
-
-
-
                             {!! Form::submit('RECOMMEND GRADUANTS FOR HOD CONFIRMATION', ['class'=>'btn btn-success','required']) !!}
-
+                    @elseif(user()->hasRole('hod'))
+                            {!! Form::submit('RECOMMEND GRADUANTS FOR DEAN CONFIRMATION', ['class'=>'btn btn-success','required']) !!}
+                    @elseif(user()->hasRole('dean'))
+                            {!! Form::submit('RECOMMEND GRADUANTS FOR PG SCHOOL CONFIRMATION', ['class'=>'btn btn-success','required']) !!}
+                    @elseif(user()->hasRole('dean_pg'))
+                            {!! Form::submit('RECOMMEND GRADUANTS FOR SENATE APPROVAL', ['class'=>'btn btn-success','required']) !!}
+                    @elseif(user()->hasRole('vc'))
+                            {!! Form::submit('APPROVE THE SELECTED STUDENTS FOR GRADUATION', ['class'=>'btn btn-success','required']) !!}
                     @else
 
-                        Note!!! This Recommendation is for PG Coordinators alone !!!!
+                       The Above Listed Students have been recommended for Graduation!!!!!
 
                     @endif
 

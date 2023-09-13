@@ -78,9 +78,16 @@
                     <ul>
 
                         <li>
-                            <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                            <a href="{{route('search.computed.results')}} " class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                                 <i class="mdi mdi-tag-heart"></i>
                                 <span>View Computed Results</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.grad.for.approval')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Recommended Graduants</span>
                             </a>
                         </li>
 
@@ -88,6 +95,20 @@
                             <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
                                 <i class="mdi mdi-tag-heart"></i>
                                 <span>View Graduation Summary Sheet</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.failist.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Fail List</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.withdrawal.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Withdrawal List</span>
                             </a>
                         </li>
 
@@ -194,9 +215,16 @@
                         </li>
 
                         <li>
-                            <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                            <a href="{{route('search.computed.results')}} " class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                                 <i class="mdi mdi-tag-heart"></i>
                                 <span>View Computed Results</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.grad.for.approval')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Recommended Graduants</span>
                             </a>
                         </li>
 
@@ -204,6 +232,20 @@
                             <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
                                 <i class="mdi mdi-tag-heart"></i>
                                 <span>View Graduation Summary Sheet</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.failist.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Fail List</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('search.withdrawal.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                                <i class="mdi mdi-tag-heart"></i>
+                                <span>View Withdrawal List</span>
                             </a>
                         </li>
 
@@ -379,6 +421,53 @@
                 </ul>
             </li>
 
+    @endrole
+
+    @role('dean_pg')
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Result Management</span>
+            </a>
+            <ul>
+
+                <li>
+                    <a href="{{route('search.computed.results')}} " class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Computed Results</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.grad.for.approval')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Recommended Graduants</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Graduation Summary Sheet</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.failist.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Fail List</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.withdrawal.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Withdrawal List</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
     @endrole
 
     @role('lecturer')
@@ -718,7 +807,7 @@
         <li>
             <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
                 <i class="mdi mdi-book-information-variant"></i>
-                <span>Result Mgt Reports</span>
+                <span>Reports</span>
             </a>
             <ul>
 
@@ -737,6 +826,51 @@
                     <a href="{{route('search.computed.results')}}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                         <i class="mdi mdi-tag-heart"></i>
                         <span>View Computed Results</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="@if (Request::is('attendee.payment')) active @endif has-arrow waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Result Management</span>
+            </a>
+            <ul>
+
+                <li>
+                    <a href="{{route('search.computed.results')}} " class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Approve Results</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.grad.for.approval')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>Approve Graduation List</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.graduation.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Graduation Summary Sheet</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.failist.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Fail List</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('search.withdrawal.summary')}} " class="@if (Request::is('search.grad.for.approval')) active @endif waves-effect">
+                        <i class="mdi mdi-tag-heart"></i>
+                        <span>View Withdrawal List</span>
                     </a>
                 </li>
 

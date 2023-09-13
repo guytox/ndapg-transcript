@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\RecommendGraduantsJob;
 use App\Jobs\SubmitGradRecommendationJob;
 use App\Models\AcademicSession;
 use App\Models\ComputedResult;
@@ -133,7 +134,8 @@ class GraduationManagementController extends Controller
 
 
     public function recommendGraduants(Request $request){
-        if (user()->hasRole('exam_officer')) {
+        //    return $request;
+        if (user()->hasRole('reg_officer')) {
 
             $programId = $request->programme;
             $sessionId = $request->schsession;
@@ -147,7 +149,81 @@ class GraduationManagementController extends Controller
                 SubmitGradRecommendationJob::dispatch($programId, $sessionId, $semesterId, $studyLevel, $reg, $staffId, $time);
             }
 
-            return back()->with('success', "Graduants Recommended Successfully, Check Recommended Graduants Menu for List");
+            return redirect(route('search.grad.for.approval'))->with('success', "Graduants Recommended Successfully, Check Recommended Graduants Menu for List");
+
+        }elseif ($request->approveAs==getRoleIdByRoleName('hod')) {
+
+            $programId = $request->programme;
+            $sessionId = $request->schsession;
+            $semesterId = $request->schsemester;
+            $studyLevel = $request->studylevel;
+            $time = now();
+            $staffId = user()->id;
+            $action = $request->action;
+            $approveAs = $request->approveAs;
+
+            foreach ($request->regMonitor as $reg) {
+                # submit recommendation job
+                RecommendGraduantsJob::dispatch($programId, $sessionId, $semesterId, $studyLevel, $reg, $staffId, $time, $approveAs, $action);
+            }
+
+            return redirect(route('search.grad.for.approval'))->with('success', "Recommendation Successfully Implemented, Check Recommended Graduants Menu for List");
+
+        }elseif ($request->approveAs==getRoleIdByRoleName('dean')) {
+            $programId = $request->programme;
+            $sessionId = $request->schsession;
+            $semesterId = $request->schsemester;
+            $studyLevel = $request->studylevel;
+            $time = now();
+            $staffId = user()->id;
+            $action = $request->action;
+            $approveAs = $request->approveAs;
+
+            foreach ($request->regMonitor as $reg) {
+                # submit recommendation job
+                RecommendGraduantsJob::dispatch($programId, $sessionId, $semesterId, $studyLevel, $reg, $staffId, $time, $approveAs, $action);
+            }
+
+            return redirect(route('search.grad.for.approval'))->with('success', "Recommendation Successfully Implemented, Check Recommended Graduants Menu for List");
+
+        }elseif ($request->approveAs==getRoleIdByRoleName('dean_pg')) {
+
+            $programId = $request->programme;
+            $sessionId = $request->schsession;
+            $semesterId = $request->schsemester;
+            $studyLevel = $request->studylevel;
+            $time = now();
+            $staffId = user()->id;
+            $action = $request->action;
+            $approveAs = $request->approveAs;
+
+            foreach ($request->regMonitor as $reg) {
+                # submit recommendation job
+                RecommendGraduantsJob::dispatch($programId, $sessionId, $semesterId, $studyLevel, $reg, $staffId, $time, $approveAs, $action);
+            }
+
+            return redirect(route('search.grad.for.approval'))->with('success', "Recommendation Successfully Implemented, Check Recommended Graduants Menu for List");
+
+        }elseif ($request->approveAs==getRoleIdByRoleName('vc')) {
+
+            $programId = $request->programme;
+            $sessionId = $request->schsession;
+            $semesterId = $request->schsemester;
+            $studyLevel = $request->studylevel;
+            $time = now();
+            $staffId = user()->id;
+            $action = $request->action;
+            $approveAs = $request->approveAs;
+
+            foreach ($request->regMonitor as $reg) {
+                # submit recommendation job
+                RecommendGraduantsJob::dispatch($programId, $sessionId, $semesterId, $studyLevel, $reg, $staffId, $time, $approveAs, $action);
+            }
+
+            return redirect(route('search.grad.for.approval'))->with('success', "Recommendation Successfully Implemented, Check Recommended Graduants Menu for List");
+
+        }else{
+            return redirect(route('search.grad.for.approval'))->with('error', "You do not have the required privildges to perform this action");
         }
     }
 

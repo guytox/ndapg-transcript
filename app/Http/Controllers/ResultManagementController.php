@@ -1329,7 +1329,7 @@ class ResultManagementController extends Controller
             'action' =>'required',
         ]);
 
-        //return $request;
+        //  return $request;    
 
         if ($request->cResults) {
             # retults present, do the needful and send for processing
@@ -1346,10 +1346,10 @@ class ResultManagementController extends Controller
             }
 
 
-
-            return redirect(route('home'))->with('info', "Approval Request for all selected results submitted successfuly !!!");
+            return redirect(route('search.computed.results'))->with('info', "Approval Request for all selected results submitted successfuly !!!");
 
             return $request;
+
         }else{
 
             #nothing submitted, return this user to the begining of the search
