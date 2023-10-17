@@ -36,7 +36,9 @@
                                     <th>S/N</th>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    {{-- <th>Email</th> --}}
+                                    @if ($feePurpose->description ==('laboratory-fees'|| 'medical-expenses'))
+                                        <th>Dept.</th>
+                                    @endif
                                     <th>Tx ID</th>
                                     <th>Amount </th>
                                     <th>Status</th>
@@ -53,7 +55,9 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $v->feePayment->user->applicant->form_number }}</td>
                                     <td>{{ $v->feePayment->user->name }}</td>
-                                    {{-- <td>{{ $v->feePayment->user->email }}</td> --}}
+                                    @if ($feePurpose->description ==('laboratory-fees' || 'medical-expenses'))
+                                        <td>{{ $v->feePayment->user->applicant->program->department->name}}</td>
+                                    @endif
                                     <td>{{ $v->feePayment->txn_id }}</td>
                                     <td>{{ number_format(convertToNaira($v->amount),2) }}</td>
                                     <td>{{ $v->status }}</td>
