@@ -586,7 +586,7 @@ Route::prefix('bursary')->middleware(['auth', 'role:admin|bursar|bursary|dap'])-
 
 //Routes for external Staff for Pay Processing etc
 
-Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bursary|dean_pg', 'verified'])->group(function () {
+Route::prefix('PayProcessor')->middleware(['auth', 'role:pay_processor|admin|bursary|bursar|dean_pg', 'verified'])->group(function () {
 
     Route::prefix('UploadPayments')->group(function () {
 
