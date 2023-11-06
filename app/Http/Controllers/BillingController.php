@@ -242,7 +242,7 @@ class BillingController extends Controller
         $totalPaid = $paymentDetails->sum('amount');
 
         return view('admin.reports.viewPaidPaymentsByItem',compact('paymentDetails','totalPaid','feePurpose'));
-    }
+    }   
 
 
 }

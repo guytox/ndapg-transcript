@@ -510,6 +510,72 @@ function getPaymentPurposeById($id){
     return $purpose->narration;
 }
 
+function isPaymentPaid($id){
+    $payment = FeePayment::where('id', $id)
+                        ->orWhere('uid', $id)
+                        ->first();
+    if ($payment) {
+        if ($payment->balance==0) {
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+
+    return false;
+}
+
+function isCredoRequestPending($id){
+    $feePayment = CredoRequest::where('fee_payment_id', $id)->where('status',"pending")->first();
+    if ($feePayment) {
+        return $feePayment;
+    }else{
+        return false;
+    }
+}
+
+function generateServiceCode($id){
+
+    $fetchCode = CredoRequest::find($id);
+    
+    switch ($fetchCode->payment->config->feeCategory->payment_purpose_slug) {
+
+        case 'application-fee':
+            return config('app.credo.serviceCode.applicationFee');
+            break;
+
+        case 'acceptance-fee':
+            return config('app.credo.serviceCode.acceptanceFee');
+            break;
+
+        case 'first-tuition':
+            return config('app.credo.serviceCode.TuitionFee');
+            break;
+
+        case 'late-registration':
+            return config('app.credo.serviceCode.lateRegistration');
+            break;
+
+        case 'tuition':
+            return config('app.credo.serviceCode.TuitionFee');
+            break;
+
+        case 'portal-services':
+            return config('app.credo.serviceCode.ExtraCharges');
+            break;
+
+        case 'spgs-charges':
+            return config('app.credo.serviceCode.ExtraCharges');
+            break;
+
+        default:
+            return config('app.credo.serviceCode.ExtraCharges');
+            break;
+    }
+}
+
 
 
 // ******************************************************************************************************************

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
+use App\Jobs\CredoPaymentConfirmationJob;
 use App\Models\CredoRequest;
 use App\Models\CredoResponse;
 use App\Models\FeeConfig;
@@ -275,6 +276,266 @@ class StudentPaymentController extends Controller
         abort(403, 'Late Registration  Fee not configured');
 
     }
+
+    public function viewStudentBalances($id){
+        #fetch all pending payments
+        $pendingPayments = FeePayment::where('user_id', $id)
+                                    ->where('balance','>', 0)
+                                    ->get();
+
+        if ($pendingPayments) {
+            if (count($pendingPayments)>0) {
+                return view('students.ViewStudentBalances')->with(['Monitors'=>$pendingPayments]);
+            }
+        }
+            return redirect(route('home'))->with('info',"You do not have any pending payments at this time");
+
+
+    }
+
+    public function initiatePayment($id){
+        #grab the payment
+        $toPay = FeePayment::where('uid', $id)->first();
+
+        if ($toPay) {
+            # CHeck for pending requests
+            if ($toPay->credoRequests) {
+                foreach ($toPay->credoRequests as $r) {
+                    #check payment status here
+                    if ($r->status == 'pending') {
+                        return redirect()->action([StudentPaymentController::class, 'processCredoPayment'],[$r->uid]);
+                    }
+                }
+            }
+                #No pending request found, proceed to show form for selecting amount
+                return view('students.initlate_payment')->with('payment', $toPay);
+
+        }else{
+            return redirect(route('home'))->with('error', "Error!!! Fee transaction Not Found, try again");
+        }
+    }
+
+    public function postPaymentRequest(Request $request, $id){
+        #lets validate some stuff
+
+        $validated = $request->validate([
+            'type' => ['required','numeric', 'min:100'],
+        ]);
+
+        #fetch fee Payment record
+        $feePayment = FeePayment::where('id', $id)->orWhere('uid', $id)->first();
+        if (!$feePayment) {
+            return back()->with('error', "Error!!!! Payment details Not found");
+        }
+
+        #All Clear Proceed to deal
+        if (isPaymentPaid($id)) {
+
+            return redirect('home')->with('info', "Notice!!! This Payment has been fully paid for");
+
+        }else{
+            #check if credoRequest is pending
+            if ($pendingCredoRequest = isCredoRequestPending($feePayment->id)) {
+
+                return redirect()->action([StudentPaymentController::class, 'processCredoPayment'],[$pendingCredoRequest->uid]);
+
+            }else{
+                return redirect()->action([StudentPaymentController::class, 'writeCredoRequest'],[$id, $request->type]);
+            }
+        }
+    }
+
+
+    public function writeCredoRequest($feeMonitor, $amount){
+        #fetch the feepayment records
+        $feePayment = FeePayment::where('uid', $feeMonitor)->first();
+
+        if (!$feePayment) {
+            return redirect('home')->with('error', "Error in Payment Processing");
+        }
+
+        #prepare to write
+        $data =[
+            'payee_id' => $feePayment->user_id,
+            'fee_payment_id' =>$feePayment->id,
+            'amount' => $amount,
+            'session_id' => $feePayment->academic_session_id,
+            'uid' => uniqid('ftn'),
+            'status' => 'pending',
+            'txn_id' => generateUniqueTransactionReference(),
+            'channel' => 'credo',
+        ];
+
+        $newCredoRequest = CredoRequest::updateOrCreate([
+            'payee_id' => $feePayment->user_id,
+            'fee_payment_id' =>$feePayment->id,
+            'amount' => $amount,
+            'session_id' => $feePayment->academic_session_id,
+            'status' => 'pending',
+            'channel' => 'credo',
+
+        ],$data);
+
+        #if successful forward to credo payment
+        if ($newCredoRequest) {
+            return redirect()->action([StudentPaymentController::class, 'generateCredoReference'],[$newCredoRequest->id]);
+        }else{
+            return redirect('home')->with('error', "Failed to record credo student payment request");
+
+        }
+
+    }
+
+    public function generateCredoReference($id){
+        #fetch the request to process further
+        $toFetch = CredoRequest::find($id);
+        if ($toFetch) {
+            if ($toFetch->credo_url !=null) {
+                return redirect()->action([StudentPaymentController::class, 'processCredoPayment'],[$toFetch->uid]);
+            }else{
+                #get parameters required to generate credo ref
+                #split the name
+                $splitName = explode(' ', $toFetch->payment->user->name, 2);
+                $firstName = $splitName[0];
+                $lastName = !empty($splitName[1]) ? $splitName[1] : '';
+                #get the user number
+                $userNumber = $toFetch->payment->user->phone_number;
+                // return $userNumber;
+
+                $body = [
+
+                    'amount' => convertToKobo($toFetch->amount),
+                    'email' => $toFetch->payment->user->email,
+                    'bearer' => 0,
+                    'callbackUrl' => config('app.credo.response_url'),
+                    'channels' => ['card'],
+                    'currency' => 'NGN',
+                    'customerFirstName' => $firstName,
+                    'customerLastName' => $lastName,
+                    'customerPhoneNumber' => $userNumber,
+                    'reference' => $toFetch->txn_id,
+                    'serviceCode' => generateServiceCode($toFetch->id),
+                    'metadata' => [
+                        'customFields' =>[
+                            [
+                                'variable_name' => 'name',
+                                'value' => $toFetch->payment->user->name,
+                                'display_name' => 'Payers Name'
+                            ],
+                            [
+                                'variable_name' => 'payee_id',
+                                'value' => $toFetch->payment->user->id,
+                                'display_name' => 'Payee ID'
+                            ],
+                            [
+                                'variable_name' => 'verification_code',
+                                'value' => $toFetch->uid,
+                                'display_name' => 'Verification Code'
+                            ]
+                        ]
+                    ]
+                ];
+
+                #configure the headers now
+                $headers = [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => config('app.credo.public_key'),
+                ];
+
+                $client = new \GuzzleHttp\Client();
+
+                # These setting are for the live environment
+                $response = $client->request('POST', 'https://api.credocentral.com/transaction/initialize',[
+                    'headers' => $headers,
+                    'json' => $body
+                ]);
+
+                //print_r($response->getBody()->getContents());
+
+                $credoReturns = json_decode($response->getBody());
+
+                $toFetch->channel = 'credo';
+                $toFetch->credo_ref = $credoReturns->data->credoReference;
+                $toFetch->credo_url = $credoReturns->data->authorizationUrl;
+                $toFetch->save();
+
+                // return $CredoTransaction;
+
+                return redirect()->away($credoReturns->data->authorizationUrl);
+
+            }
+        }else{
+            return redirect('home')->with('error', "Error in Payment Processing");
+
+        }
+    }
+
+
+    public function processCredoPayment($id){
+        #grab the payment
+        $toProcess = CredoRequest::where('uid', $id)->first();
+
+        if ($toProcess) {
+
+            if ($toProcess->credo_url != null) {
+                #check status of the transaction at credo
+                # call verify
+                $headers = [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => config('app.credo.private_key'),
+                ];
+
+                $newurl = 'https://api.credocentral.com/transaction/'.$toProcess->credo_ref.'/verify';
+
+                $client = new \GuzzleHttp\Client();
+
+                $response = $client->request('GET', $newurl,[
+                    'headers' => $headers,
+                ]);
+
+                $parameters = json_decode($response->getBody());
+
+                //return $parameters->data;
+                $businessCode = $parameters->data->businessCode;
+                $transRef = $parameters->data->transRef;
+                $businessRef = $parameters->data->businessRef;
+                $debitedAmount = $parameters->data->debitedAmount;
+                $verified_transAmount = $parameters->data->transAmount;
+                $transFeeAmount = $parameters->data->transFeeAmount;
+                //$settlementAmount = $parameters->data->settlementAmount;
+                $customerId = $parameters->data->customerId;
+                //$transactionDate = $parameters->data->transactionDate;
+                //$channelId = $parameters->data->channelId;
+                $currencyCode = $parameters->data->currencyCode;
+                $response_status = $parameters->data->status;
+
+                if ($response_status == 0) {
+
+                    $time = now();
+
+                    CredoPaymentConfirmationJob::dispatch($transRef, $currencyCode, $response_status, $verified_transAmount, $time);
+
+                }else {
+                    #payment not successful redirect to payment
+                    return redirect()->away($toProcess->credo_url);
+
+                }
+
+            }
+
+        }else{
+
+            return redirect('home')->with('error', "Error in Payment Processing, Payment Request Not Found");
+        }
+
+        return redirect('home')->with('error', "Error in Payment Processing, Payment Request could not be Verified");
+
+    }
+
+
+    
 
 
 }

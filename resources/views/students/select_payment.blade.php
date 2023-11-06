@@ -10,7 +10,7 @@
             <div class="card-body">
 
 
-                <h2 class="header-title">Outtanding Payments</h2>
+                <h2 class="header-title">Outstanding Payments</h2>
 
                 @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">

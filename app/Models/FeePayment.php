@@ -17,7 +17,7 @@ class FeePayment extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+
 
     public function configuration()
     {
@@ -37,5 +37,9 @@ class FeePayment extends Model
     public function items()
     {
         return $this->hasMany(FeePaymentItem::class, 'fee_payment_id', 'id');
+    }
+
+    public function credoRequests(){
+        return $this->hasMany(CredoRequest::class, 'fee_payment_id', 'id');
     }
 }
