@@ -254,7 +254,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {
                 #nothing found
-                Log::info('Error in Final FApplication Fee Confirmation for - '.$businessRef);
+                Log::info('Error in Final Application Fee Confirmation for - '.$businessRef);
 
                 // genericMail($emailSubject, $invalidPaymentMessage, $this->email);
             }
