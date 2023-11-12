@@ -495,10 +495,14 @@ class AdmissionProcessingController extends Controller
 
     public function cleanPaymentLog(){
 
-         $logs = PaymentLog::all();
+         $logs = PaymentLog::join('fee_payments as f','f.id','payment_logs.fee_payment_id')
+                                    ->where('f.payment_status','pending')
+                                    ->distinct('payment_logs.fee_payment_id')
+                                    ->get();
+        $time = now();
         foreach ($logs as $k) {
             #get al entries with that transaction id
-            PaymentLogSanitationJob::dispatch($k->id);
+            PaymentLogSanitationJob::dispatch($k->id, $k->fee_payment_id , $time);
 
         }
 
@@ -935,7 +939,7 @@ class AdmissionProcessingController extends Controller
 
     }
 
-    
+
 
 
 }
