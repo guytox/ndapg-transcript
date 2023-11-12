@@ -34,42 +34,30 @@
     </div>
 
 
-
-
     <div class="col-xl-6">
         <div class="card">
             <div class="card-body">
                 {{-- <h4 class="header-title">Payment Details</h4> --}}
                 <h3>Payment Description: <hr> {{$payment->config->narration}}</h3>
 
-
-
                     <hr>
 
-                <h3>Balance: NGN {{number_format(convertToNaira($payment->balance),2)}}</h3>
+                    <h3>Balance: NGN {{number_format(convertToNaira($payment->balance),2)}}</h3>
 
 
+                @if (count($errors)>0)
 
+                    <div class="alert-danger">
 
-                    @if (count($errors)>0)
-
-                <div class="alert-danger">
-
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{$error}}</li>
-
-                        @endforeach
-                        <li>Logout and Login again</li>
-                    </ul>
-                </div>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{$error}}</li>
+                            @endforeach
+                                <li>Logout and Login again</li>
+                        </ul>
+                    </div>
 
                 @endif
-
-
-
-
-
 
 
             </div>

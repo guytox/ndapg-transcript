@@ -170,10 +170,17 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
 
                 $totalLogs = PaymentLog::where('fee_payment_id', $fpEntry->id)
                                         ->get();
-                $totalPaid = $totalLogs->sum('amount_paid');
+                $totalPaid =0;
+
+                foreach ($totalLogs as $y ) {
+                    $totalPaid = $totalPaid + $y->amount_paid;
+                }
+
+                // $totalPaid = $totalLogs->sum('amount_paid');
+
                 #compute the balance
                 $rBalance = $fpEntry->amount_billed - $totalPaid;
-                if ($rBalance == 0) {
+                if ($rBalance <= 0) {
                     #payment is complete, flag all payments as paid
                     $fpEntry->payment_status = 'paid';
                     $submission->status = 'paid';

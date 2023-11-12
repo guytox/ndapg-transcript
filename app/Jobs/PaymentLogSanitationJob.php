@@ -16,15 +16,19 @@ class PaymentLogSanitationJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $id;
+    public $paymentId;
+    public $time;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($id)
+    public function __construct($id, $paymentId,  $time)
     {
         $this->id = $id;
+        $this->paymentId = $paymentId;
+        $this->time = $time;
     }
 
     /**
@@ -35,19 +39,28 @@ class PaymentLogSanitationJob implements ShouldQueue
     public function handle()
     {
         #find the entry using the id
-        $plog = PaymentLog::find($this->id);
+        $plogs = PaymentLog::where('fee_payment_id', $this->paymentId)->get();
+
+        $totalPaid = 0;
+
+        foreach ($plogs as $p ) {
+            $totalPaid = $totalPaid + $p->amount_paid;
+
+        }
         #$check = PaymentLog::where('fee_payment_id', $plog->fee_payment_id)->get();
 
 
             #find the payment
-            $fp = FeePayment::find($plog->fee_payment_id);
-            $fp->amount_paid = $plog->amount_paid;
+            $fp = FeePayment::find($this->paymentId);
+
+            $balance = $fp->amount_billed - $totalPaid;
+
+            $fp->amount_paid = $totalPaid;
+
+            $fp->balance = $balance;
             $fp->save();
 
-            $fp->balance = $fp->amount_billed - $fp->amount_paid;
-            $fp->save();
-
-            if ($fp->balance == 0) {
+            if ($balance <= 0) {
                 # flag as paid
                 $fp->payment_status = 'paid';
                # return "yes we flagged it paid";
@@ -56,5 +69,7 @@ class PaymentLogSanitationJob implements ShouldQueue
                 $fp->payment_status = 'pending';
                 #return "we flagged it pending";
             }
+
+            $fp->save();
     }
 }
