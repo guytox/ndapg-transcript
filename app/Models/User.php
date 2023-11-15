@@ -51,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     }
 
     public function student(){
-        return $this->belongsTo(StudentRecord::class, 'matric','username');
+        return $this->belongsTo(StudentRecord::class, 'username','matric');
     }
 
     public function applicant(){

@@ -503,7 +503,7 @@ Route::prefix('student')->middleware(['auth', 'role:student', 'profile_completed
 
     Route::prefix('payments')->group(function () {
         Route::get('/studentBalances/{id}', [StudentPaymentController::class, 'viewStudentBalances'])->name('student.outstanding.balances');
-        Route::get('/paymentHistory/{id}', [StudentPaymentController::class, 'viewStudentBalances'])->name('student.payment.history');
+        Route::get('/paymentHistory/{id}', [StudentPaymentController::class, 'viewStudentPaymentHistory'])->name('student.payment.history');
         Route::get('/initiatePayment/{id}', [StudentPaymentController::class ,'initiatePayment'])->name('initiate.student.payment');
         Route::post('/initiateCredoPayment/{id}', [StudentPaymentController::class ,'postPaymentRequest'])->name('initiate.credo.payment');
         Route::get('/writeCredoRequest/{id}/{amount}', [StudentPaymentController::class ,'writeCredoRequest'])->name('write.credo.request');

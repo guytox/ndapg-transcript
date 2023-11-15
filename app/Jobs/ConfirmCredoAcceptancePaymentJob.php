@@ -174,6 +174,8 @@ class ConfirmCredoAcceptancePaymentJob implements ShouldQueue
                 $fpEntry->balance = $fpEntry->amount_billed - $totalPaidLogs;
                 $fpEntry->save();
 
+                PaymentLogSanitationJob::dispatch($submission->id, $fpEntry->id, now());
+
                 #next update the Applicant admission table since this is acceptance
                 $appInfo = ApplicantAdmissionRequest::where('user_id',$payee_id)
                                                     ->where('session_id', getApplicationSession())

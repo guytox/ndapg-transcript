@@ -183,6 +183,7 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
                 if ($rBalance <= 0) {
                     #payment is complete, flag all payments as paid
                     $fpEntry->payment_status = 'paid';
+                    $fpEntry->save();
                     $submission->status = 'paid';
                     $submission->save();
 
@@ -194,6 +195,8 @@ class ConfirmCredoFirstTuitionPaymentJob implements ShouldQueue
                 #change the reference to allow user to pay a second time.
                 $fpEntry->txn_id = generateUniqueTransactionReference();
                 $fpEntry->save();
+
+                PaymentLogSanitationJob::dispatch($submission->id, $fpEntry->id, now());
 
                 #next update the Applicant admission table since this is first tuition
                 $appInfo = ApplicantAdmissionRequest::where('user_id',$payee_id)

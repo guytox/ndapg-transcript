@@ -178,6 +178,8 @@ class ConfirmCredoExtraChargesJob implements ShouldQueue
                 $fpEntry->txn_id = generateUniqueTransactionReference();
                 $fpEntry->save();
 
+                PaymentLogSanitationJob::dispatch($submission->id, $fpEntry->id, now());
+
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {
                 #nothing found

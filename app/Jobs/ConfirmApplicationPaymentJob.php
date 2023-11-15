@@ -93,6 +93,8 @@ class ConfirmApplicationPaymentJob implements ShouldQueue
             $feeRequest->status = 'paid';
             $feeRequest->save();
 
+            PaymentLogSanitationJob::dispatch($feePaymentTransaction->id, $feePaymentTransaction->id, now());
+
             // genericMail($emailSubject, $validPaymentMessage, $this->email);
         } else {
             FeePayment::where('txn_id', $this->transactionId)->where('checksum', $this->checksum)->update([
