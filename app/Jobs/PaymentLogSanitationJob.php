@@ -63,6 +63,7 @@ class PaymentLogSanitationJob implements ShouldQueue
             if ($balance <= 0) {
                 # flag as paid
                 $fp->payment_status = 'paid';
+                GrantPaymentRequestJob::dispatch($fp->id, now());
                # return "yes we flagged it paid";
             }else{
 

@@ -12,6 +12,7 @@ use App\Models\FeePayment;
 use App\Models\FeePaymentItem;
 use App\Models\FeeTemplate;
 use App\Models\FeeTemplateItem;
+use App\Models\PaymentLog;
 use Illuminate\Http\Request;
 
 class StudentPaymentController extends Controller
@@ -293,6 +294,25 @@ class StudentPaymentController extends Controller
 
     }
 
+    public function viewStudentPaymentHistory($id){
+        #fetch all pending payments
+        $paymentHistory = PaymentLog::join('fee_payments as f', 'f.id', 'payment_logs.fee_payment_id')
+                                    ->where('f.user_id', $id)
+                                    ->select('payment_logs.*')
+                                    ->get();
+
+
+
+        if ($paymentHistory) {
+            if (count($paymentHistory)>0) {
+                return view('students.ViewStudentPaymentHistory')->with(['Monitors'=>$paymentHistory]);
+            }
+        }
+            return redirect(route('home'))->with('info',"You have not made any payments at this time");
+
+
+    }
+
     public function initiatePayment($id){
         #grab the payment
         $toPay = FeePayment::where('uid', $id)->first();
@@ -535,7 +555,7 @@ class StudentPaymentController extends Controller
     }
 
 
-    
+
 
 
 }

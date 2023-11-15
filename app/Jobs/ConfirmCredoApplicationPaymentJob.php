@@ -250,6 +250,8 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                 $feeRequest->status = 'paid';
                 $feeRequest->save();
 
+                PaymentLogSanitationJob::dispatch($submission->id, $feePaymentTransaction->id, now());
+
 
                 // genericMail($emailSubject, $validPaymentMessage, $this->email);
             } else {

@@ -20,7 +20,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('student.registration.viewAll',['id'=>user()->id]) }}" class="@if (Request::is('coursereg.show')) active @endif waves-effect">
+            <a href="{{ route('student.payment.history',['id'=>user()->id]) }}" class="@if (Request::is('coursereg.show')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>Payment History</span>
             </a>
