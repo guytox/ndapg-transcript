@@ -54,7 +54,7 @@
                         <td colspan="2" width="30%">
                             <div class="text-right mb-5" >
 
-                                {!! QrCode::size(200)->generate( route('print.general.receipt',['id'=>$feeEntry->uid]) ) !!}
+                                {!! QrCode::size(200)->generate(route('print.general.receipt',['id'=>$feeEntry->uid]) ) !!}
                                 <br> verification link
                                 <br> <a href="{{route('print.general.receipt',['id'=>$feeEntry->uid])}}">{{route('print.general.receipt',['id'=>$feeEntry->uid])}}</a>
 

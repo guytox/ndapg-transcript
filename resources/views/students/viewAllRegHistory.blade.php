@@ -91,7 +91,7 @@
 
                                             @if ($v->session_id===activesession()->id && getRegMonitorById($v->id, 'status')=='approved' )
 
-                                                <a class="btn btn-danger" href="{{ route('student.registration.viewSingle', ['id'=>$v->id]) }}">Print Exam. Card</a>
+                                                <a class="btn btn-danger" href="{{ route('student.registration.printexamcard', ['id'=>$v->uid]) }}">Print Exam. Card</a>
 
                                             @endif
                                         </td>
