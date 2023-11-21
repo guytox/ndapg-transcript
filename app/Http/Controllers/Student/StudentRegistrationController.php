@@ -9,6 +9,7 @@ use App\Jobs\VetoRegistrationJob;
 use App\Models\Curriculum;
 use App\Models\CurriculumItem;
 use App\Models\DroppedCourses;
+use App\Models\FeePayment;
 use App\Models\RegClearance;
 use App\Models\RegMonitor;
 use App\Models\RegMonitorItems;
@@ -423,6 +424,82 @@ class StudentRegistrationController extends Controller
 
 
 
+    }
+
+    public function printExamCard($id){
+
+        if (user()->hasRole('student')) {
+
+            #get Payment Monitor for this sesssion
+            if ($submission = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
+            ->join('fee_categories as c','c.id','=','f.fee_category_id')
+            ->where('fee_payments.user_id', user()->id)
+            ->where('fee_payments.academic_session_id', getActiveAcademicSessionId())
+            ->where('c.payment_purpose_slug' ,'first-tuition')
+            ->select('fee_payments.*')
+            ->first()) {
+
+            }elseif ($submission = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
+            ->join('fee_categories as c','c.id','=','f.fee_category_id')
+            ->where('fee_payments.user_id', user()->id)
+            ->where('fee_payments.academic_session_id', getActiveAcademicSessionId())
+            ->where('c.payment_purpose_slug' ,'tuition')
+            ->select('fee_payments.*')
+            ->first()) {
+
+            }else{
+                return redirect(route('coursereg.index'))->with('error',"Make Sure you complete your fees before you Print your Examination Card");
+            }
+
+            #for you to reach here it means there is a payment record, check against semester to know if to allow printing of examination card or not
+
+            if (getActiveSemesterId()==1 && $submission->amount_paid > 0) {
+                # all clear allow student to go
+            }elseif (getActiveSemesterId()==2 && $submission->balance == 0) {
+                # all clear allow student to go
+            }else{
+                return redirect(route('coursereg.index'))->with('error',"Make Sure you complete your Fee Payment before you Print your Examination Card");
+            }
+
+
+            //fetch all regMonitors
+
+            $Monitors = RegMonitor::where(['student_id'=>getStudentIdByUserId(user()->id),'std_confirm'=>'1', 'uid'=>$id, 'status'=>'approved'])->with('RegMonitorItems')->first();
+
+            //return $Monitors;
+
+            if ($Monitors) {
+
+                return view('students.printExamCard', compact('Monitors','submission'));
+            }
+            return redirect(route('coursereg.index'))->with('error',"Error 40322, Contact ICT");
+
+
+        }else{
+            abort(403,"You do not have permission to view this page, Please Contact ICT");
+        }
+
+    }
+
+    public function verifyExamCard($id){
+        if (user()->hasRole('staff')) {
+
+            //fetch all regMonitors
+
+            $Monitors = RegMonitor::where(['uid'=>$id, 'status'=>'approved'])->with('RegMonitorItems')->first();
+
+            //return $Monitors;
+
+            if ($Monitors) {
+
+                return view('students.printExamCard', compact('Monitors'));
+            }
+            return redirect(route('dashboard'))->with('error',"Error 40322, Contact ICT");
+
+
+        }else{
+            abort(403,"You do not have permission to view this page, Please Contact ICT");
+        }
     }
 
 

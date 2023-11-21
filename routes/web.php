@@ -630,6 +630,9 @@ Route::get('/AppFormPreview/{id}/verify', [AdmissionProcessingController::class,
 # To view/verify courseReg
 Route::get('/Confirmation/CourseReg/{$id}', [StudentRegistrationController::class, 'verifyReg'])->middleware('auth', 'role:staff')->name('verify.student.reg');
 
+# To view/verify courseReg
+Route::get('/Confirmation/ExamCard/{$id}', [StudentRegistrationController::class, 'verifyExamCard'])->middleware('auth', 'role:staff')->name('verify.student.examcard');
+
 
 Route::get('applicant-referee/{uid}', [\App\Http\Controllers\Applicant\RefereeController::class, 'viewApplicantReferred'])->name('referee.view_details');
 Route::post('applicant-referee/{uid}', [\App\Http\Controllers\Applicant\RefereeController::class, 'updateRefereeDetails'])->name('referee.update_details');
