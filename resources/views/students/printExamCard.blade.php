@@ -209,7 +209,7 @@
                                 <td>
                                     __________________________
                                     <br> Prof. George Moses
-                                    <br> Deputy Dean  Signature
+                                    <br> Deputy Dean (SPGS) Signature
                                     <br>
                                     <br> Date: _______________________________
                                 </td>
