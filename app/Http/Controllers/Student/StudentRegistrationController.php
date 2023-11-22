@@ -482,7 +482,7 @@ class StudentRegistrationController extends Controller
     }
 
     public function verifyExamCard($id){
-        if (user()->hasRole('staff')) {
+        if (user()->hasRole('staff|admin')) {
 
             //fetch all regMonitors
 
