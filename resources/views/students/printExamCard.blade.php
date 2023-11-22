@@ -148,6 +148,11 @@
 
                     <table class="table table-centered table-nowrap mb-0">
                         <tr>
+                            <td colspan="3" class="text-centered">
+                                <b>FINANCIAL RECORDS</b>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <b>Total Fee Paid:</b> {{number_format(convertToNaira($submission->amount_paid), 2)}}
                             </td>
@@ -158,6 +163,7 @@
                                 <b>Receipt No:</b> {{$submission->uid}}
                             </td>
                         </tr>
+
                         <tr>
                             @if ($Monitors->status==='pending')
                                 <td class="text-center">
@@ -202,8 +208,8 @@
                                 </td>
                                 <td>
                                     __________________________
-                                    <br> {{getuser($Monitors->dean_approver,'name') }}
-                                    <br> Dean  (Signature & Stamp)
+                                    <br> Prof. George Moses
+                                    <br> Deputy Dean  Signature
                                     <br>
                                     <br> Date: _______________________________
                                 </td>
