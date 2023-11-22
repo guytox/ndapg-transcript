@@ -208,7 +208,7 @@
                                 </td>
                                 <td>
                                     __________________________
-                                    <br>
+                                    <br> Prof. George Moses
                                     <br> Deputy Dean  Signature
                                     <br>
                                     <br> Date: _______________________________
