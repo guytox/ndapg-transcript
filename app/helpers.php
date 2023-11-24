@@ -539,7 +539,7 @@ function isCredoRequestPending($id){
 function generateServiceCode($id){
 
     $fetchCode = CredoRequest::find($id);
-    
+
     switch ($fetchCode->payment->config->feeCategory->payment_purpose_slug) {
 
         case 'application-fee':
@@ -1008,3 +1008,32 @@ function getAcademicRoles($id){
 
 
 }
+
+
+//*********************************************************************************************** */
+// Credo Verification Helper
+//*********************************************************************************************** */
+
+function verifyCredoPayment($ref){
+    $headers = [
+        'Content-Type' => 'application/JSON',
+        'Accept' => 'application/JSON',
+        'Authorization' => config('app.credo.private_key'),
+    ];
+    #form the new url
+    $newurl = 'https://api.credocentral.com/transaction/'.$ref.'/verify';
+    #intiliaze new request
+    $client = new \GuzzleHttp\Client();
+    #fire request here
+    $response = $client->request('GET', $newurl,[
+        'headers' => $headers,
+    ]);
+    #expor the json
+    $parameters = json_decode($response->getBody());
+
+    return $parameters;
+    
+}
+
+
+
