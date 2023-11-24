@@ -497,7 +497,6 @@ class AdmissionProcessingController extends Controller
     public function cleanPaymentLog(){
 
         $logs = CredoRequest::where('status','pending')
-                            ->where('fee_payment_id', 7472)
                             ->get();
         $time = now();
 
