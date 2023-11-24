@@ -44,7 +44,22 @@ class CredoRequestSanitationJob implements ShouldQueue
                 #credo Ref Exist, you can proceed
                 #request found fire proceedure
                 #verify the status of the payment
-                $parameters = verifyCredoPayment($credRequest->credo_ref);
+                $headers = [
+                    'Content-Type' => 'application/JSON',
+                    'Accept' => 'application/JSON',
+                    'Authorization' => config('app.credo.private_key'),
+                ];
+                #form the new url
+                $newurl = 'https://api.credocentral.com/transaction/'.$credRequest->credo_ref.'/verify';
+                #intiliaze new request
+                $client = new \GuzzleHttp\Client();
+                #fire request here
+                $response = $client->request('GET', $newurl,[
+                    'headers' => $headers,
+                ]);
+                #expor the json
+                $parameters = json_decode($response->getBody());
+
                 $transRef = $parameters->data->transRef;
                 $businessRef = $parameters->data->businessRef;
                 $verified_transAmount = covertToInt($parameters->data->transAmount);
@@ -59,7 +74,7 @@ class CredoRequestSanitationJob implements ShouldQueue
                     # fire the credo request
 
                     # flag credo request as paid
-                    if ($verified_transAmount == $credRequest->amount ) {
+                    if ($parameters->data->transAmount == $credRequest->amount ) {
                         $credRequest->status = 'paid';
                         $credRequest->save();
                     }

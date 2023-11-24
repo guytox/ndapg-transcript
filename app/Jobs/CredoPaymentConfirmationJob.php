@@ -158,7 +158,7 @@ class CredoPaymentConfirmationJob implements ShouldQueue
                         $fpMonitor->txn_id = generateUniqueTransactionReference();
 
                         if ($rBalance <= 0) {
-                            $fpMonitor->status = 'paid';
+                            $fpMonitor->payment_status = 'paid';
                         }
 
                         $fpMonitor->save();
