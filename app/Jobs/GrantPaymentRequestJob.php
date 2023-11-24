@@ -39,7 +39,7 @@ class GrantPaymentRequestJob implements ShouldQueue
 
         $fpayment = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
                                     ->join('fee_categories as c','c.id','=','f.fee_category_id')
-                                    ->where('fee_payments.id',$pDetails->fee_payment_id)
+                                    ->where('fee_payments.id', $this->feePaymentId)
                                     ->first();
 
 

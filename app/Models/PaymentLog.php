@@ -12,6 +12,7 @@ class PaymentLog extends Model
     protected $guarded = [];
 
     public function feePayment(){
+        
         return $this->belongsTo(FeePayment::class, 'fee_payment_id', 'id');
     }
 }

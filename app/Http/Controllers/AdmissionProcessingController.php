@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ApplicantExport;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\CreateFreshStudentRegClearance;
+use App\Jobs\CredoRequestSanitationJob;
 use App\Jobs\FirstTuitionGenerationJob;
 use App\Jobs\GenerateStudentRecordJob;
 use App\Jobs\PaymentLogSanitationJob;
@@ -495,15 +496,13 @@ class AdmissionProcessingController extends Controller
 
     public function cleanPaymentLog(){
 
-         $logs = PaymentLog::join('fee_payments as f','f.id','payment_logs.fee_payment_id')
-                                    ->where('f.payment_status','pending')
-                                    ->distinct('payment_logs.fee_payment_id')
-                                    ->get();
+        $logs = CredoRequest::where('status','pending')
+                            ->get();
         $time = now();
+
         foreach ($logs as $k) {
             #get al entries with that transaction id
-            PaymentLogSanitationJob::dispatch($k->id, $k->fee_payment_id , $time);
-
+            CredoRequestSanitationJob::dispatch($k->id , $time);
         }
 
         return back()->with('info', "payments reverified successfully!!!");
