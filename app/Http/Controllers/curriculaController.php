@@ -57,10 +57,10 @@ class curriculaController extends Controller
                 'title'=>'required',
                 'semester'=>'required',
                 'uid'=>'required',
+                'studyYear' => 'required',
                 'studyLevel'=>'required',
                 'minRegCredits'=>'required',
                 'maxRegCredits'=>'required',
-
 
             ]);
 
@@ -70,6 +70,7 @@ class curriculaController extends Controller
                 'title',
                 'semester',
                 'studyLevel',
+                'studyYear',
                 'minRegCredits',
                 'maxRegCredits',
                 'active'
@@ -82,8 +83,9 @@ class curriculaController extends Controller
 
         }
 
+    return "You do not have the required permission to visit this page";
 
-    return " You do not have the required permission to visit this page";
+
     }
 
     /**
@@ -95,6 +97,7 @@ class curriculaController extends Controller
     public function show($id)
     {
         if (user()->hasRole('admin|dean|hod|reg_officer|exam_officer')) {
+
             $curriculum = Curriculum::with('curriculumItems')->find($id);
             $courses = SemesterCourse::where('activeStatus', '=', 1)->get()->pluck('courseCode','id');
 

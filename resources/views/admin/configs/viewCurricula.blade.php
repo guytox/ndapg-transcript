@@ -57,6 +57,11 @@ type="text/css" />
                                 </div>
 
                                 <div class="form-group">
+                                    {!! Form::label('studyYear', 'Study Year') !!}
+                                    {!! Form::select('studyYear', [1 => 1, 2 =>  2], null, ['class' => 'form-control', 'required']) !!}
+                                </div>
+
+                                <div class="form-group">
                                     {!! Form::label('title', 'Enter a Narration for the Template **(Must be Descriptive)') !!}
                                     {!! Form::text('title', '',['class'=>'form-control', 'required' ]) !!}
                                 </div>
@@ -91,6 +96,7 @@ type="text/css" />
                                     <th>S/N</th>
                                     <th>Description</th>
                                     <th>Level</th>
+                                    <th>Year</th>
                                     <th>Semester</th>
                                     <th>Program</th>
                                     <th>Min. Credits</th>
@@ -111,6 +117,7 @@ type="text/css" />
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $v['title'] }}</td>
                                     <td>{{ getStudyLevelDetailsById($v['studyLevel']) }}</td>
+                                    <td>{{ $v['studyYear']}}</td>
                                     <td>{{ getSemesterDetailsById($v['semester']) }}</td>
                                     <td>{{ getProgrammeDetailById($v['programs_id'],'name') }}</td>
                                     <td>{{ $v['minRegCredits'] }}</td>
