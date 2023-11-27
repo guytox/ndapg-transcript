@@ -12,12 +12,12 @@
             <div class="card-body">
 
 
-                <h2 class="header-title">Complete Payment Online</h2>
+                <h2 class="header-title">Complete Payment Online <span class="text-danger">(Specify Amount You want to Pay)</span> </h2>
 
 
                 <form method="post" action="{{ route('initiate.credo.payment',['id'=>$payment->uid]) }}">
                     @csrf
-                    <input type="text" name="type" value="{{convertToNaira($payment->balance)}}" class="form-control" readonly>
+                    <input type="text" name="type" value="{{convertToNaira($payment->balance)}}" class="form-control" >
                     <br>
                     <button type="submit" class="btn btn-outline-primary form-control">Proceed to Pay Online</button>
                 </form>
