@@ -31,18 +31,18 @@ class StudentRegistrationController extends Controller
     {
         //show outline for the current semester if the student has not registered before
 
-        $student_id = getStudentByUserId(user()->id)->program_id;
+        $student = getStudentByUserId(user()->id);
 
         //return user()->current_level;
 
         $currentOutline = Curriculum::where([
 
-            'programs_id' => getStudentByUserId(user()->id)->program_id,
+            'programs_id' => $student->program_id,
             'studyLevel' => user()->current_level,
-            'semester' => getSemesterIdByName(activeSession()->currentSemester)
+            'semester' => getSemesterIdByName(activeSession()->currentSemester),
+            'studyYear' => $student->study_year
         ])->first();
 
-        $currentOutline;
 
         if ($currentOutline) {
             return view('students.viewcurriculums', compact('currentOutline'));

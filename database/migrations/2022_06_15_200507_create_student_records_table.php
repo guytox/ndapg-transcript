@@ -19,6 +19,7 @@ class CreateStudentRecordsTable extends Migration
             $table->foreignId('user_id')->constrained('users', 'id')->unique();
             $table->foreignId('program_id')->constrained('programs','id');
             $table->string('matric')->unique();
+            $table->integer('study_year')->default(1);
             $table->boolean('in_defferment')->default(false);
             $table->boolean('is_suspended')->default(false);
             $table->boolean('has_graduated')->default(false);
