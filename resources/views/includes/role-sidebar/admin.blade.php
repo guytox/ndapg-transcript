@@ -243,6 +243,27 @@
             </a>
         </li>
 
+        <li>
+            <a href="{{ route('pgMigration.create') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Begin Migration</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('approve.migration') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Approve Migration</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('pgMigration.index') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>View Migration List</span>
+            </a>
+        </li>
+
     </ul>
 </li>
 
