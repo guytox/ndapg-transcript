@@ -36,6 +36,7 @@ use App\Http\Controllers\Student\StudentPaymentController;
 use App\Http\Controllers\Student\StudentRegistrationController;
 use App\Http\Controllers\StudentDeffermentController;
 use App\Http\Controllers\StudentInformationController;
+use App\Http\Controllers\StudentMigrationController;
 use App\Http\Controllers\StudyLevelsController;
 use App\Http\Controllers\SystemVariablesController;
 use App\Jobs\RegistrationApprovalJob;
@@ -237,6 +238,13 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::get('firstTuitionInvoice/{id}',[AdmissionProcessingController::class, 'printFirstTuitionInvoice'])->name('print.first.tuition.invoice');
         Route::get('/admissionReports', [AdmissionProcessingController::class, 'admissionReports'])->name('view.admission.reports');
 
+    });
+
+
+    Route::prefix('migration')->middleware('auth', 'role:admin|dap|dean_pg')->group(function(){
+        Route::resource('pgMigration', StudentMigrationController::class);
+        Route::get('approveMigration', [StudentMigrationController::class, 'approveMigration'])->name('approve.migration');
+        Route::post('effectMigration', [StudentMigrationController::class, 'effectMigration'])->name('effectAdmissionProcessing.migration');
     });
 
     #Result Management Routes
