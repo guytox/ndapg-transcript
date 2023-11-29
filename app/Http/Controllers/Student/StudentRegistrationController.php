@@ -342,7 +342,7 @@ class StudentRegistrationController extends Controller
 
             $droppedelectives = DroppedCourses::where(['student_id'=> getStudentIdByUserId(user()->id), 'category' =>'elective', 'semester_id'=>getSemesterIdByName(activeSession()->currentSemester) ])->get();
 
-            $carryOvers = RegMonitorItems::where(['student_id'=> getStudentIdByUserId(user()->id), 'semester_id'=>getSemesterIdByName(activeSession()->currentSemester)  ])->get();
+            $carryOvers = RegMonitorItems::where(['student_id'=> getStudentIdByUserId(user()->id), 'semester_id'=>getSemesterIdByName(activeSession()->currentSemester), 'is_co_passed'=>0  ])->get();
 
             $outline = Curriculum::find($id);
 
