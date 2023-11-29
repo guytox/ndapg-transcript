@@ -10,8 +10,12 @@ use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\ConfirmCredoExtraChargesJob;
 use App\Jobs\ConfirmCredoFirstTuitionPaymentJob;
 use App\Jobs\ConfirmPaymentJob;
+use App\Jobs\CredoRequestSanitationJob;
+use App\Models\ApplicationFeeRequest;
 use App\Models\CredoRequest;
 use App\Models\CredoResponse;
+use App\Models\FeeCategory;
+use App\Models\FeeConfig;
 use App\Models\Program;
 use App\Models\User;
 
@@ -64,33 +68,6 @@ class PaymentHandleController extends Controller
     public function confirmcredoApplicationPayment(Request $request)
     {
 
-        //return $request;
-
-        # prepare for validation
-
-        // $headers = [
-        //     'Content-Type' => 'application/JSON',
-        //     'Accept' => 'application/JSON',
-        //     'Authorization' => config('app.credo.private_key'),
-        // ];
-
-        // //return $headers;
-
-        // $newurl = 'https://api.credocentral.com/transaction/'.$request->transRef.'/verify';
-
-        // //return $newurl;
-
-        // $client = new \GuzzleHttp\Client();
-
-        // $response = $client->request('GET', $newurl,[
-        //     'headers' => $headers,
-        // ]);
-
-        // $parameters = json_decode($response->getBody());
-
-        // //return $parameters;
-
-
         if ($request->has('transRef') && $request->has('transAmount')) {
 
             $transactionId = $request->get('transRef');
@@ -106,8 +83,59 @@ class PaymentHandleController extends Controller
                 'transAmount'=>$request->transAmount,
             ]);
 
+            $appEntryCheck = ApplicationFeeRequest::where('credo_ref', $request->transRef)->first();
+
+            if ($appEntryCheck) {
+
+                $appFeeCate = FeeCategory::where('payment_purpose_slug', 'application-fee')->first();
+                $appFeeConfig = FeeConfig::where('fee_category_id', $appFeeCate->id)->first();
+
+                $cFeepymntData = [
+                    'user_id' => $appEntryCheck->payee_id,
+                    'uid' => $appEntryCheck->uid,
+                    'payment_config_id' => $appFeeConfig->id,
+                    'academic_session_id' => $appEntryCheck->session_id,
+                    'amount_billed' => convertToKobo($appEntryCheck->amount),
+                    'txn_id' => $appEntryCheck->txn_id,
+                    'balance' => convertToKobo($appEntryCheck->amount),
+                    'channel' => 'credo',
+                ];
+
+                $newFeePayment = FeePayment::updateOrCreate([
+                    'user_id' => $appEntryCheck->payee_id,
+                    'payment_config_id' => $appFeeConfig->id,
+                    'academic_session_id' => $appEntryCheck->session_id,
+                ], $cFeepymntData);
+
+                $cRequestData = [
+                    'payee_id' => $appEntryCheck->payee_id,
+                    'fee_payment_id' => $newFeePayment,
+                    'amount' => $appEntryCheck->amount,
+                    'session_id' => $appEntryCheck->session_id,
+                    'uid' => $appEntryCheck->uid,
+                    'txn_id' => $appEntryCheck->txn_id,
+                    'credo_ref' => $appEntryCheck->credo_ref,
+                    'credo_url' => $appEntryCheck->credo_url,
+                ];
+
+                $newCredoRequest = CredoRequest::updateOrCreate([
+                    'credo_ref' => $appEntryCheck->credo_ref,
+                ], $cRequestData);
+
+
+            }
+
             #next find what the payment is all about and route it appropriately
-            $pDetails = CredoRequest::where('credo_ref', $newrequest->transRef)->first();
+            $pDetails = CredoRequest::where('credo_ref', $request->transRef)->first();
+
+            if ($pDetails) {
+
+                $time = now();
+
+                CredoRequestSanitationJob::dispatch($pDetails->id, $time);
+            }
+
+
             #next find the fee_payment entry for this record
             $fpayment = FeePayment::join('fee_configs as f','f.id','=','fee_payments.payment_config_id')
                                     ->join('fee_categories as c','c.id','=','f.fee_category_id')
@@ -118,14 +146,14 @@ class PaymentHandleController extends Controller
                 case 'application-fee':
                         # this payment is for application
                         // send background job to confirm the payment with checksum and transaction id
-                        ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                        // ConfirmCredoApplicationPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
                         # return home and give the job some time to confirm payment
                         return redirect()->route('home')->with(['message' => 'Your payment confirmation is processing, Please Check back in about two(2) Minutes']);
                     break;
                 case 'acceptance-fee':
                     # send to acceptance fee job
                     // send background job to confirm the payment with checksum and transaction id
-                    ConfirmCredoAcceptancePaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                    // ConfirmCredoAcceptancePaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
                     # return home and give the job some time to confirm payment
                     return redirect()->route('home')->with(['message' => 'Your Acceptance Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
                     break;
@@ -135,20 +163,26 @@ class PaymentHandleController extends Controller
                 case 'first-tuition':
                     # send to first tuition fee job
                     // send background job to confirm the payment with checksum and transaction id
-                    ConfirmCredoFirstTuitionPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                    // ConfirmCredoFirstTuitionPaymentJob::dispatch($transactionId, $currency, $statusCode, $amount);
                     # return home and give the job some time to confirm payment
                     return redirect()->route('home')->with(['message' => 'Your Tuition Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
                     break;
                 case 'tuition':
-                    # code...
+
+                    return redirect()->route('home')->with(['message' => 'Your Tuition Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
+
                     break;
+
                 case 'wallet-fund':
-                    # code...
+
+                    return redirect()->route('home')->with(['message' => 'Your Wallet Funding Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
+
                     break;
+
                 case 'spgs-charges':
                     #this payment is for ID card, Medical and Laboratory
                     #send to background job
-                    ConfirmCredoExtraChargesJob::dispatch($transactionId, $currency, $statusCode, $amount);
+                    // ConfirmCredoExtraChargesJob::dispatch($transactionId, $currency, $statusCode, $amount);
                     # return home and give the job some time to confirm payment
                     return redirect()->route('home')->with(['message' => 'Your Extra Charges Fee Payment Comfirmation is  submitted for processing Successfully!!! Please Check back in about two(2) Minutes']);
                     break;

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CredoRequestSanitationJob implements ShouldQueue
 {
@@ -60,15 +61,41 @@ class CredoRequestSanitationJob implements ShouldQueue
                 #expor the json
                 $parameters = json_decode($response->getBody());
 
-                $transRef = $parameters->data->transRef;
-                $businessRef = $parameters->data->businessRef;
-                $verified_transAmount = covertToInt($parameters->data->transAmount);
-                $currencyCode = $parameters->data->currencyCode;
-                $response_status = $parameters->data->status;
                 $paymentChannel = 'credo-online';
                 $time = now();
 
+                    $businessCode = $parameters->data->businessCode;
+                    $transRef = $parameters->data->transRef;
+                    $businessRef = $parameters->data->businessRef;
+                    $debitedAmount = $parameters->data->debitedAmount;
+                    $verified_transAmount = covertToInt($parameters->data->transAmount);
+                    $transFeeAmount = $parameters->data->transFeeAmount;
+                    $settlementAmount = $parameters->data->settlementAmount;
+                    $customerId = $parameters->data->customerId;
+                    $transactionDate = $parameters->data->transactionDate;
+                    $channelId = $parameters->data->channelId;
+                    $currencyCode = $parameters->data->currencyCode;
+                    $response_status = $parameters->data->status;
+
+                    #store Response
+                    foreach ($parameters->data->metadata as $k) {
+                        if ($k->insightTag == 'name') {
+
+                            $payee_name = $k->insightTagValue;
+
+                        }elseif ($k->insightTag == 'payee_id') {
+
+                            $payee_id = $k->insightTagValue;
+
+                        }elseif ($k->insightTag == 'verification_code') {
+
+                            $payee_code = $k->insightTagValue;
+                        }
+                    }
+
                 if ($response_status == 0) {
+
+                    Log::info('Credo fee payment has been confirmed - '.$businessRef);
                     # payment is confirmed, fire the log entry
                     CredoRequestEnterPaymentLogJob::dispatch($credRequest->fee_payment_id, $credRequest->uid , $verified_transAmount, $paymentChannel, $businessRef, $time);
                     # fire the credo request
@@ -78,11 +105,23 @@ class CredoRequestSanitationJob implements ShouldQueue
                         $credRequest->status = 'paid';
                         $credRequest->save();
                     }
-                    $newCredoResponse = CredoResponse::updateOrCreate(['transRef'=>$transRef],[
+
+                    $responseRecords = CredoResponse::updateOrCreate(['transRef'=>$transRef],[
                         'transRef'=>$transRef,
-                        'currency'=>$currencyCode,
-                        'status'=>$response_status,
-                        'transAmount'=>$verified_transAmount,
+                        'businessCode'=>$businessCode,
+                        'businessRef'=>$businessRef,
+                        'debitedAmount'=>$debitedAmount,
+                        'verified_transAmount'=> $parameters->data->transAmount,
+                        'transFeeAmount'=>$transFeeAmount,
+                        'settlementAmount'=>$settlementAmount,
+                        'customerId'=>$customerId,
+                        'transactionDate'=>$transactionDate,
+                        'channelId'=>$channelId,
+                        'response_status'=>$response_status,
+                        'currencyCode'=>$currencyCode,
+                        'payee_name'=>$payee_name,
+                        'payee_id'=>$payee_id,
+                        'payee_code'=>$payee_code,
                     ]);
 
                     #
