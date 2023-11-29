@@ -353,9 +353,6 @@ class StudentRegistrationController extends Controller
             $optionals = CurriculumItem::whereNotIn('semester_courses_id',$carryOvers->pluck('course_id'))->where(['curricula_id'=> $id, 'category' =>'core/optional' ])->get();
 
 
-
-
-
             return view('students.retister', compact('cores','electives','optionals','droppedcores','droppedelectives','carryOvers','outline'));
 
         }

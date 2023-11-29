@@ -282,7 +282,9 @@ class StudentPaymentController extends Controller
         #fetch all pending payments
         $pendingPayments = FeePayment::where('user_id', $id)
                                     ->where('balance','>', 0)
-                                    ->get();
+                                    ->first();
+
+        return $pendingPayments->config->feeCategory->payment_purpose_slug;
 
         if ($pendingPayments) {
             if (count($pendingPayments)>0) {
@@ -409,9 +411,13 @@ class StudentPaymentController extends Controller
     public function generateCredoReference($id){
         #fetch the request to process further
         $toFetch = CredoRequest::find($id);
+
         if ($toFetch) {
+
             if ($toFetch->credo_url !=null) {
+
                 return redirect()->action([StudentPaymentController::class, 'processCredoPayment'],[$toFetch->uid]);
+
             }else{
                 #get parameters required to generate credo ref
                 #split the name
@@ -485,7 +491,9 @@ class StudentPaymentController extends Controller
                 return redirect()->away($credoReturns->data->authorizationUrl);
 
             }
+
         }else{
+
             return redirect('home')->with('error', "Error in Payment Processing");
 
         }
