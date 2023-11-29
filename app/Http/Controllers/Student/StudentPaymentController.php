@@ -284,8 +284,6 @@ class StudentPaymentController extends Controller
                                     ->where('balance','>', 0)
                                     ->first();
 
-        return $pendingPayments->config->feeCategory->payment_purpose_slug;
-
         if ($pendingPayments) {
             if (count($pendingPayments)>0) {
                 return view('students.ViewStudentBalances')->with(['Monitors'=>$pendingPayments]);
