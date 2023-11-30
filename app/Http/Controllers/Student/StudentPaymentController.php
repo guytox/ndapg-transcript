@@ -282,7 +282,7 @@ class StudentPaymentController extends Controller
         #fetch all pending payments
         $pendingPayments = FeePayment::where('user_id', $id)
                                     ->where('balance','>', 0)
-                                    ->first();
+                                    ->get();
 
         if ($pendingPayments) {
             if (count($pendingPayments)>0) {
