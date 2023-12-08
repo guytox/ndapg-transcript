@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+ <html lang="en" class="no-js">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="shortcut icon" href="img/nda-logo.png" type="image/x-icon" />
+       
+        <title>NDA-PG-SCHOOL: Create Account</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="Login and Registration Form with HTML5 and CSS3" />
+        <meta name="keywords" content="html5, css3, form, switch, animation, :target, pseudo-class" />
+        <meta name="author" content="Codrops" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="css/style2.css" />
+        <link rel="stylesheet" type="text/css" href="css/demo2.css" />
+        <link rel="stylesheet" type="text/css" href="css/style3.css" />
+        <link rel="stylesheet" type="text/css" href="css/animate-custom.css" />
+        <link rel="stylesheet" type="text/css" href="css/ndaforms.css" />
+        <!--
+        <style>
+            * {
+                font-family: 'Old Standard Sans', Arial, sans;
+                /*color: #666;*/
+            }
+        </style>
+        -->
+    </head>
+        <body onload='loadCategories();'>
+        <div class="container">
+            <!-- Codrops top bar -->
+
+            <div class="codrops-top">
+                <a href="https://spgs.nda.edu.ng" target="_blank">
+                    <strong>&laquo; PG PORTAL</strong>
+                </a>
+                <span class="right">
+                    <a href="https://nda.edu.ng/school-of-postgraduate-studies/" target="_blank">
+                        <strong>POST GRADUATE SCHOOL &raquo;</strong>
+                    </a>
+                </span>
+                <div class="clr"></div>
+            </div><!--/ Codrops top bar -->
+            <header style="width: 1000px; text-align: left; margin: 0 auto; border-style: none; height: auto; padding: 0px; background: none repeat scroll 0 0 #FFFFFF;
+                    background-color:green; ">  
+                <div style="display:table-cell; vertical-align: middle; float: right; border-style: none; width: 450px; color: #008B8B; margin-top: 5px;">
+                    <!-- applicants details go here -->
+                                </div>
+                <div style='display: table; height: auto; border-style: none;'>
+                    <img style="float: left;width: 60%" src="img/nda-logo.png">
+                    <div style="display:table-cell; vertical-align: middle;">
+                        <h1 style="">Nigerian Defence Academy</h1>
+                        <h1 style='font-size: x-large; line-height: 8pt;'><span>Postgraduate School</span></h1>
+                    </div>
+                    				
+                    
+                </div>
+            </header>
+<style>
+    #remainder {
+        -webkit-animation: color-change .75s infinite;
+        -moz-animation: color-change .75s infinite;
+        -o-animation: color-change .75s infinite;
+        -ms-animation: color-change .75s infinite;
+        animation: color-change .75s infinite;
+    }
+
+    @-webkit-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @-moz-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @-ms-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @-o-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+</style>
+            <div id="maincontainer">
+                <div id= "content">
+				
+<!--
+<div class = 'hwarning' style='width: 690px; margin: 0 auto; font-size: 14pt;'><b>
+<span id="remainder">FRAUD ALERT!!! </span><br>
+Be warned that some fraudsters are sending out SMS warning on the closure of<br>the PG Application Exercise with contact phone numbers for enquiries<br><span style='background-color: yellow; color: red; '>DO NOT HEED TO SUCH MESSAGE</span></b>
+</div>
+                    <div class = 'herror' style='width: 690px; margin: 0 auto;'><b>2015/2016 PG Application Exercise Has Been
+                            Extended.<br>
+                            A New Closing Date Will Be Announced Later.</b>
+</div>
+-->    <style>
+        tr {
+            width: 40px;
+        }
+    </style>
+
+    <script type='text/javascript'>
+        if (!String.prototype.trim) {
+            String.prototype.trim = function() {
+                return this.replace(/^\s+|\s+$/g,'');
+            }
+        }
+
+        var errcolor = '#FFC0CB';
+        var nrmcolor = 'White';
+        
+        function validateFormOnSubmit(theForm) {
+            var reason = "";
+            reason += validatefname(theForm.input_fname);
+            reason += validatelname(theForm.input_lname);
+            reason += validateemail(theForm.input_email);
+            reason += validatePhone(theForm.input_phone);
+            reason += validatepassword(theForm.password1, theForm.password2);
+
+
+            if (reason != "") {
+                alert("Some fields need correction:\n" + reason);
+                return false;
+            }
+
+            return true;
+        }
+
+        function validatepassword(fld1, fld2){
+            var error = "";
+            var letterNumber = /^[0-9a-zA-Z]+$/;
+            var p1 = fld1.value;
+            var p2 = fld2.value;
+            if(p1 != p2){
+                fld1.style.background = errcolor;
+                fld2.style.background = errcolor;
+                error = "=> Passwords Do Not Match\n";
+                return error;
+            }else if (p1 == p2){
+                if(p1.length >= 6) {
+                    if (!(p1.match(letterNumber))) {
+                        fld1.style.background = errcolor;
+                        fld2.style.background = errcolor;
+                        error = "=> Only alphanumeric characters are allowed in Passwords\n";
+                        return error;
+                    }
+                }else{
+                    fld1.style.background = errcolor;
+                    fld2.style.background = errcolor;
+                    error = "=> Password Must be at Least 6 Characters\n";
+                    return error;
+                }
+            }
+            if(error == ""){
+                fld1.style.background = nrmcolor;
+                fld2.style.background = nrmcolor;
+            }
+return error;
+        }
+
+        function validatefname(fld) {
+            var error = "";
+            fld.value = fld.value.trim();
+
+            if (fld.value.length == 0) {
+                fld.style.background = errcolor;
+                error = "=> First Name cannot be empty\n";
+            } else {
+                fld.style.background = nrmcolor;
+            }
+            return error;
+        }
+
+        function validatelname(fld) {
+            var error = "";
+            fld.value = fld.value.trim();
+
+            if (fld.value.length == 0) {
+                fld.style.background = errcolor;
+                error = "=> Last Name cannot be empty\n";
+            } else {
+                fld.style.background = nrmcolor;
+            }
+            return error;
+        }
+
+        function validateemail(fld) {
+            var error = "";
+            var x = fld.value;
+            var atpos = x.indexOf("@");
+            var dotpos = x.lastIndexOf(".");
+            if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= x.length)
+            {
+                fld.style.background = errcolor;
+                error = "=> Invalid Email Address\n";
+            } else {
+                fld.style.background = nrmcolor;
+            }
+            return error;
+        }
+
+        function validatePhone(fld) {
+            var error = "";
+            var stripped = fld.value.replace(/[\(\)\.\-\ ]/g, '');
+            var isempty = fld.value.replace(/^\s+|\s+$/g, "");
+
+            if (isempty == "") {
+                error = "=> You didn't enter a phone number.\n";
+                fld.style.background = errcolor;
+            } else if (isNaN(parseInt(stripped))) {
+                error = "=> The phone number contains illegal characters.\n";
+                fld.style.background = errcolor;
+            } else if (!(stripped.length == 11)) {
+                error = "=> The phone number is the wrong length.\n";
+                fld.style.background = errcolor;
+            }
+            if (error == "") {
+                fld.style.background = nrmcolor;
+            }
+            return error;
+        }
+
+    </script>
+    <fieldset>
+        <legend dir="ltr" >Create an Account</legend>
+        
+        <div style="width: 470px; margin: 0 auto; text-align: center; ">
+            <form  name="createaccount" id="createaccount" class="login" action="https://spgs.nda.edu.ng/register" method="post" onsubmit="return validateFormOnSubmit(this);">
+                <table>
+                    <tr><td class="mlabel">First Name</td><td style="width: 10px;"></td></tr>
+                    <tr><td class="minput"><input name="input_fname" id="input_fname" type="text"   style="width: 450px; height: 20px;" /></td></tr>
+                    <tr><td class="mlabel">Middle Name</td><td style="width: 10px;"></td></tr>
+                    <tr><td class="minput"><input name="input_mname" id="input_mname" type="text"   style="width: 450px; height: 20px;" /></td></tr>
+                    <tr><td class="mlabel">Last Name</td><td style="width: 10px;"></td></tr>
+                    <tr><td class="minput"><input name="input_lname" id="input_lname" type="text"   style="width: 450px; height: 20px;" /></td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr><td class="mlabel">Personal E-m@il</td><td style="width: 10px;"></td></tr>
+                    <tr><td class="minput"><input name="input_email" id="input_email" type="text"
+                                style = 'width: 450px; height: 20px;'                                ></td></tr>
+                    <tr><td class="mlabel">Personal GSM No.</td><td style="width: 10px;"></td></tr>
+                    <tr><td class="minput"><input name="input_phone" id="input_phone" type="text"   style="width: 450px; height: 20px;" /></td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr><td class="mlabel">Password</td><td style="width: 10px;"></td></tr>
+                    <tr><td class="minput"><input name="password1" id="password1" type="password"  style="width: 450px; height: 20px;" /></td></tr>
+                    <tr><td class="mlabel">Confirm Password</td><td style="width: 10px;"></td></tr>
+                    <tr><td class="minput"><input name="password2" id="password2" type="password"  style="width: 450px; height: 20px;" /></td></tr>
+                </table>
+                <fieldset class="tblFooters2">
+                    <input id="input_go" type="submit" name="continue" value="Create Account" >
+                    <!-- <input type="hidden" value="TRUE" name="continue"> -->
+                </fieldset>
+                <div style="text-align: left; font-size: 12pt;">
+                    Already have an account?, <a href="./https://spgs.nda.edu.ng/login">click here to login.</a><br>
+                    Forget Password?, <a href="./recover_password.php">click here to recover Password.</a>
+            </form>
+        </div>
+    </fieldset>
+                    <!-- begin footer -->
+                    
+</div>
+                    <!-- <div style="float: bottom;  width: auto; border: #e6e6e6; bottom: 0; height: 100px; margin-top: 10px;">
+                        <div style="float: left; width: 190px; position: absolute; border: solid; height: 95px;">;dmlcd;mcasd</div>
+                        <div style="float: right; width: 795px; position: relative; border: #DDDDDD; height: 95px;">'sadas,da</div>
+                    </div> -->
+                    <div style="float: bottom;  width: auto; border: none; bottom: 0; height: 50px; line-height: 50px;margin-top: 20px; margin-bottom: 20px; font-size: large; border-radius: 20px/10px; background-color: green;">
+                        Copyright &copy; 2023 Nigerian Defence Academy. All rights reserved.
+                    </div>
+<!--  -->
+    
+    <ul style="float: left; width: 190px; position: absolute; top:140px; height: 400px; border: none; background-color:none; line-height: 40px; text-align: center">
+<li>
+<a href="index.html" class="btn" >Home</a>
+</li>
+<li>
+<a href="programmes.html" class="btn">Available Programmes</a>
+</li>
+<li>
+<a href="requirements.html" class="btn">Admission Requirements</a>
+</li>
+<li>
+<a href="procedure.html" class="btn" >Application Procedure</a>
+</li>
+
+<li>
+<a href="https://spgs.nda.edu.ng/register" class="btn2">Register</a>
+</li>
+<li>
+<a href="https://spgs.nda.edu.ng/login" class="btn">Log In</a>
+</li>
+       
+
+</ul>
+    
+<!-- -->
+    </div>
+</body>
+</html>

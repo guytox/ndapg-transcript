@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+
+ <html lang="en" class="no-js"> 
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="shortcut icon" href="img/nda-logo.png" type="image/x-icon" />
+
+        <title>NDA-PG-SCHOOL: Log In</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="Login and Registration Form with HTML5 and CSS3" />
+        <meta name="keywords" content="html5, css3, form, switch, animation, :target, pseudo-class" />
+        <meta name="author" content="Codrops" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="css/style2.css" />
+        <link rel="stylesheet" type="text/css" href="css/demo2.css" />
+        <link rel="stylesheet" type="text/css" href="css/style3.css" />
+        <link rel="stylesheet" type="text/css" href="css/animate-custom.css" />
+        <link rel="stylesheet" type="text/css" href="css/ndaforms.css" />
+       
+    </head>
+        <body onload='loadCategories();'>
+        <div class="container">
+            <!-- Codrops top bar -->
+
+            <div class="codrops-top">
+                <a href="https://spgs.nda.edu.ng" target="_blank">
+                    <strong>&laquo; PG PORTAL</strong>
+                </a>
+                <span class="right">
+                    <a href="https://nda.edu.ng/school-of-postgraduate-studies/" target="_blank">
+                        <strong>POST GRADUATE SCHOOL &raquo;</strong>
+                    </a>
+                </span>
+                <div class="clr"></div>
+            </div><!--/ Codrops top bar -->
+            <header style="width: 1000px; text-align: left; margin: 0 auto; border-style: none; height: auto; padding: 0px; background: none repeat scroll 0 0 #FFFFFF;
+                    background-color:green; ">  
+                <div style="display:table-cell; vertical-align: middle; float: right; border-style: none; width: 450px; color: #008B8B; margin-top: 5px;">
+                    <!-- applicants details go here -->
+                                </div>
+                <div style='display: table; height: auto; border-style: none;'>
+                    <img style="float: left;width: 60%" src="img/nda-logo.png">
+                    <div style="display:table-cell; vertical-align: middle;">
+                        <h1 style="">Nigerian Defence Academy</h1>
+                        <h1 style='font-size: x-large; line-height: 8pt;'><span>Postgraduate School</span></h1>
+                    </div>
+                    				
+                    
+                </div>
+            </header>
+<style>
+    #remainder {
+        -webkit-animation: color-change .75s infinite;
+        -moz-animation: color-change .75s infinite;
+        -o-animation: color-change .75s infinite;
+        -ms-animation: color-change .75s infinite;
+        animation: color-change .75s infinite;
+    }
+
+    @-webkit-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @-moz-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @-ms-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @-o-keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+    @keyframes color-change {
+        0% { color: red; }
+        25% { color: yellow; }
+        50% { color: blue; }
+        75% { color: green; }
+        100% { color: red; }
+    }
+</style>
+            <div id="maincontainer">
+                <div id= "content">
+				
+<!--
+<div class = 'hwarning' style='width: 690px; margin: 0 auto; font-size: 14pt;'><b>
+<span id="remainder">FRAUD ALERT!!! </span><br>
+Be warned that some fraudsters are sending out SMS warning on the closure of<br>the PG Application Exercise with contact phone numbers for enquiries<br><span style='background-color: yellow; color: red; '>DO NOT HEED TO SUCH MESSAGE</span></b>
+</div>
+                    <div class = 'herror' style='width: 690px; margin: 0 auto;'><b>2015/2016 PG Application Exercise Has Been
+                            Extended.<br>
+                            A New Closing Date Will Be Announced Later.</b>
+</div>
+-->
+<script type='text/javascript'>
+var errcolor = '#FFC0CB';
+var nrmcolor = 'White';
+
+    function validateFormOnSubmit(theForm) {
+        var reason = "";
+        reason += validateusername(theForm.username);
+        reason += validatepassword(theForm.password);
+
+
+        if (reason != "") {
+            alert("Some fields need correction:\n" + reason);
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateusername(fld) {
+        var error = "";
+
+        if (fld.value.length == 0) {
+            fld.style.background = errcolor;
+            error = "=> Username cannot be empty\n";
+        } else if (fld.value.length != 10) {
+            fld.style.background = errcolor;
+            error = "=> Username length incorrect\n";
+        }
+        else {
+            fld.style.background = nrmcolor;
+        }
+        return error;
+    }
+
+    function validatepassword(fld) {
+        var error = "";
+
+        if (fld.value.length == 0) {
+            fld.style.background = errcolor;
+            error = "=> Password cannot be empty\n";
+        } else if (fld.value.length < 6) {
+            fld.style.background = errcolor;
+            error = "=> Password length incorrect\n";
+        }
+        else {
+            fld.style.background = nrmcolor;
+        }
+        return error;
+    }
+
+</script>
+<fieldset>
+    <legend dir="ltr" >Login</legend>
+        <div style="width: 470px; margin: 0 auto; text-align: center; ">
+        <form  name="login1" id="login1" class="login" action="https://spgs.nda.edu.ng/login" method="post" onsubmit="return validateFormOnSubmit(this);">
+           <div>
+			<!-- <h3><b>The Postgraduate application forms is only opened for Department of Geology Programmes and will be closed on 13th February 2022</b></h3><br/> -->
+		<!--		<h3 style="color:magenta;"><b>The Postgraduate application forms is now closed</b></h3><br/>  -->
+		<!--	<h3><b>The Postgraduate application forms will be closed on the Monday, 31 July 2023</b></h3><br/> -->
+		   </div>
+		   <table style="width: 450px;">
+                <tr><td class="mlabel">Username</td><td style="width: 10px;"></td></tr>
+                <tr><td class="minput"><input name="username" id="username" type="text"   style="width: 450px; height: 20px;" /></td></tr>
+                <tr><td class="mlabel">Password</td><td style="width: 10px;"></td></tr>
+                <tr><td class="minput"><input name="password" id="password" type="password" style="width: 450px; height: 20px;"/></td></tr>
+            </table>
+            <fieldset class="tblFooters2">
+                <input id="input_go" type="submit" name="login" value="Login" style="width: 90px;">
+            </fieldset>
+            <div style="text-align: left; font-size: 12pt;">
+                Not yet registered?, <a href="./https://spgs.nda.edu.ng/register">click here to register.</a><br>
+                Forget Password?, <a href="./recover_password.php">click here to recover Password.</a>
+            </div>
+            <fieldset id="fieldset3">
+                Please for enquiries and/or complaints send an e-m@il to: <a href="mailto:example@spgs.nda.edu.ng"><b>example@spgs.nda.edu.ng</b></a>. Make sure to quote your <b><i>username</i></b> and <b><i>invoice number</i></b> in any correspondence. Thank you.
+            </fieldset>
+        </form>
+    </div>
+</fieldset>
+
+                    <!-- begin footer -->
+                    
+</div>
+                    <!-- <div style="float: bottom;  width: auto; border: #e6e6e6; bottom: 0; height: 100px; margin-top: 10px;">
+                        <div style="float: left; width: 190px; position: absolute; border: solid; height: 95px;">;dmlcd;mcasd</div>
+                        <div style="float: right; width: 795px; position: relative; border: #DDDDDD; height: 95px;">'sadas,da</div>
+                    </div> -->
+                    <div style="float: bottom;  width: auto; border: none; bottom: 0; height: 50px; line-height: 50px;margin-top: 20px; margin-bottom: 20px; font-size: large; border-radius: 20px/10px; background-color: green;">
+                        Copyright &copy; 2023 Nigerian Defence Academy. All rights reserved.
+                    </div>
+<!--  -->
+    
+    <ul style="float: left; width: 190px; position: absolute; top:140px; height: 400px; border: none; background-color:none; line-height: 40px; text-align: center">
+<li>
+<a href="index.html" class="btn" >Home</a>
+</li>
+<li>
+<a href="programmes.html" class="btn">Available Programmes</a>
+</li>
+<li>
+<a href="requirements.html" class="btn">Admission Requirements</a>
+</li>
+<li>
+<a href="procedure.html" class="btn" >Application Procedure</a>
+</li>
+
+<li>
+<a href="https://spgs.nda.edu.ng/register" class="btn">Register</a>
+</li>
+<li>
+<a href="https://spgs.nda.edu.ng/login" class="btn2">Log In</a>
+</li>
+      
+
+</ul>
+    
+<!-- -->
+    </div>
+</body>
+</html>

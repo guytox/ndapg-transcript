@@ -59,46 +59,46 @@ class GrantPaymentRequestJob implements ShouldQueue
                         #treat reg Clearance
 
                     if ($academicSession ) {
-                        if ($academicSession->currentSemester == 'first'  && $fpayment->balance == 0) {
+                        if ($academicSession->currentSemester == 'first'  && $feeType->balance == 0) {
                             $aData = [
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                                 'first_semester' => 1,
                                 'second_semester' => 1,
                                 'status' => 1
                             ];
 
                             RegClearance::updateOrCreate([
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                             ], $aData);
 
-                        }elseif ($academicSession->currentSemester == 'first'  && $fpayment->amount_paid >0) {
+                        }elseif ($academicSession->currentSemester == 'first'  && $feeType->amount_paid >0) {
                             $fData = [
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                                 'first_semester' => 1,
                                 'second_semester' => 0,
                                 'status' => 1
                             ];
 
                             RegClearance::updateOrCreate([
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                             ], $fData);
 
-                        }elseif ($academicSession->currentSemester == 'second'  && $fpayment->balance ==0) {
+                        }elseif ($academicSession->currentSemester == 'second'  && $feeType->balance ==0) {
                             $sData = [
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                                 'first_semester' => 1,
                                 'second_semester' => 1,
                                 'status' => 1
                             ];
 
                             RegClearance::updateOrCreate([
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                             ], $sData);
                         }
                     }
@@ -111,46 +111,46 @@ class GrantPaymentRequestJob implements ShouldQueue
                     # create Student record entry
 
                     if ($academicSession ) {
-                        if ($academicSession->currentSemester == 'first'  && $fpayment->balance == 0) {
+                        if ($academicSession->currentSemester == 'first'  && $feeType->balance == 0) {
                             $aData = [
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                                 'first_semester' => 1,
                                 'second_semester' => 1,
                                 'status' => 1
                             ];
 
                             RegClearance::updateOrCreate([
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                             ], $aData);
 
-                        }elseif ($academicSession->currentSemester == 'first'  && $fpayment->amount_paid >0) {
+                        }elseif ($academicSession->currentSemester == 'first'  && $feeType->amount_paid >0) {
                             $fData = [
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                                 'first_semester' => 1,
                                 'second_semester' => 0,
                                 'status' => 1
                             ];
 
                             RegClearance::updateOrCreate([
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                             ], $fData);
 
-                        }elseif ($academicSession->currentSemester == 'second'  && $fpayment->balance ==0) {
+                        }elseif ($academicSession->currentSemester == 'second'  && $feeType->balance ==0) {
                             $sData = [
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                                 'first_semester' => 1,
                                 'second_semester' => 1,
                                 'status' => 1
                             ];
 
                             RegClearance::updateOrCreate([
-                                'student_id' => $fpayment->user->student->id,
-                                'school_session_id' => $fpayment->academic_session_id,
+                                'student_id' => $feeType->user->student->id,
+                                'school_session_id' => $feeType->academic_session_id,
                             ], $sData);
                         }
                     }
@@ -166,7 +166,7 @@ class GrantPaymentRequestJob implements ShouldQueue
                 break;
             case 'acceptance-fee':
                         #next update the Applicant admission table since this is acceptance
-                        if ($fpayment->payment_status ==  'paid') {
+                        if ($feeType->payment_status ==  'paid') {
 
                             $appInfo = ApplicantAdmissionRequest::where('user_id',$feeType->user_id)
                                                             ->where('session_id', $feeType->academic_session_id)

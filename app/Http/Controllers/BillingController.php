@@ -69,6 +69,7 @@ class BillingController extends Controller
 
         $payList = CredoRequest::where('status','pending')
                                         ->get();
+        
 
         return view('admin.viewPendingCredoPayments', compact('payList'));
 
@@ -242,7 +243,7 @@ class BillingController extends Controller
         $totalPaid = $paymentDetails->sum('amount');
 
         return view('admin.reports.viewPaidPaymentsByItem',compact('paymentDetails','totalPaid','feePurpose'));
-    }   
+    }
 
 
 }

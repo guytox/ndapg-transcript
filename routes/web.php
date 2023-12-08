@@ -22,6 +22,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\GraduationManagementController;
+use App\Http\Controllers\LandingSwitchController;
 use App\Http\Controllers\LecturerGradingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgrammeController;
@@ -58,9 +59,17 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [LandingSwitchController::class, 'landingpage']);
+Route::get('/professionalProgrammes', [LandingSwitchController::class, 'getProfessionalProgrammes'])->name('professional.programmes');
+Route::get('/academicProgrammes', [LandingSwitchController::class, 'getAcademicProgrammes'])->name('academic.programmes');
+Route::get('/admissionRequirements', function(){
+    return view('admissions.admissionRequirements');
+})->name('admission.requirements');
+
+Route::get('/applicationProceedure', function(){
+    return view('admissions.admissionProceedure');
+})->name('application.proceedure');
+
 
 Auth::routes([
     'verify' => true,
