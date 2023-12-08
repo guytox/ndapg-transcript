@@ -16,7 +16,7 @@
     </li>
 
     <li>
-    <a href="https://spgs.nda.edu.ng/register" class="btn">Register</a>
+    <a href="/register" class="btn">Register</a>
     </li>
     <li>
     <a href="{{'/login'}}" class="btn">Log In</a>
