@@ -264,6 +264,13 @@
             </a>
         </li>
 
+        <li>
+            <a href="{{ route('clear.applicant.record') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Clean Applicant Records</span>
+            </a>
+        </li>
+
     </ul>
 </li>
 

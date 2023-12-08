@@ -32,7 +32,7 @@ class curriculaController extends Controller
                 }
             }
 
-            return "all good";
+            // return "all good";
 
             return view('admin.configs.viewCurricula', compact('programs', 'semesters', 'studyLevels', 'curricula'));
         }

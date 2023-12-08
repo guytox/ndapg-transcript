@@ -104,4 +104,11 @@ class StudentMigrationController extends Controller
     public function effectMigration(Request $request){
         return $request;
     }
+
+    public function clearApplicantRecords(){
+        return getApplicationSession();
+        return $unadmitted = User::Role('hod')->get();
+    }
+
+
 }

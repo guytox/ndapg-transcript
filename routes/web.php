@@ -254,6 +254,8 @@ Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exa
         Route::resource('pgMigration', StudentMigrationController::class);
         Route::get('approveMigration', [StudentMigrationController::class, 'approveMigration'])->name('approve.migration');
         Route::post('effectMigration', [StudentMigrationController::class, 'effectMigration'])->name('effectAdmissionProcessing.migration');
+        Route::get('clearApplicantRecord', [StudentMigrationController::class, 'clearApplicantRecords'])->name('clear.applicant.record');
+
     });
 
     #Result Management Routes
