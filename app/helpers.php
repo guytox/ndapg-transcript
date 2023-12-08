@@ -22,6 +22,7 @@ use App\Models\SiteNotification;
 use App\Models\State;
 use App\Models\StudentRecord;
 use App\Models\StudyLevel;
+use App\Models\SystemVariable;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,15 @@ function getApplicationSession(){
     }
 
     return false;
+}
+
+function isApplicationOpen(){
+    $admissionStatus = SystemVariable::where('name','applications')->first();
+    if ($admissionStatus) {
+        return $admissionStatus;
+    }else{
+        return false;
+    }
 }
 
 function getMatricSession(){
@@ -1032,7 +1042,7 @@ function verifyCredoPayment($ref){
     $parameters = json_decode($response->getBody());
 
     return $parameters;
-    
+
 }
 
 

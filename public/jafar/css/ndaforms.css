@@ -1,0 +1,275 @@
+
+/* 
+    Created on : 25-Nov-2023, 19:12:26
+    Author     : Ahmad Waziri
+*/
+
+@font-face {
+    font-family: 'Old Standard Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: url('fonts/OldStandard-Regular.eot');
+    src: local('Old Standard Sans'), local('OldStandardSans'), url('fonts/OldStandard-Regular.ttf') format('truetype');
+}
+
+#maincontainer{
+    width: 1000px; /*Width of main container*/
+    margin: 0 auto; /*Center container on page*/
+    border-style: none;
+    min-height: 400px;
+}
+
+#content {
+    margin-left: 200px;
+    margin-top: 10px;
+    /* border: 2px solid #564b47; */
+    padding: 0px;
+    min-height: 400px; 
+    background: none;
+}
+
+#left {
+    float: left;
+    left: 0px;
+    width: 195px;
+    color: #564b47;
+    margin: 0px; 
+    padding: 0px;
+    border-style: solid;
+    min-height: 390px;
+    text-align: left;
+    margin-right: 10px;
+    padding-left:10px;
+}
+
+#main {
+    border-left: 2px solid #D3DCE3;
+    height: auto;
+    padding-left: 20px;
+    padding-top: 5px;
+    position: absolute;
+    top: 10px;
+    left: 246px;
+    width: 640px;
+}
+
+fieldset {
+    position: relative;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 4px 4px 0 0;
+    box-shadow: 1px 1px 2px #FFFFFF inset;
+    margin-top: 1em;
+    padding: 1.5em;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+fieldset legend {
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 3px 3px 15px #BBBBBB;
+    color: #444444;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+select {
+    /*   background: url("/applicationform/images/input_bg.gif") repeat scroll 0 0 transparent; */
+    //width:200px;
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 2px #DDDDDD;
+    color: #333333;
+    margin: 4px;
+    padding: 4px;
+    height: 30px;
+}
+
+input[type="text"] {
+    /* background: url("/applicationform/images/input_bg.gif") repeat scroll 0 0 transparent; */
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 2px #DDDDDD;
+    color: #555555;
+    margin: 6px;
+    padding: 4px;
+}
+
+input[type="password"] {
+    /* background: url("/applicationform/images/input_bg.gif") repeat scroll 0 0 transparent; */
+    border: 1px solid #AAAAAA;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 2px #DDDDDD;
+    color: #555555;
+    margin: 6px;
+    padding: 4px;
+}
+
+fieldset.tblFooters2 {
+    border-radius: 5px 5px 5px 5px;
+    clear: both;
+    float: none;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: center;
+}
+.tblFooters2 {
+    background: none repeat scroll 0 0 #D3DCE3;
+    font-weight: normal;
+}
+
+fieldset.tblFooters {
+    border-radius: 0 0 4px 5px;
+    border-top: 0 none;
+    clear: both;
+    float: none;
+    margin-bottom: 0.5em;
+    margin-top: 0;
+    text-align: right;
+}
+.tblFooters {
+    background: none repeat scroll 0 0 #D3DCE3;
+    color: #000000;
+    font-weight: normal;
+}
+
+label {
+    float: left;
+    font-weight: bolder;
+    width: 10em;
+}
+
+.tblFooters p {
+    float: left;
+    font-weight: bolder;
+}
+
+td.mlabel{
+    text-align: left; 
+    font-weight: bold; 
+    padding-left: 5px;
+    width: 375px;
+    height: 15px;
+    vertical-align: bottom;
+    //    line-height: 15px;
+
+}
+
+td.minput{
+    text-align: left; 
+    width: 375px;
+    vertical-align: top;
+}
+
+h1.mprofile{
+    text-shadow: 0 1px 0 #fff;
+    height: 25px;
+    line-height: 25px;
+    padding: 0px;
+    font-weight: bolder;
+    font-size: large;
+    color: #2A6480;
+    background-color: #D3DCE3; /*#564B47;*/
+    width: 730px;
+    margin-bottom: 10px;
+}
+
+.mymenu :hover {
+    color: red;
+    background-color: #D3DCE3;
+    height: 400px;
+}
+
+.btn {
+    background: green; 
+    color: #000;
+    display: inline-block;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+    font-family: Arial, sans-serif;
+    line-height: 2.5em;
+    padding: 0 0;
+    text-decoration: none;
+    //border: solid;
+    width: 190px;
+}
+
+.btn2 {
+    background: red;/*#2A7AAC;*/
+    color: black;/*#7CBCD6;*/
+    display: inline-block;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+    font-family: Arial, sans-serif;
+    line-height: 2.5em;
+    padding: 0 0;
+    text-decoration: none;
+    /*border: solid;*/
+    width: 190px;
+}
+
+.btn3 {
+    /*background-color: none; /*#D3DCE3;//#2A7AAC;*/
+    color: grey;/*#7CBCD6;*/
+    display: inline-block;
+    border-radius: 4px;
+    border-color: #7CBCD6;
+    border: solid;
+    border-width: .1px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+    font-family: Arial, sans-serif;
+    line-height: 2.5em;
+    padding: 0 0;
+    text-decoration: none;
+    /*border: solid;*/
+    width: 190px;
+}
+
+
+.btn:hover { 
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 
+        inset 0 1.5em 1em rgba(255,255,255,0.3);
+}
+
+.btn:active { 
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 
+        inset 0 1.5em 1em rgba(0,0,0,0.3); 
+}
+
+.hsuccess, .hwarning, .herror{
+    width:200px;
+    left: 0px;
+    margin-bottom: 15px;
+    position: relative;
+    border: 1px solid;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+.hsuccess {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image:url('tick.png');
+    background-size: 50px;
+}
+
+.hwarning {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('crossx.png');
+    background-size: 50px;
+}
+
+.herror {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('error.png');
+    background-size: 50px;
+}
+
+select {
+    background-color: white;
+}

@@ -26,6 +26,14 @@ class curriculaController extends Controller
 
             $curricula = Curriculum::all();
 
+            foreach ($curricula as $m ) {
+                if (!getProgramNameById($m->programs_id) ) {
+                    return $m;
+                }
+            }
+
+            return "all good";
+
             return view('admin.configs.viewCurricula', compact('programs', 'semesters', 'studyLevels', 'curricula'));
         }
     }
