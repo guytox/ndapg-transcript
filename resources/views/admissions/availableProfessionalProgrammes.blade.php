@@ -12,12 +12,13 @@
                         {{strtoUpper($f->name)}}
                         <ol class="dept">
                             @foreach ($f->department as $d )
+                                @if ($depts->contains($d->id))
 
                                     <li>Department of {{$d->name}}
                                         <ol class="prog">
                                             @foreach ($d->programs as $p)
 
-                                                    @if ($p->category =='professional')
+                                                    @if ($p->category =='professional' && $p->is_advertised ==1)
                                                         <li>{{$p->name}}</li>
                                                     @endif
 
@@ -25,6 +26,7 @@
                                         </ol>
                                     </li>
 
+                                @endif
                             @endforeach
                         </ol>
                     </li>
