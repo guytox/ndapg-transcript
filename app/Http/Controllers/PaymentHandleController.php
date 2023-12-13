@@ -109,7 +109,7 @@ class PaymentHandleController extends Controller
 
                 $cRequestData = [
                     'payee_id' => $appEntryCheck->payee_id,
-                    'fee_payment_id' => $newFeePayment,
+                    'fee_payment_id' => $newFeePayment->id,
                     'amount' => $appEntryCheck->amount,
                     'session_id' => $appEntryCheck->session_id,
                     'uid' => $appEntryCheck->uid,

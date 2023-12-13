@@ -236,7 +236,7 @@ class ConfirmCredoApplicationPaymentJob implements ShouldQueue
                     'amount_paid' => $verified_transAmount,
                     'uid' => $payee_code,
                     'balance' => 0,
-                    'tx_id' =>$businessRef,
+                    'txn_id' =>$businessRef,
                 ]);
 
                 PaymentLog::create([

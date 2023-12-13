@@ -16,6 +16,14 @@
             Follow the links to view available programmes and complete application form.
         </p>
         <hr>
+        <p>
+            <u>Support lines:</u>
+            <br>
+            email: <a href="mailto:pgenquiries@nda.edu.ng">pgenquiries@nda.edu.ng</a>
+            <br>
+            calls: 0816 440 3543
+
+        </p>
     </div>
 
 @endsection
