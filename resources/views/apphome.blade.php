@@ -5,7 +5,7 @@
     <legend dir="ltr" style='font-variant: small-caps; font-size: larger;'>Postgraduate School Application Portal</legend>
     <div style='font-size: medium'>
         <p>
-            Welcome to Nigerian Defense Academy, Kaduna Postgraduate School Application Portal.
+            Welcome to Nigerian Defence Academy, Kaduna Postgraduate School Application Portal.
         </p>
         <hr>
         <p>

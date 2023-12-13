@@ -183,6 +183,7 @@ class LecturerGradingController extends Controller
                                             ])
                                             ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id','s.courseCode')
                                             ->first();
+                                            
             $filename = $course->courseCode."_registrants.xlsx";
             $sessionId = $course->session_id;
             $semesterId = $course->semester_id;
