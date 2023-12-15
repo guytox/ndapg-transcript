@@ -24,7 +24,7 @@
                 <th>Payment Date</th>
             </tr>
             <tr>
-                <td>NGN{{number_format($feePayment->amount_paid,2)}}</td>
+                <td>NGN{{ number_format(convertToNaira($feePayment->amount_paid),2) }}</td>
                 <td>{{$feePayment->updated_at}}</td>
             </tr>
 
