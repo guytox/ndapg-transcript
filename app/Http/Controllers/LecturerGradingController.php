@@ -183,7 +183,7 @@ class LecturerGradingController extends Controller
                                             ])
                                             ->select('course_allocation_items.*', 'm.session_id', 'm.semester_id','s.courseCode')
                                             ->first();
-                                            
+
             $filename = $course->courseCode."_registrants.xlsx";
             $sessionId = $course->session_id;
             $semesterId = $course->semester_id;
@@ -496,6 +496,8 @@ class LecturerGradingController extends Controller
 
                 //return $course;
 
+
+
                 $course->save();
 
                 return back()->with('success',"Grade submission Successful");
@@ -517,6 +519,7 @@ class LecturerGradingController extends Controller
                                             ->where('staff_id', user()->id)
                                             ->first();
             //return $request;
+
 
             if ($request->confirm ==='mvenda') {
 

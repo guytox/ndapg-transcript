@@ -13,7 +13,15 @@
         </p>
         <hr>
         <p>
+            Cost of Application Form is <b>N15,000.00</b> (Fifteen thusand naira only).
+        </p>
+        <hr>
+        <p>
             Follow the links to view available programmes and complete application form.
+        </p>
+        <hr>
+        <p>
+            Closing Date for all applicatons is on <b>Wednesday 13th March, 2024</b>.
         </p>
         <hr>
         <p>
