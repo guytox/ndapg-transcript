@@ -49,6 +49,10 @@ class ResultComputeJob implements ShouldQueue
         // fetch the regMonitor items
         $result = RegMonitor::find($this->regMonitorId);
 
+
+        ComputedResultFixJob::dispatch($result->id, now());
+
+
         $resultItems = RegMonitorItems::where('monitor_id', $this->regMonitorId)->get();
 
          //let's declare some variables

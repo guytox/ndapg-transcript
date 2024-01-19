@@ -134,7 +134,7 @@ class GradeFirstCaJob implements ShouldQueue
 
 
             }else{
-                Log::info("**** Semester cours with id - ". $this->gradeCourse ." Not Found for grade upload ***");
+                Log::info("**** Semester course with id - ". $this->gradeCourse ." Not Found for grade upload ***");
 
             }
         }else {

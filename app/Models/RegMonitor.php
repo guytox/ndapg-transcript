@@ -30,5 +30,9 @@ class RegMonitor extends Model
 
     }
 
+    public function programme(){
+        return $this->belongsTo(Program::class, 'program_id','id');
+    }
+
 
 }

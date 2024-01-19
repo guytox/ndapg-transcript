@@ -83,6 +83,7 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
 
         //update the totals
         $toGrade->ltotal = $total;
+        $toGrade->gtotal = $total;
         $toGrade->save();
 
 
@@ -102,12 +103,22 @@ class LecturerSemesterCourseGradingJob implements ShouldQueue
 
 
                     $toGrade->lgrade = $gr->grade_letter;
+                    $toGrade->ggrade = $gr->grade_letter;
 
                     $twgp = $semestercourse->creditUnits * $gr->weight_points;
 
                     $toGrade->twgp = $twgp;
 
+                    if ($gr->credit_earned == 1) {
+                        #credit earned, flag all passsed parameters
+                        $toGrade->is_passed == '1';
+                        $toGrade->is_co_passed == '1';
+
+                    }
+
                     $toGrade->save();
+
+                    SemesterCourseGradingJob::dispatch($this->regId, $this->time);
 
 
                     Log::info("This entry has been saved with total of ".$total." which qualifies for ". $gr->grade_letter);

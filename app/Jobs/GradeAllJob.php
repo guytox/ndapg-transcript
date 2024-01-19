@@ -65,7 +65,7 @@ class GradeAllJob implements ShouldQueue
         if ($this->time <= now()) {
             #nothing unusual
         }else{
-            Log::info("something unsuual about this First CA grading");
+            Log::info("something unsuual about this Complete grading");
         }
 
 

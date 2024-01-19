@@ -8,6 +8,7 @@ use App\Models\RegMonitor;
 use App\Models\RegMonitorItems;
 use App\Models\SemesterCourse;
 use App\Models\StudentRecord;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -47,7 +48,7 @@ class SemesterCourseGradingJob implements ShouldQueue
         }else{
 
             Log::info("Something Unusual about this SemesterCourseGradingJob");
-            
+
         }
         //fetch the regMonitorItem including the monitor to determine the present semesters spent
         $GradeCheck = RegMonitorItems::join('reg_monitors as r','r.id','=', 'reg_monitor_items.monitor_id')
@@ -60,11 +61,13 @@ class SemesterCourseGradingJob implements ShouldQueue
                                             ->where('m.session_id', $GradeCheck->session_id)
                                             ->where('m.semester_id', $GradeCheck->semester_id)
                                             ->where('course_allocation_items.course_id', $GradeCheck->course_id)
+                                            ->where('course_allocation_items.can_grade', '1')
                                             ->select('course_allocation_items.*')
                                             ->first();
 
         Log::info("Allocated Course is - " .$gradedItem->course_id);
 
+        # fix all grading confirmation issues for this
 
         $toGrade = RegMonitorItems::find($this->regId);
         $toGrade->cfm_ca1 = $gradedItem->cfm_ca1;
@@ -75,8 +78,6 @@ class SemesterCourseGradingJob implements ShouldQueue
         $toGrade->save();
 
 
-        # fix all grading confirmation issues for this
-
         $semestercourse = SemesterCourse::find($toGrade->course_id);
 
         Log::info("Confirmation records corrected successfully for - ". $semestercourse->courseCode);
@@ -86,21 +87,31 @@ class SemesterCourseGradingJob implements ShouldQueue
 
         if ($toGrade->cfm_ca1 ==='1') {
             $total = $total +$toGrade->ca1;
+        }else {
+            $total = $total +$toGrade->ca1;
         }
 
         if ($toGrade->cfm_ca2 ==='1') {
+            $total = $total +$toGrade->ca2;
+        }else {
             $total = $total +$toGrade->ca2;
         }
 
         if ($toGrade->cfm_ca3 ==='1') {
             $total = $total +$toGrade->ca3;
+        }else {
+            $total = $total +$toGrade->ca3;
         }
 
         if ($toGrade->cfm_ca4 ==='1') {
             $total = $total +$toGrade->ca4;
+        }else {
+            $total = $total +$toGrade->ca4;
         }
 
         if ($toGrade->cfm_exam ==='1') {
+            $total = $total +$toGrade->exam;
+        }else {
             $total = $total +$toGrade->exam;
         }
 
@@ -138,7 +149,7 @@ class SemesterCourseGradingJob implements ShouldQueue
                                         ->where('course_id', $toGrade->course_id)
                                         ->first();
             //get the co_semesters spent and update toGrade value
-            $toGrade->co_sem_spent = $firstEntry->co_sem_spent;
+            $toGrade->co_sem_spent = $firstEntry->RegMonitor->semesters_spent;
             $toGrade->save();
 
             //Log:info('First Carry Over Semester spent updated on current registration');
@@ -168,7 +179,7 @@ class SemesterCourseGradingJob implements ShouldQueue
                     //total matches this particular selection, lets sort out some variables.
                     Log::info("Total is ". $total. " upper boundary is -".$v->upper_boundary);
 
-                    Log::info($v);
+                    // Log::info($v);
 
                     //gradeLetter.
                     $gradeLetter = $v->grade_letter;
@@ -264,6 +275,12 @@ class SemesterCourseGradingJob implements ShouldQueue
 
                 }
             }
+
+            # Schedule the result for computation one minute after now
+            $regMonitorId = $GradeCheck->monitor_id;
+            $scTime = Carbon::now()->addSeconds(10);
+            $time = now();
+            ResultComputeJob::dispatch($regMonitorId, $time)->delay($scTime);
 
 
         }else{
