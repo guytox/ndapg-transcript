@@ -24,6 +24,7 @@ use App\Http\Controllers\GradingSystemController;
 use App\Http\Controllers\GraduationManagementController;
 use App\Http\Controllers\LandingSwitchController;
 use App\Http\Controllers\LecturerGradingController;
+use App\Http\Controllers\OldResultManagementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\RegistrationApprovalController;
@@ -380,6 +381,10 @@ Route::prefix('ResultManagement')->middleware('auth', 'role:hod|dean|reg_officer
         Route::post('/oldResultComputation', [ResultManagementController::class, 'ResultComputation'])->name('recompute.oldResult')->middleware(['auth', 'role:admin|vc|dean|hod|exam_officer']);
 
 
+    });
+
+    Route::prefix('oldResultMgt')->middleware('auth','role:admin|dap|dean_pg|vc|dvc')->group(function(){
+        Route::resource('oldResultUpload', OldResultManagementController::class);
     });
 
 
