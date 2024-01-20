@@ -55,6 +55,7 @@ class VetoRegistrationJob implements ShouldQueue
         $curr = Curriculum::where('programs_id', $std->program_id)
                             ->where('semester', $this->semesterId)
                             ->where('studyLevel', $std->programme->level_id)
+                            ->where('studyYear', $std->study_year)
                             ->first();
 
         # set the parameters required min and max credit units
