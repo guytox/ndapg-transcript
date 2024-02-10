@@ -277,6 +277,9 @@ Route::prefix('RegManagement')->middleware('auth', 'role:hod|dean|reg_officer|vc
         Route::get('singleVetoReg', [StudentRegistrationController::class, 'initiateSingleVetoReg'])->name('start.single.vetoreg');
         Route::post('singleVetoReg', [StudentRegistrationController::class, 'effectSingleVetoReg'])->name('post.single.vetoreg');
 
+        Route::get('programmeVetoReg', [StudentRegistrationController::class, 'initiateProgVetoReg'])->name('start.prog.vetoreg');
+        Route::post('programmeVetoReg', [StudentRegistrationController::class, 'effectProgVetoReg'])->name('post.prog.vetoreg');
+
     });
 
     Route::prefix('bulk')->middleware('role:admin')->group(function(){

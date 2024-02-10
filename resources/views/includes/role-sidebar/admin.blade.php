@@ -396,6 +396,13 @@
         </li>
 
         <li>
+            <a href="{{ route('start.prog.vetoreg') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
+                <i class="mdi mdi-tag-heart"></i>
+                <span>Bulk Veto Registration </span>
+            </a>
+        </li>
+
+        <li>
             <a href="{{ route('start.auto.grade') }}" class="@if (Request::is('attendee.payment')) active @endif waves-effect">
                 <i class="mdi mdi-tag-heart"></i>
                 <span>Regrade All Courses </span>
