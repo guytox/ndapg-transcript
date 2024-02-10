@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Jobs\BulkRegistrationJob;
 use App\Jobs\BulkSingleRegistrationJob;
+use App\Jobs\SubmitForVetoRegJob;
 use App\Jobs\VetoRegistrationJob;
 use App\Models\Curriculum;
 use App\Models\CurriculumItem;
@@ -876,6 +877,40 @@ class StudentRegistrationController extends Controller
         }
 
         return redirect(route('post.single.vetoreg'))->with('info','Single VetoReg Executed Successfully');
+    }
+
+    public function initiateProgVetoReg(){
+        return view('admin.initiate-programme-veto-registration');
+    }
+
+    public function effectProgVetoReg(Request $request){
+        // return $request;
+        #first find the student
+        $std = StudentRecord::where('program_id', $request->d_prog)
+                            ->where('study_year', $request->level_id)
+                            ->get();
+
+        if ($std) {
+            #std found proceed
+            #set the variables
+            $sessionId = $request->school_session;
+            $semesterId = $request->semester;
+
+            $time = now();
+
+            foreach ($std as $nv ) {
+                #loop through and submit for checking and effecting
+                $studentId = $nv->id;
+                SubmitForVetoRegJob::dispatch($sessionId, $semesterId, $studentId,$time);
+
+            }
+
+        }else{
+
+            return back()->with('error', "No Students found for Search criteria");
+        }
+
+        return redirect(route('start.prog.vetoreg'))->with('info','Programme Veto Registration Executed Successfully');
     }
 
 

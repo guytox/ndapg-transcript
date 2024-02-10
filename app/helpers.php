@@ -869,6 +869,20 @@ function getAppliableProgrammeDropdown(){
     }
 }
 
+function getAllProgrammesDropdown(){
+    $listOfProgrammes = Program::OrderBy('name', 'asc')->get()->pluck('name','id');
+
+    if ($listOfProgrammes) {
+
+        return $listOfProgrammes;
+
+    }else{
+
+        return false;
+    }
+}
+
+
 //*********************************************************************************************** */
 // Studend Record Helpers Helpers
 //*********************************************************************************************** */
