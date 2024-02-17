@@ -66,7 +66,8 @@ class SubmitSessionalResultComputationJob implements ShouldQueue
             foreach ($regEntries as $q) {
                 $regId = $q->id;
                 $time = now();
-                SemesterCourseGradingJob::dispatch($regId, $time);
+                # commented out 20240215 because this is sessional result and not needed again
+                // SemesterCourseGradingJob::dispatch($regId, $time);
                 SemesterCourseSessionalGradingJob::dispatch($regId, $time);
             }
         }
@@ -75,7 +76,7 @@ class SubmitSessionalResultComputationJob implements ShouldQueue
         $regMonitorId = $regMonitorEntry->id;
         $scTime = Carbon::now()->addSeconds(15);
         $time = now();
-        ResultSessionalComputeJob::dispatch($regMonitorId, $time)->delay($scTime);
+        // ResultSessionalComputeJob::dispatch($regMonitorId, $time)->delay($scTime);
 
     }
 }

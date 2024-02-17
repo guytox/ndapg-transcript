@@ -128,7 +128,7 @@ class ResultComputeJob implements ShouldQueue
                 $lprobation = $lastResult->r_probation_count;
 
             }else{
-                //there was a problet fetching the last result so just assume zero entries
+                //there was a problem fetching the last result so just assume zero entries
                 //Log::info("Error!!! Not able to find the previous result");
                 $ltcr = 0;
                 $ltce = 0;
@@ -186,6 +186,13 @@ class ResultComputeJob implements ShouldQueue
         # if the semester is first, then duplicate this entry to the sessional values because there'd be no changes. If it second semester then the sessional computation will alter the value.
 
         if ($result->semester_id == 1) {
+            $result->s_tce = $tce;
+            $result->updated_at = now();
+            $result->s_twgp = $twgp;
+            $result->s_cgpa = convertToKobo($cgpa);
+            $result->save();
+        }elseif ($result->semester_id == 2) {
+            # this is a second semester entry and might have an effect on the sessional so update
             $result->s_tce = $tce;
             $result->updated_at = now();
             $result->s_twgp = $twgp;
