@@ -110,11 +110,15 @@ class GraduationManagementController extends Controller
             }
 
             # next get the registered students for this class
+            # first get the program to trim down who shouldn't show on the sheet
+            $progDetails = Program::find($stdProgram);
+            $minSemSpent = $progDetails->minsemspent;
             //Next fetch all regMonitors that fit this with their results and show the result columns on the page for further processing
             $regStudents = RegMonitor::where('program_id', $stdProgram)
                                     ->where('session_id', $schoolSession)
                                     ->where('semester_id', $stdSemester)
                                     ->where('level_id', $studyLevel)
+                                    ->where('semesters_spent','>=', $minSemSpent)
                                     ->orderBy('cgpa', 'desc')
                                     ->get();
 
