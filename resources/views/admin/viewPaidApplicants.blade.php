@@ -15,7 +15,7 @@
                     <div class="col-sm-6">
 
                         <h4 class="header-title">Application Fee Payment Report</h4>
-                        <p>Total Application Fee Paid by Applicants : {{ number_format($totalAmount,2)}}</p>
+                        <p>Total Application Fee Paid by Applicants : {{ number_format(ConvertToNaira($totalAmount),2)}}</p>
 
                         <p class="card-title-desc"> The List below shows List of Students who have paid for application form
 
@@ -54,7 +54,7 @@
                                     <td>{{ $v['userName'] }}</td>
                                     <td>{{ $v['userEmail'] }}</td>
                                     <td>{{ $v['userGsm'] }}</td>
-                                    <td>{{ number_format($v['userAmount'],2) }}</td>
+                                    <td>{{ number_format(ConvertToNaira($v['userAmount']),2) }}</td>
                                     <td>{{ $v['userStatus'] }}</td>
                                     <td>{{ $v['userPayment'] }}</td>
 
