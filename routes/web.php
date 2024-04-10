@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcademicSessionsController;
 use App\Http\Controllers\Admin\AdminReportsController;
+use App\Http\Controllers\Admin\BillingsController;
 use App\Http\Controllers\Admin\FeeCategoriesController;
 use App\Http\Controllers\Admin\FeeConfigurationsController;
 use App\Http\Controllers\Admin\FeeItemsController;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\PaymentController as ApplicantPaymentController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\CredoRequestController;
+use App\Http\Controllers\CredoResponseController;
 use App\Http\Controllers\curriculaController;
 use App\Http\Controllers\IdCardManagementController;
 use App\Http\Controllers\CurriculaItemsController;
@@ -31,6 +34,7 @@ use App\Http\Controllers\RegistrationApprovalController;
 use App\Http\Controllers\ResultManagementController;
 use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\ScholarshipController;
+use App\Http\Controllers\ScholarshipProcessingController;
 use App\Http\Controllers\SemesterCourseAllocationController;
 use App\Http\Controllers\SemesterCoursesController;
 use App\Http\Controllers\StaffController;
@@ -41,6 +45,8 @@ use App\Http\Controllers\StudentInformationController;
 use App\Http\Controllers\StudentMigrationController;
 use App\Http\Controllers\StudyLevelsController;
 use App\Http\Controllers\SystemVariablesController;
+use App\Http\Controllers\TranscriptPaymentController;
+use App\Http\Controllers\TranscriptRequestController;
 use App\Jobs\RegistrationApprovalJob;
 use App\Models\Faculty;
 use Illuminate\Auth\Events\PasswordReset;
@@ -129,10 +135,13 @@ Route::post('/reset-password', function (Request $request) {
 
 //Home Routes
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('verified')->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('verified','profile_completed')->name('home');
 
 Route::get('profile', [ProfileController::class, 'index'])->middleware('auth')->name('user.profile');
 Route::post('profile', [ProfileController::class, 'updateProfile'])->middleware('auth')->name('user.profile');
+
+Route::get('email/update', [ProfileController::class, 'emailindex'])->middleware('auth')->name('email.update');
+Route::post('email/update', [ProfileController::class, 'updateemail'])->middleware('auth')->name('email.update');
 
 
 
@@ -141,6 +150,21 @@ Route::get('/applicant/acceptance-fee', [ApplicantPaymentController::class, 'acc
 Route::post('/applicant/first-tuition-fee', [ApplicantPaymentController::class, 'firstTuitionFee'])->name('first.tuition.fee');
 Route::post('/applicant/first-extra-charges', [ApplicantPaymentController::class, 'firstExtraCharges'])->name('first.extra.charge');
 Route::get('/applicant/reprocess-credo-fee/{id}', [ApplicantPaymentController::class, 'reprocessCredoFee'])->name('reprocess.credo.payment');
+
+Route::prefix('Requests')->middleware('auth', 'role:applicant','verified','profile_completed')->group(function(){
+    Route::resource('transcripts',TranscriptRequestController::class);
+    Route::get('check-transcript-fee/{id}',[TranscriptPaymentController::class, 'checkBilling'])->name('check.transcript.fee.payment');
+    Route::get('generate-transcript-fee/{id}/{fee}',[TranscriptPaymentController::class, 'generateBilling'])->name('generate.transcript.fee.payment');
+    Route::get('view-transcript-timeline/{id}',[TranscriptRequestController::class, 'viewTimeline'])->name('view.transcript.timeline');
+    Route::get('submit-transcript-request/{id}',[TranscriptRequestController::class, 'submitTranscriptRequest'])->name('submit.transcript.request');
+    Route::get('verify-transcript-request-payment/{id}',[TranscriptRequestController::class, 'verifyTrancriptRequestPayment'])->name('verify.transcript.request.payment');
+});
+
+Route::prefix('PaymentProcessing')->middleware('auth', 'role:applicant|admin','verified','profile_completed')->group(function(){
+    Route::get('generate-credo-ref/{id}',[CredoRequestController::class, 'generateCredoRef'])->name('get.credo.ref');
+    Route::get('generate-credo-request/{id}/{fee}',[CredoRequestController::class, 'generateCredoRequest'])->name('generate.credo.request');
+    Route::get('process-credo-request/{id}',[CredoRequestController::class, 'processCredoPayment'])->name('process.credo.payment');
+});
 
 Route::prefix('admin')->middleware(['role:admin|dean_pg|dean|hod|reg_officer|exam_officer|ict_support|bursary|dap|registry','auth', 'profile_completed', 'verified'])->group(function(){
 
@@ -408,7 +432,7 @@ Route::prefix('Graduation')->middleware(['auth','role:exam_officer|hod|admin|dea
     Route::post('Search/List/withdrawalListSummary',[GraduationManagementController::class, 'getWithdrawalListSummary'])->name('get.withdrawal.summary');
 });
 
-Route::prefix('applicant')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified','application.submission'])->group(function () {
+Route::prefix('application.submit')->middleware(['auth', 'role:applicant', 'application_fee.confirm', 'verified','application.submission'])->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/contact-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'contactDetails'])->name('applicant.profile.contact_details');
         Route::get('/personal-details', [\App\Http\Controllers\Applicant\ProfileController::class, 'personalDetails'])->name('applicant.profile.personal_details');
@@ -591,23 +615,23 @@ Route::prefix('bursary')->middleware(['auth', 'role:admin|bursar|bursary|dap'])-
 
 
     //Manual Payment Processing Routes
-    Route::get('/manual-payment-processing/confirmation', [StudentManualPaymentController::class, 'getManualPaymentForConfirmations'])->name('manual.payment.confirmation');
-    Route::get('/manual-payment-processing/checking', [StudentManualPaymentController::class, 'getManualPaymentForChecking'])->name('manual.payment.checking');
-    Route::get('/manual-payment-processing/approval', [StudentManualPaymentController::class, 'getManualPaymentForApproval'])->name('manual.payment.approval');
-    Route::get('/manual-payment-processing/approved', [StudentManualPaymentController::class, 'getApprovedManualPayment'])->name('manual.payment.approved');
+    // Route::get('/manual-payment-processing/confirmation', [StudentManualPaymentController::class, 'getManualPaymentForConfirmations'])->name('manual.payment.confirmation');
+    // Route::get('/manual-payment-processing/checking', [StudentManualPaymentController::class, 'getManualPaymentForChecking'])->name('manual.payment.checking');
+    // Route::get('/manual-payment-processing/approval', [StudentManualPaymentController::class, 'getManualPaymentForApproval'])->name('manual.payment.approval');
+    // Route::get('/manual-payment-processing/approved', [StudentManualPaymentController::class, 'getApprovedManualPayment'])->name('manual.payment.approved');
 
-    Route::get('/manual-payment-processing/{id}/deleteAction', [StudentManualPaymentController::class, 'deleteProposal'])->name('delete.manual.payment.proposal');
-    Route::get('/manual-payment-processing/{id}/reverseAction', [StudentManualPaymentController::class, 'reverseProposal'])->name('reverse.manual.payment.proposal');
-    Route::get('/manual-payment-processing/confirmAction', [StudentManualPaymentController::class, 'confirmBilling'])->name('manual.payment.confirm.action');
-    Route::get('/manual-payment-processing/checkAction', [StudentManualPaymentController::class, 'checkBilling'])->name('manual.payment.check.action');
-    Route::get('/manual-payment-processing/approveAction', [StudentManualPaymentController::class, 'approveBilling'])->name('manual.payment.approve.action');
-    Route::get('/manual-payment-processing/disApproveAction', [StudentManualPaymentController::class, 'DeConfirmBilling'])->name('manual.payment.disapprove.action');
+    // Route::get('/manual-payment-processing/{id}/deleteAction', [StudentManualPaymentController::class, 'deleteProposal'])->name('delete.manual.payment.proposal');
+    // Route::get('/manual-payment-processing/{id}/reverseAction', [StudentManualPaymentController::class, 'reverseProposal'])->name('reverse.manual.payment.proposal');
+    // Route::get('/manual-payment-processing/confirmAction', [StudentManualPaymentController::class, 'confirmBilling'])->name('manual.payment.confirm.action');
+    // Route::get('/manual-payment-processing/checkAction', [StudentManualPaymentController::class, 'checkBilling'])->name('manual.payment.check.action');
+    // Route::get('/manual-payment-processing/approveAction', [StudentManualPaymentController::class, 'approveBilling'])->name('manual.payment.approve.action');
+    // Route::get('/manual-payment-processing/disApproveAction', [StudentManualPaymentController::class, 'DeConfirmBilling'])->name('manual.payment.disapprove.action');
 
-    Route::get('/manual-payment-processing/viewExcessReport', [StudentManualPaymentController::class, 'viewExcessReport'])->name('manual.payment.excess.report');
+    // Route::get('/manual-payment-processing/viewExcessReport', [StudentManualPaymentController::class, 'viewExcessReport'])->name('manual.payment.excess.report');
 
-    Route::get('/manual-payment-processing/deleteExcessReport/{id}', [StudentManualPaymentController::class, 'deleteExcessScholarship'])->name('manual.payment.excess.delete');
+    // Route::get('/manual-payment-processing/deleteExcessReport/{id}', [StudentManualPaymentController::class, 'deleteExcessScholarship'])->name('manual.payment.excess.delete');
 
-    Route::resource('/manual-payment-processing', StudentManualPaymentController::class);
+    // Route::resource('/manual-payment-processing', StudentManualPaymentController::class);
 
 
 
@@ -618,7 +642,7 @@ Route::prefix('bursary')->middleware(['auth', 'role:admin|bursar|bursary|dap'])-
     Route::post('/add-template-item', [FeeTemplateItemsController::class, 'addNewTemplateItem'])->name('new.template.item');
 
     // Student Wallet Routes
-    Route::resource('/student-wallets', StudentWalletController::class);
+    // Route::resource('/student-wallets', StudentWalletController::class);
 });
 
 
@@ -672,7 +696,12 @@ Route::get('complete-application-payment', function () {
     return view('payments.application_payment');
 })->name('pay.application.now');
 
-Route::get('api/paya', [PaymentHandleController::class, 'confirmApplicationPayment']);
-Route::get('api/payb', [PaymentHandleController::class, 'confirmcredoApplicationPayment']);
-Route::post('api/payb', [PaymentHandleController::class, 'confirmcredoApplicationPayment']);
+Route::get('api/payb', [CredoResponseController::class, 'confirmcredoApplicationPayment']);
+Route::post('api/payb', [CredoResponseController::class, 'confirmcredoApplicationPayment']);
+
+# Transcript Generation Routes
+Route::get('api/submitConfirmedMatric', [TranscriptRequestController::class, 'matricNumberVerification']);
+Route::get('api/getTranscriptDetails', [TranscriptRequestController::class, 'sendProfileInformation']);
+Route::get('api/takeProfileDetails', [TranscriptRequestController::class, 'receiveProfileUpdateIformation']);
+Route::get('api/takeTxProcessedDetails', [TranscriptRequestController::class, 'receiveTranscriptProcessedInfo']);
 

@@ -7,25 +7,38 @@
     </a>
 
     <ul>
+
         <li>
-            <a href="{{ route('applicants.profile.biodata') }}" class=" waves-effect">
+            <a href="{{ route('user.profile') }}" class="@if (Request::is('user.profile')) active @endif waves-effect">
+                <i class="mdi mdi-face-profile"></i>
+                <span>Update Profile</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+<li>
+    <a href="#" class="has-arrow waves-effect">
+        <i class="mdi mdi-school-outline    "></i>
+        <span>Transcripts</span>
+    </a>
+
+    <ul>
+        <li>
+            <a href="{{ route('transcripts.index') }}" class=" waves-effect">
                 <i class="mdi mdi-face-recognition"></i>
-                <span>Biodata</span>
+                <span>Previous Requests</span>
             </a>
         </li>
 
         <li>
-            <a href="{{ route('applicant.profile.contact_details') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
+            <a href="{{ route('transcripts.create') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
                 <i class="mdi mdi-face-outline"></i>
-                <span>Contact Details</span>
+                <span>New Transcript </span>
             </a>
         </li>
-        <li>
-            <a href="{{ route('applicant.profile.personal_details') }}" class="@if (Request::is('applicant.profile.personal_details')) active @endif waves-effect">
-                <i class="mdi mdi-face-profile"></i>
-                <span>Personal Details</span>
-            </a>
-        </li>
+
 
     </ul>
 </li>

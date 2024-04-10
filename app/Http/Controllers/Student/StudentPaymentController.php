@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Jobs\ConfirmCredoApplicationPaymentJob;
 use App\Jobs\CredoPaymentConfirmationJob;
+use App\Models\ApplicationFeeRequest;
 use App\Models\CredoRequest;
 use App\Models\CredoResponse;
 use App\Models\FeeConfig;

@@ -19,9 +19,6 @@ class CredoPaymentConfirmationJob implements ShouldQueue
 
 
     public $transactionId;
-    public $currency;
-    public $statusCode;
-    public $amount;
     public $time;
 
     /**
@@ -29,12 +26,9 @@ class CredoPaymentConfirmationJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($transactionId, $currency, $statusCode, $amount, $time)
+    public function __construct($transactionId, $time)
     {
         $this->transactionId = $transactionId;
-        $this->currency = $currency;
-        $this->statusCode = $statusCode;
-        $this->amount = $amount;
         $this->time = $time;
     }
 
@@ -98,10 +92,10 @@ class CredoPaymentConfirmationJob implements ShouldQueue
             'transRef'=>$transRef,
             'businessCode'=>$businessCode,
             'businessRef'=>$businessRef,
-            'debitedAmount'=>$debitedAmount,
-            'verified_transAmount'=>$verified_transAmount,
-            'transFeeAmount'=>$transFeeAmount,
-            'settlementAmount'=>$settlementAmount,
+            'debitedAmount'=>convertToKobo($debitedAmount),
+            'verified_transAmount'=>convertToKobo($verified_transAmount),
+            'transFeeAmount'=>convertToKobo($transFeeAmount),
+            'settlementAmount'=>convertToKobo($settlementAmount),
             'customerId'=>$customerId,
             'transactionDate'=>$transactionDate,
             'channelId'=>$channelId,
@@ -112,104 +106,7 @@ class CredoPaymentConfirmationJob implements ShouldQueue
             'payee_code'=>$payee_code,
         ]);
 
-        #is the payment made?
-        if ($response_status == 0) {
-            #get the credo request
-            $toVerify = CredoRequest::where('uid', $payee_code)->first();
-            $toVerify->status = 'paid';
-            $toVerify->save();
-
-            #write Payment Log Entry for the payment
-            $updateData = [
-                'fee_payment_id' => $toVerify->fee_payment_id,
-                'uid' => $payee_code,
-                'amount_paid' => convertToKobo($settlementAmount),
-                'tx_id' => $businessRef,
-                'payment_channel' => config('app.payment_methods.credo')
-
-
-            ];
-            #write the Log
-            PaymentLog::updateOrCreate([
-                'fee_payment_id' => $toVerify->fee_payment_id,
-                'tx_id' => $businessRef,
-            ], $updateData);
-
-            #update the fee payment
-            $totalLogs = PaymentLog::where('fee_payment_id', $toVerify->fee_payment_id)
-                                        ->get();
-            if ($totalLogs) {
-
-                if (count($totalLogs) > 0) {
-
-                    $totalPaid = 0;
-                    foreach ($totalLogs as $v ) {
-                        $totalPaid = $totalPaid + $v->amount_paid;
-                    }
-                    #fetch the monitor
-                    $fpMonitor = FeePayment::find($toVerify->fee_payment_id);
-
-                    $rBalance = $fpMonitor->amount_billed - $totalPaid;
-
-                    if ($fpMonitor) {
-                        #perform updates
-                        $fpMonitor->amount_paid = $totalPaid;
-                        $fpMonitor->balance = $rBalance;
-                        $fpMonitor->txn_id = generateUniqueTransactionReference();
-
-                        if ($rBalance <= 0) {
-                            $fpMonitor->payment_status = 'paid';
-                        }
-
-                        $fpMonitor->save();
-                    }
-
-                }
-
-            }
-
-            if ($toVerify) {
-                #get the purpose of the payment
-                switch ($toVerify->payment->config->feeCategory->payment_purpose_slug) {
-
-                    case 'application-fee':
-                        ConfirmApplicationFeePaymentJob::dispatch($toVerify->fee_payment_id, $this->time);
-                        break;
-
-                    case 'acceptance-fee':
-                        ConfirmAcceptanceFeePaymentJob::dispatch($toVerify->fee_payment_id, $this->time);
-                        break;
-
-                    case 'first-tuition':
-                        ConfirmFirstTuitionFeePaymentJob::dispatch($toVerify->fee_payment_id, $this->time);
-                        break;
-
-                    case 'late-registration':
-                        return config('app.credo.serviceCode.lateRegistration');
-                        break;
-
-                    case 'tuition':
-                        ConfirmTuitionFeePaymentJob::dispatch($toVerify->fee_payment_id, $this->time);
-                        break;
-
-                    case 'portal-services':
-                        return config('app.credo.serviceCode.ExtraCharges');
-                        break;
-
-                    case 'spgs-charges':
-                        return config('app.credo.serviceCode.ExtraCharges');
-                        break;
-
-                    default:
-                        return config('app.credo.serviceCode.ExtraCharges');
-                        break;
-                }
-            }
-        }
-
-
-
-
+            CredoPaymentLogJob::dispatch($responseRecords->payee_code, now());
 
     }
 }

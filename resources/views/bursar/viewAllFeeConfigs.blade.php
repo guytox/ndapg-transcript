@@ -58,6 +58,21 @@ type="text/css" />
                                 </div>
 
                                 <div class="form-group">
+                                    {!! Form::label('InCountry', 'Delivering to Nigeria ? ') !!}
+                                    {!! Form::select('InCountry', [''=> 'N/A','0' => 'NO', '1' => 'YES'], '', ['class' => 'form-control']) !!}
+                                </div>
+
+                                <div class="form-group">
+                                    {!! Form::label('IsPhysical', 'Delivering Physically ? ') !!}
+                                    {!! Form::select('IsPhysical', [''=> 'N/A','0' => 'NO', '1' => 'YES'], '', ['class' => 'form-control']) !!}
+                                </div>
+
+                                <div class="form-group">
+                                    {!! Form::label('IsExpress', 'For Express Delivery') !!}
+                                    {!! Form::select('IsExpress', [''=> 'N/A','0' => 'NO', '1' => 'YES'], '', ['class' => 'form-control']) !!}
+                                </div>
+
+                                <div class="form-group">
                                     {!! Form::label('study_level', 'Select Study Level') !!}
                                     {!! Form::select('study_level', [''=>'N/A',getAllStudyLevels()], null, ['class' => 'form-control']) !!}
                                 </div>
@@ -101,11 +116,11 @@ type="text/css" />
                                 <tr>
                                     <th>S/N</th>
                                     <th>Description</th>
-                                    <th>Programme</th>
-                                    <th>Level</th>
-                                    <th>Semester</th>
-                                    <th>In State</th>
-                                    <th>Category</th>
+                                    <th>In Nigeria</th>
+                                    <th>Physical</th>
+                                    <th>Express</th>
+                                    {{-- <th>In State</th> --}}
+                                    <th>Type</th>
                                     <th>Amount</th>
                                     <th>Action</th>
                                 </tr>
@@ -120,10 +135,13 @@ type="text/css" />
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $v['narration'] }}</td>
-                                    <td>{{ getProgrammeNameById($v['program_id']) }}</td>
+                                    <td>{{ $v['in_country'] }}</td>
+                                    <td>{{ $v['physical'] }}</td>
+                                    <td>{{ $v['express'] }}</td>
+                                    {{-- <td>{{ getProgrammeNameById($v['program_id']) }}</td>
                                     <td>{{ getStudyLevelNameById($v['study_level_id']) }}</td>
-                                    <td>{{ getSemesterNameById($v['semester_id']) }}</td>
-                                    <td>{{ getInStateValue($v['in_state']) }}</td>
+                                    <td>{{ getSemesterNameById($v['semester_id']) }}</td> --}}
+                                    {{-- <td>{{ getInStateValue($v['in_state']) }}</td> --}}
                                     <td>{{ getFeeCategoryName($v['fee_category_id']) }}</td>
                                     <td>N{{ number_format(convertToNaira(getFeeTemplateAmount($v['fee_template_id'])),2) }}</td>
 
@@ -168,6 +186,21 @@ type="text/css" />
                                             <div class="form-group">
                                                 {!! Form::label('narration', 'Enter a Description for this Configuration (See Examples)') !!}
                                                 {!! Form::text('narration', $v->narration,['class'=>'form-control', 'required' ]) !!}
+                                            </div>
+
+                                            <div class="form-group">
+                                                {!! Form::label('InCountry', 'Delivering to Nigeria ? ') !!}
+                                                {!! Form::select('InCountry', [''=> 'N/A','0' => 'NO', '1' => 'YES'], $v->in_country, ['class' => 'form-control']) !!}
+                                            </div>
+
+                                            <div class="form-group">
+                                                {!! Form::label('IsPhysical', 'Delivering Physically ? ') !!}
+                                                {!! Form::select('IsPhysical', [''=> 'N/A','0' => 'NO', '1' => 'YES'], $v->physical, ['class' => 'form-control']) !!}
+                                            </div>
+
+                                            <div class="form-group">
+                                                {!! Form::label('IsExpress', 'For Express Delivery') !!}
+                                                {!! Form::select('IsExpress', [''=> 'N/A','0' => 'NO', '1' => 'YES'], $v->express, ['class' => 'form-control']) !!}
                                             </div>
 
                                             <div class="form-group">

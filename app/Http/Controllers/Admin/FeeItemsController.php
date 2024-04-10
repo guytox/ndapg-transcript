@@ -102,7 +102,10 @@ class FeeItemsController extends Controller
     {
         if ($this->middleware(['role:admin'])) {
 
-            return redirect(route('fee-items.index'))->with(['message' => "Error !!!, Deleting a Fee Item Not allowed, Contact ICT"]);
+            $toDelete = FeeItem::find($id);
+            $toDelete->delete();
+
+            return redirect(route('fee-items.index'))->with(['message' => "Deleting a Fee Item Not allowed, Be Careful"]);
 
         }else{
 

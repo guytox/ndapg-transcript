@@ -17,7 +17,10 @@ class AdminUserSeeder extends Seeder
     public function run()
     {
         $faker = app(Generator::class);
-        $emails = ['julius@gmail.com', 'guytox@gmail.com', 'voachanya@gmail.com'];
+        $emails = ['julius@gmail.com', 'guytox@gmail.com', 'vincentachanya@gmail.com'];
+        $phone_number = 1234567;
+
+
 
         foreach ($emails as $email)
         {
@@ -25,50 +28,13 @@ class AdminUserSeeder extends Seeder
                 'name' => $faker->firstName() . ' ' . $faker->lastName(),
                 'email' => $email,
                 'password' => Hash::make('123456'),
+                'phone_number' => $phone_number,
                 'email_verified_at' => now()
             ]);
 
+            $user->assignRole('admin');
             $user->assignRole('staff');
-
-            if ($email == 'pioryina@umm.edu.ng') {
-
-                $user = User::updateOrCreate(['email' => $email], [
-                    'name' => 'Mr. Amo Philip Ioryina',
-                    'email' => $email,
-                    'password' => Hash::make('123456'),
-                    'email_verified_at' => now()
-                ]);
-
-                $user->assignRole('bursar');
-                $user->assignRole('staff');
-
-            }elseif ($email == 'vicechancellor@umm.edu.ng') {
-
-                $user = User::updateOrCreate(['email' => $email], [
-                    'name' => 'Vice Chancellor',
-                    'email' => $email,
-                    'password' => Hash::make('123456'),
-                    'email_verified_at' => now()
-                ]);
-
-                $user->assignRole('vc');
-                $user->assignRole('staff');
-
-            }else{
-
-                $user = User::updateOrCreate(['email' => $email], [
-                    'name' => $faker->firstName() . ' ' . $faker->lastName(),
-                    'email' => $email,
-                    'password' => Hash::make('123456'),
-                    'email_verified_at' => now()
-                ]);
-
-                $user->assignRole('admin');
-                $user->assignRole('staff');
-
-            }
-
-
+            $phone_number++;
 
         }
     }

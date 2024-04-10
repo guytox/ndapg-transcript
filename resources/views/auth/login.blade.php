@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="form-group mb-4">
                 <label for="username">Username</label>
-                <input type="text" class="form-control @error('username') is-invalid @enderror" id="email" placeholder="Email Address / Matric No / Staff ID" name="username" value="{{ old('username') }}">
+                <input type="text" class="form-control @error('username') is-invalid @enderror" id="email" placeholder="Email Address" name="username" value="{{ old('username') }}">
                 @error('username')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -23,7 +23,7 @@
             </div>
             <div class="form-group mb-4">
                 <label for="password">Password</label>
-                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Enter password" name="password">
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Enter your password" name="password">
                 @error('password')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -56,11 +56,11 @@
 
             <div class="row">
             <div class="col-4">
-                    <a href="{{ asset('assets/NDA_SPGS_OnlineApplicationGuide.pdf') }}" target="_blank" class="btn btn-secondary  waves-effect waves-light" type="submit">Application Guidelines </a>
+                    <a href="{{ asset('assets/NDA_SPGS_OnlineApplicationGuide.pdf') }}" target="_blank" class="btn btn-secondary  waves-effect waves-light" type="submit">Transcript Request Guidelines </a>
             </div>
             <div class="col-8">
                 <a href="{{ route('register') }}" class="btn btn-danger "><i class="mdi mdi-account-circle mr-1"></i>
-                    Begin Application (For New Applicants Only)</a>
+                    Begin New Transcript Request (For New Applicants Only)</a>
             </div>
             </div>
         </div>

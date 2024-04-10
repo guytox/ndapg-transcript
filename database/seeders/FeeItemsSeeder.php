@@ -15,7 +15,7 @@ class FeeItemsSeeder extends Seeder
      */
     public function run()
     {
-        $items = ['Late Registration'.'Tuition','Library','Examination','Medical Expenses',  'Hall Maintenance', 'ICT Training', 'Development Levy', 'Entrepreneurship Training', 'Sports Levy', 'Departmental Registration Fee', 'Campus Wide Internet Service', 'Hospital Development Levy', 'Faculty Registration', 'Security Fees', 'Utility Charges', 'Laboratory Fees','Departmental Handbook', 'Donations', 'Electricity Charges', 'Entrepreneurship Development Center', 'Field Trips', 'Hire of Academic Gowns', 'Identity (ID) Card', 'Transcript Fees', 'Statement Of Result', 'Certificate Fees', 'Postgraduate Acceptance Fees', 'Postgraduate Screening Fees', 'Leadership Training', 'Deferment Fees', 'Postgraduate Application Fees' ];
+        $items = [ 'Transcript Application Fees', 'Transcript Express Fees', 'Statement Of Result Fee' ];
 
 
         foreach ($items as $v ) {
