@@ -704,4 +704,7 @@ Route::get('api/submitConfirmedMatric', [TranscriptRequestController::class, 'ma
 Route::get('api/getTranscriptDetails', [TranscriptRequestController::class, 'sendProfileInformation']);
 Route::get('api/takeProfileDetails', [TranscriptRequestController::class, 'receiveProfileUpdateIformation']);
 Route::get('api/takeTxProcessedDetails', [TranscriptRequestController::class, 'receiveTranscriptProcessedInfo']);
+Route::get('api/submitTranscriptGenerationStatus', [TranscriptRequestController::class, 'receiveTranscriptGenerationStatus']);
+Route::get('api/submitTranscriptVerificationStatus', [TranscriptRequestController::class, 'receiveTranscriptVerificationStatus']);
+Route::get('api/submitTranscriptDispatchStatus', [TranscriptRequestController::class, 'receiveTranscriptDispatchStatus']);
 

@@ -477,5 +477,119 @@ class TranscriptRequestController extends Controller
         return $request;
     }
 
+    public function receiveTranscriptGenerationStatus(Request $request){
+        // return $request
+        $validated = $request->validate([
+            'token' => 'required|string',
+            'public_key' => 'required|string',
+            'transcript_ref' => 'required',
+            'TranscriptGeneratedBy' => 'required',
+        ]);
+
+        $rHash = hash('sha256', $request->public_key.$request->transcript_ref.$request->TranscriptGeneratedBy.env('UG_TX_APP_KEY'));
+
+        if ($rHash === $request->token ) {
+            #validation passed, process data
+            $profileToUpdate = TranscriptRequest::where('uid', $request->transcript_ref)->first();
+
+
+            #now update the request
+            $profileToUpdate->tp =1;
+            $profileToUpdate->tp_at = now();
+            $profileToUpdate->tp_by = $request->TranscriptGeneratedBy;
+            $profileToUpdate->ug_mssg = "Transcript Generated Successfully, Waiting for Verification";
+            $profileToUpdate->save();
+            // return $profileToUpdate;
+            #update complete, now return response
+
+            $responseData =[
+                'status' => 0,
+                'request_ref' => $profileToUpdate->ug_ref,
+                'token' => hash('sha256', $request->public_key.$profileToUpdate->ug_ref.env('UG_TX_APP_KEY')),
+                'public_key' => env('UG_TX_PUB_KEY'),
+            ];
+
+            return response($responseData, 200);
+
+        }
+    }
+
+
+    public function receiveTranscriptVerificationStatus(Request $request){
+        // return $request
+        $validated = $request->validate([
+            'token' => 'required|string',
+            'public_key' => 'required|string',
+            'transcript_ref' => 'required',
+            'TranscriptVerifiedBy' => 'required',
+        ]);
+
+        $rHash = hash('sha256', $request->public_key.$request->transcript_ref.$request->TranscriptVerifiedBy.env('UG_TX_APP_KEY'));
+
+        if ($rHash === $request->token ) {
+            #validation passed, process data
+            $profileToUpdate = TranscriptRequest::where('uid', $request->transcript_ref)->first();
+
+
+            #now update the request
+            $profileToUpdate->tv =1;
+            $profileToUpdate->tv_at = now();
+            $profileToUpdate->tv_by = $request->TranscriptVerifiedBy;
+            $profileToUpdate->ug_mssg = "Transcript Verified Successfully, Awaiting Dispatch";
+
+            $profileToUpdate->save();
+            // return $profileToUpdate;
+            #update complete, now return response
+
+            $responseData =[
+                'status' => 0,
+                'request_ref' => $profileToUpdate->ug_ref,
+                'token' => hash('sha256', $request->public_key.$profileToUpdate->ug_ref.env('UG_TX_APP_KEY')),
+                'public_key' => env('UG_TX_PUB_KEY'),
+            ];
+
+            return response($responseData, 200);
+
+        }
+    }
+
+    public function receiveTranscriptDispatchStatus(Request $request){
+        // return $request
+        $validated = $request->validate([
+            'token' => 'required|string',
+            'public_key' => 'required|string',
+            'transcript_ref' => 'required',
+            'TranscriptDispatchedBy' => 'required',
+        ]);
+
+        $rHash = hash('sha256', $request->public_key.$request->transcript_ref.$request->TranscriptDispatchedBy.env('UG_TX_APP_KEY'));
+
+        if ($rHash === $request->token ) {
+            #validation passed, process data
+            $profileToUpdate = TranscriptRequest::where('uid', $request->transcript_ref)->first();
+
+
+            #now update the request
+            $profileToUpdate->td =1;
+            $profileToUpdate->td_at = now();
+            $profileToUpdate->td_by = $request->TranscriptDispatchedBy;
+            $profileToUpdate->ug_mssg = "Transcript Dispatch Successfully, Awaiting Receipt";
+
+            $profileToUpdate->save();
+            // return $profileToUpdate;
+            #update complete, now return response
+
+            $responseData =[
+                'status' => 0,
+                'request_ref' => $profileToUpdate->ug_ref,
+                'token' => hash('sha256', $request->public_key.$profileToUpdate->ug_ref.env('UG_TX_APP_KEY')),
+                'public_key' => env('UG_TX_PUB_KEY'),
+            ];
+
+            return response($responseData, 200);
+
+        }
+    }
+
 
 }

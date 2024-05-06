@@ -44,7 +44,7 @@
 </li>
 
 
-<li>
+{{-- <li>
     <a href="#" class="has-arrow @if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-school-outline"></i>
         <span>Academics</span>
@@ -81,25 +81,25 @@
 
 
     </ul>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="{{ route('application.fee') }}" class="@if (Request::is('application.fee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Payment</span>
     </a>
-</li>
+</li> --}}
 
 
 
-<li>
+{{-- <li>
     <a href="{{ route('applicant.referee') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Referee</span>
     </a>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="#" class="has-arrow waves-effect">
         <i class="mdi mdi-briefcase"></i>
         <span>Qualifications</span>
@@ -129,21 +129,21 @@
         </li>
 
     </ul>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="{{ route('applicant.research') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Research Proposal</span>
     </a>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="{{ route('preview.application',['id'=>user()->id]) }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Preview And Submit</span>
     </a>
-</li>
+</li> --}}
 
 @endrole
 
