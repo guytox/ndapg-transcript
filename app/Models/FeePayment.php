@@ -42,4 +42,8 @@ class FeePayment extends Model
     public function credoRequests(){
         return $this->hasMany(CredoRequest::class, 'fee_payment_id', 'id');
     }
+
+    public function transcriptRequest(){
+        return $this->hasOne(TranscriptRequest::class, 'id','request_id');
+    }
 }

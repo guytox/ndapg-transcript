@@ -55,6 +55,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
     }
 
     /**
@@ -72,10 +73,11 @@ class RegisterController extends Controller
                 'email' => $data['email'],
                 'application_no' => generateApplicationNumber(),
                 'password' => Hash::make($data['password']),
+                'uid' => uniqid('mem_'),
             ]);
 
             $user->update([
-                'username' => $user->application_no
+                'username' => $user->application_no,
             ]);
 
             $user->assignRole(config('app.roles.applicant'));

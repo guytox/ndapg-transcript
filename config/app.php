@@ -293,6 +293,8 @@ return [
             'acceptanceFee' => '000012UPV6OU',
             'TuitionFee' => '000012HGPXKW',
             'ExtraCharges' =>'000012Y3PJ1N',
+            'TranscriptFee' =>'000012JQND33',
+            
         ],
     ],
 
@@ -302,7 +304,7 @@ return [
     ],
 
     'payment_methods' => [
-        'umm-wallet' => 'umm-wallet',
+        'nda-wallet' => 'nda-wallet',
         'e-tranzact' => 'e-tranzact',
         'credo' => 'credo-online',
     ],

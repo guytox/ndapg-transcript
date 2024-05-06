@@ -48,7 +48,8 @@ class FeeCategoriesController extends Controller
 
         $paymentCategory = FeeCategory::updateOrCreate( ['category_name' => $request->category_name], [
             'category_name' => $request->category_name,
-            'description' => Str::slug(strtolower($request->category_name))
+            'description' => Str::slug(strtolower($request->category_name)),
+            'payment_purpose_slug' => Str::slug(strtolower($request->category_name))
         ]);
 
         return back()->with(['message' => 'Fee Category Created Successfully']);

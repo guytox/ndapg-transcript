@@ -15,7 +15,7 @@ class LandingSwitchController extends Controller
                  return redirect(route('login'));
                 break;
             case 'On':
-                 return view('apphome');
+                 return view('index');
                 break;
 
             default:

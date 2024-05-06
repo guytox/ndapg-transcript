@@ -15,4 +15,8 @@ class CredoRequest extends Model
     {
         return $this->belongsTo(FeePayment::class, 'fee_payment_id', 'id');
     }
+
+    public function credoResponse(){
+        return $this->hasOne(CredoResponse::class, 'businessRef', 'txn_id');
+    }
 }

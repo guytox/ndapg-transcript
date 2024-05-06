@@ -26,11 +26,11 @@
 
                         @include('includes.role-sidebar.applicant')
 
-                        @include('includes.role-sidebar.student')
+                        {{-- @include('includes.role-sidebar.student') --}}
 
                         @include('includes.role-sidebar.admin')
 
-                        @include('includes.role-sidebar.staff')
+                        {{-- @include('includes.role-sidebar.staff') --}}
 
                         <li>
                             <a href=" {{route('password.email')}} "  class=" waves-effect">

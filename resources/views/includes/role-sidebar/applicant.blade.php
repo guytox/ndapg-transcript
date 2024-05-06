@@ -7,31 +7,44 @@
     </a>
 
     <ul>
-        <li>
-            <a href="{{ route('applicants.profile.biodata') }}" class=" waves-effect">
-                <i class="mdi mdi-face-recognition"></i>
-                <span>Biodata</span>
-            </a>
-        </li>
 
         <li>
-            <a href="{{ route('applicant.profile.contact_details') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
-                <i class="mdi mdi-face-outline"></i>
-                <span>Contact Details</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('applicant.profile.personal_details') }}" class="@if (Request::is('applicant.profile.personal_details')) active @endif waves-effect">
+            <a href="{{ route('user.profile') }}" class="@if (Request::is('user.profile')) active @endif waves-effect">
                 <i class="mdi mdi-face-profile"></i>
-                <span>Personal Details</span>
+                <span>Update Profile</span>
             </a>
         </li>
 
     </ul>
 </li>
 
-
 <li>
+    <a href="#" class="has-arrow waves-effect">
+        <i class="mdi mdi-school-outline    "></i>
+        <span>Transcripts</span>
+    </a>
+
+    <ul>
+        <li>
+            <a href="{{ route('transcripts.index') }}" class=" waves-effect">
+                <i class="mdi mdi-face-recognition"></i>
+                <span>Previous Requests</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('transcripts.create') }}" class="@if (Request::is('applicant.profile.contact_details')) active @endif waves-effect">
+                <i class="mdi mdi-face-outline"></i>
+                <span>New Transcript </span>
+            </a>
+        </li>
+
+
+    </ul>
+</li>
+
+
+{{-- <li>
     <a href="#" class="has-arrow @if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-school-outline"></i>
         <span>Academics</span>
@@ -68,25 +81,25 @@
 
 
     </ul>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="{{ route('application.fee') }}" class="@if (Request::is('application.fee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Payment</span>
     </a>
-</li>
+</li> --}}
 
 
 
-<li>
+{{-- <li>
     <a href="{{ route('applicant.referee') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Referee</span>
     </a>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="#" class="has-arrow waves-effect">
         <i class="mdi mdi-briefcase"></i>
         <span>Qualifications</span>
@@ -116,21 +129,21 @@
         </li>
 
     </ul>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="{{ route('applicant.research') }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Research Proposal</span>
     </a>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href="{{ route('preview.application',['id'=>user()->id]) }}" class="@if (Request::is('application.referee')) active @endif waves-effect">
         <i class="mdi mdi-cash-marker"></i>
         <span>Preview And Submit</span>
     </a>
-</li>
+</li> --}}
 
 @endrole
 

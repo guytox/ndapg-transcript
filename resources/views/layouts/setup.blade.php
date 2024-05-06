@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>NDA |App</title>
+    <title>{{env('APP_NAME')}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Durable Consultants Limited" name="description" />
     <meta content="Themesdesign" name="author" />
@@ -157,7 +157,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-right d-none d-sm-block">
-                                © 2022, NDA Postgraduate School
+                                © {{getCarbonDate()->year}}, NDA Postgraduate School
                             </div>
                         </div>
                     </div>

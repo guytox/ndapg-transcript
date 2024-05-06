@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\AdmissionCount;
 use App\Models\MatricConfiguration;
+use App\Models\SystemVariable;
 use Illuminate\Database\Seeder;
 
 class MatricConfigSeeder extends Seeder
@@ -17,11 +19,24 @@ class MatricConfigSeeder extends Seeder
         MatricConfiguration::updateOrCreate([
             'session_id' => activeSession()->id
         ], [
+            'session_id' => activeSession()->id,
             'application_number' => 'APPG20220000',
             'student_number' => 'PG20220000',
             'session_id' => '1',
-            'created_at' => '2019-09-03 00:00:00',
-            'updated_at' => '2019-09-03 00:00:00',
+        ]);
+
+        AdmissionCount::updateOrCreate([
+            'category' => 'transcript',
+        ],[
+            'category' => 'transcript',
+            'prefix' => 'NDA/TR/'
+        ]);
+
+        SystemVariable::updateOrCreate([
+            'name' => 'applications',
+        ],[
+            'name' => 'applications',
+            'value' => 'On'
         ]);
     }
 }

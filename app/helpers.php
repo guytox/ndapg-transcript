@@ -2,7 +2,9 @@
 
 use App\Models\AcademicSession;
 use App\Models\AdmissionCount;
+use App\Models\Country;
 use App\Models\CredoRequest;
+use App\Models\CredoResponse;
 use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\FeeCategory;
@@ -11,8 +13,10 @@ use App\Models\FeeItem;
 use App\Models\FeePayment;
 use App\Models\FeeTemplate;
 use App\Models\FeeType;
+use App\Models\Gender;
 use App\Models\MatricConfig;
 use App\Models\MatricConfiguration;
+use App\Models\NdaService;
 use App\Models\PaymentConfiguration;
 use App\Models\Program;
 use App\Models\RegMonitor;
@@ -23,8 +27,11 @@ use App\Models\State;
 use App\Models\StudentRecord;
 use App\Models\StudyLevel;
 use App\Models\SystemVariable;
+use App\Models\TranscriptDeliveryMode;
+use App\Models\TranscriptType;
 use App\Models\User;
 use App\Models\UserProfile;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 function activeSession(){
@@ -68,6 +75,12 @@ function isApplicationOpen(){
     }else{
         return false;
     }
+}
+
+function getCarbonDate(){
+    $nowDate = Carbon::createFromFormat('Y-m-d H:i:s', now());
+
+    return $nowDate;
 }
 
 function getMatricSession(){
@@ -170,13 +183,20 @@ function updateMatriculationNumber($number)
 }
 
 function generateApplicationNumber(){
-    $applicationNo = \App\Models\MatricConfiguration::where('session_id', activeSession()->id)->first();
+    $applicationNo = AdmissionCount::where('category', 'transcript')->first();
 
     if($applicationNo) {
-        if($applicationNo->application_number_count === 0) {
-            return $applicationNo->application_number . ($applicationNo->application_number_count + 1);
-        }
-        return $applicationNo->application_number . $applicationNo->application_number_count;
+        $newAppNo = $applicationNo->prefix . $applicationNo->count;
+
+        $newCount = $applicationNo->count + 1;
+        $applicationNo->count = $newCount;
+        $applicationNo->save();
+
+        return $newAppNo;
+
+    }else{
+
+        return false;
     }
 }
 
@@ -184,7 +204,7 @@ function updateApplicationNumber($number)
 {
     $number = substr($number, -5);
 
-    $applicationNo = \App\Models\MatricConfiguration::where('session_id', activeSession()->id)->first();
+    $applicationNo = MatricConfiguration::where('session_id', activeSession()->id)->first();
     $modifiedNumber = (string)((int)($number));
     if($applicationNo) {
         $applicationNo->update([
@@ -251,12 +271,12 @@ function getUserById($id){
  */
 function currentDate()
 {
-    return Carbon\Carbon::today()->toDateString();
+    return Carbon::today()->toDateString();
 }
 
 function humanReadableDate($date)
 {
-    return Carbon\Carbon::parse($date)->format('D d, M Y');
+    return Carbon::parse($date)->format('D d, M Y');
 }
 
 function presentationFileURL($file)
@@ -268,8 +288,8 @@ function presentationFileURL($file)
 function generateUniqueTransactionReference()
 {
     do {
-        $code = random_int(100000, 999999);
-    } while (CredoRequest::where("txn_id", "=", $code)->first());
+        $code = random_int(1000000, 9999999);
+    } while (CredoResponse::where("businessRef", "=", $code)->first());
 
     return $code;
 }
@@ -477,6 +497,13 @@ function getfeeCategoryIdByCategoryName($categoryName){
     return $purpose->id;
 }
 
+function getFeeCatoryBySlug($categoryName){
+
+    $purpose = FeeCategory::where('payment_purpose_slug', $categoryName)->first();
+
+    return $purpose;
+}
+
 // ******************************************************************************************************************
 // Fee Template  Helpers
 // ******************************************************************************************************************
@@ -579,6 +606,16 @@ function generateServiceCode($id){
         case 'spgs-charges':
             return config('app.credo.serviceCode.ExtraCharges');
             break;
+
+        case 'ug-transcript':
+            return config('app.credo.serviceCode.TranscriptFee');
+            break;
+
+        case 'pg-transcript':
+            return config('app.credo.serviceCode.TranscriptFee');
+            break;
+
+
 
         default:
             return config('app.credo.serviceCode.ExtraCharges');
@@ -1058,6 +1095,79 @@ function verifyCredoPayment($ref){
     return $parameters;
 
 }
+
+
+//*********************************************************************************************** */
+// NDA Service Dropdown Helpers
+//*********************************************************************************************** */
+
+function selectServiceDropdown(){
+
+    $ndaServices = NdaService::all()->pluck('service_name','id');
+
+    return $ndaServices;
+
+}
+
+
+//*********************************************************************************************** */
+// NDA Gender Dropdown Helpers
+//*********************************************************************************************** */
+
+function selectNdaGenderDropdown(){
+
+    $ndaServices = Gender::all()->pluck('gender_name','id');
+
+    return $ndaServices;
+
+}
+
+//*********************************************************************************************** */
+// NDA Transcript Type Dropdown Helpers
+//*********************************************************************************************** */
+
+function selectTranscriptTypeDropdown(){
+
+    $ndaServices = TranscriptType::all()->pluck('type_name','id');
+
+    return $ndaServices;
+
+}
+
+//*********************************************************************************************** */
+// NDA Transcript Country Dropdown Helpers
+//*********************************************************************************************** */
+
+function selectTranscriptCountryDropdown(){
+
+    $ndaServices = Country::orderBy('country_name','asc')->get()->pluck('country_name','id');
+
+    return $ndaServices;
+
+}
+
+function getCountryById($id){
+    $selectedCountry = Country::find($id);
+
+    return $selectedCountry;
+}
+
+
+//*********************************************************************************************** */
+// NDA Transcript Country Dropdown Helpers
+//*********************************************************************************************** */
+
+function selectDeliveryModeDropdown(){
+
+    $ndaServices = TranscriptDeliveryMode::orderBy('mode','asc')->get()->pluck('mode','id');
+
+    return $ndaServices;
+
+}
+
+
+
+
 
 
 

@@ -22,7 +22,7 @@ class CheckProfileCompleted
 
         $userDetails = User::where('id', $user->id)->first();
 
-        if($userDetails->phone_number !== null && $userDetails->email !== null && $userDetails->passport !== null)
+        if($userDetails->phone_number !== null && $userDetails->email !== null)
         {
             return $next($request);
         }

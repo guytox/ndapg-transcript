@@ -31,7 +31,7 @@ class RefereeController extends Controller
             if (count($trefs)>=3) {
 
                 return back()->with('error', "Info !!! You have up to three(3) nominees already, Delete some if you can.!!!");
-                
+
             }
         }
 
@@ -42,7 +42,7 @@ class RefereeController extends Controller
     {
         $details = UserReferee::where('uid', $uid)->first();
         if($details->is_filled === 1) {
-            abort('403', 'This information had already been submitted successfully');
+            abort(403, 'This information had already been submitted successfully');
         }elseif($details){
             return view('applicant.referee_form', compact('details'));
         }else{

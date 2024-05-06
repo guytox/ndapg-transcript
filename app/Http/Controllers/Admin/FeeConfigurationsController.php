@@ -33,6 +33,7 @@ class FeeConfigurationsController extends Controller
             'acceptance' => "Acceptance Fees",
             'extra_charges' => "Extra Charges",
             'defferment' => "Defferment Fees",
+            'transcript' => "Transcript",
         ];
         // get fee categories
         $categories = FeeCategory::all()->pluck('category_name', 'id');
@@ -70,6 +71,9 @@ class FeeConfigurationsController extends Controller
             'fee_category_id' => 'required|integer',
             'narration' => 'required|string',
             'account' => 'required|string',
+            'InCountry' => 'required|integer',
+            'IsPhysical' => 'required|integer',
+            'IsExpress' => 'required|integer',
             'study_level' => 'present',
             'program_id' => 'present',
             'semester' => 'present',
@@ -99,6 +103,9 @@ class FeeConfigurationsController extends Controller
             'fee_template_id' => $request->fee_template_id,
             'fee_category_id' => $request->fee_category_id,
             'narration' => $request->narration,
+            'in_country' => $request->InCountry,
+            'physical' => $request->IsPhysical,
+            'express' => $request->IsExpress,
             'study_level_id' => $request->study_level,
             'program_id' => $request->program_id,
             'semester_id' => $request->semester,
@@ -148,6 +155,9 @@ class FeeConfigurationsController extends Controller
             'fee_template_id' => 'required|integer',
             'fee_category_id' => 'required|integer',
             'narration' => 'required|string',
+            'InCountry' => 'required|integer',
+            'IsPhysical' => 'required|integer',
+            'IsExpress' => 'required|integer',
             'study_level' => 'present',
             'program_id' => 'present',
             'semester' => 'present',
@@ -180,6 +190,9 @@ class FeeConfigurationsController extends Controller
         $newConfig->fee_template_id = $request->fee_template_id;
         $newConfig->fee_category_id = $request->fee_category_id;
         $newConfig->narration = $request->narration;
+        $newConfig->in_country = $request->InCountry;
+        $newConfig->physical = $request->IsPhysical;
+        $newConfig->express = $request->IsExpress;
         $newConfig->study_level_id = $request->study_level;
         $newConfig->program_id = $request->program_id;
         $newConfig->semester_id = $request->semester;

@@ -15,7 +15,7 @@ class FeeCategoriesSeeder extends Seeder
      */
     public function run()
     {
-        $categories = ['Initial System Billing', 'System Late Registration Billing', 'Wallet Fund','acceptance_fee', 'application_fee', 'first_tuition', 'late_registration', 'tuition','portal_services'];
+        $categories = ['UG Transcript', 'PG Transcript', 'Wallet Fund'];
         foreach ($categories as $v ) {
 
             $catetory = FeeCategory::updateOrCreate( ['category_name' => $v], [

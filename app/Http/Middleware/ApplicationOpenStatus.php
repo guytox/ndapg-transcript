@@ -19,10 +19,13 @@ class ApplicationOpenStatus
     {
         $check = SystemVariable::where('name','applications')->first();
         if ($check->value == 'On') {
+
             #registration is on allow to proceed
             return $next($request);
+
         }else{
-            return redirect(route('login'))->with('error', "We Are not Accepting Application Forms Now");
+
+            return redirect(route('login'))->with('error', "We are not accepting Transcript Application Requests at the moment, Please try again later");
 
         }
     }
