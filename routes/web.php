@@ -66,7 +66,7 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('/', [LandingSwitchController::class, 'landingpage']);
+Route::get('/', [LandingSwitchController::class, 'landingpage'])->name('landing-page');
 Route::get('/professionalProgrammes', [LandingSwitchController::class, 'getProfessionalProgrammes'])->name('professional.programmes');
 Route::get('/academicProgrammes', [LandingSwitchController::class, 'getAcademicProgrammes'])->name('academic.programmes');
 Route::get('/admissionRequirements', function(){
