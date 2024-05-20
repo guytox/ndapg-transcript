@@ -39,8 +39,8 @@
                             <div class="mb-5">
                                 <h1>Nigerian Defence Academy </h1>
                             </div>
-                            <h4 class="mt-4">Postgraduate School</h4>
-                            <p>The Nigerian Defence Academy Postgraduate School Admission Form into various Postgraduate Programmes for the 2022/2023 Academic Session is hereby released. Click on the links below to check conditions before applying</p>
+                            <h4 class="mt-4">Online Transcript Portal</h4>
+                            <p>The Nigerian Defence Academy Online Transcript Portal is for all transcript request (Postgraduate and Undergraduate)</p>
                         </div>
 
                         <div class="text-center">
@@ -53,12 +53,31 @@
                 <div class="row pt-4 align-items-center justify-content-center">
                     <div class="col-sm-5">
                         <div class="">
-                            <img src="{{ asset('admin/assets/images/bean.jpg') }}" alt="" class="img-fluid mx-auto d-block">
+                            <img src="{{ asset('admin/assets/images/transcript.jpg') }}" alt="" class="img-fluid mx-auto d-block">
                         </div>
                     </div>
                     <div class="col-lg-6 ml-lg-auto">
                         <div class="mt-5 mt-lg-0">
                             <div class="card maintenance-box">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <div class="avatar-xs mr-3">
+                                            <span class="avatar-title rounded-circle bg-primary">
+                                                01
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="font-size-15 text-uppercase">Transcript Request Guidelines</h5>
+
+                                            <p class="text-muted mb-0"><a
+                                                href="{{ asset('assets/NDA_SPGS_OnlineApplicationGuide.pdf') }}"
+                                                class="text-decoration-underline">Download Transcript Request Guidelines</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- <div class="card maintenance-box">
                                 <div class="card-body p-4">
                                     <div class="media">
                                         <div class="avatar-xs mr-3">
@@ -129,7 +148,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
