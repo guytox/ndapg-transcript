@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\PaymentStatusCheckJob;
 use App\Models\CredoRequest;
 use App\Models\FeeConfig;
+use App\Models\FeePayment;
 use App\Models\PaymentLog;
 use App\Models\TranscriptDetail;
 use App\Models\TranscriptRequest;
@@ -311,7 +312,20 @@ class TranscriptRequestController extends Controller
     public function verifyTrancriptRequestPayment($id){
         #this is built to verify payment,
         #just call a job that will verify the credo details and proceed to confirm payment
-        return $id;
+        $trPayment= FeePayment::where('uid', $id)->first();
+
+        if ($trPayment) {
+            #fee payment entry found, next check the credo request entry
+            $cRequest = CredoRequest::where('fee_payment_id', $trPayment->id)->first();
+            if ($cRequest) {
+                if ($cRequest->credo_url != '') {
+                    return redirect()->away($cRequest->credo_url);
+                }else{
+                    return redirect()->action([CredoRequestController::class, 'generateCredoRef'],['id'=>$cRequest->uid]);
+                }
+            }
+        }
+        return redirect(route('home'))->with('info', "There is a problem with this request please start again");
     }
 
     public function submitTranscriptRequest($id){
