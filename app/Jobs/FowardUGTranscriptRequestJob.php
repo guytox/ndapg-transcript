@@ -57,7 +57,7 @@ class FowardUGTranscriptRequestJob implements ShouldQueue
         $client = new \GuzzleHttp\Client();
 
         # These setting are for the live environment
-        $response = $client->request('GET', 'http://127.0.0.1:8001/api/checkmatric',[
+        $response = $client->request('GET', env('UG_URL').'/api/checkmatric',[
             'headers' => $headers,
             'json' => $body
         ]);
