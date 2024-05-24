@@ -340,7 +340,7 @@ class TranscriptRequestController extends Controller
         // return $feePymnt->feepayment->config->feeCategory->payment_purpose_slug;
         PaymentStatusCheckJob::dispatch($feePymnt->feepayment->uid, now());
 
-        return back()->with('info', "Transcript Request submitted successfully, Please Check back after sometime");
+        return back ()->with('info', "Transcript Request submitted successfully, Please Check back after sometime");
     }
 
     public function matricNumberVerification(Request $request){
