@@ -67,16 +67,20 @@ class FowardUGTranscriptRequestJob implements ShouldQueue
 
         if ($ugResponse->token == hash('sha256', env('UG_TX_PUB_KEY').$ugResponse->tx_ref.env('UG_TX_APP_KEY'))) {
             # this request is valid, update the records and proceed
-            if ($ugResponse->tx_ref != 0) {
+            if ($ugResponse->tx_ref != '') {
                  #now update the request to submitted since there's a response from ug portal
                  $feePymnt->ts = 1;
                  $feePymnt->ug_ref = $ugResponse->tx_ref;
                  $feePymnt->ts_at = now();
-                 $feePymnt->ug_mssg = "Request Successfully Submitted";
+                 if ($ugResponse->tx_ref == 0) {
+                    $feePymnt->ug_mssg = "Matric Number Not Found";
+                 }else{
+                    $feePymnt->ug_mssg = "Request Successfully Submitted";
+                 }
                  $feePymnt->save();
 
 
-            }elseif($ugResponse->tx_ref != 0){
+            }elseif($ugResponse->tx_ref == 0){
                 #this student matric number was not found so the request was submitted as a failed request, so notify the end user of the latest message
                 $feePymnt->ug_mssg = "Matric Number Not Found";
                 $feePymnt->save();
